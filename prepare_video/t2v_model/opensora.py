@@ -15,6 +15,11 @@ def run_opensora_v1_3(prompts:list,raw_video_dir:str,device_id:Union[int, list]=
         for item in prompts:
             f.write(repr(item)[1:-1] + '\n')
     
+    video_names_file=f"{model_dir}/configs/opensora-v1-3/inference/video_names.txt"
+    with open(video_names_file,"w") as f:
+        for video_name in video_names:
+            f.write(video_name+"\n")
+    
     print("ready to run generating script")
 
     env = os.environ.copy() 
@@ -39,6 +44,7 @@ def run_opensora_v1_3(prompts:list,raw_video_dir:str,device_id:Union[int, list]=
                 "--layernorm-kernel","False",
                 "--num-sampling-steps",f"{num_inference_steps}",
                 "--cfg-scale",f"{guidance_scale}",
+                "--video-names-path",f"{video_names_file}",
                 ],env=env)
 
     # video_files=[x for x in sorted(os.listdir(temp_save_dir)) if x.endswith("mp4")]
@@ -59,15 +65,21 @@ def run_opensora_v1_2(prompts:list,raw_video_dir:str,device_id:Union[int, list]=
         for item in prompts:
             f.write(repr(item)[1:-1] + '\n')
     
+    video_names_file=f"{model_dir}/configs/opensora-v1-2/inference/video_names.txt"
+    with open(video_names_file,"w") as f:
+        for video_name in video_names:
+            f.write(video_name+"\n")
+    
     print("ready to run generating script")
 
     env = os.environ.copy() 
     env['PYTHONPATH'] = f"{model_dir}"
     env['CUDA_VISIBLE_DEVICES'] = f"{device_id}"
     
-    date_time = datetime.now().strftime("%m-%d--%H-%M-%S")
-    temp_save_dir=f"{model_dir}/res_v1_2_{date_time}"
-    os.makedirs(temp_save_dir,exist_ok=True)
+    # date_time = datetime.now().strftime("%m-%d--%H-%M-%S")
+    # # temp_save_dir=f"{model_dir}/res_v1_2_{date_time}"
+    # temp_save_dir=f"{model_dir}/res_v1_2"
+    # os.makedirs(temp_save_dir,exist_ok=True)
 
     print(f"curr_seed: {seed}")
     subprocess.run(["python", "scripts/inference.py","configs/opensora-v1-2/inference/sample.py",
@@ -75,11 +87,12 @@ def run_opensora_v1_2(prompts:list,raw_video_dir:str,device_id:Union[int, list]=
                 "--num-frames",f"{num_frames}",
                 "--resolution","480p",
                 "--aspect-ratio","9:16",
-                "--save-dir",f"{temp_save_dir}",
+                "--save-dir",f"{raw_video_dir}",
                 "--prompt-path","configs/opensora-v1-2/inference/prompt.txt",
                 "--layernorm-kernel","False",
                 "--num-sampling-steps",f"{num_inference_steps}",
                 "--cfg-scale",f"{guidance_scale}",
+                "--video-names-path",f"{video_names_file}",
                 ],env=env)
 
     # video_files=[x for x in sorted(os.listdir(temp_save_dir)) if x.endswith("mp4")]
@@ -99,6 +112,11 @@ def run_opensora_v1_1(prompts:list,raw_video_dir:str,device_id:Union[int, list]=
     with open(input_txt_file,"w") as f:
         for item in prompts:
             f.write(repr(item)[1:-1] + '\n')
+    
+    video_names_file=f"{model_dir}/configs/opensora-v1-1/inference/video_names.txt"
+    with open(video_names_file,"w") as f:
+        for video_name in video_names:
+            f.write(video_name+"\n")
     
     print("ready to run generating script")
 
@@ -120,6 +138,7 @@ def run_opensora_v1_1(prompts:list,raw_video_dir:str,device_id:Union[int, list]=
                 "--layernorm-kernel","False",
                 "--num-sampling-steps",f"{num_inference_steps}",
                 "--cfg-scale",f"{guidance_scale}",
+                "--video-names-path",f"{video_names_file}",
                 ],env=env)
 
     # video_files=[x for x in sorted(os.listdir(temp_save_dir)) if x.endswith("mp4")]
@@ -141,6 +160,11 @@ def run_opensora_v1_0(prompts:list,raw_video_dir:str,device_id:Union[int, list]=
     with open(input_txt_file,"w") as f:
         for item in prompts:
             f.write(repr(item)[1:-1] + '\n')
+    
+    video_names_file=f"{model_dir}/configs/opensora-v1-0/inference/video_names.txt"
+    with open(video_names_file,"w") as f:
+        for video_name in video_names:
+            f.write(video_name+"\n")
     
     print("ready to run generating script")
 
@@ -165,6 +189,7 @@ def run_opensora_v1_0(prompts:list,raw_video_dir:str,device_id:Union[int, list]=
                 "--save-dir",f"{temp_save_dir}",
                 "--num-sampling-steps",f"{num_inference_steps}",
                 "--cfg-scale",f"{guidance_scale}",
+                "--video-names-path",f"{video_names_file}",
                 ],env=env)
     
     # video_files=[x for x in sorted(os.listdir(temp_save_dir)) if x.endswith("mp4")]

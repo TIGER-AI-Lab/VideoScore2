@@ -10,17 +10,17 @@ def run_opensora_plan_v1_3(prompts:list,raw_video_dir:str,device_id:Union[int, l
                    num_inference_steps:int=30,guidance_scale:float=7.5,seed:int=42,
                     api_kwargs:dict={},model_dir:str="",script_dir:str="",):
     os.chdir(f"{model_dir}/")
-    prompt_file="examples/prompt_list_v1_3.txt"
-    input_txt_file=f"{model_dir}/{prompt_file}"
-    with open(input_txt_file,"w") as f:
+    prompt_file=f"{model_dir}/examples/prompt_list_v1_3.txt"
+    with open(prompt_file,"w") as f:
         for item in prompts:
             f.write(repr(item)[1:-1] + '\n')
     
-    print("ready to run generating script")
+    video_names_file=f"{model_dir}/examples/video_names.txt"
+    with open(video_names_file,"w") as f:
+        for video_name in video_names:
+            f.write(video_name+"\n")
     
-    date_time = datetime.now().strftime("%m-%d--%H-%M-%S")
-    temp_save_dir=f"{model_dir}/examples/res_v1_3_{date_time}"
-    os.makedirs(temp_save_dir,exist_ok=True)
+    print("ready to run generating script")
     
     env = os.environ.copy() 
     env['CUDA_VISIBLE_DEVICES'] = f"{device_id}"
@@ -30,17 +30,17 @@ def run_opensora_plan_v1_3(prompts:list,raw_video_dir:str,device_id:Union[int, l
         "--nproc_per_node","1",
         "--master_port","29514",
         "-m","opensora.sample.sample",
-        "--model_path",f"{model_dir}/ckpt/any93x640x640/diffusion",
+        "--model_path",f"{model_dir}/ckpt/any93x640x640/diffusion_model",
         "--version","v1_3",
         "--num_frames",f"{num_frames}",
         "--height",f"{height}",
         "--width",f"{width}",
         "--cache_dir","../ckpt",
-        "--text_encoder_name_1","google/mt5-xxl",
+        "--text_encoder_name_1",f"{model_dir}/ckpt/mt5-xxl",
         "--text_prompt",f"{prompt_file}",
         "--ae","WFVAEModel_D8_4x8x8",
         "--ae_path",f"{model_dir}/ckpt/any93x640x640/vae",
-        "--save_img_path",f"{temp_save_dir}",
+        "--save_img_path",f"{raw_video_dir}",
         "--fps","18",
         "--guidance_scale",f"{guidance_scale}",
         "--num_sampling_steps",f"{num_inference_steps}",
@@ -52,6 +52,7 @@ def run_opensora_plan_v1_3(prompts:list,raw_video_dir:str,device_id:Union[int, l
         "--prediction_type","v_prediction",
         "--save_memory",
         "--version","v1_3",
+        "--video_names_file",f"{video_names_file}",
         ],env=env)
     
     # video_files=[x for x in sorted(os.listdir(temp_save_dir)) if x.endswith("mp4")]

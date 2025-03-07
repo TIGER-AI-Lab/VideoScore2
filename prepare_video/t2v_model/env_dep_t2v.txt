@@ -4,6 +4,29 @@ moviepy==1.0.3
 typing
 
 
+& DiffSynth
+install: 
+git clone https://github.com/modelscope/DiffSynth-Studio.git
+conda create -n diffsynth -y python=3.10
+conda activate diffsynth
+cd DiffSynth-Studio
+pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cu121
+pip install -e .
+
+ex install:
+pip install transformers==4.37.2 
+pip install pillow==10.0.0 
+pip install numpy==1.24.3 
+pip install datasets==2.18.0  
+pip install packaging==16.8 
+pip install dill==0.3.9 
+pip install multiprocess==0.70.17 
+pip install protobuf 3.8.0
+pip install fire
+pip install replicate
+pip install moviepy==1.0.3
+pip install typing
+
 & HotShot-XL
 
 
@@ -80,9 +103,21 @@ huggingface-cli download --repo-type model hpcai-tech/OpenSora-STDiT-v4-i2v --lo
 huggingface-cli download --repo-type model hpcai-tech/OpenSora-VAE-v1.3 --local-dir /data/xuan/videoscore2/t2v_model/Open-Sora/ckpt/OpenSora-VAE-v1.3
 huggingface-cli download --repo-type model google/t5-v1_1-xxl --local-dir /data/xuan/videoscore2/t2v_model/Open-Sora/ckpt/t5-v1_1-xxl
 - debug:
-Open-Sora/opensora/utils/ckpt_utils.py
-line245: device: Union[torch.device, str] = "cpu" 
-(| is not supported by python<=3.9) 
+Open-Sora/opensora/utils/ckpt_utils.py line245 
+    device: Union[torch.device, str] = "cpu" 
+    (| is not supported by python<=3.9) 
+Open-Sora/opensora/datasets/utils.py
+    *"avc1"->*"mp4v"
+
+- modify:
+Open-Sora/opensora/utils/config_utils.py line 39 add
+    parser.add_argument("--video-names-path", default=None, type=int, help="path to video names txt file")
+Open-Sora/scripts/inference.py line 184 add
+    if num_sample==1:
+    save_paths = [
+        os.path.join(save_dir,f"{video_names[i]}.mp4")
+    ]
+    else:
 
 
 & Open-Sora-Plan
@@ -105,12 +140,26 @@ wget https://huggingface.co/LanguageBind/Open-Sora-Plan-v1.3.0/resolve/main/any9
 wget https://huggingface.co/LanguageBind/Open-Sora-Plan-v1.3.0/resolve/main/any93x640x640/diffusion_pytorch_model.safetensors.index.json -O /data/xuan/videoscore2/t2v_model/Open-Sora-Plan/ckpt/any93x640x640/diffusion_model/diffusion_pytorch_model.safetensors.index.json
 wget https://huggingface.co/LanguageBind/Open-Sora-Plan-v1.3.0/resolve/main/vae/config.json -O /data/xuan/videoscore2/t2v_model/Open-Sora-Plan/ckpt/any93x640x640/vae/config.json
 wget https://huggingface.co/LanguageBind/Open-Sora-Plan-v1.3.0/resolve/main/vae/merged.ckpt -O /data/xuan/videoscore2/t2v_model/Open-Sora-Plan/ckpt/any93x640x640/vae/merged.ckpt
-- debug:
+- modify:
 Open-Sora-Plan/opensora/sample/sample.py 
 line10
-import sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-print(sys.path)
+    import sys
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+Open-Sora-Plan/opensora/utils/sample_utils.py line484 add
+    parser.add_argument('--video_names_file', type=str)
+Open-Sora-Plan/opensora/utils/sample_utils.py line 231 add
+    video_names=[]
+    with open(args.video_names_file,"r") as f:
+        video_names = f.readlines()
+    video_names = [line.strip() for line in video_names]
+Open-Sora-Plan/opensora/utils/sample_utils.py line 337
+    f'{args.sample_method}_{index}_gs{args.guidance_scale}_s{args.num_sampling_steps}.mp4'
+    -> f'{video_names[idx]}.mp4'
+Open-Sora-Plan/opensora/utils/sample_utils.py line 342
+    quality=10
+Open-Sora-Plan/opensora/utils/sample_utils.py line 410-420 'else: ...'
+    commeted pass
+
 
 
 
@@ -128,6 +177,21 @@ pip install typing
 pip install torchao
 - modify
 requirements.txt: line 1 2 3
+SkyReels-V1/video_generate.py line 41 add
+    parser.add_argument("--prompt_file", type=str, default="")
+    parser.add_argument("--video_names_file", type=str, default="")
+SkyReels-V1/video_generate.py line 69 add
+    video_names=[]
+    with open(args.video_names_file,"r") as f:
+        video_names = f.readlines()
+    video_names = [line.strip() for line in video_names]
+    
+    prompts=[]
+    with open(args.prompt_file,"r") as f:
+        prompts = f.readlines()
+    prompts = ["FPS24, "+line for line in prompts]
+SkyReels-V1/video_generate.py last line 
+    export_to_video(output, f"{out_dir}/{video_name}.mp4", fps=args.fps)
 
 
 & VideoLaVIT

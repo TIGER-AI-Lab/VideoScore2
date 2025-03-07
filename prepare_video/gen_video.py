@@ -10,9 +10,9 @@
 # from t2v_model.hotshot_xl import run_hotshot_xl
 # from t2v_model.videocrafter2 import run_videocrafter2
 # from t2v_model.vchitect2 import run_vchitect2
-from t2v_model.magictime import run_magictime
+# from t2v_model.magictime import run_magictime
 # from t2v_model.opensora import run_opensora_v1_3
-# from t2v_model.opensora_plan import run_opensora_plan_v1_3
+from t2v_model.opensora_plan import run_opensora_plan_v1_3
 import json
 import os
 import fire 
@@ -36,6 +36,7 @@ model_code_mapping={
                    "kling":"r",
                    "sora":"s",
                    "pika_v2_2":"t",
+                   "opensora_plan_v1_3":"u",
                    }
 
 model_pipe_mapping={
@@ -53,7 +54,8 @@ model_pipe_mapping={
                 #    "hotshot_xl":run_hotshot_xl,
                 #    "videocrafter2":run_videocrafter2,
                 #    "vchitect2":run_vchitect2,
-                   "magictime":run_magictime,
+                #    "magictime":run_magictime,
+                   "opensora_plan_v1_3":run_opensora_plan_v1_3,
                     }
 
 rep_token="r8_CaA3gW8F5C6D5C0uMvSbpGNzO50QQCn1TwBOy"
@@ -98,7 +100,7 @@ def gen_video(t2v_model,device_id,start_idx,end_idx):
                     )
         
     # source code
-    src_code_list=["hotshot_xl","lavie_base","videocrafter2","magictime","vchitect2","opensora_v1_3","videolavit"]
+    src_code_list=["hotshot_xl","lavie_base","videocrafter2","magictime","vchitect2","opensora_v1_3","videolavit","opensora_plan_v1_3"]
     if t2v_model in src_code_list:
         script_dir=os.path.dirname(os.path.abspath(__file__))
         model_dir=""
@@ -114,6 +116,8 @@ def gen_video(t2v_model,device_id,start_idx,end_idx):
             model_dir=os.path.join(root_dir,"t2v_model","LaVIT","VideoLaVIT")
         if t2v_model=="magictime":
             model_dir=os.path.join(root_dir,"t2v_model","MagicTime")
+        if t2v_model=="opensora_plan_v1_3":
+            model_dir=os.path.join(root_dir,"t2v_model","Open-Sora-Plan")
         pipe_function(prompts=prompts,raw_video_dir=raw_video_dir,
                     video_names=video_names,device_id=device_id,seed=seed,
                     model_dir=model_dir,script_dir=script_dir,
@@ -124,7 +128,7 @@ if __name__ == "__main__":
     
     fire.Fire(gen_video)
     
-    # python gen_video.py --t2v_model magictime --device_id 4 --start_idx 1500 --end_idx 1999
+    # python gen_video.py --t2v_model opensora_plan_v1_3 --device_id 7 --start_idx 500 --end_idx 999
     
     
     # yt-dlp -f "bestvideo[ext=mp4]+bestaudio[ext=mp4]" -o "my_video.mp4" --download-sections "*0:05:47.080-0:06:04.297" https://www.youtube.com/watch?v=D03BQb0sEqw
