@@ -169,3 +169,13 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+
+prepare_video/const
+prepare_video/api_err_report
+prepare_video/prompts/*
+!prepare_video/prompts/*.py
+!prepare_video/prompts/*.png
+
+prepare_video/t2v_model/_*
+prepare_video/t2v_model/api*
