@@ -5,11 +5,14 @@ import yaml
 from typing import Union
 from datetime import datetime
 
+hf_cache_dir="/data/shared_huggingface/hub/"
 
 def run_stepvideo_t2v(prompts:list,raw_video_dir:str,device_id:Union[int, list]=0,video_names:list=[],
                    num_frames:int=97,height:int=544,width:int=960,
                    num_inference_steps:int=30,guidance_scale:float=6.0,seed:int=42,
                     api_kwargs:dict={},model_dir:str="",script_dir:str="",):
+    
+    
     os.chdir(f"{model_dir}/")
     os.makedirs(f"{model_dir}/temp",exist_ok=True)
     date_time = datetime.now().strftime("%m-%d--%H-%M-%S")
@@ -39,6 +42,7 @@ def run_stepvideo_t2v(prompts:list,raw_video_dir:str,device_id:Union[int, list]=
         "--height",f"{height}",
         "--seed",f"{seed}",
         "--save_dir",f"{raw_video_dir}",
+        "--cache_dir",f"{hf_cache_dir}",
         ],env=env)
     
     os.chdir(script_dir)
@@ -77,6 +81,7 @@ def run_stepvideo_t2v_low_vram(prompts:list,raw_video_dir:str,device_id:Union[in
         "--height",f"{height}",
         "--seed",f"{seed}",
         "--save_dir",f"{raw_video_dir}",
+        "--cache_dir",f"{hf_cache_dir}",
         ],env=env)
     
     os.chdir(script_dir)

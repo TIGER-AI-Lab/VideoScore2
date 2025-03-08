@@ -10,7 +10,7 @@
 # from t2v_model.hotshot_xl import run_hotshot_xl
 # from t2v_model.videocrafter2 import run_videocrafter2
 # from t2v_model.vchitect2 import run_vchitect2
-# from t2v_model.magictime import run_magictime
+from t2v_model.magictime import run_magictime
 # from t2v_model.opensora import run_opensora_v1_3
 from t2v_model.opensora_plan import run_opensora_plan_v1_3
 import json
@@ -44,7 +44,7 @@ model_pipe_mapping={
                 #     "latte":run_latte,
                 #     "mochi1_preview":run_mochi1_preview_quant,
                 #     "modelscope":run_modelscope,
-                #     "cogvideox_2b":run_cogvideox_2b,
+                    # "cogvideox_2b":run_cogvideox_2b,
                 #    "cogvideox_5b":run_cogvideox_5b,
                 #    "cogvideox15_5b":run_cogvideox15_5b,
                 #    "lavie_base":run_lavie_base,
@@ -54,7 +54,7 @@ model_pipe_mapping={
                 #    "hotshot_xl":run_hotshot_xl,
                 #    "videocrafter2":run_videocrafter2,
                 #    "vchitect2":run_vchitect2,
-                #    "magictime":run_magictime,
+                   "magictime":run_magictime,
                    "opensora_plan_v1_3":run_opensora_plan_v1_3,
                     }
 
@@ -128,7 +128,7 @@ if __name__ == "__main__":
     
     fire.Fire(gen_video)
     
-    # python gen_video.py --t2v_model opensora_plan_v1_3 --device_id 7 --start_idx 500 --end_idx 999
+    # python gen_video.py --t2v_model opensora_plan_v1_3 --device_id 0 --start_idx 1500 --end_idx 1999
     
-    
+    # cd /home/brantley/workdir/VideoScore2/prepare_video
     # yt-dlp -f "bestvideo[ext=mp4]+bestaudio[ext=mp4]" -o "my_video.mp4" --download-sections "*0:05:47.080-0:06:04.297" https://www.youtube.com/watch?v=D03BQb0sEqw
