@@ -69,9 +69,6 @@ def gen_video(t2v_model,device_id,start_idx,end_idx):
             d=json.loads(line.strip())
             prompts.append(d["text"])
     
-    raw_video_dir=os.path.join(root_dir,"videos",t2v_model)
-    os.makedirs(raw_video_dir,exist_ok=True)
-    
     # start_idx=2000
     # end_idx=start_idx + 999
     prompts=prompts[start_idx:end_idx+1]
@@ -81,6 +78,9 @@ def gen_video(t2v_model,device_id,start_idx,end_idx):
     video_names=[f"{i:06d}_{model_code}" for i in range(start_idx,end_idx + 1)]
         
     pipe_function=model_pipe_mapping[t2v_model]
+    
+    raw_video_dir=os.path.join(root_dir,"videos",t2v_model)
+    os.makedirs(raw_video_dir,exist_ok=True)
     
     # hf_pipe
     hf_pipe_list=["anidiff","latte","ltx_video","mochi1_preview","modelscope","zeroscope","text2video_zero","cogvideox_2b","cogvideox_5b","cogvideox15_5b",]

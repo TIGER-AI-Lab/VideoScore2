@@ -29,7 +29,6 @@ pip install typing
 
 
 
-
 & HotShot-XL
 
 
@@ -201,6 +200,8 @@ SkyReels-V1/video_generate.py last line
 - install:
 git clone https://github.com/jy0205/LaVIT.git
 cd VideoLaVIT
+conda create -n videolavit -y
+conda activate videolavit
 pip install -r requirements.txt
 - ex install:
 pip install torch==2.2.0 torchvision==0.17.0 torchaudio==2.2.0 --index-url https://download.pytorch.org/whl/cu121
@@ -214,7 +215,9 @@ pip install replicate
 pip install moviepy==1.0.3
 pip install typing
 - weights: 
-huggingface-cli download --repo-type model rain1011/Video-LaVIT-v1 --local-dir /data/xuan/videoscore2/t2v_model/Video-LaVIT-v1/
+huggingface-cli download --repo-type model rain1011/Video-LaVIT-v1 --local-dir /data/xuan/videoscore2/t2v_model/LaVIT/VideoLaVIT/Video-LaVIT-v1/
+- modify:
+add file t2v_inference.py
 - debug: 
 
 
@@ -235,15 +238,15 @@ pip install typing
 huggingface-cli download --repo-type model Vchitect/Vchitect-XL-2B --local-dir /data/xuan/videoscore2/t2v_model/Vchitect-XL-2B/
 - debug:
 Vchitect-2.0/models/pipeline.py 
-line 298: device = "cuda"
+    line 198: device = "cuda"
 Vchitect-2.0/inference.py
-add usage of "video_names" list, 
-parser.add_argument("--prompt_file", type=str)
-parser.add_argument("--video_names_file", type=str)
-parser.add_argument("--height", type=int, default=768)
-parser.add_argument("--width", type=int, default=432)
-parser.add_argument("--num_inference_steps", type=int, default=100)
-parser.add_argument("--guidance_scale", type=float, default=7.5)
-parser.add_argument("--frames", type=int, default=40)
-parser.add_argument("--seed", type=int, default=42)
+    add usage of "video_names" list, 
+    parser.add_argument("--prompt_file", type=str)
+    parser.add_argument("--video_names_file", type=str)
+    parser.add_argument("--height", type=int, default=768)
+    parser.add_argument("--width", type=int, default=432)
+    parser.add_argument("--num_inference_steps", type=int, default=100)
+    parser.add_argument("--guidance_scale", type=float, default=7.5)
+    parser.add_argument("--frames", type=int, default=40)
+    parser.add_argument("--seed", type=int, default=42)
 
