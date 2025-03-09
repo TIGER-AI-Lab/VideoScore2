@@ -20,12 +20,14 @@ def video_info(video_path):
 
 def run():
     rep_token="r8_CaA3gW8F5C6D5C0uMvSbpGNzO50QQCn1TwBOy"
-    prompts=["A boy and a dog are playing soccer on a grassy field, looking very happy. The boy is wearing a red jersey, and the dog is a golden retriever. Trees and flowers surround them, and the sky is blue with a few white clouds.",
+    prompts=[
+        "A boy and a dog are playing soccer on a grassy field, looking very happy. The boy is wearing a red jersey, and the dog is a golden retriever.",
+        # "A dog is looking out of the window."
              ]
-    raw_video_dir="/home/brantley/workdir/VideoScore2/prepare_video/t2v_model/examples"
+    script_dir=os.path.dirname(os.path.abspath(__file__))
+    raw_video_dir=os.path.join(script_dir,"examples")
     seed=42
     t2v_model_dir="/data/xuan/videoscore2/t2v_model"
-    script_dir=os.path.dirname(os.path.abspath(__file__))
     
     
     model_dir=""
@@ -69,34 +71,26 @@ def run():
     # =========== to be tested ==============
     # OOM
     # video_names=["videolavit"]
-    # device_id=6
+    # device_id=5
     # run_videolavit(prompts=prompts,raw_video_dir=raw_video_dir,
     #                 video_names=video_names,device_id=device_id,
-    #                 model_dir=f"{t2v_model_dir}/Vchitect-2.0",script_dir=script_dir,
+    #                 model_dir=f"{t2v_model_dir}/LaVIT/VideoLaVIT",script_dir=script_dir,
     #                 )
     # print(f"run_{video_names[0]} done")
     
     
-    # video_names=["opensora_v1_2"]
-    # device_id=7
-    # run_opensora_v1_2(prompts=prompts,raw_video_dir=raw_video_dir,
-    #                 video_names=video_names,device_id=device_id,
-    #                 model_dir=f"{t2v_model_dir}/Open-Sora",script_dir=script_dir,
-    #                 )
-    # print(f"run_{video_names[0]} done")
-    
-
-    video_names=["stepvideo_t2v_low_vram",]
-    device_id=1
-    run_stepvideo_t2v_low_vram(prompts=prompts,raw_video_dir=raw_video_dir,
+    video_names=["opensora_v1_3"]
+    device_id=4
+    run_opensora_v1_3(prompts=prompts,raw_video_dir=raw_video_dir,
                     video_names=video_names,device_id=device_id,
-                    model_dir=f"{t2v_model_dir}/DiffSynth-Studio",script_dir=script_dir,
+                    model_dir=f"{t2v_model_dir}/Open-Sora",script_dir=script_dir,
                     )
     print(f"run_{video_names[0]} done")
     
-    # video_names=["wanx21_1_3b",]
-    # device_id=0
-    # run_wanx21_1_3b(prompts=prompts,raw_video_dir=raw_video_dir,
+    
+    # video_names=["stepvideo_t2v_low_vram",]
+    # device_id=5
+    # run_stepvideo_t2v_low_vram(prompts=prompts,raw_video_dir=raw_video_dir,
     #                 video_names=video_names,device_id=device_id,
     #                 model_dir=f"{t2v_model_dir}/DiffSynth-Studio",script_dir=script_dir,
     #                 )
@@ -123,11 +117,10 @@ if __name__ == "__main__":
     
     
     # url="https://replicate.delivery/xezq/ppZsjat9gjJXGRcJ0oOkBohRzOkiVcdXrKLdWYo17EQgVUEF/tmpn0u3oc74.mp4"
-    # video_path="/data/xuan/video_eval/leader_bd/videos/kling/w_0007_0.mp4"
+    # video_path="/data/xuan/VideoScore2/prepare_video/t2v_model/examples/wanx21_1_3b.mp4"
     # response = requests.get(url)
     # if response.status_code == 200:
     #     with open(video_path, "wb") as file:
     #         file.write(response.content)
-    # video_info(video_path)
-    
-    
+    # video_info("/data/xuan/VideoScore2/prepare_video/t2v_model/examples/wanx21_14b_2.mp4")
+    # 

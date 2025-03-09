@@ -88,17 +88,18 @@ pip install -r requirements/requirements-cu121.txt
 pip install -v . # for development mode, `pip install -v -e .`
 pip install git+https://github.com/hpcaitech/TensorNVMe.git
 pip install git+https://github.com/hpcaitech/ColossalAI.git
+conda install -c conda-forge opencv
 (optional)
 pip install packaging ninja
 pip install flash-attn --no-build-isolation
 pip install -v --disable-pip-version-check --no-cache-dir --no-build-isolation --config-settings "--build-option=--cpp_ext" --config-settings "--build-option=--cuda_ext" git+https://github.com/NVIDIA/apex.git
-
 -ex install:
 pip install fire
 pip install replicate
 pip install moviepy==1.0.3
 pip install typing
 - weights: 
+mkdir -p /data/xuan/videoscore2/t2v_model/Open-Sora/ckpt/
 huggingface-cli download --repo-type model hpcai-tech/OpenSora-STDiT-v4 --local-dir /data/xuan/videoscore2/t2v_model/Open-Sora/ckpt/OpenSora-STDiT-v4
 huggingface-cli download --repo-type model hpcai-tech/OpenSora-STDiT-v4-360p --local-dir /data/xuan/videoscore2/t2v_model/Open-Sora/ckpt/OpenSora-STDiT-v4-360p
 huggingface-cli download --repo-type model hpcai-tech/OpenSora-STDiT-v4-i2v --local-dir /data/xuan/videoscore2/t2v_model/Open-Sora/ckpt/OpenSora-STDiT-v4-i2v
@@ -108,18 +109,24 @@ huggingface-cli download --repo-type model google/t5-v1_1-xxl --local-dir /data/
 Open-Sora/opensora/utils/ckpt_utils.py line245 
     device: Union[torch.device, str] = "cpu" 
     (| is not supported by python<=3.9) 
-Open-Sora/opensora/datasets/utils.py
+Open-Sora/opensora/datasets/utils.py line185
     *"avc1"->*"mp4v"
-
 - modify:
 Open-Sora/opensora/utils/config_utils.py line 39 add
-    parser.add_argument("--video-names-path", default=None, type=int, help="path to video names txt file")
+    parser.add_argument("--video-names-path", default=None, type=str, help="path to video names txt file")
 Open-Sora/scripts/inference.py line 184 add
     if num_sample==1:
     save_paths = [
         os.path.join(save_dir,f"{video_names[i]}.mp4")
     ]
     else:
+Open-Sora/configs/opensora-v1-3/inference/t2v.py line15
+    from_pretrained="hpcai-tech/OpenSora-STDiT-v4",
+Open-Sora/configs/opensora-v1-3/inference/t2v.py line25
+    from_pretrained="hpcai-tech/OpenSora-VAE-v1.3",
+Open-Sora/configs/opensora-v1-3/inference/t2v.py line38
+    from_pretrained="google/t5-v1_1-xxl",
+
 
 
 & Open-Sora-Plan
@@ -135,6 +142,8 @@ pip install replicate
 pip install moviepy==1.0.3
 pip install typing
 - weights: 
+mkdir -p /data/xuan/videoscore2/t2v_model/Open-Sora-Plan/ckpt/any93x640x640/diffusion_model
+mkdir -p /data/xuan/videoscore2/t2v_model/Open-Sora-Plan/ckpt/any93x640x640/vae
 huggingface-cli download --repo-type model google/mt5-xxl --local-dir /data/xuan/videoscore2/t2v_model/Open-Sora-Plan/ckpt/
 wget https://huggingface.co/LanguageBind/Open-Sora-Plan-v1.3.0/resolve/main/any93x640x640/config.json -O /data/xuan/videoscore2/t2v_model/Open-Sora-Plan/ckpt/any93x640x640/diffusion_model/config.json
 wget https://huggingface.co/LanguageBind/Open-Sora-Plan-v1.3.0/resolve/main/any93x640x640/diffusion_pytorch_model-00001-of-00002.safetensors -O /data/xuan/videoscore2/t2v_model/Open-Sora-Plan/ckpt/any93x640x640/diffusion_model/diffusion_pytorch_model-00001-of-00002.safetensors
@@ -158,7 +167,7 @@ Open-Sora-Plan/opensora/utils/sample_utils.py line 337
     f'{args.sample_method}_{index}_gs{args.guidance_scale}_s{args.num_sampling_steps}.mp4'
     -> f'{video_names[idx]}.mp4'
 Open-Sora-Plan/opensora/utils/sample_utils.py line 342
-    quality=10
+    quality=9
 Open-Sora-Plan/opensora/utils/sample_utils.py line 410-420 'else: ...'
     commeted pass
 
@@ -203,6 +212,7 @@ cd VideoLaVIT
 conda create -n videolavit -y
 conda activate videolavit
 pip install -r requirements.txt
+pip install xformers
 - ex install:
 pip install torch==2.2.0 torchvision==0.17.0 torchaudio==2.2.0 --index-url https://download.pytorch.org/whl/cu121
 pip install datasets==2.21.0

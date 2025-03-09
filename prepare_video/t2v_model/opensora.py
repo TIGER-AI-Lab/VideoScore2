@@ -100,6 +100,17 @@ def run_opensora_v1_2(prompts:list,raw_video_dir:str,device_id:Union[int, list]=
     #     shutil.move(src=os.path.join(temp_save_dir,video_file),dst=os.path.join(raw_video_dir,video_names[idx],".mp4"))
     # os.remove(temp_save_dir)
     
+    for video in os.listdir(raw_video_dir):
+        input_video=os.path.join(raw_video_dir,video)
+        output_video=os.path.join(raw_video_dir,video)
+        cmd = [
+            "ffmpeg",
+            "-i", input_video,
+            "-vcodec", "libx264",
+            output_video
+        ]
+        subprocess.run(cmd, check=True)
+    
     os.chdir(script_dir)
     
     
