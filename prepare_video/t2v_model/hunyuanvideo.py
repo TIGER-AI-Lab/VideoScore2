@@ -5,13 +5,12 @@ import yaml
 from typing import Union
 from datetime import datetime
 
-hf_cache_dir="/data/shared_huggingface/hub/"
+hf_cache_dir="/data/xuan/videoscore2/t2v_model/DiffSynth-Studio/models"
 
 def run_hunyuanvideo_24g(prompts:list,raw_video_dir:str,device_id:Union[int, list]=0,video_names:list=[],
                    num_frames:int=97,height:int=544,width:int=960,
                    num_inference_steps:int=30,guidance_scale:float=6.0,seed:int=42,
                     api_kwargs:dict={},model_dir:str="",script_dir:str="",):
-    
     
     os.chdir(f"{model_dir}/")
     os.makedirs(f"{model_dir}/temp",exist_ok=True)

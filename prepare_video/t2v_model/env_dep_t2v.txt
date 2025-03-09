@@ -203,6 +203,9 @@ git clone https://github.com/jy0205/LaVIT.git
 cd VideoLaVIT
 pip install -r requirements.txt
 - ex install:
+pip install torch==2.2.0 torchvision==0.17.0 torchaudio==2.2.0 --index-url https://download.pytorch.org/whl/cu121
+pip install datasets==2.21.0
+pip install transformers==4.46.0
 pip install protobuf
 pip install apex
 pip install numpy==1.26.4

@@ -5,7 +5,7 @@ import yaml
 from typing import Union
 from datetime import datetime
 
-hf_cache_dir="/data/shared_huggingface/hub/"
+hf_cache_dir="/data/xuan/videoscore2/t2v_model/DiffSynth-Studio/models"
 
 def run_wanx21_1_3b(prompts:list,raw_video_dir:str,device_id:Union[int, list]=0,video_names:list=[],
                    num_frames:int=97,height:int=544,width:int=960,
