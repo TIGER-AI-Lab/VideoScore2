@@ -2,6 +2,7 @@
 import os
 import subprocess
 from typing import Union
+from datetime import datetime
 
 def run_vchitect2(prompts:list,raw_video_dir:str,device_id:Union[int, list]=0,video_names:list=[],
                    num_frames:int=40,height:int=432,width:int=768,
@@ -9,10 +10,10 @@ def run_vchitect2(prompts:list,raw_video_dir:str,device_id:Union[int, list]=0,vi
                     api_kwargs:dict={},model_dir:str="",script_dir:str="",):
     
     os.environ["CUDA_VISIBLE_DEVICES"] = f"{device_id}"
-    
-    prompt_file=f"{model_dir}/assets/test.txt"
+    date_time = datetime.now().strftime("%m-%d--%H-%M-%S")
+    prompt_file=f"{model_dir}/assets/test_{date_time}.txt"
     ckpt_path=f"{model_dir}/Vchitect-2.0-2B"
-    video_names_file=f"{model_dir}/assets/video_names.txt"
+    video_names_file=f"{model_dir}/assets/video_names_{date_time}.txt"
     
     with open(video_names_file,"w") as f:
         for video_name in video_names:

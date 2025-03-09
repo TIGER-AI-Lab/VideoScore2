@@ -6,6 +6,8 @@ from opensora_plan import *
 from skyreels_v1 import *
 from stepvideo_t2v import *
 from wanx21 import *
+from hunyuanvideo import *
+from allegro import *
 from moviepy.editor import VideoFileClip
 import torch
 import os
@@ -69,7 +71,7 @@ def run():
     # wget https://huggingface.co/Vchitect/LaVie/resolve/main/lavie_base.pt
     
     # =========== to be tested ==============
-    # OOM
+    # ImportError: /usr/local/lib/python3.10/dist-packages/fused_layer_norm_cuda.cpython-310-x86_64-linux-gnu.so: undefined symbol: _ZN2at4_ops19empty_memory_format4callEN3c108ArrayRefINS2_6SymIntEEESt8optionalINS2_10ScalarTypeEES6_INS2_6LayoutEES6_INS2_6DeviceEES6_IbES6_INS2_12MemoryFormatEE
     # video_names=["videolavit"]
     # device_id=5
     # run_videolavit(prompts=prompts,raw_video_dir=raw_video_dir,
@@ -79,13 +81,22 @@ def run():
     # print(f"run_{video_names[0]} done")
     
     
-    video_names=["opensora_v1_3"]
-    device_id=4
-    run_opensora_v1_3(prompts=prompts,raw_video_dir=raw_video_dir,
+    video_names=["allegro"]
+    device_id=5
+    run_allegro(prompts=prompts,raw_video_dir=raw_video_dir,
                     video_names=video_names,device_id=device_id,
-                    model_dir=f"{t2v_model_dir}/Open-Sora",script_dir=script_dir,
+                    model_dir=f"{t2v_model_dir}/Allegro",script_dir=script_dir,
                     )
     print(f"run_{video_names[0]} done")
+    
+    # too slow (20min/video)
+    # video_names=["hunyuanvideo_24g",]
+    # device_id=5
+    # run_hunyuanvideo_24g(prompts=prompts,raw_video_dir=raw_video_dir,
+    #                 video_names=video_names,device_id=device_id,
+    #                 model_dir=f"{t2v_model_dir}/DiffSynth-Studio",script_dir=script_dir,
+    #                 )
+    # print(f"run_{video_names[0]} done")
     
     
     # video_names=["stepvideo_t2v_low_vram",]
@@ -122,5 +133,6 @@ if __name__ == "__main__":
     # if response.status_code == 200:
     #     with open(video_path, "wb") as file:
     #         file.write(response.content)
-    # video_info("/data/xuan/VideoScore2/prepare_video/t2v_model/examples/wanx21_14b_2.mp4")
+    # video_info("/data/xuan/VideoScore2/prepare_video/t2v_model/examples/opensora_plan_v1_3.mp4")
     # 
+    # ffmpeg -i /data/xuan/VideoScore2/prepare_video/t2v_model/examples/opensora_v1_3.mp4 -vcodec libx264 /data/xuan/VideoScore2/prepare_video/t2v_model/examples/opensora_v1_3_output.mp4

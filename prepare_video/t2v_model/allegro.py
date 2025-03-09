@@ -1,47 +1,46 @@
 import os
-from tqdm import tqdm
+import shutil
+import subprocess
 from typing import Union
-import torch
-from diffusers.utils import export_to_video
+from datetime import datetime
 
 def run_allegro(prompts:list,raw_video_dir:str,device_id:Union[int, list]=0,video_names:list=[],
-                num_frames:int=88,height:int=512,width:int=512,
-                    num_inference_steps:int=50,guidance_scale:float=7.5,seed:int=42,
+                   num_frames:int=88,height:int=720,width:int=1280,
+                   num_inference_steps:int=30,guidance_scale:float=6.0,seed:int=42,
                     api_kwargs:dict={},model_dir:str="",script_dir:str="",):
+    os.chdir(f"{model_dir}/")
+    os.makedirs(f"{model_dir}/temp",exist_ok=True)
+    date_time = datetime.now().strftime("%m-%d--%H-%M-%S")
+    prompt_file=f"temp/prompt_list_{date_time}.txt"
+    with open(os.path.join(model_dir,prompt_file),"w") as f:
+        for item in prompts:
+            f.write(repr(item)[1:-1] + '\n')
     
-    torch.manual_seed(seed)
-    os.environ["CUDA_VISIBLE_DEVICES"] = f"{device_id}"
+    video_names_file=f"temp/video_names_{date_time}.txt"
+    with open(os.path.join(model_dir,video_names_file),"w") as f:
+        for video_name in video_names:
+            f.write(video_name+"\n")
     
-    from diffusers.quantizers.quantization_config import BitsAndBytesConfig as DiffusersBitsAndBytesConfig
-    from diffusers.models.transformers.transformer_allegro import AllegroTransformer3DModel
-    from diffusers.pipelines.allegro.pipeline_allegro import AllegroPipeline
-    from transformers import BitsAndBytesConfig as BitsAndBytesConfig, T5EncoderModel
+    print("ready to run generating script")
+    
+    env = os.environ.copy() 
+    env['CUDA_VISIBLE_DEVICES'] = f"{device_id}"
+    
+    subprocess.run([
+        "python","single_inference.py",
+        "--save_dir",f"{raw_video_dir}",
+        "--prompt_file",f"{os.path.join(model_dir,prompt_file)}",
+        "--video_names_file",f"{os.path.join(model_dir,video_names_file)}",    
+        "--vae",f"{model_dir}/ckpt/Allegro/vae",
+        "--dit",f"{model_dir}/ckpt/Allegro/transformer",
+        "--text_encoder",f"{model_dir}/ckpt/Allegro/text_encoder",
+        "--tokenizer",f"{model_dir}/ckpt/Allegro/tokenizer",
+        "--guidance_scale",f"{guidance_scale}",
+        "--num_sampling_steps",f"{num_inference_steps}",
+        "--seed",f"{seed}",
+        "--num_frames",f"{num_frames}",
+        "--height",f"{height}",
+        "--width",f"{width}",
+        ],env=env)
 
-    quant_config = BitsAndBytesConfig(load_in_8bit=True)
-    text_encoder_8bit = T5EncoderModel.from_pretrained(
-        "rhymes-ai/Allegro",subfolder="text_encoder",quantization_config=quant_config,torch_dtype=torch.float16,
-    )
-
-    quant_config = DiffusersBitsAndBytesConfig(load_in_8bit=True)
-    transformer_8bit = AllegroTransformer3DModel.from_pretrained(
-        "rhymes-ai/Allegro",subfolder="transformer",quantization_config=quant_config,torch_dtype=torch.float16,
-    )
-
-    pipe = AllegroPipeline.from_pretrained(
-        "rhymes-ai/Allegro",text_encoder=text_encoder_8bit,transformer=transformer_8bit,torch_dtype=torch.float16,
-    ).to("cuda")
-
-    for idx,prompt in tqdm(enumerate(prompts)):
-        video_path=os.path.join(raw_video_dir,f"{idx}.mp4")
-        if video_names is not None and len(video_names)!=0:
-            video_path=os.path.join(raw_video_dir,f"{video_names[idx]}.mp4")
-        video_frames = pipe(
-            prompt=prompt,
-            # num_frames=num_frames,
-            # height=height,
-            # width=width,
-            # num_inference_steps=num_inference_steps,
-            guidance_scale=guidance_scale,
-            max_sequence_length=512
-        ).frames[0]
-        export_to_video(video_frames,video_path)
+    os.chdir(script_dir)

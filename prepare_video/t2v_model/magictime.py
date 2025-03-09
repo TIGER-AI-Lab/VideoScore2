@@ -16,9 +16,10 @@ def run_magictime(prompts:list,raw_video_dir:str,device_id:Union[int, list]=0,vi
     config_file=f"/sample_configs/RealisticVision.yaml"
     curr_config_file=f"sample_configs/RealisticVision_{date_time}.yaml"
     os.chdir(f"{model_dir}/")
-    
-    video_names_file=f"{model_dir}/sample_configs/video_names.txt"
-    with open(video_names_file,"w") as f:
+
+            
+    video_names_file=f"sample_configs/video_names.txt"
+    with open(os.path.join(model_dir,video_names_file),"w") as f:
         for video_name in video_names:
             f.write(video_name+"\n")
     
@@ -31,7 +32,7 @@ def run_magictime(prompts:list,raw_video_dir:str,device_id:Union[int, list]=0,vi
     config[0]['W'] = width
     config[0]['seed'] = seed
     config[0]['prompt'] = prompts
-    config[0]['video_names_file']=video_names_file
+    config[0]['video_names_file']=f"{os.path.join(model_dir,video_names_file)}",
     print("curr_seed", seed)
         
     with open(curr_config_file, 'w') as f:

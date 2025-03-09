@@ -10,13 +10,14 @@ def run_opensora_plan_v1_3(prompts:list,raw_video_dir:str,device_id:Union[int, l
                    num_inference_steps:int=30,guidance_scale:float=7.5,seed:int=42,
                     api_kwargs:dict={},model_dir:str="",script_dir:str="",):
     os.chdir(f"{model_dir}/")
-    prompt_file=f"{model_dir}/examples/prompt_list_v1_3.txt"
-    with open(prompt_file,"w") as f:
+    date_time = datetime.now().strftime("%m-%d--%H-%M-%S")
+    prompt_file=f"examples/prompt_list_v1_3_{date_time}.txt"
+    with open(os.path.join(model_dir,prompt_file),"w") as f:
         for item in prompts:
             f.write(repr(item)[1:-1] + '\n')
     
-    video_names_file=f"{model_dir}/examples/video_names.txt"
-    with open(video_names_file,"w") as f:
+    video_names_file=f"examples/video_names.txt"
+    with open(os.path.join(model_dir,video_names_file),"w") as f:
         for video_name in video_names:
             f.write(video_name+"\n")
     
@@ -24,7 +25,7 @@ def run_opensora_plan_v1_3(prompts:list,raw_video_dir:str,device_id:Union[int, l
     
     env = os.environ.copy() 
     env['CUDA_VISIBLE_DEVICES'] = f"{device_id}"
-    
+    env['PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION']='python'
     subprocess.run([
         "torchrun","--nnodes=1",
         "--nproc_per_node","1",
@@ -37,7 +38,7 @@ def run_opensora_plan_v1_3(prompts:list,raw_video_dir:str,device_id:Union[int, l
         "--width",f"{width}",
         "--cache_dir","../ckpt",
         "--text_encoder_name_1",f"{model_dir}/ckpt/mt5-xxl",
-        "--text_prompt",f"{prompt_file}",
+        "--text_prompt",f"{os.path.join(model_dir,prompt_file)}",
         "--ae","WFVAEModel_D8_4x8x8",
         "--ae_path",f"{model_dir}/ckpt/any93x640x640/vae",
         "--save_img_path",f"{raw_video_dir}",
@@ -52,7 +53,7 @@ def run_opensora_plan_v1_3(prompts:list,raw_video_dir:str,device_id:Union[int, l
         "--prediction_type","v_prediction",
         "--save_memory",
         "--version","v1_3",
-        "--video_names_file",f"{video_names_file}",
+        "--video_names_file",f"{os.path.join(model_dir,video_names_file)}",
         ],env=env)
     
     # video_files=[x for x in sorted(os.listdir(temp_save_dir)) if x.endswith("mp4")]

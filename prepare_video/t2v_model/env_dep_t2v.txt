@@ -3,6 +3,20 @@ replicate
 moviepy==1.0.3
 typing
 
+& Allegro
+install: 
+conda create -n allegro python=3.10
+conda activate allegro
+cd Allegro
+pip install -r requirements.txt
+pip install tqdm
+pip install aiohttp
+pip install pandas
+
+weights:
+mkdir -p ckpt
+git clone https://huggingface.co/rhymes-ai/Allegro
+
 
 & DiffSynth
 install: 
@@ -10,18 +24,21 @@ git clone https://github.com/modelscope/DiffSynth-Studio.git
 conda create -n diffsynth -y python=3.10
 conda activate diffsynth
 cd DiffSynth-Studio
-pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cu121
 pip install -e .
+pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cu121
+pip install flash-attn==2.5.8 --no-build-isolation
+pip install ninja
+pip install pandas
+pip install aiohttp
+pip install rich
+pip install click==7.1
+pip install numpy
+pip install tqdm
+pip install tokenizers==0.20
+pip install accelerate==0.34.0
+pip install sentencepiece
 
 ex install:
-pip install transformers==4.37.2 
-pip install pillow==10.0.0 
-pip install numpy==1.24.3 
-pip install datasets==2.18.0  
-pip install packaging==16.8 
-pip install dill==0.3.9 
-pip install multiprocess==0.70.17 
-pip install protobuf 3.8.0
 pip install fire
 pip install replicate
 pip install moviepy==1.0.3
@@ -136,6 +153,8 @@ cd Open-Sora-Plan
 conda create -n opensora_plan python=3.8 -y
 conda activate opensora_plan
 pip install -e .
+pip install diffusers==0.30.2
+pip install wandb
 -ex install:
 pip install fire
 pip install replicate
@@ -213,6 +232,7 @@ conda create -n videolavit -y
 conda activate videolavit
 pip install -r requirements.txt
 pip install xformers
+pip install accelerate
 - ex install:
 pip install torch==2.2.0 torchvision==0.17.0 torchaudio==2.2.0 --index-url https://download.pytorch.org/whl/cu121
 pip install datasets==2.21.0
@@ -229,7 +249,8 @@ huggingface-cli download --repo-type model rain1011/Video-LaVIT-v1 --local-dir /
 - modify:
 add file t2v_inference.py
 - debug: 
-
+ImportError: cannot import name 'cached_download' from 'huggingface_hub' (/home/user/.local/lib/python3.10/site-packages/huggingface_hub/__init__.py)
+    /home/user/.local/lib/python3.10/site-packages/huggingface_hub/utils/dynamicxxxx.py, delete "cached_download"
 
 & Vchitect-2.0
 - install:

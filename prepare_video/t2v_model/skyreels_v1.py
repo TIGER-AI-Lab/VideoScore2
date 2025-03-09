@@ -11,13 +11,14 @@ def run_skyreels_v1(prompts:list,raw_video_dir:str,device_id:Union[int, list]=0,
                     api_kwargs:dict={},model_dir:str="",script_dir:str="",):
     os.chdir(f"{model_dir}/")
     os.makedirs(f"{model_dir}/temp",exist_ok=True)
-    prompt_file=f"{model_dir}/temp/prompt_list.txt"
-    with open(prompt_file,"w") as f:
+    date_time = datetime.now().strftime("%m-%d--%H-%M-%S")
+    prompt_file=f"temp/prompt_list_{date_time}.txt"
+    with open(os.path.join(model_dir,prompt_file),"w") as f:
         for item in prompts:
             f.write(repr(item)[1:-1] + '\n')
     
-    video_names_file=f"{model_dir}/temp/video_names.txt"
-    with open(video_names_file,"w") as f:
+    video_names_file=f"temp/video_names_{date_time}.txt"
+    with open(os.path.join(model_dir,video_names_file),"w") as f:
         for video_name in video_names:
             f.write(video_name+"\n")
     
@@ -35,18 +36,13 @@ def run_skyreels_v1(prompts:list,raw_video_dir:str,device_id:Union[int, list]=0,
         "--height",f"{height}",
         "--width",f"{width}",
         "--num_frames",f"{num_frames}",
-        "--prompt_file",f"{prompt_file}",
+        "--prompt_file",f"{os.path.join(model_dir,prompt_file)}",
         "--embedded_guidance_scale","1.0",
         "--quant",
         "--offload",
         "--high_cpu_memory",
         "--parameters_level",
-        "--video_names_file",f"{video_names_file}",
+        "--video_names_file",f"{os.path.join(model_dir,video_names_file)}",
         ],env=env)
-    
-    # video_files=[x for x in sorted(os.listdir(temp_save_dir)) if x.endswith("mp4")]
-    # for idx,video_file in enumerate(video_files):
-    #     shutil.move(src=os.path.join(temp_save_dir,video_file),dst=os.path.join(raw_video_dir,video_names[idx],".mp4"))
-    # os.remove(temp_save_dir)
-    
+
     os.chdir(script_dir)
