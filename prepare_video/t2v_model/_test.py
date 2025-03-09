@@ -86,21 +86,21 @@ def run():
     # print(f"run_{video_names[0]} done")
     
 
-    # video_names=["stepvideo_t2v_low_vram",]
-    # device_id=1
-    # run_stepvideo_t2v_low_vram(prompts=prompts,raw_video_dir=raw_video_dir,
-    #                 video_names=video_names,device_id=device_id,
-    #                 model_dir=f"{t2v_model_dir}/DiffSynth-Studio",script_dir=script_dir,
-    #                 )
-    # print(f"run_{video_names[0]} done")
-    
-    video_names=["wanx21_1_3b",]
-    device_id=0
-    run_wanx21_1_3b(prompts=prompts,raw_video_dir=raw_video_dir,
+    video_names=["stepvideo_t2v_low_vram",]
+    device_id=1
+    run_stepvideo_t2v_low_vram(prompts=prompts,raw_video_dir=raw_video_dir,
                     video_names=video_names,device_id=device_id,
                     model_dir=f"{t2v_model_dir}/DiffSynth-Studio",script_dir=script_dir,
                     )
     print(f"run_{video_names[0]} done")
+    
+    # video_names=["wanx21_1_3b",]
+    # device_id=0
+    # run_wanx21_1_3b(prompts=prompts,raw_video_dir=raw_video_dir,
+    #                 video_names=video_names,device_id=device_id,
+    #                 model_dir=f"{t2v_model_dir}/DiffSynth-Studio",script_dir=script_dir,
+    #                 )
+    # print(f"run_{video_names[0]} done")
     
     
     # video_names=["skyreels_v1"]
