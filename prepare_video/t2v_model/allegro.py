@@ -6,7 +6,7 @@ from datetime import datetime
 
 def run_allegro(prompts:list,raw_video_dir:str,device_id:Union[int, list]=0,video_names:list=[],
                    num_frames:int=88,height:int=720,width:int=1280,
-                   num_inference_steps:int=30,guidance_scale:float=6.0,seed:int=42,
+                   num_inference_steps:int=100,guidance_scale:float=7.5,seed:int=42,
                     api_kwargs:dict={},model_dir:str="",script_dir:str="",):
     os.chdir(f"{model_dir}/")
     os.makedirs(f"{model_dir}/temp",exist_ok=True)

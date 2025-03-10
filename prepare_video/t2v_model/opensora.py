@@ -80,11 +80,7 @@ def run_opensora_v1_2(prompts:list,raw_video_dir:str,device_id:Union[int, list]=
     env = os.environ.copy() 
     env['PYTHONPATH'] = f"{model_dir}"
     env['CUDA_VISIBLE_DEVICES'] = f"{device_id}"
-    
-    # date_time = datetime.now().strftime("%m-%d--%H-%M-%S")
-    # # temp_save_dir=f"{model_dir}/res_v1_2_{date_time}"
-    # temp_save_dir=f"{model_dir}/res_v1_2"
-    # os.makedirs(temp_save_dir,exist_ok=True)
+
 
     print(f"curr_seed: {seed}")
     subprocess.run(["python", "scripts/inference.py","configs/opensora-v1-2/inference/sample.py",
@@ -137,10 +133,6 @@ def run_opensora_v1_1(prompts:list,raw_video_dir:str,device_id:Union[int, list]=
     env['PYTHONPATH'] = f"{model_dir}"
     env['CUDA_VISIBLE_DEVICES'] = f"{device_id}"
     
-    date_time = datetime.now().strftime("%m-%d--%H-%M-%S")
-    temp_save_dir=f"{model_dir}/res_v1_1_{date_time}"
-    os.makedirs(temp_save_dir,exist_ok=True)
-    
     print(f"curr_seed: {seed}")
     subprocess.run(["python", "scripts/inference.py","configs/opensora-v1-1/inference/sample.py",
                 "--seed", f"{seed}",
@@ -175,12 +167,12 @@ def run_opensora_v1_0(prompts:list,raw_video_dir:str,device_id:Union[int, list]=
                     api_kwargs:dict={},model_dir:str="",script_dir:str="",):
     os.chdir(f"{model_dir}/")
     date_time = datetime.now().strftime("%m-%d--%H-%M-%S")
-    prompt_file=f"configs/opensora-v1-0/inference/prompt_{date_time}.txt"
+    prompt_file=f"configs/opensora/inference/prompt_{date_time}.txt"
     with open(os.path.join(model_dir,prompt_file),"w") as f:
         for item in prompts:
             f.write(repr(item)[1:-1] + '\n')
     
-    video_names_file=f"configs/opensora-v1-0/inference/video_names_{date_time}.txt"
+    video_names_file=f"configs/opensora/inference/video_names_{date_time}.txt"
     with open(os.path.join(model_dir,video_names_file),"w") as f:
         for video_name in video_names:
             f.write(video_name+"\n")
@@ -190,10 +182,6 @@ def run_opensora_v1_0(prompts:list,raw_video_dir:str,device_id:Union[int, list]=
     env = os.environ.copy() 
     env['PYTHONPATH'] = f"{model_dir}"
     env['CUDA_VISIBLE_DEVICES'] = f"{device_id}"
-    
-    date_time = datetime.now().strftime("%m-%d--%H-%M-%S")
-    temp_save_dir=f"{model_dir}/res_v1_0_{date_time}"
-    os.makedirs(temp_save_dir,exist_ok=True)
     
     print(f"curr_seed: {seed}")
     subprocess.run([

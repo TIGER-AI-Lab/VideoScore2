@@ -34,6 +34,7 @@ pip install rich
 pip install click==7.1
 pip install numpy
 pip install tqdm
+pip install huggingface_hub==0.25.2
 pip install tokenizers==0.20
 pip install accelerate==0.34.0
 pip install sentencepiece
@@ -116,12 +117,20 @@ pip install replicate
 pip install moviepy==1.0.3
 pip install typing
 - weights: 
+for v1.3
 mkdir -p /data/xuan/videoscore2/t2v_model/Open-Sora/ckpt/
 huggingface-cli download --repo-type model hpcai-tech/OpenSora-STDiT-v4 --local-dir /data/xuan/videoscore2/t2v_model/Open-Sora/ckpt/OpenSora-STDiT-v4
 huggingface-cli download --repo-type model hpcai-tech/OpenSora-STDiT-v4-360p --local-dir /data/xuan/videoscore2/t2v_model/Open-Sora/ckpt/OpenSora-STDiT-v4-360p
 huggingface-cli download --repo-type model hpcai-tech/OpenSora-STDiT-v4-i2v --local-dir /data/xuan/videoscore2/t2v_model/Open-Sora/ckpt/OpenSora-STDiT-v4-i2v
 huggingface-cli download --repo-type model hpcai-tech/OpenSora-VAE-v1.3 --local-dir /data/xuan/videoscore2/t2v_model/Open-Sora/ckpt/OpenSora-VAE-v1.3
 huggingface-cli download --repo-type model google/t5-v1_1-xxl --local-dir /data/xuan/videoscore2/t2v_model/Open-Sora/ckpt/t5-v1_1-xxl
+
+for v1.0:
+mkdir -p /data/xuan/videoscore2/t2v_model/Open-Sora/ckpt
+wget https://huggingface.co/hpcai-tech/Open-Sora/resolve/main/OpenSora-v1-HQ-16x512x512.pth -O /data/xuan/videoscore2/t2v_model/Open-Sora/ckpt/OpenSora-v1-HQ-16x512x512.pth
+Open-Sora/configs/opensora/inference/16x512x512.py line 12
+    from_pretrained="ckpt/OpenSora-v1-HQ-16x512x512.pth",
+
 - debug:
 Open-Sora/opensora/utils/ckpt_utils.py line245 
     device: Union[torch.device, str] = "cpu" 
@@ -224,6 +233,22 @@ SkyReels-V1/video_generate.py last line
     export_to_video(output, f"{out_dir}/{video_name}.mp4", fps=args.fps)
 
 
+
+& T2V-Turbo
+install:
+git clone https://github.com/Ji4chenLi/t2v-turbo.git
+conda create -n t2vturbo -y
+conda activate t2vturbo
+pip install accelerate transformers diffusers webdataset loralib peft pytorch_lightning open_clip_torch==2.24.0 hpsv2 image-reward peft wandb av einops packaging omegaconf opencv-python kornia moviepy imageio torchdata==0.8.0 decord torchaudio bitsandbytes langdetect scipy
+pip install git+https://github.com/openai/CLIP.git
+pip install flash-attn --no-build-isolation
+git clone https://github.com/Dao-AILab/flash-attention.git
+cd flash-attention
+pip install csrc/fused_dense_lib csrc/layer_norm
+conda install xformers -c xformers
+
+
+
 & VideoLaVIT
 - install:
 git clone https://github.com/jy0205/LaVIT.git
@@ -250,7 +275,9 @@ huggingface-cli download --repo-type model rain1011/Video-LaVIT-v1 --local-dir /
 add file t2v_inference.py
 - debug: 
 ImportError: cannot import name 'cached_download' from 'huggingface_hub' (/home/user/.local/lib/python3.10/site-packages/huggingface_hub/__init__.py)
-    /home/user/.local/lib/python3.10/site-packages/huggingface_hub/utils/dynamicxxxx.py, delete "cached_download"
+    install huggingface_hub<0.26.0
+
+
 
 & Vchitect-2.0
 - install:

@@ -1,16 +1,13 @@
-from vchitect2 import run_vchitect2
-from magictime import run_magictime
-from videolavit import run_videolavit
-from opensora import *
-from opensora_plan import *
-from skyreels_v1 import *
+
 from stepvideo_t2v import *
-from wanx21 import *
+# from wanx21 import *
 from hunyuanvideo import *
-from allegro import *
+# from allegro import *
+from opensora import *
 from moviepy.editor import VideoFileClip
 import torch
 import os
+import time
 
 def video_info(video_path):
     clip = VideoFileClip(video_path)
@@ -81,24 +78,34 @@ def run():
     # print(f"run_{video_names[0]} done")
     
     
-    video_names=["allegro"]
-    device_id=5
-    run_allegro(prompts=prompts,raw_video_dir=raw_video_dir,
-                    video_names=video_names,device_id=device_id,
-                    model_dir=f"{t2v_model_dir}/Allegro",script_dir=script_dir,
-                    )
-    print(f"run_{video_names[0]} done")
+    # video_names=["opensora_v1_0"]
+    # device_id=6
+    # run_opensora_v1_0(prompts=prompts,raw_video_dir=raw_video_dir,
+    #                 video_names=video_names,device_id=device_id,
+    #                 model_dir=f"{t2v_model_dir}/Open-Sora",script_dir=script_dir,
+    #                 )
+    # print(f"run_{video_names[0]} done")
     
-    # too slow (20min/video)
-    # video_names=["hunyuanvideo_24g",]
+    
+    # # too slow (40min/video, 1 gpu)
+    # video_names=["allegro"]
     # device_id=5
+    # run_allegro(prompts=prompts,raw_video_dir=raw_video_dir,
+    #                 video_names=video_names,device_id=device_id,
+    #                 model_dir=f"{t2v_model_dir}/Allegro",script_dir=script_dir,
+    #                 )
+    # print(f"run_{video_names[0]} done")
+    
+    # # too slow (30min/video, 1 gpu)
+    # video_names=["hunyuanvideo_24g",]
+    # device_id=7
     # run_hunyuanvideo_24g(prompts=prompts,raw_video_dir=raw_video_dir,
     #                 video_names=video_names,device_id=device_id,
     #                 model_dir=f"{t2v_model_dir}/DiffSynth-Studio",script_dir=script_dir,
     #                 )
     # print(f"run_{video_names[0]} done")
     
-    
+    # # too slow (20min/video, single gpu)
     # video_names=["stepvideo_t2v_low_vram",]
     # device_id=5
     # run_stepvideo_t2v_low_vram(prompts=prompts,raw_video_dir=raw_video_dir,
@@ -106,6 +113,15 @@ def run():
     #                 model_dir=f"{t2v_model_dir}/DiffSynth-Studio",script_dir=script_dir,
     #                 )
     # print(f"run_{video_names[0]} done")
+    
+    
+    video_names=["stepvideo_t2v",]
+    device_id=7
+    run_stepvideo_t2v(prompts=prompts,raw_video_dir=raw_video_dir,
+                    video_names=video_names,device_id=device_id,
+                    model_dir=f"{t2v_model_dir}/DiffSynth-Studio",script_dir=script_dir,
+                    )
+    print(f"run_{video_names[0]} done")
     
     
     # video_names=["skyreels_v1"]
@@ -124,8 +140,10 @@ def run():
 
 
 if __name__ == "__main__":
+    time_start=time.time()
     run()
-    
+    time_end=time.time()
+    print(f"Time cost: {time_end-time_start}s")
     
     # url="https://replicate.delivery/xezq/ppZsjat9gjJXGRcJ0oOkBohRzOkiVcdXrKLdWYo17EQgVUEF/tmpn0u3oc74.mp4"
     # video_path="/data/xuan/VideoScore2/prepare_video/t2v_model/examples/wanx21_1_3b.mp4"
@@ -133,6 +151,6 @@ if __name__ == "__main__":
     # if response.status_code == 200:
     #     with open(video_path, "wb") as file:
     #         file.write(response.content)
-    # video_info("/data/xuan/VideoScore2/prepare_video/t2v_model/examples/opensora_plan_v1_3.mp4")
+    # video_info("/data/xuan/VideoScore2/prepare_video/t2v_model/examples/stepvideo_t2v_low_vram_1.mp4")
     # 
-    # ffmpeg -i /data/xuan/VideoScore2/prepare_video/t2v_model/examples/opensora_v1_3.mp4 -vcodec libx264 /data/xuan/VideoScore2/prepare_video/t2v_model/examples/opensora_v1_3_output.mp4
+    # ffmpeg -i /data/xuan/VideoScore2/prepare_video/t2v_model/examples/opensora_v1_1.mp4 -vcodec libx264 /data/xuan/VideoScore2/prepare_video/t2v_model/examples/opensora_v1_1_output.mp4

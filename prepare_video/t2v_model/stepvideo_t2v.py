@@ -5,11 +5,11 @@ import yaml
 from typing import Union
 from datetime import datetime
 
-hf_cache_dir="/data/xuan/videoscore2/t2v_model/DiffSynth-Studio/models"
+cache_dir="/data/xuan/videoscore2/t2v_model/DiffSynth-Studio/models"
 
 def run_stepvideo_t2v(prompts:list,raw_video_dir:str,device_id:Union[int, list]=0,video_names:list=[],
-                   num_frames:int=97,height:int=544,width:int=960,
-                   num_inference_steps:int=30,guidance_scale:float=6.0,seed:int=42,
+                   num_frames:int=100,height:int=544,width:int=992,
+                   num_inference_steps:int=30,guidance_scale:float=9.0,seed:int=42,
                     api_kwargs:dict={},model_dir:str="",script_dir:str="",):
     
     
@@ -32,7 +32,7 @@ def run_stepvideo_t2v(prompts:list,raw_video_dir:str,device_id:Union[int, list]=
     env['CUDA_VISIBLE_DEVICES'] = f"{device_id}"
         
     subprocess.run([
-        "python","sample_stepvideo.py",
+        "python","scripts/sample_stepvideo.py",
         "--prompt_file",f"{prompt_file}",
         "--video_names_file",f"{video_names_file}",
         "--num_frames",f"{num_frames}",
@@ -42,15 +42,15 @@ def run_stepvideo_t2v(prompts:list,raw_video_dir:str,device_id:Union[int, list]=
         "--height",f"{height}",
         "--seed",f"{seed}",
         "--save_dir",f"{raw_video_dir}",
-        "--cache_dir",f"{hf_cache_dir}",
+        "--cache_dir",f"{cache_dir}",
         ],env=env)
     
     os.chdir(script_dir)
 
 
 def run_stepvideo_t2v_low_vram(prompts:list,raw_video_dir:str,device_id:Union[int, list]=0,video_names:list=[],
-                   num_frames:int=97,height:int=544,width:int=960,
-                   num_inference_steps:int=30,guidance_scale:float=6.0,seed:int=42,
+                   num_frames:int=100,height:int=544,width:int=992,
+                   num_inference_steps:int=30,guidance_scale:float=9.0,seed:int=42,
                     api_kwargs:dict={},model_dir:str="",script_dir:str="",):
     os.chdir(f"{model_dir}/")
     os.makedirs(f"{model_dir}/temp",exist_ok=True)
@@ -81,7 +81,7 @@ def run_stepvideo_t2v_low_vram(prompts:list,raw_video_dir:str,device_id:Union[in
         "--height",f"{height}",
         "--seed",f"{seed}",
         "--save_dir",f"{raw_video_dir}",
-        "--cache_dir",f"{hf_cache_dir}",
+        "--cache_dir",f"{cache_dir}",
         ],env=env)
     
     os.chdir(script_dir)
