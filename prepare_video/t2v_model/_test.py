@@ -1,9 +1,10 @@
 
 from stepvideo_t2v import *
-# from wanx21 import *
+from wanx21 import *
 from hunyuanvideo import *
 # from allegro import *
 from opensora import *
+from ltx_video import *
 from moviepy.editor import VideoFileClip
 import torch
 import os
@@ -77,49 +78,10 @@ def run():
     #                 )
     # print(f"run_{video_names[0]} done")
     
-    
-    # video_names=["opensora_v1_0"]
-    # device_id=6
-    # run_opensora_v1_0(prompts=prompts,raw_video_dir=raw_video_dir,
-    #                 video_names=video_names,device_id=device_id,
-    #                 model_dir=f"{t2v_model_dir}/Open-Sora",script_dir=script_dir,
-    #                 )
-    # print(f"run_{video_names[0]} done")
-    
-    
-    # # too slow (40min/video, 1 gpu)
-    # video_names=["allegro"]
-    # device_id=5
-    # run_allegro(prompts=prompts,raw_video_dir=raw_video_dir,
-    #                 video_names=video_names,device_id=device_id,
-    #                 model_dir=f"{t2v_model_dir}/Allegro",script_dir=script_dir,
-    #                 )
-    # print(f"run_{video_names[0]} done")
-    
-    # # too slow (30min/video, 1 gpu)
-    # video_names=["hunyuanvideo_24g",]
-    # device_id=7
-    # run_hunyuanvideo_24g(prompts=prompts,raw_video_dir=raw_video_dir,
-    #                 video_names=video_names,device_id=device_id,
-    #                 model_dir=f"{t2v_model_dir}/DiffSynth-Studio",script_dir=script_dir,
-    #                 )
-    # print(f"run_{video_names[0]} done")
-    
-    # # too slow (20min/video, single gpu)
-    # video_names=["stepvideo_t2v_low_vram",]
-    # device_id=5
-    # run_stepvideo_t2v_low_vram(prompts=prompts,raw_video_dir=raw_video_dir,
-    #                 video_names=video_names,device_id=device_id,
-    #                 model_dir=f"{t2v_model_dir}/DiffSynth-Studio",script_dir=script_dir,
-    #                 )
-    # print(f"run_{video_names[0]} done")
-    
-    
-    video_names=["stepvideo_t2v",]
+    video_names=["ltx_video_091",]
     device_id=7
-    run_stepvideo_t2v(prompts=prompts,raw_video_dir=raw_video_dir,
+    run_ltx_video_091(prompts=prompts,raw_video_dir=raw_video_dir,
                     video_names=video_names,device_id=device_id,
-                    model_dir=f"{t2v_model_dir}/DiffSynth-Studio",script_dir=script_dir,
                     )
     print(f"run_{video_names[0]} done")
     

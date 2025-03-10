@@ -4,8 +4,8 @@ from typing import Union
 import torch
 from diffusers.utils import export_to_video
 
-def run_ltx_video(prompts:list,raw_video_dir:str,device_id:Union[int, list]=0,video_names:list=[],
-                  num_frames:int=40,height:int=704,width:int=512,
+def run_ltx_video_091(prompts:list,raw_video_dir:str,device_id:Union[int, list]=0,video_names:list=[],
+                  num_frames:int=40,height:int=480,width:int=704,
                     num_inference_steps:int=50,guidance_scale:float=6.0,seed:int=42,
                     api_kwargs:dict={},model_dir:str="",script_dir:str="",): 
     
@@ -31,5 +31,3 @@ def run_ltx_video(prompts:list,raw_video_dir:str,device_id:Union[int, list]=0,vi
             guidance_scale=guidance_scale,
         ).frames[0]
         export_to_video(video_frames,video_path)
-        # clip = VideoFileClip(video_path)
-        # clip.write_videofile(video_path, codec="libx264", audio_codec="aac")
