@@ -3,6 +3,7 @@ import json
 from tqdm import tqdm
 from huggingface_hub import login,upload_folder, upload_file,HfApi
 import shutil
+import zipfile
 
 model_code_mapping=json.load(open("const/model_code.json","r"))
 
@@ -30,7 +31,7 @@ repo_ID2="hexuan21/VS2"
 
 HF_TOKEN="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"
 
-def collect_upload():
+def direct_upload():
     api=HfApi()
     
     for k,v in endpoint_model_mapping.items():
@@ -43,6 +44,7 @@ def collect_upload():
 
             if any([not os.path.exists(os.path.join(video_dir,f"{i:06d}_{code}.mp4")) for i in range(start_idx,end_idx+1)]):
                 continue
+            
             BATCH_SIZE=100
             num_batch=int((end_idx+1-start_idx)/BATCH_SIZE)
             for j in range(num_batch):
@@ -67,7 +69,39 @@ def collect_upload():
                     run_as_future=True,
                 )
                 
+
+
+def zip_upload():
+    api=HfApi()
+    
+    for k,v in endpoint_model_mapping.items():
+        start_idx=int(k[0])
+        end_idx=int(k[1])
+        for code in v:
+            name=code_model_mapping[code]
+            
+            video_dir=f"/data/xuan/videoscore2/videos/{name}"
+            if any([not os.path.exists(os.path.join(video_dir,f"{i:06d}_{code}.mp4")) for i in range(start_idx,end_idx+1)]):
+                continue
+            temp_dir=f"/data/xuan/videoscore2/temp/{start_idx}_{end_idx}"
+            os.makedirs(temp_dir,exist_ok=True)
+            
+            output_zip=os.path.join(temp_dir,f"{name}.zip")
+            with zipfile.ZipFile(output_zip, 'w') as zipf:
+                for i in tqdm(range(start_idx,end_idx+1)):
+                    video_name=f"{i:06d}_{code}.mp4"
+                    src_path=os.path.join(video_dir,video_name)
+                    zipf.write(src_path, video_name)                
                 
+            upload_file(
+                path_or_fileobj=output_zip,
+                path_in_repo=f"{start_idx}_{end_idx}/{name}.zip", 
+                repo_id=repo_ID,
+                repo_type="dataset",
+                token=HF_TOKEN,
+                run_as_future=True,
+            )
+
             
 
 
@@ -75,5 +109,6 @@ def check_each_pack():
     None
     
 if __name__ == "__main__":
-    collect_upload()
+    # direct_upload()
+    zip_upload()
 
