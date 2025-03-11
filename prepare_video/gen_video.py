@@ -4,7 +4,7 @@
 # from t2v_model.modelscope import run_modelscope
 # from t2v_model.cogvideox import run_cogvideox_2b,run_cogvideox_5b,run_cogvideox15_5b
 # from t2v_model.lavie import run_lavie_base
-# from t2v_model.ltx_video import run_ltx_video
+from t2v_model.ltx_video import run_ltx_video_091, run_ltx_video_095
 # from t2v_model.zeroscope import run_zeroscope
 # from t2v_model.text2video_zero import run_text2video_zero
 # from t2v_model.hotshot_xl import run_hotshot_xl
@@ -12,11 +12,13 @@
 # from t2v_model.vchitect2 import run_vchitect2
 # from t2v_model.wanx21 import run_wanx21_1_3b,run_wanx21_14b
 # from t2v_model.magictime import run_magictime
-from t2v_model.opensora import run_opensora_v1_2, run_opensora_v1_3
+# from t2v_model.opensora import run_opensora_v1_2, run_opensora_v1_3
 # from t2v_model.opensora_plan import run_opensora_plan_v1_3
+# from t2v_model.stepvideo_t2v import run_stepvideo_t2v,run_stepvideo_t2v_low_vram
 import json
 import os
 import fire 
+import time
 
 model_code_mapping={
                     "anidiff":"a",
@@ -27,7 +29,7 @@ model_code_mapping={
                    "cogvideox_5b":"f",
                    "cogvideox15_5b":"g",
                    "lavie_base":"h",
-                   "ltx_video":"i",
+                   "ltx_video_091":"i",
                    "zeroscope":"j",
                    "text2video_zero":"k",
                    "hotshot_xl":"m",
@@ -41,6 +43,8 @@ model_code_mapping={
                    "wanx21_1_3b":"v",
                    "wanx21_14b":"w",
                    "opensora_v1_2":"x",
+                   "stepvideo_t2v":"y",
+                   "ltx_video_095":"z",
                    }
 
 model_pipe_mapping={
@@ -48,11 +52,11 @@ model_pipe_mapping={
                 #     "latte":run_latte,
                 #     "mochi1_preview":run_mochi1_preview_quant,
                 #     "modelscope":run_modelscope,
-                    # "cogvideox_2b":run_cogvideox_2b,
+                #     "cogvideox_2b":run_cogvideox_2b,
                 #    "cogvideox_5b":run_cogvideox_5b,
                 #    "cogvideox15_5b":run_cogvideox15_5b,
                 #    "lavie_base":run_lavie_base,
-                #    "ltx_video":run_ltx_video,
+                #    "ltx_video_091":run_ltx_video_091,
                 #    "zeroscope":run_zeroscope,
                 #    "text2video_zero":run_text2video_zero,
                 #    "hotshot_xl":run_hotshot_xl,
@@ -62,7 +66,9 @@ model_pipe_mapping={
                 #    "opensora_plan_v1_3":run_opensora_plan_v1_3,
                 # "wanx21_1_3b":run_wanx21_1_3b,
                 #    "wanx21_14b":run_wanx21_14b,
-                   "opensora_v1_2":run_opensora_v1_2,
+                #    "opensora_v1_2":run_opensora_v1_2,
+                #    "stepvideo_t2v":run_stepvideo_t2v,
+                "ltx_video_095":run_ltx_video_095,
                     }
 
 rep_token="r8_CaA3gW8F5C6D5C0uMvSbpGNzO50QQCn1TwBOy"
@@ -90,7 +96,7 @@ def gen_video(t2v_model,device_id,start_idx,end_idx):
     os.makedirs(raw_video_dir,exist_ok=True)
     
     # hf_pipe
-    hf_pipe_list=["anidiff","latte","ltx_video","mochi1_preview","modelscope","zeroscope","text2video_zero","cogvideox_2b","cogvideox_5b","cogvideox15_5b",]
+    hf_pipe_list=["anidiff","latte","ltx_video_091","mochi1_preview","modelscope","zeroscope","text2video_zero","cogvideox_2b","cogvideox_5b","cogvideox15_5b",]
     if t2v_model in hf_pipe_list:
         pipe_function(prompts=prompts,raw_video_dir=raw_video_dir,
                     video_names=video_names,device_id=device_id,seed=seed
@@ -110,7 +116,9 @@ def gen_video(t2v_model,device_id,start_idx,end_idx):
     src_code_list=["hotshot_xl","lavie_base","videocrafter2","magictime","vchitect2",
                    "opensora_plan_v1_3",
                    "opensora_v1_3","opensora_v1_2","opensora_v1_1","opensora_v1_0",
-                   "wanx21_1_3b","wanx21_14b","videolavit",]
+                   "wanx21_1_3b","wanx21_14b",
+                   "ltx_video_091","ltx_video_095",
+                   "videolavit",]
     if t2v_model in src_code_list:
         script_dir=os.path.dirname(os.path.abspath(__file__))
         model_dir=""
@@ -130,8 +138,10 @@ def gen_video(t2v_model,device_id,start_idx,end_idx):
             model_dir=os.path.join(root_dir,"t2v_model","Open-Sora-Plan")
         if t2v_model in ["opensora_v1_0","opensora_v1_1","opensora_v1_2","opensora_v1_3"]:
             model_dir=os.path.join(root_dir,"t2v_model","Open-Sora")
-        if t2v_model=="wanx21_1_3b":
+        if t2v_model in ["wanx21_1_3b","wanx21_14b","stepvideo_t2v",]:
             model_dir=os.path.join(root_dir,"t2v_model","DiffSynth-Studio")
+        if t2v_model == "ltx_video_095":
+            model_dir=os.path.join(root_dir,"t2v_model","LTX-Video")
         pipe_function(prompts=prompts,raw_video_dir=raw_video_dir,
                     video_names=video_names,device_id=device_id,seed=seed,
                     model_dir=model_dir,script_dir=script_dir,
@@ -139,10 +149,11 @@ def gen_video(t2v_model,device_id,start_idx,end_idx):
     
     
 if __name__ == "__main__":
-    
+    time_start=time.time()
     fire.Fire(gen_video)
+    time_end=time.time()
+    print(f"Time cost: {time_end-time_start:.2f}s")
     
-    # python gen_video.py --t2v_model opensora_v1_2 --device_id 3 --start_idx 3000 --end_idx 3499
+    # python gen_video.py --t2v_model ltx_video_095 --device_id 6 --start_idx 1500 --end_idx 1999
     
-    # cd /home/brantley/workdir/VideoScore2/prepare_video
     # yt-dlp -f "bestvideo[ext=mp4]+bestaudio[ext=mp4]" -o "my_video.mp4" --download-sections "*0:05:47.080-0:06:04.297" https://www.youtube.com/watch?v=D03BQb0sEqw

@@ -3,8 +3,14 @@ replicate
 moviepy==1.0.3
 typing
 
+export PATH="/home/user/anaconda3/bin:$PATH"
+conda activate your_env_name
+conda install python pip --force-reinstall
+hash -r
+source ~/.bashrc
+
 & Allegro
-install: 
+- install: 
 conda create -n allegro python=3.10
 conda activate allegro
 cd Allegro
@@ -13,13 +19,16 @@ pip install tqdm
 pip install aiohttp
 pip install pandas
 
-weights:
+- weights:
 mkdir -p ckpt
 git clone https://huggingface.co/rhymes-ai/Allegro
+modified:  
+single_inference.py
+
 
 
 & DiffSynth
-install: 
+- install: 
 git clone https://github.com/modelscope/DiffSynth-Studio.git
 conda create -n diffsynth -y python=3.10
 conda activate diffsynth
@@ -39,7 +48,7 @@ pip install tokenizers==0.20
 pip install accelerate==0.34.0
 pip install sentencepiece
 
-ex install:
+- ex install:
 pip install fire
 pip install replicate
 pip install moviepy==1.0.3
@@ -68,6 +77,40 @@ pip install typing
 wget https://huggingface.co/Vchitect/LaVie/resolve/main/lavie_base.pt -O /data/xuan/videoscore2/t2v_model/LaVie/pretrained_models/lavie_base.pt
 huggingface-cli download --repo-type model rCompVis/stable-diffusion-v1-4  --local-dir /data/xuan/videoscore2/t2v_model/LaVie/pretrained_models/stable-diffusion-v1-4/
 huggingface-cli download --repo-type model rCompVis/stabilityai/stable-diffusion-x4-upscaler  --local-dir /data/xuan/videoscore2/t2v_model/LaVie/pretrained_models/stabilityai/stable-diffusion-x4-upscaler/
+
+
+& LTX-Video
+- install:
+git clone https://github.com/Lightricks/LTX-Video.git
+cd LTX-Video
+conda create -n ltx python=3.10 -y
+conda activate ltx
+pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cu121
+pip install diffusers==0.28.2
+pip install transformers==4.48.0
+pip install sentencepiece==0.1.96
+pip install huggingface-hub==0.25.2
+pip install einops
+pip install tim
+pip install accelerate
+pip install matplotlib
+pip install imageio[ffmpeg]
+python -m pip install -e .\[inference-script\]
+- ex install:
+pip install fire
+pip install replicate
+pip install moviepy==1.0.3
+pip install typing
+- weights:
+mkdir -p /data/xuan/videoscore2/t2v_model/LTX-Video/ckpt
+python 
+    from huggingface_hub import hf_hub_download
+
+    model_dir = '/data/xuan/videoscore2/t2v_model/LTX-Video/ckpt'   # The local directory to save downloaded checkpoint
+    hf_hub_download(repo_id="Lightricks/LTX-Video", filename="ltx-video-2b-v0.9.5.safetensors", local_dir=model_dir, local_dir_use_symlinks=False, repo_type='model')
+- modify:
+add file inference_batch.py
+
 
 
 & MagicTime

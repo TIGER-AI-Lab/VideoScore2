@@ -78,10 +78,11 @@ def run():
     #                 )
     # print(f"run_{video_names[0]} done")
     
-    video_names=["ltx_video_091",]
+    video_names=["ltx_video_095",]
     device_id=7
-    run_ltx_video_091(prompts=prompts,raw_video_dir=raw_video_dir,
+    run_ltx_video_095(prompts=prompts,raw_video_dir=raw_video_dir,
                     video_names=video_names,device_id=device_id,
+                    model_dir=f"{t2v_model_dir}/LTX-Video",script_dir=script_dir,
                     )
     print(f"run_{video_names[0]} done")
     
@@ -102,10 +103,10 @@ def run():
 
 
 if __name__ == "__main__":
-    time_start=time.time()
-    run()
-    time_end=time.time()
-    print(f"Time cost: {time_end-time_start}s")
+    # time_start=time.time()
+    # run()
+    # time_end=time.time()
+    # print(f"Time cost: {time_end-time_start}s")
     
     # url="https://replicate.delivery/xezq/ppZsjat9gjJXGRcJ0oOkBohRzOkiVcdXrKLdWYo17EQgVUEF/tmpn0u3oc74.mp4"
     # video_path="/data/xuan/VideoScore2/prepare_video/t2v_model/examples/wanx21_1_3b.mp4"
@@ -113,6 +114,6 @@ if __name__ == "__main__":
     # if response.status_code == 200:
     #     with open(video_path, "wb") as file:
     #         file.write(response.content)
-    # video_info("/data/xuan/VideoScore2/prepare_video/t2v_model/examples/stepvideo_t2v_low_vram_1.mp4")
+    video_info("/data/xuan/VideoScore2/prepare_video/t2v_model/examples/ltx_video_095_2.mp4")
     # 
     # ffmpeg -i /data/xuan/VideoScore2/prepare_video/t2v_model/examples/opensora_v1_1.mp4 -vcodec libx264 /data/xuan/VideoScore2/prepare_video/t2v_model/examples/opensora_v1_1_output.mp4
