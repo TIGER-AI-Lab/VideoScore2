@@ -9,6 +9,11 @@ conda install python pip --force-reinstall
 hash -r
 source ~/.bashrc
 
+
+## to download real videos from Koala dataset:
+pip install yt-dlp
+
+
 & Allegro
 - install: 
 conda create -n allegro python=3.10

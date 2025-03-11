@@ -20,32 +20,8 @@ import os
 import fire 
 import time
 
-model_code_mapping={
-                    "anidiff":"a",
-                   "latte":"b",
-                   "mochi1_preview":"c",
-                   "modelscope":"d",
-                   "cogvideox_2b":"e",
-                   "cogvideox_5b":"f",
-                   "cogvideox15_5b":"g",
-                   "lavie_base":"h",
-                   "ltx_video_091":"i",
-                   "zeroscope":"j",
-                   "text2video_zero":"k",
-                   "hotshot_xl":"m",
-                   "videocrafter2":"n",
-                   "vchitect2":"p",
-                   "magictime":"q",
-                   "kling":"r",
-                   "sora":"s",
-                   "pika_v2_2":"t",
-                   "opensora_plan_v1_3":"u",
-                   "wanx21_1_3b":"v",
-                   "wanx21_14b":"w",
-                   "opensora_v1_2":"x",
-                   "stepvideo_t2v":"y",
-                   "ltx_video_095":"z",
-                   }
+model_code_mapping=json.load(open("const/model_code.json","r"))
+
 
 model_pipe_mapping={
                 #     "anidiff":run_anidiff,
@@ -155,5 +131,3 @@ if __name__ == "__main__":
     print(f"Time cost: {time_end-time_start:.2f}s")
     
     # python gen_video.py --t2v_model ltx_video_095 --device_id 6 --start_idx 1500 --end_idx 1999
-    
-    # yt-dlp -f "bestvideo[ext=mp4]+bestaudio[ext=mp4]" -o "my_video.mp4" --download-sections "*0:05:47.080-0:06:04.297" https://www.youtube.com/watch?v=D03BQb0sEqw
