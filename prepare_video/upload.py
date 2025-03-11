@@ -58,14 +58,14 @@ def collect_upload():
                     os.makedirs(temp_dir,exist_ok=True)
                     shutil.copy(src=src_path,dst=dst_path)
                     
-                    upload_folder(
-                        folder_path=temp_dir,
-                        path_in_repo=f"{start_idx}_{end_idx}/{name}/", 
-                        repo_id=repo_ID,
-                        repo_type="dataset",
-                        token=HF_TOKEN,
-                        run_as_future=True,
-                    )
+                upload_folder(
+                    folder_path=temp_dir,
+                    path_in_repo=f"{start_idx}_{end_idx}/{name}/", 
+                    repo_id=repo_ID,
+                    repo_type="dataset",
+                    token=HF_TOKEN,
+                    run_as_future=True,
+                )
                 
                 
             
