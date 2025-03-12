@@ -33,7 +33,7 @@ def run_lavie_base(prompts:list,raw_video_dir:str,device_id:Union[int, list]=0,v
     shutil.copyfile(config_file,backup_file)
     os.chdir(f"{model_dir}/base/")
     print("ready to run generating script")
-    subprocess.run(["python", "pipelines/sample.py","--config", f"{model_dir}/base/{curr_config_file}"])
+    subprocess.run(["python", "pipelines/sample.py","--config", f"{curr_config_file}"])
     print("current env: ",os.environ.get('CONDA_DEFAULT_ENV'))
     os.chdir(script_dir)
 
