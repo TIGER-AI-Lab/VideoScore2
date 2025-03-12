@@ -73,8 +73,6 @@ def check_each_pack():
             if len(code)==0:
                 continue
             name=code_model_mapping[code]
-            if all([not os.path.exists(os.path.join(video_dir,f"{i:06d}_{code}.mp4")) for i in range(start_idx,end_idx+1)]):
-                continue
             
             video_dir=f"/data/xuan/videoscore2/videos/{name}"
             for i in range(start_idx,end_idx+1):
@@ -116,11 +114,6 @@ def zip_upload():
                 run_as_future=True,
             )
 
-            
-
-
-def check_each_pack():
-    None
     
 if __name__ == "__main__":
     check_each_pack()
