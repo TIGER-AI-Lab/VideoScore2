@@ -91,7 +91,6 @@ def zip_upload():
             
             video_dir=f"/data/xuan/videoscore2/videos/{name}"
             if any([not os.path.exists(os.path.join(video_dir,f"{i:06d}_{code}.mp4")) for i in range(start_idx,end_idx+1)]):
-                print(f"\n{'#'*50}\nmissing {name}\n{'#'*50}\n")
                 continue
             temp_dir=f"/data/xuan/videoscore2/temp/{start_idx}_{end_idx}"
             os.makedirs(temp_dir,exist_ok=True)
@@ -116,6 +115,6 @@ def zip_upload():
 
     
 if __name__ == "__main__":
-    check_each_pack()
-    # zip_upload()
+    # check_each_pack()
+    zip_upload()
     
