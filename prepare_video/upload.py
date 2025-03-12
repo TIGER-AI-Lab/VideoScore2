@@ -10,26 +10,21 @@ model_code_mapping=json.load(open("const/model_code.json","r"))
 code_model_mapping={v:k for k,v in model_code_mapping.items()}
 
 endpoint_model_mapping={
-    ('0000','0499'):["d","j","m","a","e","q","h","c","v","r",],
-    # ('0500','0999'):["i","m","n","e","u","c","f","r","","",],
-    # ('1000','1499'):["k","m","b","p","z","h","f","v","","",],
-    # ('1500','1999'):["d","m","a","e","z","u","q","","","",],
-    # ('2000','2499'):["j","m","n","p","q","h","","","","",],
-    # ('2500','2999'):["i","b","n","z","f","","","","","",],
-    # ('3000','3499'):["k","a","e","q","h","f","","","","",],
-    # ('3500','3999'):["d","a","b","n","f","c","","","","",],
-    # ('4000','4499'):["j","b","n","e","h","c","","","","",],
-    # ('4500','4999'):["i","a","b","e","z","q","f","","","",],
+    ('0000','0499'):["d","k","m","a","e","q","h","c","v","r",],
+    ('0500','0999'):["i","m","n","e","u","c","f","r","","",],
+    ('1000','1499'):["k","m","b","p","z","h","f","v","","",],
+    ('1500','1999'):["d","m","a","e","z","u","q","","","",],
+    ('2000','2499'):["j","m","n","p","q","h","","","","",],
+    ('2500','2999'):["i","b","n","z","f","","","","","",],
+    ('3000','3499'):["k","a","e","q","h","f","","","","",],
+    ('3500','3999'):["d","a","b","n","f","c","","","","",],
+    ('4000','4499'):["j","b","n","e","h","c","","","","",],
+    ('4500','4999'):["i","a","b","e","z","q","f","","","",],
 }
 
-
-
-
 repo_ID="hexuan21/VideoScore2_video_cache"
-repo_ID2="hexuan21/VS2"
 
-
-HF_TOKEN="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"
+HF_TOKEN=os.environ["HF_TOKEN"]
 
 def direct_upload():
     api=HfApi()
@@ -78,6 +73,8 @@ def zip_upload():
         start_idx=int(k[0])
         end_idx=int(k[1])
         for code in v:
+            if len(code)==0:
+                continue
             name=code_model_mapping[code]
             
             video_dir=f"/data/xuan/videoscore2/videos/{name}"
@@ -87,6 +84,8 @@ def zip_upload():
             os.makedirs(temp_dir,exist_ok=True)
             
             output_zip=os.path.join(temp_dir,f"{name}.zip")
+            if os.path.exists(output_zip):
+                continue
             with zipfile.ZipFile(output_zip, 'w') as zipf:
                 for i in tqdm(range(start_idx,end_idx+1)):
                     video_name=f"{i:06d}_{code}.mp4"
@@ -95,7 +94,7 @@ def zip_upload():
                 
             upload_file(
                 path_or_fileobj=output_zip,
-                path_in_repo=f"{start_idx}_{end_idx}/{name}.zip", 
+                path_in_repo=f"{start_idx:04d}_{end_idx:04d}/{name}.zip", 
                 repo_id=repo_ID,
                 repo_type="dataset",
                 token=HF_TOKEN,
@@ -111,4 +110,4 @@ def check_each_pack():
 if __name__ == "__main__":
     # direct_upload()
     zip_upload()
-
+    
