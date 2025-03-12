@@ -32,7 +32,7 @@ def run_magictime(prompts:list,raw_video_dir:str,device_id:Union[int, list]=0,vi
     config[0]['W'] = width
     config[0]['seed'] = seed
     config[0]['prompt'] = prompts
-    config[0]['video_names_file']=f"{os.path.join(model_dir,video_names_file)}",
+    config[0]['video_names_file']=f"{os.path.join(model_dir,video_names_file)}"
     print("curr_seed", seed)
         
     with open(curr_config_file, 'w') as f:

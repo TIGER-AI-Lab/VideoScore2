@@ -4,14 +4,14 @@
 # from t2v_model.modelscope import run_modelscope
 # from t2v_model.cogvideox import run_cogvideox_2b,run_cogvideox_5b,run_cogvideox15_5b
 # from t2v_model.lavie import run_lavie_base
-from t2v_model.ltx_video import run_ltx_video_091, run_ltx_video_095
+# from t2v_model.ltx_video import run_ltx_video_091, run_ltx_video_095
 # from t2v_model.zeroscope import run_zeroscope
 # from t2v_model.text2video_zero import run_text2video_zero
 # from t2v_model.hotshot_xl import run_hotshot_xl
 # from t2v_model.videocrafter2 import run_videocrafter2
 # from t2v_model.vchitect2 import run_vchitect2
-from t2v_model.wanx21 import run_wanx21_1_3b,run_wanx21_14b
-# from t2v_model.magictime import run_magictime
+# from t2v_model.wanx21 import run_wanx21_1_3b,run_wanx21_14b
+from t2v_model.magictime import run_magictime
 # from t2v_model.opensora import run_opensora_v1_2, run_opensora_v1_3
 # from t2v_model.opensora_plan import run_opensora_plan_v1_3
 # from t2v_model.stepvideo_t2v import run_stepvideo_t2v,run_stepvideo_t2v_low_vram
@@ -38,13 +38,13 @@ model_pipe_mapping={
                 #    "hotshot_xl":run_hotshot_xl,
                 #    "videocrafter2":run_videocrafter2,
                 #    "vchitect2":run_vchitect2,
-                #    "magictime":run_magictime,
+                   "magictime":run_magictime,
                 #    "opensora_plan_v1_3":run_opensora_plan_v1_3,
-                "wanx21_1_3b":run_wanx21_1_3b,
+                # "wanx21_1_3b":run_wanx21_1_3b,
                 #    "wanx21_14b":run_wanx21_14b,
                 #    "opensora_v1_2":run_opensora_v1_2,
                 #    "stepvideo_t2v":run_stepvideo_t2v,
-                "ltx_video_095":run_ltx_video_095,
+                # "ltx_video_095":run_ltx_video_095,
                     }
 
 rep_token="r8_CaA3gW8F5C6D5C0uMvSbpGNzO50QQCn1TwBOy"
