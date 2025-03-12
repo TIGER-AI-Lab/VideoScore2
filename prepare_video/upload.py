@@ -26,49 +26,63 @@ repo_ID="hexuan21/VideoScore2_video_cache"
 
 HF_TOKEN=os.environ["HF_TOKEN"]
 
-def direct_upload():
-    api=HfApi()
+# def direct_upload():
+#     api=HfApi()
     
+#     for k,v in endpoint_model_mapping.items():
+#         start_idx=int(k[0])
+#         end_idx=int(k[1])
+#         for code in v:
+#             name=code_model_mapping[code]
+            
+#             video_dir=f"/data/xuan/videoscore2/videos/{name}"
+
+#             if any([not os.path.exists(os.path.join(video_dir,f"{i:06d}_{code}.mp4")) for i in range(start_idx,end_idx+1)]):
+#                 continue
+            
+#             BATCH_SIZE=100
+#             num_batch=int((end_idx+1-start_idx)/BATCH_SIZE)
+#             for j in range(num_batch):
+#                 temp_dir=f"/data/xuan/videoscore2/temp/{start_idx}_{end_idx}/{name}_b{j}"
+#                 for i in range(j*BATCH_SIZE,(j+1)*BATCH_SIZE):
+#                     video_name=f"{i:06d}_{code}.mp4"
+#                     src_path=os.path.join(video_dir,video_name)
+#                     dst_path=os.path.join(temp_dir,video_name)
+#                     if not os.path.exists(src_path):
+#                         continue
+#                     # if os.path.exists(dst_path):
+#                     #     continue
+#                     os.makedirs(temp_dir,exist_ok=True)
+#                     shutil.copy(src=src_path,dst=dst_path)
+                    
+#                 upload_folder(
+#                     folder_path=temp_dir,
+#                     path_in_repo=f"{start_idx}_{end_idx}/{name}/", 
+#                     repo_id=repo_ID,
+#                     repo_type="dataset",
+#                     token=HF_TOKEN,
+#                     run_as_future=True,
+#                 )
+                
+
+def check_each_pack():
     for k,v in endpoint_model_mapping.items():
         start_idx=int(k[0])
         end_idx=int(k[1])
         for code in v:
+            if len(code)==0:
+                continue
             name=code_model_mapping[code]
-            
-            video_dir=f"/data/xuan/videoscore2/videos/{name}"
-
-            if any([not os.path.exists(os.path.join(video_dir,f"{i:06d}_{code}.mp4")) for i in range(start_idx,end_idx+1)]):
+            if all([not os.path.exists(os.path.join(video_dir,f"{i:06d}_{code}.mp4")) for i in range(start_idx,end_idx+1)]):
                 continue
             
-            BATCH_SIZE=100
-            num_batch=int((end_idx+1-start_idx)/BATCH_SIZE)
-            for j in range(num_batch):
-                temp_dir=f"/data/xuan/videoscore2/temp/{start_idx}_{end_idx}/{name}_b{j}"
-                for i in range(j*BATCH_SIZE,(j+1)*BATCH_SIZE):
-                    video_name=f"{i:06d}_{code}.mp4"
-                    src_path=os.path.join(video_dir,video_name)
-                    dst_path=os.path.join(temp_dir,video_name)
-                    if not os.path.exists(src_path):
-                        continue
-                    # if os.path.exists(dst_path):
-                    #     continue
-                    os.makedirs(temp_dir,exist_ok=True)
-                    shutil.copy(src=src_path,dst=dst_path)
-                    
-                upload_folder(
-                    folder_path=temp_dir,
-                    path_in_repo=f"{start_idx}_{end_idx}/{name}/", 
-                    repo_id=repo_ID,
-                    repo_type="dataset",
-                    token=HF_TOKEN,
-                    run_as_future=True,
-                )
-                
+            video_dir=f"/data/xuan/videoscore2/videos/{name}"
+            for i in range(start_idx,end_idx+1):
+                if not os.path.exists(os.path.join(video_dir,f"{i:06d}_{code}.mp4")):
+                    print(f"\n{'#'*50}\nmissing {name} - f'{i:06d}_{code}.mp4' \n{'#'*50}\n")
 
 
-def zip_upload():
-    api=HfApi()
-    
+def zip_upload():    
     for k,v in endpoint_model_mapping.items():
         start_idx=int(k[0])
         end_idx=int(k[1])
@@ -79,6 +93,7 @@ def zip_upload():
             
             video_dir=f"/data/xuan/videoscore2/videos/{name}"
             if any([not os.path.exists(os.path.join(video_dir,f"{i:06d}_{code}.mp4")) for i in range(start_idx,end_idx+1)]):
+                print(f"\n{'#'*50}\nmissing {name}\n{'#'*50}\n")
                 continue
             temp_dir=f"/data/xuan/videoscore2/temp/{start_idx}_{end_idx}"
             os.makedirs(temp_dir,exist_ok=True)
@@ -108,6 +123,6 @@ def check_each_pack():
     None
     
 if __name__ == "__main__":
-    # direct_upload()
-    zip_upload()
+    check_each_pack()
+    # zip_upload()
     
