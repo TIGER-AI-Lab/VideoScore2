@@ -31,15 +31,59 @@ def copy_video_anno_try():
     with open("/data/xuan/videoscore2/anno_page/text_files/sampled_id.json","w") as f:
         json.dump({"video_ids":L},f,indent=4)
 
-p="/data/xuan/videoscore2/text_prompts/prompt_en_koala.jsonl"
-with open(p,"r") as f:
-    data=[json.loads(line) for line in f]
 
-for i, x in enumerate(data):
-    if "." not in x["text"][-3:]:
-        data[i]["text"]+="."
+
+# import hashlib 
+# import ast
+# import shutil
+
+# prompt_path="/home/brantley/workdir/VideoScore2/prepare_video/prompts/prompt_sora.jsonl"
+# all_items=[json.loads(x) for x in open(prompt_path,"r")]
+# all_texts=[x['text'] for x in all_items]
+
+# t="/data/xuan/videoscore2/videos/sora_raw/result.txt"
+# with open(t, 'r', encoding='utf-8') as f:
+#     lines = [line.strip() for line in f]
+
+# print(len(os.listdir("/data/xuan/videoscore2/videos/sora_raw/video")))
+
+# for x in tqdm(lines):
+#     x=ast.literal_eval(x)
+#     prompt=x['prompt']
+#     id=""
+#     if prompt not in all_texts:
+#         pass
+#         # if len(x["url"])==0:
+#         #     # print(x)
+#         #     continue
+#         # md5 = hashlib.md5()
+#         # md5.update(x['url'].encode('utf-8'))
+#         # fname = md5.hexdigest() + '.mp4'
+#         # shutil.move(f"/data/xuan/videoscore2/videos/sora_raw/video/{fname}",f"/data/xuan/videoscore2/videos/sora_bad/{fname}.mp4")
+#     else:
+#         for y in all_items:
+#             if prompt==y['text']:
+#                 id=y['video_id']
+#         if len(x["url"])==0:
+#             # print(x)
+#             continue
         
-with open(p,"w") as f2:
-    for p in data:
-        f2.write(json.dumps(p)+"\n")
+#         md5 = hashlib.md5()
+#         md5.update(x['url'].encode('utf-8'))
+#         fname = md5.hexdigest() + '.mp4'
+#         if not os.path.exists(f"/data/xuan/videoscore2/videos/sora_raw/video/{fname}"):
+#             print(fname)
+#             continue
+#         os.makedirs(f"/data/xuan/videoscore2/videos/sora",exist_ok=True)
+#         shutil.move(f"/data/xuan/videoscore2/videos/sora_raw/video/{fname}",f"/data/xuan/videoscore2/videos/sora/{id}_s.mp4")
+
+
+# print(len(os.listdir("/data/xuan/videoscore2/videos/sora")))
+# print(len(os.listdir("/data/xuan/videoscore2/videos/sora_bad")))
+
+# for i in range(1000,1500):
+#     if not os.path.exists(f"/data/xuan/videoscore2/videos/sora/{i:06d}_s.mp4"):
+#         print(i)
+
+
 
