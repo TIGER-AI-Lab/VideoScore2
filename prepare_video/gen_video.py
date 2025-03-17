@@ -44,9 +44,10 @@ model_pipe_mapping={
                 # "wanx21_1_3b":run_wanx21_1_3b,
                 #    "wanx21_14b":run_wanx21_14b,
                 #    "opensora_v1_2":run_opensora_v1_2,
-                   "stepvideo_t2v":run_stepvideo_t2v,
+                #    "opensora_v1_3":run_opensora_v1_3,
                 # "ltx_video_095":run_ltx_video_095,
-                # "opensora_v2":run_opensora_v2
+                # "opensora_v2":run_opensora_v2,
+                # "stepvideo_t2v":run_stepvideo_t2v,
                     }
 
 rep_token="r8_CaA3gW8F5C6D5C0uMvSbpGNzO50QQCn1TwBOy"
