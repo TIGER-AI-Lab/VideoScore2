@@ -144,7 +144,7 @@ line 184 new_filename=f"{video_names[idx]}.mp4"
 diffusers==0.11.2 does not support "from diffusers.utils import export_to_video", which is used in most other t2v_models
 
 
-& Open-Sora
+& Open-Sora-v1
 - install:
 conda create -n opensora python=3.9 -y
 conda activate opensora
@@ -200,6 +200,35 @@ Open-Sora/configs/opensora-v1-3/inference/t2v.py line25
     from_pretrained="hpcai-tech/OpenSora-VAE-v1.3",
 Open-Sora/configs/opensora-v1-3/inference/t2v.py line38
     from_pretrained="google/t5-v1_1-xxl",
+
+
+& Open-Sora-v2
+- install:
+conda create -n opensora2 python=3.10
+conda activate opensora2
+git clone https://github.com/hpcaitech/Open-Sora
+cd Open-Sora
+# Ensure torch >= 2.4.0
+pip install -v . # for development mode, `pip install -v -e .`
+pip install xformers==0.0.27.post2 --index-url https://download.pytorch.org/whl/cu121 # install xformers according to your cuda version
+pip install flash-attn --no-build-isolation
+(optional)
+git clone https://github.com/Dao-AILab/flash-attention # 4f0640d5
+cd flash-attention/hopper
+python setup.py install
+
+- ex install:
+pip install fire
+pip install replicate
+pip install moviepy==1.0.3
+pip install typing
+
+- weights:
+pip install "huggingface_hub[cli]"
+huggingface-cli download hpcai-tech/Open-Sora-v2 --local-dir /data/xuan/videoscore2/t2v_model/Open-Sora-v2/ckpts
+
+
+- modify:
 
 
 

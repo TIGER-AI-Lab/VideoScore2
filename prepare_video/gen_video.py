@@ -12,8 +12,9 @@
 # from t2v_model.vchitect2 import run_vchitect2
 # from t2v_model.wanx21 import run_wanx21_1_3b,run_wanx21_14b
 # from t2v_model.magictime import run_magictime
-# from t2v_model.opensora import run_opensora_v1_2, run_opensora_v1_3
-from t2v_model.opensora_plan import run_opensora_plan_v1_3
+from t2v_model.opensora_v1 import run_opensora_v1_2, run_opensora_v1_3
+from t2v_model.opensora_v2 import run_opensora_v2
+# from t2v_model.opensora_plan import run_opensora_plan_v1_3
 # from t2v_model.stepvideo_t2v import run_stepvideo_t2v,run_stepvideo_t2v_low_vram
 import json
 import os
@@ -39,12 +40,13 @@ model_pipe_mapping={
                 #    "videocrafter2":run_videocrafter2,
                 #    "vchitect2":run_vchitect2,
                 #    "magictime":run_magictime,
-                   "opensora_plan_v1_3":run_opensora_plan_v1_3,
+                #    "opensora_plan_v1_3":run_opensora_plan_v1_3,
                 # "wanx21_1_3b":run_wanx21_1_3b,
                 #    "wanx21_14b":run_wanx21_14b,
-                #    "opensora_v1_2":run_opensora_v1_2,
+                   "opensora_v1_2":run_opensora_v1_2,
                 #    "stepvideo_t2v":run_stepvideo_t2v,
                 # "ltx_video_095":run_ltx_video_095,
+                # "opensora_v2":run_opensora_v2
                     }
 
 rep_token="r8_CaA3gW8F5C6D5C0uMvSbpGNzO50QQCn1TwBOy"
@@ -113,7 +115,9 @@ def gen_video(t2v_model,device_id,start_idx,end_idx):
         if t2v_model in ["opensora_plan_v1_3"]:
             model_dir=os.path.join(root_dir,"t2v_model","Open-Sora-Plan")
         if t2v_model in ["opensora_v1_0","opensora_v1_1","opensora_v1_2","opensora_v1_3"]:
-            model_dir=os.path.join(root_dir,"t2v_model","Open-Sora")
+            model_dir=os.path.join(root_dir,"t2v_model","Open-Sora-v1")
+        if t2v_model in ["opensora_v2",]:
+            model_dir=os.path.join(root_dir,"t2v_model","Open-Sora-v2")
         if t2v_model in ["wanx21_1_3b","wanx21_14b","stepvideo_t2v",]:
             model_dir=os.path.join(root_dir,"t2v_model","DiffSynth-Studio")
         if t2v_model == "ltx_video_095":
@@ -130,4 +134,4 @@ if __name__ == "__main__":
     time_end=time.time()
     print(f"Time cost: {time_end-time_start:.2f}s")
     
-    # python gen_video.py --t2v_model opensora_plan_v1_3 --device_id 1 --start_idx 4000 --end_idx 4499
+    # python gen_video.py --t2v_model opensora_v1_2 --device_id 0 --start_idx 500 --end_idx 999

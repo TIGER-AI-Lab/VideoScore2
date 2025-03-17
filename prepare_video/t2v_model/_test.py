@@ -114,6 +114,6 @@ if __name__ == "__main__":
     # if response.status_code == 200:
     #     with open(video_path, "wb") as file:
     #         file.write(response.content)
-    video_info("/data/xuan/VideoScore2/prepare_video/t2v_model/examples/ltx_video_095_2.mp4")
+    video_info("/data/xuan/videoscore2/videos/opensora_v1_2/000501_x.mp4")
     # 
     # ffmpeg -i /data/xuan/VideoScore2/prepare_video/t2v_model/examples/opensora_v1_1.mp4 -vcodec libx264 /data/xuan/VideoScore2/prepare_video/t2v_model/examples/opensora_v1_1_output.mp4
