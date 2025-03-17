@@ -32,20 +32,25 @@ def run_opensora_v2(prompts:list,raw_video_dir:str,device_id:Union[int, list]=0,
     # torchrun --nproc_per_node 1 --standalone scripts/diffusion/inference.py configs/diffusion/inference/t2i2v_768px.py --save-dir samples --prompt "raining, sea"
     
     print(f"curr_seed: {seed}")
-    subprocess.run(["python", "scripts/inference.py","configs/opensora-v1-3/inference/t2v.py",
-                "--seed", f"{seed}",
-                "--num-frames",f"{num_frames}",
-                "--num-sample","1",
-                "--resolution","720p",
-                "--aspect-ratio","9:16",
-                "--aes","very good",
-                "--flow","fair",
+    subprocess.run(["torchrun", 
+                "--nproc_per_node","1",
+                "--standalone","scripts/diffusion/inference.py",
+                "configs/diffusion/inference/t2i2v_768px.py",
                 "--save-dir",f"{raw_video_dir}",
-                "--prompt-path",f"{os.path.join(model_dir,prompt_file)}",
-                "--layernorm-kernel","False",
-                "--num-sampling-steps",f"{num_inference_steps}",
-                "--cfg-scale",f"{guidance_scale}",
-                "--video-names-path",f"{os.path.join(model_dir,video_names_file)}",
+                
+                # "--seed", f"{seed}",
+                # "--num-frames",f"{num_frames}",
+                # "--num-sample","1",
+                # "--resolution","720p",
+                # "--aspect-ratio","9:16",
+                # "--aes","very good",
+                # "--flow","fair",
+                # "--save-dir",f"{raw_video_dir}",
+                # "--prompt-path",f"{os.path.join(model_dir,prompt_file)}",
+                # "--layernorm-kernel","False",
+                # "--num-sampling-steps",f"{num_inference_steps}",
+                # "--cfg-scale",f"{guidance_scale}",
+                # "--video-names-path",f"{os.path.join(model_dir,video_names_file)}",
                 ],env=env)
     
     os.chdir(script_dir)

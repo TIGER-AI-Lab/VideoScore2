@@ -1,10 +1,6 @@
 
-from stepvideo_t2v import *
-from wanx21 import *
-from hunyuanvideo import *
-# from allegro import *
-from opensora import *
-from ltx_video import *
+from opensora_v1 import *
+from opensora_v2 import *
 from moviepy.editor import VideoFileClip
 import torch
 import os
@@ -78,11 +74,11 @@ def run():
     #                 )
     # print(f"run_{video_names[0]} done")
     
-    video_names=["ltx_video_095",]
-    device_id=7
-    run_ltx_video_095(prompts=prompts,raw_video_dir=raw_video_dir,
+    video_names=["opensora_v1_3",]
+    device_id=4
+    run_opensora_v1_3(prompts=prompts,raw_video_dir=raw_video_dir,
                     video_names=video_names,device_id=device_id,
-                    model_dir=f"{t2v_model_dir}/LTX-Video",script_dir=script_dir,
+                    model_dir=f"{t2v_model_dir}/Open-Sora-v1",script_dir=script_dir,
                     )
     print(f"run_{video_names[0]} done")
     
@@ -103,10 +99,10 @@ def run():
 
 
 if __name__ == "__main__":
-    # time_start=time.time()
-    # run()
-    # time_end=time.time()
-    # print(f"Time cost: {time_end-time_start}s")
+    time_start=time.time()
+    run()
+    time_end=time.time()
+    print(f"Time cost: {time_end-time_start}s")
     
     # url="https://replicate.delivery/xezq/ppZsjat9gjJXGRcJ0oOkBohRzOkiVcdXrKLdWYo17EQgVUEF/tmpn0u3oc74.mp4"
     # video_path="/data/xuan/VideoScore2/prepare_video/t2v_model/examples/wanx21_1_3b.mp4"
