@@ -144,6 +144,7 @@ line 184 new_filename=f"{video_names[idx]}.mp4"
 diffusers==0.11.2 does not support "from diffusers.utils import export_to_video", which is used in most other t2v_models
 
 
+
 & Open-Sora-v1
 - install:
 conda create -n opensora python=3.9 -y
@@ -165,19 +166,17 @@ pip install replicate
 pip install moviepy==1.0.3
 pip install typing
 - weights: 
-for v1.3
+v1.3
 mkdir -p /data/xuan/videoscore2/t2v_model/Open-Sora/ckpt/
 huggingface-cli download --repo-type model hpcai-tech/OpenSora-STDiT-v4 --local-dir /data/xuan/videoscore2/t2v_model/Open-Sora/ckpt/OpenSora-STDiT-v4
 huggingface-cli download --repo-type model hpcai-tech/OpenSora-STDiT-v4-360p --local-dir /data/xuan/videoscore2/t2v_model/Open-Sora/ckpt/OpenSora-STDiT-v4-360p
 huggingface-cli download --repo-type model hpcai-tech/OpenSora-STDiT-v4-i2v --local-dir /data/xuan/videoscore2/t2v_model/Open-Sora/ckpt/OpenSora-STDiT-v4-i2v
 huggingface-cli download --repo-type model hpcai-tech/OpenSora-VAE-v1.3 --local-dir /data/xuan/videoscore2/t2v_model/Open-Sora/ckpt/OpenSora-VAE-v1.3
 huggingface-cli download --repo-type model google/t5-v1_1-xxl --local-dir /data/xuan/videoscore2/t2v_model/Open-Sora/ckpt/t5-v1_1-xxl
-
-for v1.0:
+v1.0:
 mkdir -p /data/xuan/videoscore2/t2v_model/Open-Sora/ckpt
 wget https://huggingface.co/hpcai-tech/Open-Sora/resolve/main/OpenSora-v1-HQ-16x512x512.pth -O /data/xuan/videoscore2/t2v_model/Open-Sora/ckpt/OpenSora-v1-HQ-16x512x512.pth
-Open-Sora/configs/opensora/inference/16x512x512.py line 12
-    from_pretrained="ckpt/OpenSora-v1-HQ-16x512x512.pth",
+
 
 - debug:
 Open-Sora/opensora/utils/ckpt_utils.py line245 
@@ -185,6 +184,7 @@ Open-Sora/opensora/utils/ckpt_utils.py line245
     (| is not supported by python<=3.9) 
 Open-Sora/opensora/datasets/utils.py line185
     *"avc1"->*"mp4v"
+
 - modify:
 Open-Sora/opensora/utils/config_utils.py line 39 add
     parser.add_argument("--video-names-path", default=None, type=str, help="path to video names txt file")
@@ -194,12 +194,35 @@ Open-Sora/scripts/inference.py line 184 add
         os.path.join(save_dir,f"{video_names[i]}.mp4")
     ]
     else:
-Open-Sora/configs/opensora-v1-3/inference/t2v.py line15
-    from_pretrained="hpcai-tech/OpenSora-STDiT-v4",
-Open-Sora/configs/opensora-v1-3/inference/t2v.py line25
-    from_pretrained="hpcai-tech/OpenSora-VAE-v1.3",
-Open-Sora/configs/opensora-v1-3/inference/t2v.py line38
-    from_pretrained="google/t5-v1_1-xxl",
+        ...
+
+v1.3/v1.2/v1.1/v1.0: 
+Open-Sora/configs/opensora-v1-x/inference/xxxxxx.py line 15 add:
+    num_inference_steps=30
+    guidance_scale=7.0
+    video_names_path=""
+
+v1.3
+Open-Sora/configs/opensora-v1-3/inference/t2v.py 
+    model = dict( ...
+        from_pretrained="./ckpt/OpenSora-STDiT-v4",
+        ...)
+Open-Sora/configs/opensora-v1-3/inference/t2v.py
+    vae = dict( ...
+    from_pretrained="./ckpt/OpenSora-VAE-v1.3",
+    ...)
+Open-Sora/configs/opensora-v1-3/inference/t2v.py
+    text_encoder=dict( ...
+    from_pretrained="./ckpt/t5-v1_1-xxl",
+    ...)
+
+v1.0
+Open-Sora/configs/opensora/inference/16x512x512.py
+    model = dict(...
+        from_pretrained="ckpt/OpenSora-v1-HQ-16x512x512.pth",
+    ...)
+
+
 
 
 & Open-Sora-v2
@@ -227,8 +250,9 @@ pip install typing
 pip install "huggingface_hub[cli]"
 huggingface-cli download hpcai-tech/Open-Sora-v2 --local-dir /data/xuan/videoscore2/t2v_model/Open-Sora-v2/ckpts
 
-
 - modify:
+
+
 
 
 

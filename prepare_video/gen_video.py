@@ -15,7 +15,7 @@
 # from t2v_model.opensora_v1 import run_opensora_v1_2, run_opensora_v1_3
 # from t2v_model.opensora_v2 import run_opensora_v2
 # from t2v_model.opensora_plan import run_opensora_plan_v1_3
-from t2v_model.stepvideo_t2v import run_stepvideo_t2v,run_stepvideo_t2v_low_vram
+# from t2v_model.stepvideo_t2v import run_stepvideo_t2v,run_stepvideo_t2v_low_vram
 import json
 import os
 import fire 
