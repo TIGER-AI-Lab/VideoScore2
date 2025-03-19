@@ -22,6 +22,7 @@
     "wanx21_14b": "w",
     "opensora_v1_2": "x",
     "stepvideo_t2v": "y",
+    "stepvideo_t2v_low_vram": "y",
     "ltx_video_095": "z",
     "ruyi": "A",
     "opensora_v1_3": "B",

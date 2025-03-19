@@ -12,7 +12,7 @@
 # from t2v_model.vchitect2 import run_vchitect2
 # from t2v_model.wanx21 import run_wanx21_1_3b,run_wanx21_14b
 # from t2v_model.magictime import run_magictime
-from t2v_model.opensora_v1 import run_opensora_v1_2, run_opensora_v1_3
+# from t2v_model.opensora_v1 import run_opensora_v1_2, run_opensora_v1_3
 # from t2v_model.opensora_v2 import run_opensora_v2
 # from t2v_model.opensora_plan import run_opensora_plan_v1_3
 from t2v_model.stepvideo_t2v import run_stepvideo_t2v,run_stepvideo_t2v_low_vram
@@ -43,11 +43,12 @@ model_pipe_mapping={
                 #    "opensora_plan_v1_3":run_opensora_plan_v1_3,
                 # "wanx21_1_3b":run_wanx21_1_3b,
                 #    "wanx21_14b":run_wanx21_14b,
-                   "opensora_v1_2":run_opensora_v1_2,
-                   "opensora_v1_3":run_opensora_v1_3,
+                #    "opensora_v1_2":run_opensora_v1_2,
+                #    "opensora_v1_3":run_opensora_v1_3,
                 # "ltx_video_095":run_ltx_video_095,
                 # "opensora_v2":run_opensora_v2,
-                "stepvideo_t2v":run_stepvideo_t2v,
+                # "stepvideo_t2v":run_stepvideo_t2v,
+                "stepvideo_t2v_low_vram":run_stepvideo_t2v_low_vram,
                     }
 
 rep_token="r8_CaA3gW8F5C6D5C0uMvSbpGNzO50QQCn1TwBOy"
@@ -95,7 +96,7 @@ def gen_video(t2v_model,device_id,start_idx,end_idx):
     src_code_list=["hotshot_xl","lavie_base","videocrafter2","magictime","vchitect2",
                    "opensora_plan_v1_3",
                    "opensora_v1_3","opensora_v1_2","opensora_v1_1","opensora_v1_0",
-                   "wanx21_1_3b","wanx21_14b","stepvideo_t2v",
+                   "wanx21_1_3b","wanx21_14b","stepvideo_t2v","stepvideo_t2v_low_vram",
                    "ltx_video_091","ltx_video_095",
                    "videolavit",]
     if t2v_model in src_code_list:
@@ -119,7 +120,7 @@ def gen_video(t2v_model,device_id,start_idx,end_idx):
             model_dir=os.path.join(root_dir,"t2v_model","Open-Sora-v1")
         if t2v_model in ["opensora_v2",]:
             model_dir=os.path.join(root_dir,"t2v_model","Open-Sora-v2")
-        if t2v_model in ["wanx21_1_3b","wanx21_14b","stepvideo_t2v",]:
+        if t2v_model in ["wanx21_1_3b","wanx21_14b","stepvideo_t2v","stepvideo_t2v_low_vram"]:
             model_dir=os.path.join(root_dir,"t2v_model","DiffSynth-Studio")
         if t2v_model == "ltx_video_095":
             model_dir=os.path.join(root_dir,"t2v_model","LTX-Video")

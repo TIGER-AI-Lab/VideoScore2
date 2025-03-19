@@ -74,11 +74,20 @@ def run():
     #                 )
     # print(f"run_{video_names[0]} done")
     
-    video_names=["opensora_v1_3",]
-    device_id=4
-    run_opensora_v1_3(prompts=prompts,raw_video_dir=raw_video_dir,
+    # video_names=["opensora_v1_3",]
+    # device_id=4
+    # run_opensora_v1_3(prompts=prompts,raw_video_dir=raw_video_dir,
+    #                 video_names=video_names,device_id=device_id,
+    #                 model_dir=f"{t2v_model_dir}/Open-Sora-v1",script_dir=script_dir,
+    #                 )
+    # print(f"run_{video_names[0]} done")
+    
+    
+    video_names=["opensora_v2",]
+    device_id=5
+    run_opensora_v2(prompts=prompts,raw_video_dir=raw_video_dir,
                     video_names=video_names,device_id=device_id,
-                    model_dir=f"{t2v_model_dir}/Open-Sora-v1",script_dir=script_dir,
+                    model_dir=f"{t2v_model_dir}/Open-Sora-v2",script_dir=script_dir,
                     )
     print(f"run_{video_names[0]} done")
     
@@ -92,10 +101,6 @@ def run():
     # print(f"run_{video_names[0]} done")
     
     # video_info(os.path.join(raw_video_dir,f"{video_names[0]}.mp4"))
-    
-    # /data/xuan/videoscore2/t2v_model/Open-Sora-Plan/ckpt/any93x640x640/diffusion
-    # 
-
 
 
 if __name__ == "__main__":
@@ -110,6 +115,6 @@ if __name__ == "__main__":
     # if response.status_code == 200:
     #     with open(video_path, "wb") as file:
     #         file.write(response.content)
-    video_info("/data/xuan/videoscore2/videos/opensora_v1_2/000501_x.mp4")
+    # video_info("/data/xuan/videoscore2/videos/opensora_v1_2/000501_x.mp4")
     # 
     # ffmpeg -i /data/xuan/VideoScore2/prepare_video/t2v_model/examples/opensora_v1_1.mp4 -vcodec libx264 /data/xuan/VideoScore2/prepare_video/t2v_model/examples/opensora_v1_1_output.mp4
