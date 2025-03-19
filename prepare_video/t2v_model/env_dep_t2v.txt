@@ -46,8 +46,6 @@ pip install pandas
 pip install aiohttp
 pip install rich
 pip install click==7.1
-pip install numpy
-pip install tqdm
 pip install huggingface_hub==0.25.2
 pip install tokenizers==0.20
 pip install accelerate==0.34.0
