@@ -79,11 +79,5 @@ def copy_video_anno_try():
 
 
 # print(len(os.listdir("/data/xuan/videoscore2/videos/sora")))
-# print(len(os.listdir("/data/xuan/videoscore2/videos/sora_bad")))
-
-# for i in range(1000,1500):
-#     if not os.path.exists(f"/data/xuan/videoscore2/videos/sora/{i:06d}_s.mp4"):
-#         print(i)
-
 
 
