@@ -372,7 +372,7 @@ def add_camera_motion_vidprom():
 def collect_all():
     source_dir="/data/xuan/videoscore2/text_prompts"
     f_names=["prompt_koala.jsonl","prompt_vidprom.jsonl","prompt_vidprom_camera_motion.jsonl","story_prompt.jsonl","ocr_text_prompt.jsonl"]
-    src_names=["koala","vidprom","camera_motion","story","ocr_etxt"]
+    src_names=["koala","vidprom","camera_motion","story","ocr_text"]
     res_file="all_prompts.jsonl"
     all_items=[]
     data=[]
@@ -397,8 +397,12 @@ async def translate_all():
     date_time = datetime.now().strftime("%m-%d--%H-%M-%S")
     logger=set_logger(f"./logs/orc_text_prompt_debug.log")
     
-    src_path="/data/xuan/videoscore2/text_prompts/all_prompts.jsonl"
-    res_path="/data/xuan/videoscore2/text_prompts/all_prompts_en_cn.jsonl"
+    # src_path="/data/xuan/videoscore2/text_prompts/all_prompts.jsonl"
+    # res_path="/data/xuan/videoscore2/text_prompts/all_prompts_en_cn.jsonl"
+    
+    src_path="no_cn.jsonl"
+    res_path="en_cn.jsonl"
+    
     with open(src_path,"r") as f:
         all_items=[json.loads(line) for line in f]
     
@@ -445,8 +449,8 @@ if __name__ == "__main__":
     # os.environ["OPENAI_ORG"]=API_KEYS["OpenAI_ORG_ID"]
     os.environ["OPENAI_BASE_URL"]=API_KEYS["DeepBricks_BASE_URL"]
     
-    # model_name="gpt-4o-2024-08-06"
-    model_name = "gpt-4o-mini"
+    model_name="gpt-4o-2024-08-06"
+    # model_name = "gpt-4o-mini"
     model_config = lm_config.LMConfig(provider="openai_chat", model=model_name)
     
     # fire.Fire(koala_prompts)
