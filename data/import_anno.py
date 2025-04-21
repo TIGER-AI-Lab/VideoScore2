@@ -69,7 +69,9 @@ from prepare_video.prompts.utils_gpt_chat import *
 data_dir="/data/xuan/videoscore2/data"
 all_data_path=f"{data_dir}/all_anno.json"
 COMMENT_REFINE_TEMPLATE=""
-
+shared_comments=json.load(open("./const/shared_comments.json","r"))
+MIN_SCORE=1
+MAX_SCORE=5
 
 def convert_anno(raw_anno_file):
     with open(raw_anno_file,"r",encoding="utf-8") as f:
@@ -104,14 +106,20 @@ def convert_anno(raw_anno_file):
         
         visual_comment=anno["labels"][1]["data"]["value"]
         t2v_comment=anno["labels"][3]["data"]["value"]
-        physical_comment=anno["labels"][5]["data"]["value"]        
+        physical_comment=anno["labels"][5]["data"]["value"]
+        if visual_score==MIN_SCORE or visual_score==MAX_SCORE:
+            visual_comment="NA"
+        if t2v_score==MAX_SCORE:
+            t2v_comment="NA"
+        if physical_score==MAX_SCORE:
+            physical_comment="NA"     
+               
         visual_scores.append(visual_score)
         visual_comments.append(visual_comment)
         t2v_scores.append(t2v_score)
         t2v_comments.append(t2v_comment)
         physical_scores.append(physical_score)
         physical_comments.append(physical_comment)
-        
      
         data_item={
             "video_name":video_name,
@@ -139,6 +147,14 @@ def convert_anno(raw_anno_file):
         data[idx]['visual']["comment"]=visual_comments_refined[idx]
         data[idx]['t2v_align']["comment"]=t2v_comments_refined[idx]
         data[idx]['physical']["comment"]=physical_comments_refined[idx]
+        if visual_scores[idx]==MIN_SCORE:
+            data[idx]['visual']["comment"]=shared_comments["visual_1"]
+        if visual_scores[idx]==MAX_SCORE:
+            data[idx]['visual']["comment"]=shared_comments["visual_5"]
+        if t2v_scores[idx]==MIN_SCORE:
+            data[idx]['t2v_align']["comment"]=shared_comments["t2v_1"]
+        if physical_scores[idx]==MIN_SCORE:
+            data[idx]['physical']["comment"]=shared_comments["physical_1"]
         
         
     # with open(save_path,"a",encoding="utf-8") as f:
