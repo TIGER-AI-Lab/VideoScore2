@@ -54,15 +54,4 @@ def download_koala_real_videos():
     
     
 if __name__  == "__main__":
-    # download_koala_real_videos()
-    dir="/data/xuan/videoscore2/anno_page/anno_upload_shuffled"
-    os.makedirs(dir,exist_ok=True)
-    p="/data/xuan/videoscore2/anno_page/anno_upload/intra_inter_shuffled_all.json"
-    with open(p,"r") as f:
-        data=json.load(f)
-    
-    for i in range(100):
-        chunk=data[i*500:(i+1)*500]
-        with open(os.path.join(dir,f"batch_{i}.json"),"w") as f:
-            json.dump(chunk,f,indent=4)
-        print(f"chunk {i} done")
+    download_koala_real_videos()
