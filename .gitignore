@@ -177,3 +177,6 @@ prepare_video/prompts/*
 !prepare_video/prompts/*.py
 !prepare_video/prompts/*.png
 prepare_video/t2v_model/api*
+
+
+data/test*
