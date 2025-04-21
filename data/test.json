@@ -1,0 +1,2762 @@
+[
+    {
+        "_id": "67fa7e7e64cfe057abb7d0b4",
+        "batchId": "67fa7e7e64cfe057abb7d059",
+        "info": {
+            "data": [
+                {
+                    "content": "生成视频使用的PROMPT",
+                    "type": "TITLE"
+                },
+                {
+                    "content": "English Prompt: The sun rises over a serene city landscape, transitioning to bustling streets as fans in vibrant football jerseys converge towards iconic Premier League stadiums. The energy is palpable, with the excitement building for a day packed with football action. \n翻译为中文的Prompt:阳光照耀着宁静的城市风景，逐渐转向熙熙攘攘的街道，身穿鲜艳足球球衣的球迷们聚集向标志性的英超体育场。氛围令人振奋，兴奋感在为充满足球赛事的一天而不断升温。",
+                    "type": "TEXT"
+                },
+                {
+                    "content": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/1000_1499/ltx_video_091/001023_i.mp4",
+                    "type": "VIDEO"
+                },
+                {
+                    "content": "src_id: f731fee5-c9f6-57da-a98f-03be1b16df73  src: vidprom",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "labels": [
+            {
+                "_id": "67fc79515c7dcbd18191e6ef",
+                "data": {
+                    "id": 1,
+                    "hash": "1_视觉质量评分",
+                    "label": "1_视觉质量评分",
+                    "value": "asasasa",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc79515c7dcbd18191e6f0",
+                "data": {
+                    "id": 2,
+                    "hash": "1_视觉质量描述",
+                    "label": "1_视觉质量描述",
+                    "value": "画质比较模糊，看不清城市风景，街道和标志性的体育场",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc79515c7dcbd18191e6f1",
+                "data": {
+                    "id": 3,
+                    "hash": "1_文本符合度评分",
+                    "label": "1_文本符合度评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc79515c7dcbd18191e6f2",
+                "data": {
+                    "id": 4,
+                    "hash": "1_文本符合度描述",
+                    "label": "1_文本符合度描述",
+                    "value": "看不到球迷聚集",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc79515c7dcbd18191e6f3",
+                "data": {
+                    "id": 5,
+                    "hash": "1_物理符合度评分",
+                    "label": "1_物理符合度评分",
+                    "value": 4,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc79515c7dcbd18191e6f4",
+                "data": {
+                    "id": 6,
+                    "hash": "1_物理符合度描述",
+                    "label": "1_物理符合度描述",
+                    "value": "符合常理",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "_id": "67fa7e7e64cfe057abb7d0b5",
+        "batchId": "67fa7e7e64cfe057abb7d059",
+        "info": {
+            "data": [
+                {
+                    "content": "生成视频使用的PROMPT",
+                    "type": "TITLE"
+                },
+                {
+                    "content": "English Prompt: A man throws a rock into a calm pond, watches the splash ripple out, then picks up another stone and skips it across the water. \n翻译为中文的Prompt:一个男人把一块石头扔进平静的池塘，观察水花扩散，然后捡起另一块石头在水面上跳跃着扔出去。",
+                    "type": "TEXT"
+                },
+                {
+                    "content": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/3000_3499/cogvideox_5b/003119_f.mp4",
+                    "type": "VIDEO"
+                },
+                {
+                    "content": "src_id: 5d11bab6-2208-4451-ae1d-b4d690a2daa2  src: story",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "labels": [
+            {
+                "_id": "67fc7a0ae585a6200b0128bf",
+                "data": {
+                    "id": 1,
+                    "hash": "1_视觉质量评分",
+                    "label": "1_视觉质量评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc7a0ae585a6200b0128c0",
+                "data": {
+                    "id": 2,
+                    "hash": "1_视觉质量描述",
+                    "label": "1_视觉质量描述",
+                    "value": "手里的石头突然出现，人物的手脚会扭曲变形",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc7a0ae585a6200b0128c1",
+                "data": {
+                    "id": 3,
+                    "hash": "1_文本符合度评分",
+                    "label": "1_文本符合度评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc7a0ae585a6200b0128c2",
+                "data": {
+                    "id": 4,
+                    "hash": "1_文本符合度描述",
+                    "label": "1_文本符合度描述",
+                    "value": "没有扔第一块石头的动作",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc7a0ae585a6200b0128c3",
+                "data": {
+                    "id": 5,
+                    "hash": "1_物理符合度评分",
+                    "label": "1_物理符合度评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc7a0ae585a6200b0128c4",
+                "data": {
+                    "id": 6,
+                    "hash": "1_物理符合度描述",
+                    "label": "1_物理符合度描述",
+                    "value": "男子的手和脚会弯折",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "_id": "67fa7e7e64cfe057abb7d0b6",
+        "batchId": "67fa7e7e64cfe057abb7d059",
+        "info": {
+            "data": [
+                {
+                    "content": "生成视频使用的PROMPT",
+                    "type": "TITLE"
+                },
+                {
+                    "content": "English Prompt: A fly fisherman standing in a river, fighting with a big salmon on his rod. Two cartoon grizzlies look happy for him in the background. \n翻译为中文的Prompt:",
+                    "type": "TEXT"
+                },
+                {
+                    "content": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/3500_3999/opensora_plan_v1_3/003680_u.mp4",
+                    "type": "VIDEO"
+                },
+                {
+                    "content": "src_id: 5791de8c-627e-5772-be28-b0df5f2627f0  src: vidprom",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "labels": [
+            {
+                "_id": "67fbf007237395bba3d1bab9",
+                "data": {
+                    "id": 1,
+                    "hash": "1_视觉质量评分",
+                    "label": "1_视觉质量评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbf007237395bba3d1baba",
+                "data": {
+                    "id": 2,
+                    "hash": "1_视觉质量描述",
+                    "label": "1_视觉质量描述",
+                    "value": "画面清晰。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbf007237395bba3d1babb",
+                "data": {
+                    "id": 3,
+                    "hash": "1_文本符合度评分",
+                    "label": "1_文本符合度评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbf007237395bba3d1babc",
+                "data": {
+                    "id": 4,
+                    "hash": "1_文本符合度描述",
+                    "label": "1_文本符合度描述",
+                    "value": "鱼不在钓竿上，钓者也没有和鱼搏斗，没有出现卡通灰熊。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbf007237395bba3d1babd",
+                "data": {
+                    "id": 5,
+                    "hash": "1_物理符合度评分",
+                    "label": "1_物理符合度评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbf007237395bba3d1babe",
+                "data": {
+                    "id": 6,
+                    "hash": "1_物理符合度描述",
+                    "label": "1_物理符合度描述",
+                    "value": "鱼长了脚。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "_id": "67fa7e7e64cfe057abb7d0b7",
+        "batchId": "67fa7e7e64cfe057abb7d059",
+        "info": {
+            "data": [
+                {
+                    "content": "生成视频使用的PROMPT",
+                    "type": "TITLE"
+                },
+                {
+                    "content": "English Prompt: A serious-looking Spartan warrior stands straight, looking directly at the camera, hands relaxed, with a masculine face, square jaw, and visible wrinkles, wearing a red and gold armor suit. \n翻译为中文的Prompt:一个严肃的斯巴达战士笔直站立，直视镜头，双手放松，面容刚毅，方形下颌，皱纹明显，穿着红色和金色的铠甲。",
+                    "type": "TEXT"
+                },
+                {
+                    "content": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/3000_3499/cogvideox_2b/003470_e.mp4",
+                    "type": "VIDEO"
+                },
+                {
+                    "content": "src_id: 4b7c1ba8-2cc5-5ac2-93a7-36f952b74933  src: vidprom",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "labels": [
+            {
+                "_id": "67fc6ee25d75ec849577c8c9",
+                "data": {
+                    "id": 1,
+                    "hash": "1_视觉质量评分",
+                    "label": "1_视觉质量评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc6ee25d75ec849577c8ca",
+                "data": {
+                    "id": 2,
+                    "hash": "1_视觉质量描述",
+                    "label": "1_视觉质量描述",
+                    "value": "画质清晰，人物面部自然。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc6ee25d75ec849577c8cb",
+                "data": {
+                    "id": 3,
+                    "hash": "1_文本符合度评分",
+                    "label": "1_文本符合度评分",
+                    "value": 4,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc6ee25d75ec849577c8cc",
+                "data": {
+                    "id": 4,
+                    "hash": "1_文本符合度描述",
+                    "label": "1_文本符合度描述",
+                    "value": "没看见双手的状态。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc6ee25d75ec849577c8cd",
+                "data": {
+                    "id": 5,
+                    "hash": "1_物理符合度评分",
+                    "label": "1_物理符合度评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc6ee25d75ec849577c8ce",
+                "data": {
+                    "id": 6,
+                    "hash": "1_物理符合度描述",
+                    "label": "1_物理符合度描述",
+                    "value": "符合常理。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "_id": "67fa7e7e64cfe057abb7d0b8",
+        "batchId": "67fa7e7e64cfe057abb7d059",
+        "info": {
+            "data": [
+                {
+                    "content": "生成视频使用的PROMPT",
+                    "type": "TITLE"
+                },
+                {
+                    "content": "English Prompt: A cute 9-year-old b-girl running through a field of tulips with blonde hair, blue eyes, and a happy facial expression while wearing a white summer dress. \n翻译为中文的Prompt:一个可爱的9岁女孩在郁金香田野里奔跑，金色的头发，蓝色的眼睛，面带快乐的表情，穿着白色的夏裙。",
+                    "type": "TEXT"
+                },
+                {
+                    "content": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/4000_4499/lavie_base/004164_h.mp4",
+                    "type": "VIDEO"
+                },
+                {
+                    "content": "src_id: 3c8e4fba-607b-5a39-8380-2c0dbfa38615  src: vidprom",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "labels": [
+            {
+                "_id": "67fbeae9fa9768893ce4b887",
+                "data": {
+                    "id": 1,
+                    "hash": "1_视觉质量评分",
+                    "label": "1_视觉质量评分",
+                    "value": 4,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbeae9fa9768893ce4b888",
+                "data": {
+                    "id": 2,
+                    "hash": "1_视觉质量描述",
+                    "label": "1_视觉质量描述",
+                    "value": "女孩的面部不自然，发型在双马尾和披散头发之间来回变化。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbeae9fa9768893ce4b889",
+                "data": {
+                    "id": 3,
+                    "hash": "1_文本符合度评分",
+                    "label": "1_文本符合度评分",
+                    "value": 4,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbeae9fa9768893ce4b88a",
+                "data": {
+                    "id": 4,
+                    "hash": "1_文本符合度描述",
+                    "label": "1_文本符合度描述",
+                    "value": "女孩的眼睛不是蓝色。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbeae9fa9768893ce4b88b",
+                "data": {
+                    "id": 5,
+                    "hash": "1_物理符合度评分",
+                    "label": "1_物理符合度评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbeae9fa9768893ce4b88c",
+                "data": {
+                    "id": 6,
+                    "hash": "1_物理符合度描述",
+                    "label": "1_物理符合度描述",
+                    "value": "面部变化不自然，发型也在突变。女孩的动作是向前奔跑，但是以花为参照物来看，女孩的身体在后退。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "_id": "67fa7e7e64cfe057abb7d0b9",
+        "batchId": "67fa7e7e64cfe057abb7d059",
+        "info": {
+            "data": [
+                {
+                    "content": "生成视频使用的PROMPT",
+                    "type": "TITLE"
+                },
+                {
+                    "content": "English Prompt: A person carefully cuts raw chicken pieces on a well-used wooden cutting board, using a large kitchen knife. The chicken is arranged in a grid pattern as the hands work methodically, cutting and positioning the pieces. The scene is well-lit with no distractions, focusing on the sharp knife, raw chicken, and the person's hands in action. \n翻译为中文的Prompt:一个人小心翼翼地在一个用得很旧的木砧板上切生鸡肉，使用一把大厨刀。鸡肉以网格模式排列，双手有条不紊地切割和摆放这些肉块。场景光线良好，没有干扰，聚焦在锋利的刀、生鸡肉和这个人正在动作的手上。",
+                    "type": "TEXT"
+                },
+                {
+                    "content": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/2000_2499/wanx21_1_3b/002085_v.mp4",
+                    "type": "VIDEO"
+                },
+                {
+                    "content": "src_id: e39CHmBK6Os_29  src: koala",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "labels": [
+            {
+                "_id": "67fc707325ecf7d4245e7148",
+                "data": {
+                    "id": 1,
+                    "hash": "1_视觉质量评分",
+                    "label": "1_视觉质量评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc707325ecf7d4245e7149",
+                "data": {
+                    "id": 2,
+                    "hash": "1_视觉质量描述",
+                    "label": "1_视觉质量描述",
+                    "value": "画质清晰，人物动作自然",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc707325ecf7d4245e714a",
+                "data": {
+                    "id": 3,
+                    "hash": "1_文本符合度评分",
+                    "label": "1_文本符合度评分",
+                    "value": 4,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc707325ecf7d4245e714b",
+                "data": {
+                    "id": 4,
+                    "hash": "1_文本符合度描述",
+                    "label": "1_文本符合度描述",
+                    "value": "看不出木砧板已经用得很旧",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc707325ecf7d4245e714c",
+                "data": {
+                    "id": 5,
+                    "hash": "1_物理符合度评分",
+                    "label": "1_物理符合度评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc707325ecf7d4245e714d",
+                "data": {
+                    "id": 6,
+                    "hash": "1_物理符合度描述",
+                    "label": "1_物理符合度描述",
+                    "value": "符合常理。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "_id": "67fa7e7e64cfe057abb7d0ba",
+        "batchId": "67fa7e7e64cfe057abb7d059",
+        "info": {
+            "data": [
+                {
+                    "content": "生成视频使用的PROMPT",
+                    "type": "TITLE"
+                },
+                {
+                    "content": "English Prompt: Big backyard swimming pool filling with water in the morning, sun glare on the surface, and small waves inside. Cinematic style. \n翻译为中文的Prompt:早晨，大后院的游泳池正在注满水，阳光在水面上反射出耀眼的光芒，池内泛起小波浪。电影风格。",
+                    "type": "TEXT"
+                },
+                {
+                    "content": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/4500_4999/magictime/004853_q.mp4",
+                    "type": "VIDEO"
+                },
+                {
+                    "content": "src_id: c37c0237-ddab-5b7f-b345-c988f23f3085  src: vidprom",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "labels": [
+            {
+                "_id": "67fbeb1d95f1dcc5fac93faf",
+                "data": {
+                    "id": 1,
+                    "hash": "1_视觉质量评分",
+                    "label": "1_视觉质量评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbeb1d95f1dcc5fac93fb0",
+                "data": {
+                    "id": 2,
+                    "hash": "1_视觉质量描述",
+                    "label": "1_视觉质量描述",
+                    "value": "画质清晰。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbeb1d95f1dcc5fac93fb1",
+                "data": {
+                    "id": 3,
+                    "hash": "1_文本符合度评分",
+                    "label": "1_文本符合度评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbeb1d95f1dcc5fac93fb2",
+                "data": {
+                    "id": 4,
+                    "hash": "1_文本符合度描述",
+                    "label": "1_文本符合度描述",
+                    "value": "基本符合文本描述。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbeb1d95f1dcc5fac93fb3",
+                "data": {
+                    "id": 5,
+                    "hash": "1_物理符合度评分",
+                    "label": "1_物理符合度评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbeb1d95f1dcc5fac93fb4",
+                "data": {
+                    "id": 6,
+                    "hash": "1_物理符合度描述",
+                    "label": "1_物理符合度描述",
+                    "value": "没有不符合常理的地方。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "_id": "67fa7e7e64cfe057abb7d0bb",
+        "batchId": "67fa7e7e64cfe057abb7d059",
+        "info": {
+            "data": [
+                {
+                    "content": "生成视频使用的PROMPT",
+                    "type": "TITLE"
+                },
+                {
+                    "content": "English Prompt: A flicker of fire appears on the screen, slowly transitioning into an illuminated diya at the Ganga Ghat. The diya shines brightly in a vibrant orange hue, casting a soft glow. \n翻译为中文的Prompt:屏幕上出现一闪而过的火焰，慢慢过渡到恒河岸边的点亮油灯。油灯散发出明亮的橙色光芒，投射出柔和的光辉。",
+                    "type": "TEXT"
+                },
+                {
+                    "content": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/3000_3499/cogvideox15_5b/003215_g.mp4",
+                    "type": "VIDEO"
+                },
+                {
+                    "content": "src_id: dc379e4f-6438-52b8-8d62-371f8a23a73a  src: vidprom",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "labels": [
+            {
+                "_id": "67fbf07370f0171be4922ae6",
+                "data": {
+                    "id": 1,
+                    "hash": "1_视觉质量评分",
+                    "label": "1_视觉质量评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbf07370f0171be4922ae7",
+                "data": {
+                    "id": 2,
+                    "hash": "1_视觉质量描述",
+                    "label": "1_视觉质量描述",
+                    "value": "画面清晰，细节自然。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbf07370f0171be4922ae8",
+                "data": {
+                    "id": 3,
+                    "hash": "1_文本符合度评分",
+                    "label": "1_文本符合度评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbf07370f0171be4922ae9",
+                "data": {
+                    "id": 4,
+                    "hash": "1_文本符合度描述",
+                    "label": "1_文本符合度描述",
+                    "value": "火焰没有一闪而过，而是持续出现在整个视频。没有出现油灯。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbf07370f0171be4922aea",
+                "data": {
+                    "id": 5,
+                    "hash": "1_物理符合度评分",
+                    "label": "1_物理符合度评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbf07370f0171be4922aeb",
+                "data": {
+                    "id": 6,
+                    "hash": "1_物理符合度描述",
+                    "label": "1_物理符合度描述",
+                    "value": "没有不符合逻辑的地方。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "_id": "67fa7e7e64cfe057abb7d0bc",
+        "batchId": "67fa7e7e64cfe057abb7d059",
+        "info": {
+            "data": [
+                {
+                    "content": "生成视频使用的PROMPT",
+                    "type": "TITLE"
+                },
+                {
+                    "content": "English Prompt: Envision Koji approaching Master Shiro with a mixture of excitement and respect. See him bowing slightly as he speaks, eager to learn from the wise old master. \n翻译为中文的Prompt:想象小岛带着兴奋和尊重接近白大师。看到他微微鞠躬，急切地想向这位智慧的老大师学习。",
+                    "type": "TEXT"
+                },
+                {
+                    "content": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/4500_4999/lavie_base/004711_h.mp4",
+                    "type": "VIDEO"
+                },
+                {
+                    "content": "src_id: bc699eab-62c3-5aea-b56f-963c10c9024b  src: vidprom",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "labels": [
+            {
+                "_id": "67fbe69d2d8eaae9f4f31e77",
+                "data": {
+                    "id": 1,
+                    "hash": "1_视觉质量评分",
+                    "label": "1_视觉质量评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbe69d2d8eaae9f4f31e78",
+                "data": {
+                    "id": 2,
+                    "hash": "1_视觉质量描述",
+                    "label": "1_视觉质量描述",
+                    "value": "画质清晰，人物面部和动作自然。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbe69d2d8eaae9f4f31e79",
+                "data": {
+                    "id": 3,
+                    "hash": "1_文本符合度评分",
+                    "label": "1_文本符合度评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbe69d2d8eaae9f4f31e7a",
+                "data": {
+                    "id": 4,
+                    "hash": "1_文本符合度描述",
+                    "label": "1_文本符合度描述",
+                    "value": "没有出现白大师。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbe69d2d8eaae9f4f31e7b",
+                "data": {
+                    "id": 5,
+                    "hash": "1_物理符合度评分",
+                    "label": "1_物理符合度评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbe69d2d8eaae9f4f31e7c",
+                "data": {
+                    "id": 6,
+                    "hash": "1_物理符合度描述",
+                    "label": "1_物理符合度描述",
+                    "value": "没有不符合逻辑的地方。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "_id": "67fa7e7e64cfe057abb7d0bd",
+        "batchId": "67fa7e7e64cfe057abb7d059",
+        "info": {
+            "data": [
+                {
+                    "content": "生成视频使用的PROMPT",
+                    "type": "TITLE"
+                },
+                {
+                    "content": "English Prompt: A crying child amidst ruined houses at sunset, holding a doll in their hand, with birds flying in the sky. \n翻译为中文的Prompt:在日落时分，哭泣的孩子站在废墟中的房屋之间，手中握着一个洋娃娃，天空中飞翔着鸟儿。",
+                    "type": "TEXT"
+                },
+                {
+                    "content": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/2500_2999/ltx_video_095/002693_z.mp4",
+                    "type": "VIDEO"
+                },
+                {
+                    "content": "src_id: 2d195fd3-0ce8-5e2f-9fd3-9ec78b9d2365  src: vidprom",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "labels": [
+            {
+                "_id": "67fc7bfe237395bba3d40f49",
+                "data": {
+                    "id": 1,
+                    "hash": "1_视觉质量评分",
+                    "label": "1_视觉质量评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc7bfe237395bba3d40f4a",
+                "data": {
+                    "id": 2,
+                    "hash": "1_视觉质量描述",
+                    "label": "1_视觉质量描述",
+                    "value": "孩子的五官的比例不协调，身体的比例也不自然，左手的两段手臂有错位。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc7bfe237395bba3d40f4b",
+                "data": {
+                    "id": 3,
+                    "hash": "1_文本符合度评分",
+                    "label": "1_文本符合度评分",
+                    "value": 4,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc7bfe237395bba3d40f4c",
+                "data": {
+                    "id": 4,
+                    "hash": "1_文本符合度描述",
+                    "label": "1_文本符合度描述",
+                    "value": "孩子没有在哭泣",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc7bfe237395bba3d40f4d",
+                "data": {
+                    "id": 5,
+                    "hash": "1_物理符合度评分",
+                    "label": "1_物理符合度评分",
+                    "value": 2,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc7bfe237395bba3d40f4e",
+                "data": {
+                    "id": 6,
+                    "hash": "1_物理符合度描述",
+                    "label": "1_物理符合度描述",
+                    "value": "左手的上下段手臂错位",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "_id": "67fa7e7e64cfe057abb7d0be",
+        "batchId": "67fa7e7e64cfe057abb7d059",
+        "info": {
+            "data": [
+                {
+                    "content": "生成视频使用的PROMPT",
+                    "type": "TITLE"
+                },
+                {
+                    "content": "English Prompt: Atv rider wearing a yellow and purple helmet walks to a yellow Can-Am Renegade ATV, sits on it, and starts the engine. \n翻译为中文的Prompt:一名穿着黄色和紫色头盔的全地形车骑手走向一辆黄色的Can-Am Renegade全地形车，坐上去并启动引擎。",
+                    "type": "TEXT"
+                },
+                {
+                    "content": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/4500_4999/anidiff/004659_a.mp4",
+                    "type": "VIDEO"
+                },
+                {
+                    "content": "src_id: 3b955788-ad8e-5828-a4df-57ceeed0ca4d  src: vidprom",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "labels": [
+            {
+                "_id": "67fbf0e5fa9768893ce4bb08",
+                "data": {
+                    "id": 1,
+                    "hash": "1_视觉质量评分",
+                    "label": "1_视觉质量评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbf0e5fa9768893ce4bb09",
+                "data": {
+                    "id": 2,
+                    "hash": "1_视觉质量描述",
+                    "label": "1_视觉质量描述",
+                    "value": "画面清晰，人物动作连贯自然。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbf0e5fa9768893ce4bb0a",
+                "data": {
+                    "id": 3,
+                    "hash": "1_文本符合度评分",
+                    "label": "1_文本符合度评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbf0e5fa9768893ce4bb0b",
+                "data": {
+                    "id": 4,
+                    "hash": "1_文本符合度描述",
+                    "label": "1_文本符合度描述",
+                    "value": "没有紫色头盔。骑手没有走向车再坐上去，而是一开始就坐在车上。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbf0e5fa9768893ce4bb0c",
+                "data": {
+                    "id": 5,
+                    "hash": "1_物理符合度评分",
+                    "label": "1_物理符合度评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbf0e5fa9768893ce4bb0d",
+                "data": {
+                    "id": 6,
+                    "hash": "1_物理符合度描述",
+                    "label": "1_物理符合度描述",
+                    "value": "没有不符合常理的地方。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "_id": "67fa7e7e64cfe057abb7d0bf",
+        "batchId": "67fa7e7e64cfe057abb7d059",
+        "info": {
+            "data": [
+                {
+                    "content": "生成视频使用的PROMPT",
+                    "type": "TITLE"
+                },
+                {
+                    "content": "English Prompt: A casual indoor scene shows a woman and a man seated at a kitchen counter. The woman, wearing a black top and with long blonde hair, gestures as she speaks to the man, dressed in a blue Dodgers t-shirt. The modern kitchen, featuring a stainless steel range hood, white cabinets, and a well-lit atmosphere, serves as the backdrop. Natural light filters in through a large window, creating a warm and inviting ambiance. Both individuals are engaged in conversation, with the camera capturing the interaction and the organized, clean kitchen. \n翻译为中文的Prompt:一个休闲的室内场景显示一位女性和一位男性坐在厨房台面上。女性穿着黑色上衣，留着长长的金发，手势表达着与男性的对话，男性则穿着蓝色道奇队的T恤。现代厨房的背景有不锈钢油烟机、白色橱柜和明亮的氛围。自然光透过一扇大窗户洒入，营造出温暖而宜人的环境。两人正在交谈，镜头捕捉到他们的互动以及整洁有序的厨房。",
+                    "type": "TEXT"
+                },
+                {
+                    "content": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/1500_1999/anidiff/001534_a.mp4",
+                    "type": "VIDEO"
+                },
+                {
+                    "content": "src_id: GrEXi7e7sQU_80  src: koala",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "labels": [
+            {
+                "_id": "67fc7afc2d8eaae9f4f560c7",
+                "data": {
+                    "id": 1,
+                    "hash": "1_视觉质量评分",
+                    "label": "1_视觉质量评分",
+                    "value": 4,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc7afc2d8eaae9f4f560c8",
+                "data": {
+                    "id": 2,
+                    "hash": "1_视觉质量描述",
+                    "label": "1_视觉质量描述",
+                    "value": "女人的侧脸有变形",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc7afc2d8eaae9f4f560c9",
+                "data": {
+                    "id": 3,
+                    "hash": "1_文本符合度评分",
+                    "label": "1_文本符合度评分",
+                    "value": 2,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc7afc2d8eaae9f4f560ca",
+                "data": {
+                    "id": 4,
+                    "hash": "1_文本符合度描述",
+                    "label": "1_文本符合度描述",
+                    "value": "女人的衣服颜色错误；没有出现另一个和女人交谈的男人",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc7afc2d8eaae9f4f560cb",
+                "data": {
+                    "id": 5,
+                    "hash": "1_物理符合度评分",
+                    "label": "1_物理符合度评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc7afc2d8eaae9f4f560cc",
+                "data": {
+                    "id": 6,
+                    "hash": "1_物理符合度描述",
+                    "label": "1_物理符合度描述",
+                    "value": "符合常理",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "_id": "67fa7e7e64cfe057abb7d0c0",
+        "batchId": "67fa7e7e64cfe057abb7d059",
+        "info": {
+            "data": [
+                {
+                    "content": "生成视频使用的PROMPT",
+                    "type": "TITLE"
+                },
+                {
+                    "content": "English Prompt: A news segment features three anchors at a round table in a modern studio. The background shows a large screen with social media icons and a cityscape. One anchor gestures towards the screen while the others listen attentively. The first anchor wears a dark suit, the second a light suit, and the third also wears a dark suit. The studio is professional and well-lit, with microphones and laptops on the table, highlighting the news discussion. The camera provides a clear, wide-angle view of the scene. \n翻译为中文的Prompt:一个新闻片段展示了三位主播在现代工作室的圆桌旁。背景中有一个大型屏幕，上面显示着社交媒体图标和城市景观。一位主播向屏幕做手势，其他人则专心倾听。第一位主播穿着深色西装，第二位穿着浅色西装，第三位也穿着深色西装。工作室专业且光线充足，桌上放着麦克风和笔记本电脑，突显了新闻讨论的氛围。摄像机提供了清晰的广角视角。",
+                    "type": "TEXT"
+                },
+                {
+                    "content": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/4500_4999/ltx_video_091/004537_i.mp4",
+                    "type": "VIDEO"
+                },
+                {
+                    "content": "src_id: SL7qSPpn3fY_6  src: koala",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "labels": [
+            {
+                "_id": "67fc7a6325ecf7d4245f37e6",
+                "data": {
+                    "id": 1,
+                    "hash": "1_视觉质量评分",
+                    "label": "1_视觉质量评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc7a6325ecf7d4245f37e7",
+                "data": {
+                    "id": 2,
+                    "hash": "1_视觉质量描述",
+                    "label": "1_视觉质量描述",
+                    "value": "主持人的一只手消失，一只手模糊",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc7a6325ecf7d4245f37e8",
+                "data": {
+                    "id": 3,
+                    "hash": "1_文本符合度评分",
+                    "label": "1_文本符合度评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc7a6325ecf7d4245f37e9",
+                "data": {
+                    "id": 4,
+                    "hash": "1_文本符合度描述",
+                    "label": "1_文本符合度描述",
+                    "value": "只有一位主持人",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc7a6325ecf7d4245f37ea",
+                "data": {
+                    "id": 5,
+                    "hash": "1_物理符合度评分",
+                    "label": "1_物理符合度评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc7a6325ecf7d4245f37eb",
+                "data": {
+                    "id": 6,
+                    "hash": "1_物理符合度描述",
+                    "label": "1_物理符合度描述",
+                    "value": "主持人的左手凭空闪现",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "_id": "67fa7e7e64cfe057abb7d0c1",
+        "batchId": "67fa7e7e64cfe057abb7d059",
+        "info": {
+            "data": [
+                {
+                    "content": "生成视频使用的PROMPT",
+                    "type": "TITLE"
+                },
+                {
+                    "content": "English Prompt: At the military training ground, the tank slowly moves around the territory. Suddenly, it discovers another tank and opens fire, releasing a projectile that flies towards the enemy. \n翻译为中文的Prompt:在军事训练场，坦克缓缓在领土上移动。突然，它发现另一辆坦克并开火，发射出一枚飞向敌人的炮弹。",
+                    "type": "TEXT"
+                },
+                {
+                    "content": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/3500_3999/anidiff/003959_a.mp4",
+                    "type": "VIDEO"
+                },
+                {
+                    "content": "src_id: 4b51da63-5522-5f88-974b-d978f928203b  src: vidprom",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "labels": [
+            {
+                "_id": "67fc70165d75ec849577db14",
+                "data": {
+                    "id": 1,
+                    "hash": "1_视觉质量评分",
+                    "label": "1_视觉质量评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc70165d75ec849577db15",
+                "data": {
+                    "id": 2,
+                    "hash": "1_视觉质量描述",
+                    "label": "1_视觉质量描述",
+                    "value": "左边坦克的履带突然错位。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc70165d75ec849577db16",
+                "data": {
+                    "id": 3,
+                    "hash": "1_文本符合度评分",
+                    "label": "1_文本符合度评分",
+                    "value": 4,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc70165d75ec849577db17",
+                "data": {
+                    "id": 4,
+                    "hash": "1_文本符合度描述",
+                    "label": "1_文本符合度描述",
+                    "value": "按照文本描述描述，应该是在视频里先出现的坦克开火打击后出现的坦克，但是视频中是后出现的坦克向先出现的坦克开火。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc70165d75ec849577db18",
+                "data": {
+                    "id": 5,
+                    "hash": "1_物理符合度评分",
+                    "label": "1_物理符合度评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fc70165d75ec849577db19",
+                "data": {
+                    "id": 6,
+                    "hash": "1_物理符合度描述",
+                    "label": "1_物理符合度描述",
+                    "value": "左边坦克一开始在沿垂直于履带的方向移动。而且左边坦克被火炮击中后毫无损伤，仍然正常移动。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "_id": "67fa7e7e64cfe057abb7d0c2",
+        "batchId": "67fa7e7e64cfe057abb7d059",
+        "info": {
+            "data": [
+                {
+                    "content": "生成视频使用的PROMPT",
+                    "type": "TITLE"
+                },
+                {
+                    "content": "English Prompt: Cinematic, futuristic female samurai dressed in full armor, lovingly looking at the viewer, walking in the streets of a futuristic temple, slight breeze, sharp focus, intricate detail, wind blowing, in the style of John Woo. \n翻译为中文的Prompt:电影感，未来派女性武士穿着全套盔甲，深情地看着观众，走在未来寺庙的街道上，微风拂过，清晰聚焦，复杂细节，风吹动，仿佛在吴宇森的风格中。",
+                    "type": "TEXT"
+                },
+                {
+                    "content": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/2000_2499/vchitect2/002436_p.mp4",
+                    "type": "VIDEO"
+                },
+                {
+                    "content": "src_id: aaf153dd-3854-5137-8359-cc973b461891  src: vidprom",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "labels": [
+            {
+                "_id": "67fbd7d192caaf6b9423838b",
+                "data": {
+                    "id": 1,
+                    "hash": "1_视觉质量评分",
+                    "label": "1_视觉质量评分",
+                    "value": 4,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbd7d192caaf6b9423838c",
+                "data": {
+                    "id": 2,
+                    "hash": "1_视觉质量描述",
+                    "label": "1_视觉质量描述",
+                    "value": "人物面部清晰，但是背景模糊。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbd7d192caaf6b9423838d",
+                "data": {
+                    "id": 3,
+                    "hash": "1_文本符合度评分",
+                    "label": "1_文本符合度评分",
+                    "value": 4,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbd7d192caaf6b9423838e",
+                "data": {
+                    "id": 4,
+                    "hash": "1_文本符合度描述",
+                    "label": "1_文本符合度描述",
+                    "value": "女武士没有“深情”的眼神。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbd7d192caaf6b9423838f",
+                "data": {
+                    "id": 5,
+                    "hash": "1_物理符合度评分",
+                    "label": "1_物理符合度评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbd7d192caaf6b94238390",
+                "data": {
+                    "id": 6,
+                    "hash": "1_物理符合度描述",
+                    "label": "1_物理符合度描述",
+                    "value": "女武士的面部，身体上的衣服和背景建筑在持续渐变",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "_id": "67fa7e7e64cfe057abb7d0c3",
+        "batchId": "67fa7e7e64cfe057abb7d059",
+        "info": {
+            "data": [
+                {
+                    "content": "生成视频使用的PROMPT",
+                    "type": "TITLE"
+                },
+                {
+                    "content": "English Prompt: On a sunny afternoon, a white kitten was walking along a ridge in the countryside with some sludge stuck to its feet. \n翻译为中文的Prompt:在一个阳光明媚的下午，一只白色的小猫在乡间的小山坡上走着，脚上沾着一些泥浆。",
+                    "type": "TEXT"
+                },
+                {
+                    "content": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/2000_2499/zeroscope/002495_j.mp4",
+                    "type": "VIDEO"
+                },
+                {
+                    "content": "src_id: 0ce2c805-798e-528c-945f-af104e5433e8  src: vidprom",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "labels": [
+            {
+                "_id": "67fbdeae5bce13eda3e5a833",
+                "data": {
+                    "id": 1,
+                    "hash": "1_视觉质量评分",
+                    "label": "1_视觉质量评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbdeae5bce13eda3e5a834",
+                "data": {
+                    "id": 2,
+                    "hash": "1_视觉质量描述",
+                    "label": "1_视觉质量描述",
+                    "value": "画面在晃动。左上角有不明黑色条纹。猫爪会突然消失。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbdeae5bce13eda3e5a835",
+                "data": {
+                    "id": 3,
+                    "hash": "1_文本符合度评分",
+                    "label": "1_文本符合度评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbdeae5bce13eda3e5a836",
+                "data": {
+                    "id": 4,
+                    "hash": "1_文本符合度描述",
+                    "label": "1_文本符合度描述",
+                    "value": "基本符合文本描述。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbdeae5bce13eda3e5a837",
+                "data": {
+                    "id": 5,
+                    "hash": "1_物理符合度评分",
+                    "label": "1_物理符合度评分",
+                    "value": 2,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbdeae5bce13eda3e5a838",
+                "data": {
+                    "id": 6,
+                    "hash": "1_物理符合度描述",
+                    "label": "1_物理符合度描述",
+                    "value": "猫爪被猫脸吸收，又从猫脸里长出来。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "_id": "67fa7e7e64cfe057abb7d0c4",
+        "batchId": "67fa7e7e64cfe057abb7d059",
+        "info": {
+            "data": [
+                {
+                    "content": "生成视频使用的PROMPT",
+                    "type": "TITLE"
+                },
+                {
+                    "content": "English Prompt: A small, dilapidated house sits on stilts over calm water, surrounded by lush greenery. Its weathered concrete structure shows visible cracks and peeling paint. The tranquil scene reflects the house and surrounding foliage in the water, creating a serene atmosphere. No people or animals are present, and the steady camera captures the peaceful, rural setting. \n翻译为中文的Prompt:",
+                    "type": "TEXT"
+                },
+                {
+                    "content": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/3500_3999/opensora_v1_2/003602_x.mp4",
+                    "type": "VIDEO"
+                },
+                {
+                    "content": "src_id: sEas9m3318c_356  src: koala",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "labels": [
+            {
+                "_id": "67fbc9875bce13eda3e584b0",
+                "data": {
+                    "id": 1,
+                    "hash": "1_视觉质量评分",
+                    "label": "1_视觉质量评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbc9875bce13eda3e584b1",
+                "data": {
+                    "id": 2,
+                    "hash": "1_视觉质量描述",
+                    "label": "1_视觉质量描述",
+                    "value": "视频清晰，水面波动效果自然。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbc9875bce13eda3e584b2",
+                "data": {
+                    "id": 3,
+                    "hash": "1_文本符合度评分",
+                    "label": "1_文本符合度评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbc9875bce13eda3e584b3",
+                "data": {
+                    "id": 4,
+                    "hash": "1_文本符合度描述",
+                    "label": "1_文本符合度描述",
+                    "value": "完全符合文本描述。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbc9875bce13eda3e584b4",
+                "data": {
+                    "id": 5,
+                    "hash": "1_物理符合度评分",
+                    "label": "1_物理符合度评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbc9875bce13eda3e584b5",
+                "data": {
+                    "id": 6,
+                    "hash": "1_物理符合度描述",
+                    "label": "1_物理符合度描述",
+                    "value": "没有不合常理之处。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "_id": "67fa7e7e64cfe057abb7d0c5",
+        "batchId": "67fa7e7e64cfe057abb7d059",
+        "info": {
+            "data": [
+                {
+                    "content": "生成视频使用的PROMPT",
+                    "type": "TITLE"
+                },
+                {
+                    "content": "English Prompt: A young woman picks up a fallen leaf, inspects its veins closely, then softly blows it away into the breeze. \n翻译为中文的Prompt:一位年轻女子捡起一片落叶，仔细观察叶脉，然后轻轻地将其吹向微风中。",
+                    "type": "TEXT"
+                },
+                {
+                    "content": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/1000_1499/sora/001059_s.mp4",
+                    "type": "VIDEO"
+                },
+                {
+                    "content": "src_id: ad7ad6dd-ccc0-423f-8032-1cdffc5ba38e  src: story",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "labels": [
+            {
+                "_id": "67fbd9a45c7dcbd1818fc51e",
+                "data": {
+                    "id": 1,
+                    "hash": "1_视觉质量评分",
+                    "label": "1_视觉质量评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbd9a45c7dcbd1818fc51f",
+                "data": {
+                    "id": 2,
+                    "hash": "1_视觉质量描述",
+                    "label": "1_视觉质量描述",
+                    "value": "视频清晰，人物动作连贯。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbd9a45c7dcbd1818fc520",
+                "data": {
+                    "id": 3,
+                    "hash": "1_文本符合度评分",
+                    "label": "1_文本符合度评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbd9a45c7dcbd1818fc521",
+                "data": {
+                    "id": 4,
+                    "hash": "1_文本符合度描述",
+                    "label": "1_文本符合度描述",
+                    "value": "女子没有吹树叶的动作。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbd9a45c7dcbd1818fc522",
+                "data": {
+                    "id": 5,
+                    "hash": "1_物理符合度评分",
+                    "label": "1_物理符合度评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbd9a45c7dcbd1818fc523",
+                "data": {
+                    "id": 6,
+                    "hash": "1_物理符合度描述",
+                    "label": "1_物理符合度描述",
+                    "value": "没有不和常理的地方。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "_id": "67fa7e7e64cfe057abb7d0c6",
+        "batchId": "67fa7e7e64cfe057abb7d059",
+        "info": {
+            "data": [
+                {
+                    "content": "生成视频使用的PROMPT",
+                    "type": "TITLE"
+                },
+                {
+                    "content": "English Prompt: IMAX shot of two mob bosses talking to each other in an Asian castle office, soft red fill light with dramatic key light. \n翻译为中文的Prompt:IMAX镜头，两位黑帮老大在亚洲城堡办公室交谈，柔和的红色填充光与戏剧性的主光。",
+                    "type": "TEXT"
+                },
+                {
+                    "content": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/4500_4999/anidiff/004551_a.mp4",
+                    "type": "VIDEO"
+                },
+                {
+                    "content": "src_id: 11752a73-bbba-5b7c-93f7-7bc218a3f333  src: vidprom",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "labels": [
+            {
+                "_id": "67fbdc185d75ec8495766feb",
+                "data": {
+                    "id": 1,
+                    "hash": "1_视觉质量评分",
+                    "label": "1_视觉质量评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbdc185d75ec8495766fec",
+                "data": {
+                    "id": 2,
+                    "hash": "1_视觉质量描述",
+                    "label": "1_视觉质量描述",
+                    "value": "左边人物的脸部形态不自然，手部变形",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbdc185d75ec8495766fed",
+                "data": {
+                    "id": 3,
+                    "hash": "1_文本符合度评分",
+                    "label": "1_文本符合度评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbdc185d75ec8495766fee",
+                "data": {
+                    "id": 4,
+                    "hash": "1_文本符合度描述",
+                    "label": "1_文本符合度描述",
+                    "value": "基本符合文本描述。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbdc185d75ec8495766fef",
+                "data": {
+                    "id": 5,
+                    "hash": "1_物理符合度评分",
+                    "label": "1_物理符合度评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbdc185d75ec8495766ff0",
+                "data": {
+                    "id": 6,
+                    "hash": "1_物理符合度描述",
+                    "label": "1_物理符合度描述",
+                    "value": "左边人物的两只手有融合现象",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "_id": "67fa7e7e64cfe057abb7d0c7",
+        "batchId": "67fa7e7e64cfe057abb7d059",
+        "info": {
+            "data": [
+                {
+                    "content": "生成视频使用的PROMPT",
+                    "type": "TITLE"
+                },
+                {
+                    "content": "English Prompt: Three anthropomorphic mice in astronaut suits sit inside a high-tech spacecraft, engaged in a lively conversation. One mouse in the foreground is particularly animated, using hand gestures to emphasize points, while the other two mice listen attentively. In the background, a larger character, possibly a regal human or animal, watches the interaction. The spacecraft is illuminated by bright, artificial lighting, and the control panels suggest a futuristic setting. The camera captures the expressive mice and their surroundings, focusing on their dynamic interaction. \n翻译为中文的Prompt:",
+                    "type": "TEXT"
+                },
+                {
+                    "content": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/0000_0499/mochi1_preview/000279_c.mp4",
+                    "type": "VIDEO"
+                },
+                {
+                    "content": "src_id: YG7iFTEmDms_43  src: koala",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "labels": [
+            {
+                "_id": "67fbe1dd95f1dcc5fac93bf6",
+                "data": {
+                    "id": 1,
+                    "hash": "1_视觉质量评分",
+                    "label": "1_视觉质量评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbe1dd95f1dcc5fac93bf7",
+                "data": {
+                    "id": 2,
+                    "hash": "1_视觉质量描述",
+                    "label": "1_视觉质量描述",
+                    "value": "画质清晰，主要细节可分辨。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbe1dd95f1dcc5fac93bf8",
+                "data": {
+                    "id": 3,
+                    "hash": "1_文本符合度评分",
+                    "label": "1_文本符合度评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbe1dd95f1dcc5fac93bf9",
+                "data": {
+                    "id": 4,
+                    "hash": "1_文本符合度描述",
+                    "label": "1_文本符合度描述",
+                    "value": "基本符合文本描述。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbe1dd95f1dcc5fac93bfa",
+                "data": {
+                    "id": 5,
+                    "hash": "1_物理符合度评分",
+                    "label": "1_物理符合度评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbe1dd95f1dcc5fac93bfb",
+                "data": {
+                    "id": 6,
+                    "hash": "1_物理符合度描述",
+                    "label": "1_物理符合度描述",
+                    "value": "老鼠的鼻子和耳朵穿透了头部防护罩。人手只有四根手指。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "_id": "67fa7e7e64cfe057abb7d0c8",
+        "batchId": "67fa7e7e64cfe057abb7d059",
+        "info": {
+            "data": [
+                {
+                    "content": "生成视频使用的PROMPT",
+                    "type": "TITLE"
+                },
+                {
+                    "content": "English Prompt: A traveler pushes a suitcase through a busy airport, struggles to lift it over a small step, then pauses to catch their breath and check the time. \n翻译为中文的Prompt:一位旅行者推着行李箱穿过繁忙的机场，努力将其抬过一个小台阶，然后停下来喘口气并查看时间。",
+                    "type": "TEXT"
+                },
+                {
+                    "content": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/1000_1499/sora/001113_s.mp4",
+                    "type": "VIDEO"
+                },
+                {
+                    "content": "src_id: f591b0a8-517b-4387-b190-0eec82a37911  src: story",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "labels": [
+            {
+                "_id": "67fbcfbb5bce13eda3e5965d",
+                "data": {
+                    "id": 1,
+                    "hash": "1_视觉质量评分",
+                    "label": "1_视觉质量评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbcfbb5bce13eda3e5965e",
+                "data": {
+                    "id": 2,
+                    "hash": "1_视觉质量描述",
+                    "label": "1_视觉质量描述",
+                    "value": "视频很清晰，效果很逼真。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbcfbb5bce13eda3e5965f",
+                "data": {
+                    "id": 3,
+                    "hash": "1_文本符合度评分",
+                    "label": "1_文本符合度评分",
+                    "value": 4,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbcfbb5bce13eda3e59660",
+                "data": {
+                    "id": 4,
+                    "hash": "1_文本符合度描述",
+                    "label": "1_文本符合度描述",
+                    "value": "没有“将行李箱抬过一个小台阶”的动作。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbcfbb5bce13eda3e59661",
+                "data": {
+                    "id": 5,
+                    "hash": "1_物理符合度评分",
+                    "label": "1_物理符合度评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbcfbb5bce13eda3e59662",
+                "data": {
+                    "id": 6,
+                    "hash": "1_物理符合度描述",
+                    "label": "1_物理符合度描述",
+                    "value": "没有不符合逻辑的地方。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "_id": "67fa7e7e64cfe057abb7d0c9",
+        "batchId": "67fa7e7e64cfe057abb7d059",
+        "info": {
+            "data": [
+                {
+                    "content": "生成视频使用的PROMPT",
+                    "type": "TITLE"
+                },
+                {
+                    "content": "English Prompt: A masked panda bear with a champion belt practicing wrestling in a ring, drawn in black and white with great detail, panoramic scene, no deformities, dynamic postures, white background. \n翻译为中文的Prompt:一只戴着面具的熊猫穿着冠军腰带在擂台上练习摔跤，黑白画风，细节丰富，全景场景，无畸形，动态姿势，白色背景。",
+                    "type": "TEXT"
+                },
+                {
+                    "content": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/1500_1999/cogvideox_2b/001502_e.mp4",
+                    "type": "VIDEO"
+                },
+                {
+                    "content": "src_id: 9cc86c5f-870a-56b2-8ba5-b338e6200633  src: vidprom",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "labels": [
+            {
+                "_id": "67fbe346fa9768893ce4b511",
+                "data": {
+                    "id": 1,
+                    "hash": "1_视觉质量评分",
+                    "label": "1_视觉质量评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbe346fa9768893ce4b512",
+                "data": {
+                    "id": 2,
+                    "hash": "1_视觉质量描述",
+                    "label": "1_视觉质量描述",
+                    "value": "熊猫的肢体比例不协调，动作不自然。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbe346fa9768893ce4b513",
+                "data": {
+                    "id": 3,
+                    "hash": "1_文本符合度评分",
+                    "label": "1_文本符合度评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbe346fa9768893ce4b514",
+                "data": {
+                    "id": 4,
+                    "hash": "1_文本符合度描述",
+                    "label": "1_文本符合度描述",
+                    "value": "熊猫没有戴面具，没有穿冠军腰带。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbe346fa9768893ce4b515",
+                "data": {
+                    "id": 5,
+                    "hash": "1_物理符合度评分",
+                    "label": "1_物理符合度评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbe346fa9768893ce4b516",
+                "data": {
+                    "id": 6,
+                    "hash": "1_物理符合度描述",
+                    "label": "1_物理符合度描述",
+                    "value": "熊猫的四肢扭曲变形，面部的眼睛突然消失。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "_id": "67fa7e7e64cfe057abb7d0ca",
+        "batchId": "67fa7e7e64cfe057abb7d059",
+        "info": {
+            "data": [
+                {
+                    "content": "生成视频使用的PROMPT",
+                    "type": "TITLE"
+                },
+                {
+                    "content": "English Prompt: A guy working in front of the computer as a designer, through the windows we can see that it is raining. \n翻译为中文的Prompt:一个男设计师在电脑前工作，通过窗户可以看到外面正在下雨。",
+                    "type": "TEXT"
+                },
+                {
+                    "content": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/1000_1499/ltx_video_095/001051_z.mp4",
+                    "type": "VIDEO"
+                },
+                {
+                    "content": "src_id: d32ec013-0afe-5e7f-9365-f45fa693ded4  src: vidprom",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "labels": [
+            {
+                "_id": "67fbddaa9d5e94712c64fbb4",
+                "data": {
+                    "id": 1,
+                    "hash": "1_视觉质量评分",
+                    "label": "1_视觉质量评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbddaa9d5e94712c64fbb5",
+                "data": {
+                    "id": 2,
+                    "hash": "1_视觉质量描述",
+                    "label": "1_视觉质量描述",
+                    "value": "画质清晰，主要细节可分辨。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbddaa9d5e94712c64fbb6",
+                "data": {
+                    "id": 3,
+                    "hash": "1_文本符合度评分",
+                    "label": "1_文本符合度评分",
+                    "value": 2,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbddaa9d5e94712c64fbb7",
+                "data": {
+                    "id": 4,
+                    "hash": "1_文本符合度描述",
+                    "label": "1_文本符合度描述",
+                    "value": "没有直接出现电脑，没有窗户，也没有窗外的雨景。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbddaa9d5e94712c64fbb8",
+                "data": {
+                    "id": 5,
+                    "hash": "1_物理符合度评分",
+                    "label": "1_物理符合度评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbddaa9d5e94712c64fbb9",
+                "data": {
+                    "id": 6,
+                    "hash": "1_物理符合度描述",
+                    "label": "1_物理符合度描述",
+                    "value": "按在键盘上的手有六根手指",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "_id": "67fa7e7e64cfe057abb7d0cb",
+        "batchId": "67fa7e7e64cfe057abb7d059",
+        "info": {
+            "data": [
+                {
+                    "content": "生成视频使用的PROMPT",
+                    "type": "TITLE"
+                },
+                {
+                    "content": "English Prompt: A young man with glasses and a graphic black t-shirt stands in front of an industrial lathe machine, explaining its operation. He gestures with his hands, pointing at various parts of the machine and occasionally adjusting a red knob. The machine is old-fashioned, with a large spindle and mechanical components. The background is an industrial space with concrete floors and visible pipes, with bright, even lighting. The man's movements are clear and expressive, highlighting his focus on demonstrating how the machine works. \n翻译为中文的Prompt:一个戴眼镜的年轻男子穿着图案黑色T恤，站在一台工业车床前，讲解其操作。他用手势指向机器的各个部分，并偶尔调整一个红色旋钮。机器看起来古老，配有一个大主轴和机械部件。背景是一个工业空间，地面是混凝土，管道清晰可见，光线明亮均匀。这个男子的动作清晰而富有表现力，突出他专注于演示机器的工作原理。",
+                    "type": "TEXT"
+                },
+                {
+                    "content": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/4500_4999/magictime/004521_q.mp4",
+                    "type": "VIDEO"
+                },
+                {
+                    "content": "src_id: 3VR1-Zm0kKw_45  src: koala",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "labels": [
+            {
+                "_id": "67fbcb4c237395bba3d193c3",
+                "data": {
+                    "id": 1,
+                    "hash": "1_视觉质量评分",
+                    "label": "1_视觉质量评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbcb4c237395bba3d193c4",
+                "data": {
+                    "id": 2,
+                    "hash": "1_视觉质量描述",
+                    "label": "1_视觉质量描述",
+                    "value": "男子的面部和手部扭曲。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbcb4c237395bba3d193c5",
+                "data": {
+                    "id": 3,
+                    "hash": "1_文本符合度评分",
+                    "label": "1_文本符合度评分",
+                    "value": 2,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbcb4c237395bba3d193c6",
+                "data": {
+                    "id": 4,
+                    "hash": "1_文本符合度描述",
+                    "label": "1_文本符合度描述",
+                    "value": "没有工业车床；男子站在原地没有讲解操作，没有指向机器，也没有调整旋钮的动作；男子没有任何动作，也没有演示机器的工作原理。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbcb4c237395bba3d193c7",
+                "data": {
+                    "id": 5,
+                    "hash": "1_物理符合度评分",
+                    "label": "1_物理符合度评分",
+                    "value": 2,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbcb4c237395bba3d193c8",
+                "data": {
+                    "id": 6,
+                    "hash": "1_物理符合度描述",
+                    "label": "1_物理符合度描述",
+                    "value": "男子的手不符合逻辑，两只手融合在一起成为混乱的肉团。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "_id": "67fa7e7e64cfe057abb7d0cc",
+        "batchId": "67fa7e7e64cfe057abb7d059",
+        "info": {
+            "data": [
+                {
+                    "content": "生成视频使用的PROMPT",
+                    "type": "TITLE"
+                },
+                {
+                    "content": "English Prompt: Cityscape Sunrise Revelation: Generate a video of the city skyline at sunrise, with subtle details revealing the conclusion of a noir narrative. Use warm hues and soft lighting to evoke a sense of revelation. Pan right. \n翻译为中文的Prompt:城市日出揭示：生成一段城市天际线在日出时分的视频，细微细节揭示黑色叙事的结局。使用温暖的色调和柔和的光线来唤起揭示的感觉。向右平移。",
+                    "type": "TEXT"
+                },
+                {
+                    "content": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/1500_1999/hotshot_xl/001570_m.mp4",
+                    "type": "VIDEO"
+                },
+                {
+                    "content": "src_id: 82573900-7a47-5b28-bc0c-d4869e640a82  src: camera_motion",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "labels": [
+            {
+                "_id": "67fbda8595f1dcc5fac938f0",
+                "data": {
+                    "id": 1,
+                    "hash": "1_视觉质量评分",
+                    "label": "1_视觉质量评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbda8595f1dcc5fac938f1",
+                "data": {
+                    "id": 2,
+                    "hash": "1_视觉质量描述",
+                    "label": "1_视觉质量描述",
+                    "value": "可以分辨出主要的元素",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbda8595f1dcc5fac938f2",
+                "data": {
+                    "id": 3,
+                    "hash": "1_文本符合度评分",
+                    "label": "1_文本符合度评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbda8595f1dcc5fac938f3",
+                "data": {
+                    "id": 4,
+                    "hash": "1_文本符合度描述",
+                    "label": "1_文本符合度描述",
+                    "value": "基本符合文本描述",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbda8595f1dcc5fac938f4",
+                "data": {
+                    "id": 5,
+                    "hash": "1_物理符合度评分",
+                    "label": "1_物理符合度评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbda8595f1dcc5fac938f5",
+                "data": {
+                    "id": 6,
+                    "hash": "1_物理符合度描述",
+                    "label": "1_物理符合度描述",
+                    "value": "没有不合常理的地方",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "_id": "67fa7e7e64cfe057abb7d0cd",
+        "batchId": "67fa7e7e64cfe057abb7d059",
+        "info": {
+            "data": [
+                {
+                    "content": "生成视频使用的PROMPT",
+                    "type": "TITLE"
+                },
+                {
+                    "content": "English Prompt: Birds are flying over a forest with dried leaves and parched ground under the scorching midday sun, with a clear blue sky. Summer, Miyazaki comic style. \n翻译为中文的Prompt:鸟儿在干枯的树叶和干裂的土地上空飞翔，烈日下的森林里，天空湛蓝。夏天，宫崎骏漫画风格。",
+                    "type": "TEXT"
+                },
+                {
+                    "content": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/0500_0999/opensora_v1_2/000968_x.mp4",
+                    "type": "VIDEO"
+                },
+                {
+                    "content": "src_id: 045eb861-87d3-53a4-9586-15c5fb80672e  src: vidprom",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "labels": [
+            {
+                "_id": "67fbac452d8eaae9f4f27bc5",
+                "data": {
+                    "id": 1,
+                    "hash": "1_视觉质量评分",
+                    "label": "1_视觉质量评分",
+                    "value": 4,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbac452d8eaae9f4f27bc6",
+                "data": {
+                    "id": 2,
+                    "hash": "1_视觉质量描述",
+                    "label": "1_视觉质量描述",
+                    "value": "画面中间的黑色线条是突然出现。画面左边的鸟飞行动作不流畅，有掉帧。右上方的鸟始终没有全部露出画面。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbac452d8eaae9f4f27bc7",
+                "data": {
+                    "id": 3,
+                    "hash": "1_文本符合度评分",
+                    "label": "1_文本符合度评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbac452d8eaae9f4f27bc8",
+                "data": {
+                    "id": 4,
+                    "hash": "1_文本符合度描述",
+                    "label": "1_文本符合度描述",
+                    "value": "不是宫崎骏漫画风格。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbac452d8eaae9f4f27bc9",
+                "data": {
+                    "id": 5,
+                    "hash": "1_物理符合度评分",
+                    "label": "1_物理符合度评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fbac452d8eaae9f4f27bca",
+                "data": {
+                    "id": 6,
+                    "hash": "1_物理符合度描述",
+                    "label": "1_物理符合度描述",
+                    "value": "地上的干枯的树叶在蠕动。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "_id": "67fa7e7e64cfe057abb7d0ce",
+        "batchId": "67fa7e7e64cfe057abb7d059",
+        "info": {
+            "data": [
+                {
+                    "content": "生成视频使用的PROMPT",
+                    "type": "TITLE"
+                },
+                {
+                    "content": "English Prompt: A man in a black coat with black hair and purple glowing eyes is fighting with swords, blood flowing from his wounds. \n翻译为中文的Prompt:一名黑衣男子，黑发紫眼，正挥剑作战，鲜血从他的伤口流出。",
+                    "type": "TEXT"
+                },
+                {
+                    "content": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/4000_4499/mochi1_preview/004241_c.mp4",
+                    "type": "VIDEO"
+                },
+                {
+                    "content": "src_id: 8793d188-a247-5e2d-89c2-4588c6b46678  src: vidprom",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "labels": [
+            {
+                "_id": "67fb878c0e5a34384c815443",
+                "data": {
+                    "id": 1,
+                    "hash": "1_视觉质量评分",
+                    "label": "1_视觉质量评分",
+                    "value": 4,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fb878c0e5a34384c815444",
+                "data": {
+                    "id": 2,
+                    "hash": "1_视觉质量描述",
+                    "label": "1_视觉质量描述",
+                    "value": "对比度较低，整体清晰度不高，手部模糊。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fb878c0e5a34384c815445",
+                "data": {
+                    "id": 3,
+                    "hash": "1_文本符合度评分",
+                    "label": "1_文本符合度评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fb878c0e5a34384c815446",
+                "data": {
+                    "id": 4,
+                    "hash": "1_文本符合度描述",
+                    "label": "1_文本符合度描述",
+                    "value": "黑衣男子，黑发，紫眼，剑，鲜血等要素都具备。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fb878c0e5a34384c815447",
+                "data": {
+                    "id": 5,
+                    "hash": "1_物理符合度评分",
+                    "label": "1_物理符合度评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fb878c0e5a34384c815448",
+                "data": {
+                    "id": 6,
+                    "hash": "1_物理符合度描述",
+                    "label": "1_物理符合度描述",
+                    "value": "鲜血喷洒的量太夸张，人物的眼睛鼻孔嘴巴发光，肢体运动的轨迹也很混乱。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "_id": "67fa7e7e64cfe057abb7d0cf",
+        "batchId": "67fa7e7e64cfe057abb7d059",
+        "info": {
+            "data": [
+                {
+                    "content": "生成视频使用的PROMPT",
+                    "type": "TITLE"
+                },
+                {
+                    "content": "English Prompt: A female hand hitting a volleyball over the net with strength. Quick action. The hand is in the shot the whole time, as is the ball. \n翻译为中文的Prompt:一个女性的手用力将排球打过网。快速的动作。整个过程中手和球都在画面中。",
+                    "type": "TEXT"
+                },
+                {
+                    "content": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/4000_4499/ltx_video_095/004205_z.mp4",
+                    "type": "VIDEO"
+                },
+                {
+                    "content": "src_id: 492225d6-67fa-517e-b3fb-eb6a81c83834  src: vidprom",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "labels": [
+            {
+                "_id": "67fba2f1237395bba3d0f5e7",
+                "data": {
+                    "id": 1,
+                    "hash": "1_视觉质量评分",
+                    "label": "1_视觉质量评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fba2f1237395bba3d0f5e8",
+                "data": {
+                    "id": 2,
+                    "hash": "1_视觉质量描述",
+                    "label": "1_视觉质量描述",
+                    "value": "手不自然，有扭曲现象",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fba2f1237395bba3d0f5e9",
+                "data": {
+                    "id": 3,
+                    "hash": "1_文本符合度评分",
+                    "label": "1_文本符合度评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fba2f1237395bba3d0f5ea",
+                "data": {
+                    "id": 4,
+                    "hash": "1_文本符合度描述",
+                    "label": "1_文本符合度描述",
+                    "value": "没有体现是女性的手。没有手击打球的画面。视频逻辑是手在拉扯网，然后排球从上方掉落。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fba2f1237395bba3d0f5eb",
+                "data": {
+                    "id": 5,
+                    "hash": "1_物理符合度评分",
+                    "label": "1_物理符合度评分",
+                    "value": 3,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fba2f1237395bba3d0f5ec",
+                "data": {
+                    "id": 6,
+                    "hash": "1_物理符合度描述",
+                    "label": "1_物理符合度描述",
+                    "value": "排球穿网，镶嵌在网里。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "_id": "67fa7e7e64cfe057abb7d0d0",
+        "batchId": "67fa7e7e64cfe057abb7d059",
+        "info": {
+            "data": [
+                {
+                    "content": "生成视频使用的PROMPT",
+                    "type": "TITLE"
+                },
+                {
+                    "content": "English Prompt: A man in a yellow graphic t-shirt and black jacket sits at a cluttered desk, holding a red and black glass globe. Surrounded by books, a notebook, and a smartphone, he focuses intently on the globe, adjusting his grip as he shifts his gaze. The room is dimly lit with natural light from a window, creating a cozy atmosphere. \n翻译为中文的Prompt:",
+                    "type": "TEXT"
+                },
+                {
+                    "content": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/0500_0999/mochi1_preview/000756_c.mp4",
+                    "type": "VIDEO"
+                },
+                {
+                    "content": "src_id: iOFw87x-QVA_29  src: koala",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "labels": [
+            {
+                "_id": "67fba166237395bba3d0eed2",
+                "data": {
+                    "id": 1,
+                    "hash": "1_视觉质量评分",
+                    "label": "1_视觉质量评分",
+                    "value": 4,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fba166237395bba3d0eed3",
+                "data": {
+                    "id": 2,
+                    "hash": "1_视觉质量描述",
+                    "label": "1_视觉质量描述",
+                    "value": "手有变形扭曲现象",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fba166237395bba3d0eed4",
+                "data": {
+                    "id": 3,
+                    "hash": "1_文本符合度评分",
+                    "label": "1_文本符合度评分",
+                    "value": 4,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fba166237395bba3d0eed5",
+                "data": {
+                    "id": 4,
+                    "hash": "1_文本符合度描述",
+                    "label": "1_文本符合度描述",
+                    "value": "没看见智能手机",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fba166237395bba3d0eed6",
+                "data": {
+                    "id": 5,
+                    "hash": "1_物理符合度评分",
+                    "label": "1_物理符合度评分",
+                    "value": 4,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fba166237395bba3d0eed7",
+                "data": {
+                    "id": 6,
+                    "hash": "1_物理符合度描述",
+                    "label": "1_物理符合度描述",
+                    "value": "玻璃球无支撑悬空",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "_id": "67fa7e7e64cfe057abb7d0d1",
+        "batchId": "67fa7e7e64cfe057abb7d059",
+        "info": {
+            "data": [
+                {
+                    "content": "生成视频使用的PROMPT",
+                    "type": "TITLE"
+                },
+                {
+                    "content": "English Prompt: A man sitting on a chair, looking up at the sky in shock, surrounded by trees and a beautiful lake. \n翻译为中文的Prompt:一个男人坐在椅子上，震惊地仰望天空，周围是树木和美丽的湖泊。",
+                    "type": "TEXT"
+                },
+                {
+                    "content": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/1500_1999/mochi1_preview/001513_c.mp4",
+                    "type": "VIDEO"
+                },
+                {
+                    "content": "src_id: 20980530-0ac4-5ab5-b91b-979439c62f9d  src: vidprom",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "labels": [
+            {
+                "_id": "67fba4195c7dcbd1818f0481",
+                "data": {
+                    "id": 1,
+                    "hash": "1_视觉质量评分",
+                    "label": "1_视觉质量评分",
+                    "value": 2,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fba4195c7dcbd1818f0482",
+                "data": {
+                    "id": 2,
+                    "hash": "1_视觉质量描述",
+                    "label": "1_视觉质量描述",
+                    "value": "画面模糊，仿佛在震动。分辨不出画面里是男子的面部还是后脑勺。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fba4195c7dcbd1818f0483",
+                "data": {
+                    "id": 3,
+                    "hash": "1_文本符合度评分",
+                    "label": "1_文本符合度评分",
+                    "value": 2,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fba4195c7dcbd1818f0484",
+                "data": {
+                    "id": 4,
+                    "hash": "1_文本符合度描述",
+                    "label": "1_文本符合度描述",
+                    "value": "男子没有作出仰望的动作，也看不到表情，因此无法体现男子的震惊的心情。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fba4195c7dcbd1818f0485",
+                "data": {
+                    "id": 5,
+                    "hash": "1_物理符合度评分",
+                    "label": "1_物理符合度评分",
+                    "value": 5,
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            },
+            {
+                "_id": "67fba4195c7dcbd1818f0486",
+                "data": {
+                    "id": 6,
+                    "hash": "1_物理符合度描述",
+                    "label": "1_物理符合度描述",
+                    "value": "人物没有任何运动。周围的环境没有发现不合理的地方。",
+                    "drawType": "QUESTION",
+                    "count": 1
+                }
+            }
+        ]
+    }
+]

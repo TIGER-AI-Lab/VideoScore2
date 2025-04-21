@@ -395,7 +395,7 @@ def collect_all():
 
 async def translate_all():
     date_time = datetime.now().strftime("%m-%d--%H-%M-%S")
-    logger=set_logger(f"./logs/orc_text_prompt_debug.log")
+    logger=set_logger(f"./logs/ocr_text_prompt_debug.log")
     
     # src_path="/data/xuan/videoscore2/text_prompts/all_prompts.jsonl"
     # res_path="/data/xuan/videoscore2/text_prompts/all_prompts_en_cn.jsonl"
