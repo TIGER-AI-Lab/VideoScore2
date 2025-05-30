@@ -1,0 +1,53 @@
+[
+    {
+        "video_name": "001023_i",
+        "video_path": "",
+        "prompt": "The sun rises over a serene city landscape, transitioning to bustling streets as fans in vibrant football jerseys converge towards iconic Premier League stadiums. The energy is palpable, with the excitement building for a day packed with football action",
+        "visual": {
+            "score": "2",
+            "comment": "The visual quality of the video is notably lacking, with a significant degree of blurriness that obscures the details of the cityscape. The vibrant colors and energy of the bustling streets, as well as the iconic Premier League stadiums, are difficult to discern due to this lack of clarity. Overall, the visuals do not effectively convey the excitement and atmosphere intended in the prompt, detracting from the watching experience."
+        },
+        "t2v_align": {
+            "score": "3",
+            "comment": "The video does not effectively depict the gathering of fans in vibrant football jerseys, which is a crucial element of the prompt. Despite the serene city landscape and the rising sun, the absence of fans converging towards the iconic Premier League stadiums significantly detracts from the overall energy and excitement that the text prompt intended to convey. This lack of representation leaves the scene feeling incomplete and fails to capture the palpable enthusiasm for the day packed with football action."
+        },
+        "physical": {
+            "score": "4",
+            "comment": "The video overall adheres to common sense and portrays a believable depiction of a city landscape transitioning from a serene morning to a lively football scene. However, it would benefit from a more nuanced representation of physical dynamics, such as the interaction of light during sunrise and the movement of crowds. While the ambiance captures the excitement and energy of fans in vibrant football jerseys heading to the stadium, certain elements could be enhanced for a more authentic experience, ensuring that all aspects remain consistent with physical laws and everyday realities."
+        }
+    },
+    {
+        "video_name": "003119_f",
+        "video_path": "",
+        "prompt": "A man throws a rock into a calm pond, watches the splash ripple out, then picks up another stone and skips it across the water",
+        "visual": {
+            "score": "3",
+            "comment": "The video suffers from several visual quality issues that detract from the overall experience. Firstly, the sudden appearance of the stone in the character's hand appears jarring and disrupts the flow of the scene. Additionally, the character's hands and feet exhibit noticeable distortion and misalignment, which creates an unnatural look. These factors contribute to a lack of clarity and smoothness that is essential for maintaining immersion in the video. Overall, improvements in these areas would greatly enhance the visual quality and viewer engagement."
+        },
+        "t2v_align": {
+            "score": "3",
+            "comment": "The video fails to accurately depict the sequence of actions described in the prompt, as it does not show the man throwing the first rock into the pond. This omission is significant because it disrupts the intended narrative of the scene. Including this initial action is crucial for establishing context and enhancing the overall coherence of the video."
+        },
+        "physical": {
+            "score": "3",
+            "comment": "The video presents several physical inconsistencies that detract from its overall realism. Notably, the man's hands and feet appear to bend in unnatural ways, which violates common sense and physical laws. Such distortions can be quite jarring for viewers, as they disrupt the flow of the action and create an unsettling visual experience. Ideally, human figures should exhibit more natural movements and postures, especially in a serene setting like throwing stones into a calm pond."
+        }
+    },
+    {
+        "video_name": "003680_u",
+        "video_path": "",
+        "prompt": "A fly fisherman standing in a river, fighting with a big salmon on his rod. Two cartoon grizzlies look happy for him in the background",
+        "visual": {
+            "score": "5",
+            "comment": "The video demonstrates impressive clarity, allowing viewers to appreciate the details of the fly fisherman and the vibrant scenery surrounding him. The resolution is adequate, contributing to an overall pleasant viewing experience. However, there are moments where local blurriness detracts from the visual quality, particularly during fast movements or transitions. Additionally, the stability of brightness and contrast is generally good, but there are occasional abrupt changes that can be distracting. Overall, while the visual elements are engaging, addressing the issues of blurriness and abrupt brightness shifts would enhance the overall impact of the video."
+        },
+        "t2v_align": {
+            "score": "3",
+            "comment": "The generated video does not accurately depict the scene described in the text prompt. Notably, the salmon is missing from the fishing rod, and the fisherman is not shown actively battling with the fish. Additionally, there are no cartoon grizzlies present in the background, which significantly detracts from the overall alignment with the prompt. These omissions impact the coherence and completeness of the video, making it less engaging and true to the intended narrative."
+        },
+        "physical": {
+            "score": "3",
+            "comment": "One notable inconsistency in the video is the depiction of the fish, which appears to have legs instead of fins. This unusual characteristic deviates from the natural anatomy of salmon, creating a surreal and unrealistic visual. Such a physical anomaly not only violates common sense but also distracts from the overall scene, making it difficult to engage with the narrative of the fly fisherman battling his catch."
+        }
+    }
+]
