@@ -5,15 +5,15 @@
         "prompt": "The sun rises over a serene city landscape, transitioning to bustling streets as fans in vibrant football jerseys converge towards iconic Premier League stadiums. The energy is palpable, with the excitement building for a day packed with football action",
         "visual": {
             "score": "2",
-            "comment": "The visual quality of the video is notably lacking, with a significant degree of blurriness that obscures the details of the cityscape. The vibrant colors and energy of the bustling streets, as well as the iconic Premier League stadiums, are difficult to discern due to this lack of clarity. Overall, the visuals do not effectively convey the excitement and atmosphere intended in the prompt, detracting from the watching experience."
+            "comment": "The visual quality of the video is quite poor, with noticeable blurriness that detracts from the viewing experience. The city landscape lacks clarity, making it difficult to appreciate the details of the surroundings. Additionally, the streets and iconic stadiums are not well-defined, which further diminishes the overall impact of the visuals. Improvements in resolution and sharpness would greatly enhance the clarity and allow viewers to fully engage with the vibrant atmosphere depicted in the scene."
         },
         "t2v_align": {
             "score": "3",
-            "comment": "The video does not effectively depict the gathering of fans in vibrant football jerseys, which is a crucial element of the prompt. Despite the serene city landscape and the rising sun, the absence of fans converging towards the iconic Premier League stadiums significantly detracts from the overall energy and excitement that the text prompt intended to convey. This lack of representation leaves the scene feeling incomplete and fails to capture the palpable enthusiasm for the day packed with football action."
+            "comment": "The generated video fails to depict the gathering of fans, which is a crucial element of the prompt. While it captures the serene city landscape and the transition to bustling streets, the absence of fans in vibrant football jerseys significantly diminishes the overall energy and excitement that should be present in the scene. Including a crowd of enthusiastic supporters would enhance the depiction of the atmosphere leading up to the football action."
         },
         "physical": {
             "score": "4",
-            "comment": "The video overall adheres to common sense and portrays a believable depiction of a city landscape transitioning from a serene morning to a lively football scene. However, it would benefit from a more nuanced representation of physical dynamics, such as the interaction of light during sunrise and the movement of crowds. While the ambiance captures the excitement and energy of fans in vibrant football jerseys heading to the stadium, certain elements could be enhanced for a more authentic experience, ensuring that all aspects remain consistent with physical laws and everyday realities."
+            "comment": "The video does a commendable job of creating a vibrant atmosphere, but there are moments where physical consistency is lacking. For instance, the transition from the serene city landscape to the bustling streets feels abrupt and could be more gradual to reflect the natural flow of time. Additionally, the depiction of fans wearing vibrant football jerseys appears somewhat static, lacking realistic movement and interaction. Overall, while the concept is engaging, certain elements could benefit from a more coherent representation of physical laws and common sense to enhance the viewer's immersion."
         }
     },
     {
@@ -22,15 +22,15 @@
         "prompt": "A man throws a rock into a calm pond, watches the splash ripple out, then picks up another stone and skips it across the water",
         "visual": {
             "score": "3",
-            "comment": "The video suffers from several visual quality issues that detract from the overall experience. Firstly, the sudden appearance of the stone in the character's hand appears jarring and disrupts the flow of the scene. Additionally, the character's hands and feet exhibit noticeable distortion and misalignment, which creates an unnatural look. These factors contribute to a lack of clarity and smoothness that is essential for maintaining immersion in the video. Overall, improvements in these areas would greatly enhance the visual quality and viewer engagement."
+            "comment": "The video exhibits several visual quality issues that detract from the overall viewing experience. Notably, the appearance of the stone in the character's hand is abrupt and seems out of place, creating a jarring effect. Additionally, there are noticeable distortions in the character's hands and feet, which appear to twist and deform unnaturally. These issues not only disrupt the fluidity of the animation but also impact the clarity and realism of the scene. Improving these aspects could significantly enhance the visual coherence and aesthetic appeal of the video."
         },
         "t2v_align": {
             "score": "3",
-            "comment": "The video fails to accurately depict the sequence of actions described in the prompt, as it does not show the man throwing the first rock into the pond. This omission is significant because it disrupts the intended narrative of the scene. Including this initial action is crucial for establishing context and enhancing the overall coherence of the video."
+            "comment": "The video does not accurately depict the initial action of the man throwing the first rock into the pond. This crucial moment is missing, which detracts from the overall alignment with the text prompt. Including this action would significantly enhance the coherence of the scene and better illustrate the sequence described."
         },
         "physical": {
             "score": "3",
-            "comment": "The video presents several physical inconsistencies that detract from its overall realism. Notably, the man's hands and feet appear to bend in unnatural ways, which violates common sense and physical laws. Such distortions can be quite jarring for viewers, as they disrupt the flow of the action and create an unsettling visual experience. Ideally, human figures should exhibit more natural movements and postures, especially in a serene setting like throwing stones into a calm pond."
+            "comment": "The video presents some noticeable physical inconsistencies, particularly with the man's hand and foot movements. At times, they appear to bend in unnatural ways that defy the basic principles of human anatomy. This creates a disconcerting effect, as it disrupts the overall realism of the scene. Such abnormalities detract from the immersion and may confuse viewers, as they expect more natural motions in a typical setting like this."
         }
     },
     {
@@ -39,15 +39,474 @@
         "prompt": "A fly fisherman standing in a river, fighting with a big salmon on his rod. Two cartoon grizzlies look happy for him in the background",
         "visual": {
             "score": "5",
-            "comment": "The video demonstrates impressive clarity, allowing viewers to appreciate the details of the fly fisherman and the vibrant scenery surrounding him. The resolution is adequate, contributing to an overall pleasant viewing experience. However, there are moments where local blurriness detracts from the visual quality, particularly during fast movements or transitions. Additionally, the stability of brightness and contrast is generally good, but there are occasional abrupt changes that can be distracting. Overall, while the visual elements are engaging, addressing the issues of blurriness and abrupt brightness shifts would enhance the overall impact of the video."
+            "comment": "The video showcases a clear and crisp visual quality, effectively capturing the essence of the scene. The resolution is commendable, allowing viewers to appreciate the details of the fly fisherman and the vibrant setting. Overall clarity is maintained throughout the video, contributing positively to the viewing experience. However, there are moments where local blurriness can be observed, particularly during quick movements, which slightly detracts from the overall smoothness of the presentation. Additionally, the stability of brightness and contrast is generally consistent, but there are abrupt changes that disrupt the visual flow at times. Overall, while the video has many strengths in its visual quality, addressing the minor issues of blurriness and abrupt transitions would enhance the overall watching experience."
         },
         "t2v_align": {
             "score": "3",
-            "comment": "The generated video does not accurately depict the scene described in the text prompt. Notably, the salmon is missing from the fishing rod, and the fisherman is not shown actively battling with the fish. Additionally, there are no cartoon grizzlies present in the background, which significantly detracts from the overall alignment with the prompt. These omissions impact the coherence and completeness of the video, making it less engaging and true to the intended narrative."
+            "comment": "The generated video falls short in several key areas based on the text prompt. Firstly, the salmon is missing from the fishing rod, which is crucial for depicting the action of the fly fisherman. Additionally, the fisherman does not appear to be engaged in a struggle with the fish, which is a significant aspect of the scene described. Furthermore, there are no cartoon grizzlies present in the background to convey the intended playful atmosphere of the moment. Overall, these omissions greatly affect the alignment of the video with the prompt."
         },
         "physical": {
             "score": "3",
-            "comment": "One notable inconsistency in the video is the depiction of the fish, which appears to have legs instead of fins. This unusual characteristic deviates from the natural anatomy of salmon, creating a surreal and unrealistic visual. Such a physical anomaly not only violates common sense but also distracts from the overall scene, making it difficult to engage with the narrative of the fly fisherman battling his catch."
+            "comment": "One notable physical inconsistency in the video is the depiction of the salmon, which appears to have developed legs. This abnormal feature not only defies the biological characteristics of fish but also creates a surreal and unrealistic visual. The presence of legs on a fish is a clear violation of common sense and biological norms, making the scene feel unnatural and detracting from the overall quality of the video."
+        }
+    },
+    {
+        "video_name": "003470_e",
+        "video_path": "",
+        "prompt": "A serious-looking Spartan warrior stands straight, looking directly at the camera, hands relaxed, with a masculine face, square jaw, and visible wrinkles, wearing a red and gold armor suit",
+        "visual": {
+            "score": "5",
+            "comment": "The video displays a clear visual quality, particularly in the depiction of the Spartan warrior's face, which appears natural and lifelike. The details such as the masculine features, square jaw, and visible wrinkles are rendered effectively, contributing to an overall sense of realism. The clarity of the visuals enhances the viewer's experience, allowing for an immersive connection with the character."
+        },
+        "t2v_align": {
+            "score": "4",
+            "comment": "The generated video does not accurately depict the Spartan warrior's hand position as described in the prompt. While the warrior has a serious expression and is wearing the specified red and gold armor, the video fails to show the hands relaxed as mentioned. This omission detracts from the overall representation of the character and does not align with the details provided in the text prompt."
+        },
+        "physical": {
+            "score": "5",
+            "comment": "The video portrays a Spartan warrior who embodies a serious demeanor, standing tall and facing the camera. His masculine features, including a square jaw and distinct wrinkles, add to the authenticity of the character. Additionally, the red and gold armor suit effectively captures the essence of a warrior. Overall, the depiction aligns with common sense and physical expectations, making the representation of the Spartan warrior both believable and engaging."
+        }
+    },
+    {
+        "video_name": "004164_h",
+        "video_path": "",
+        "prompt": "A cute 9-year-old b-girl running through a field of tulips with blonde hair, blue eyes, and a happy facial expression while wearing a white summer dress",
+        "visual": {
+            "score": "4",
+            "comment": "The visual quality of the video suffers from several noticeable issues. Firstly, the girl's facial features appear unnatural, which detracts from the overall appeal of the scene. Additionally, there is inconsistency in her hairstyle, as it fluctuates between pigtails and loose hair throughout the video, leading to a disjointed viewing experience. These elements disrupt the visual coherence and immersion of the piece."
+        },
+        "t2v_align": {
+            "score": "4",
+            "comment": "The generated video does not accurately depict the character as described in the text prompt. Specifically, the girl's eyes are not blue, which is a key detail mentioned. This discrepancy affects the overall alignment of the video with the intended portrayal of the cute 9-year-old b-girl. Ensuring that all features, such as eye color, match the prompt is essential for a more accurate representation."
+        },
+        "physical": {
+            "score": "3",
+            "comment": "The video presents several issues related to physical consistency. Firstly, the facial expressions of the girl appear unnatural and inconsistent throughout the scene, detracting from the overall realism. Additionally, there are noticeable fluctuations in her hairstyle, which seem to change abruptly rather than maintaining a coherent look. Most concerning, while the girl is depicted as running forward, the surrounding tulips indicate that her body is actually moving backward, creating a confusing and illogical visual. These discrepancies significantly undermine the believability of the animation."
+        }
+    },
+    {
+        "video_name": "002085_v",
+        "video_path": "",
+        "prompt": "A person carefully cuts raw chicken pieces on a well-used wooden cutting board, using a large kitchen knife. The chicken is arranged in a grid pattern as the hands work methodically, cutting and positioning the pieces. The scene is well-lit with no distractions, focusing on the sharp knife, raw chicken, and the person's hands in action",
+        "visual": {
+            "score": "5",
+            "comment": "The visual quality of the video is quite impressive, characterized by clear and sharp imagery. The actions of the person cutting the chicken appear natural and fluid, enhancing the overall realism of the scene. The well-lit environment contributes significantly to the clarity, allowing viewers to focus on the details of the chicken and the skillful movements of the hands. However, while the clarity is commendable, it would be beneficial to ensure that there are no distracting elements in the background to maintain viewer engagement. Overall, the video presents a satisfying visual experience that effectively captures the essence of the cooking process."
+        },
+        "t2v_align": {
+            "score": "4",
+            "comment": "The video fails to convey the character of the wooden cutting board as described in the prompt. It does not effectively showcase that the cutting board is well-used, which is an important detail that adds authenticity to the scene. A more weathered appearance with visible wear and tear would enhance the realism and depth of the video."
+        },
+        "physical": {
+            "score": "5",
+            "comment": "The video demonstrates a strong adherence to physical consistency, as the actions depicted align well with common sense and realistic behaviors. The individual is seen methodically cutting raw chicken on a wooden cutting board, showcasing proper kitchen techniques. The lighting is effective, drawing attention to the sharp knife and the carefully arranged chicken pieces. Overall, there are no apparent violations of physical laws or unnatural elements, making the scene believable and grounded in reality."
+        }
+    },
+    {
+        "video_name": "004853_q",
+        "video_path": "",
+        "prompt": "Big backyard swimming pool filling with water in the morning, sun glare on the surface, and small waves inside. Cinematic style",
+        "visual": {
+            "score": "5",
+            "comment": "The visual quality of the video is quite impressive, with clear resolution that enhances the overall viewing experience. The clarity of the imagery allows the details of the backyard swimming pool to shine through, creating a vivid representation of the scene. However, there are moments where local blurriness slightly detracts from the smoothness of the visuals. While the brightness and contrast are generally stable, the sun glare on the surface of the water adds a cinematic touch but may also lead to some minor distortions. Overall, the combination of these elements results in a visually engaging piece, though addressing the blurriness could further elevate its quality."
+        },
+        "t2v_align": {
+            "score": "5",
+            "comment": "The generated video aligns reasonably well with the text prompt, effectively showcasing a big backyard swimming pool filling with water in the morning. However, there are some areas for improvement. The depiction of sun glare on the surface of the water could be more pronounced to enhance the cinematic feel, and the small waves inside the pool are somewhat understated. Overall, while the video captures the essence of the prompt, emphasizing these details would elevate the quality and accuracy of the representation."
+        },
+        "physical": {
+            "score": "5",
+            "comment": "The video presents a backyard swimming pool filling with water in the morning light, beautifully capturing the sun's glare on the surface and the gentle waves inside. I did not observe any violations of common sense or physical laws. The scene feels natural and consistent, enhancing the overall cinematic quality."
+        }
+    },
+    {
+        "video_name": "003215_g",
+        "video_path": "",
+        "prompt": "A flicker of fire appears on the screen, slowly transitioning into an illuminated diya at the Ganga Ghat. The diya shines brightly in a vibrant orange hue, casting a soft glow",
+        "visual": {
+            "score": "5",
+            "comment": "The visual quality of the video is impressive, with a clear image that showcases natural details beautifully. The overall clarity is commendable, allowing the viewer to appreciate the subtle nuances of the scene. The vibrant orange hue of the diya is particularly striking, adding to the visual appeal and enhancing the viewing experience."
+        },
+        "t2v_align": {
+            "score": "3",
+            "comment": "The generated video does not accurately align with the text prompt, as the flicker of fire described is missing. Instead of a brief flash, the flames appear continuously throughout the video, which deviates from the intended depiction. Additionally, the illuminated diya, a crucial element of the scene, is completely absent. The absence of this oil lamp detracts significantly from the overall representation of the Ganga Ghat ambiance that the prompt aimed to convey."
+        },
+        "physical": {
+            "score": "5",
+            "comment": "The video effectively maintains physical consistency throughout its duration. There are no apparent logical inconsistencies or violations of common sense and physical laws in the portrayal of the flicker of fire transitioning into the illuminated diya. The vibrant orange hue and the soft glow emitted by the diya are depicted in a manner that aligns well with realistic expectations, enhancing the overall immersive experience."
+        }
+    },
+    {
+        "video_name": "004711_h",
+        "video_path": "",
+        "prompt": "Envision Koji approaching Master Shiro with a mixture of excitement and respect. See him bowing slightly as he speaks, eager to learn from the wise old master",
+        "visual": {
+            "score": "5",
+            "comment": "The visual quality of the video is commendable, with clear resolution that enhances the overall viewing experience. The characters' facial expressions and movements appear natural and fluid, effectively conveying the emotions of excitement and respect. This attention to detail in both clarity and motion significantly contributes to the immersive quality of the scene."
+        },
+        "t2v_align": {
+            "score": "3",
+            "comment": "The generated video fails to depict Master Shiro, which is a crucial element of the text prompt. Without his presence, the scene lacks the intended interaction between Koji and the wise old master, diminishing the overall narrative impact. It would be beneficial for future iterations to ensure that all key characters mentioned in the prompt are accurately represented in the video."
+        },
+        "physical": {
+            "score": "5",
+            "comment": "The video successfully maintains physical consistency throughout the scene. There are no logical inconsistencies present, and the actions of the characters align well with expected behavior. Koji's approach to Master Shiro, characterized by a respectful bow and an expression of eagerness, feels authentic and believable. Overall, the portrayal adheres to common sense and physical laws, resulting in a natural and coherent viewing experience."
+        }
+    },
+    {
+        "video_name": "002693_z",
+        "video_path": "",
+        "prompt": "A crying child amidst ruined houses at sunset, holding a doll in their hand, with birds flying in the sky",
+        "visual": {
+            "score": "3",
+            "comment": "The visual quality of the video suffers from several significant issues. Firstly, the proportions of the child's facial features appear unbalanced, which detracts from the overall realism of the character. Additionally, the body's proportions do not seem natural, leading to an unsettling visual effect. There is also a noticeable misalignment in the segments of the left arm, further compromising the fluidity and coherence of the animation. These factors collectively hinder the viewer's experience and diminish the emotional impact of the scene."
+        },
+        "t2v_align": {
+            "score": "4",
+            "comment": "The generated video fails to depict the emotional aspect of the scene, as the child is not shown crying, which is a crucial element of the prompt. The absence of this key detail diminishes the impact of the narrative being conveyed. Additionally, the overall atmosphere of the ruined houses at sunset is not fully realized, as the child's expression does not align with the poignant setting described. It would greatly enhance the alignment with the prompt if the child were portrayed with visible tears to reflect their sorrow."
+        },
+        "physical": {
+            "score": "2",
+            "comment": "In the video, I noticed a significant issue with the physical consistency related to the child's left arm. The upper and lower segments of the left arm appear misaligned, creating an unnatural and unsettling visual. This dislocation detracts from the overall realism of the scene, making it difficult for viewers to connect with the emotional weight of the moment. Such inconsistencies can undermine the viewer's immersion and disrupt the intended narrative of the crying child amidst the ruined houses."
+        }
+    },
+    {
+        "video_name": "004659_a",
+        "video_path": "",
+        "prompt": "Atv rider wearing a yellow and purple helmet walks to a yellow Can-Am Renegade ATV, sits on it, and starts the engine",
+        "visual": {
+            "score": "5",
+            "comment": "The video displays a clear and sharp image, allowing viewers to easily discern the details of the scene. The movements of the ATV rider are fluid and natural, contributing to an overall engaging viewing experience. The visual quality is commendable, with no noticeable blurriness or distortion that could detract from the action. Additionally, the stability of brightness and contrast enhances the visual appeal, making the colors of the yellow and purple helmet and the ATV stand out effectively."
+        },
+        "t2v_align": {
+            "score": "3",
+            "comment": "The generated video fails to accurately depict the text prompt in several key aspects. Firstly, the ATV rider is shown wearing only a yellow helmet, missing the crucial purple element that was specified. Additionally, instead of walking towards the yellow Can-Am Renegade ATV, the rider is seen sitting on the vehicle from the very beginning, which disrupts the intended sequence of actions. These discrepancies significantly affect the overall alignment of the video with the provided text prompt."
+        },
+        "physical": {
+            "score": "5",
+            "comment": "The video maintains a strong sense of physical consistency throughout. There are no apparent violations of common sense or physical laws, and every action depicted appears natural and realistic. The ATV rider's movements, from walking to sitting on the ATV and starting the engine, are fluid and believable, reinforcing the authenticity of the scene."
+        }
+    },
+    {
+        "video_name": "001534_a",
+        "video_path": "",
+        "prompt": "A casual indoor scene shows a woman and a man seated at a kitchen counter. The woman, wearing a black top and with long blonde hair, gestures as she speaks to the man, dressed in a blue Dodgers t-shirt. The modern kitchen, featuring a stainless steel range hood, white cabinets, and a well-lit atmosphere, serves as the backdrop. Natural light filters in through a large window, creating a warm and inviting ambiance. Both individuals are engaged in conversation, with the camera capturing the interaction and the organized, clean kitchen",
+        "visual": {
+            "score": "4",
+            "comment": "The visual quality of the video has notable issues, particularly with the representation of the woman's profile, which appears distorted. This misalignment detracts from the overall clarity and realism of the scene. While the kitchen setting is well-lit and inviting, the abrupt change in the woman's facial features disrupts the viewer's experience. The resolution is adequate, but local blurriness around her profile raises concerns about the fidelity of the visuals. Improving the stability of the image and ensuring that all characters are accurately depicted would greatly enhance the quality of this AI-generated video."
+        },
+        "t2v_align": {
+            "score": "2",
+            "comment": "The generated video falls short in accurately depicting the scene described in the prompt. Firstly, the color of the woman's clothing is incorrect; she is supposed to wear a black top, but this detail is not reflected in the video. Additionally, there is a significant issue with the absence of the man who is meant to be engaged in conversation with the woman. The interaction between the two characters is a crucial element of the scene, and his omission detracts from the overall coherence and realism of the video. Without these key components, the video fails to effectively capture the intended atmosphere and dynamics of the setting."
+        },
+        "physical": {
+            "score": "5",
+            "comment": "The video generally adheres to the principles of physical consistency; however, there are minor aspects that could be improved for a more natural representation. For instance, the lighting in the kitchen appears overly uniform and lacks dynamic shadows, which would typically be present in a real indoor setting with natural light. Additionally, the gestures and movements of the characters could be enhanced to reflect more realistic human interaction, as they currently seem somewhat stiff. Overall, while the scene is visually appealing and mostly coherent, paying closer attention to these details would greatly enhance the believability of the interaction."
+        }
+    },
+    {
+        "video_name": "004537_i",
+        "video_path": "",
+        "prompt": "A news segment features three anchors at a round table in a modern studio. The background shows a large screen with social media icons and a cityscape. One anchor gestures towards the screen while the others listen attentively. The first anchor wears a dark suit, the second a light suit, and the third also wears a dark suit. The studio is professional and well-lit, with microphones and laptops on the table, highlighting the news discussion. The camera provides a clear, wide-angle view of the scene",
+        "visual": {
+            "score": "3",
+            "comment": "The video exhibits significant visual issues that detract from the overall viewing experience. One of the most concerning aspects is the disappearance of one anchor's hand, which creates a confusing visual effect. Additionally, there is noticeable blurriness affecting one of the hands, making it difficult for viewers to focus on the anchors' gestures and interactions. These issues suggest a lack of clarity and stability in the visual presentation, which impacts the professionalism expected from a news segment. Improving the resolution and ensuring that all elements are sharply defined would greatly enhance the visual quality of the video."
+        },
+        "t2v_align": {
+            "score": "3",
+            "comment": "The video does not accurately reflect the text prompt, as it features only one anchor instead of the specified three. This lack of multiple anchors significantly affects the portrayal of the news segment, which should ideally show all three presenters at the round table. Additionally, the absence of the other elements such as the large screen with social media icons and the cityscape background is noticeable, detracting from the overall professional setting described in the prompt. A more accurate representation of the scene, including all anchors and the intended background, is needed for better alignment with the given text."
+        },
+        "physical": {
+            "score": "3",
+            "comment": "In the video, there is a notable issue with the physical consistency where the left hand of the anchor on the left side appears to materialize out of thin air. This unnatural appearance raises questions about the realism of the animation, as it defies the common expectations of how limbs should move and be positioned in relation to the body. Such an inconsistency can distract viewers and detracts from the overall credibility of the news segment being portrayed. A more careful attention to the natural gestures and positioning of the anchors' hands would greatly enhance the believability of the scene."
+        }
+    },
+    {
+        "video_name": "003959_a",
+        "video_path": "",
+        "prompt": "At the military training ground, the tank slowly moves around the territory. Suddenly, it discovers another tank and opens fire, releasing a projectile that flies towards the enemy",
+        "visual": {
+            "score": "3",
+            "comment": "The visual quality of the video suffers from a noticeable issue with the left tank's tracks, which appear misaligned. This distortion detracts from the overall realism and clarity of the scene, as it disrupts the viewer's immersion in the military training environment. Additionally, there may be other subtle factors affecting the visual experience, such as local blurriness or abrupt changes in the scene that could benefit from further refinement. Overall, improving these aspects would significantly enhance the quality and impact of the video."
+        },
+        "t2v_align": {
+            "score": "4",
+            "comment": "The video does not accurately depict the sequence of events described in the text prompt. According to the prompt, the first tank should be the one that opens fire, followed by the appearance of the enemy tank. However, in the video, the enemy tank appears first and fires at the initial tank. This misalignment in the order of actions creates confusion and does not faithfully represent the intended narrative."
+        },
+        "physical": {
+            "score": "3",
+            "comment": "In the video, there are notable issues with physical consistency. Initially, the tank on the left is shown moving in a direction that is perpendicular to the tracks, which defies the expected movement pattern of a tank. Additionally, after being hit by the cannon fire, the left tank shows no visible damage or impact, continuing to move as if unaffected. This lack of realistic reaction to the projectile undermines the overall believability of the scene and raises questions about adherence to the principles of physics and common sense in the representation of military equipment."
+        }
+    },
+    {
+        "video_name": "002436_p",
+        "video_path": "",
+        "prompt": "Cinematic, futuristic female samurai dressed in full armor, lovingly looking at the viewer, walking in the streets of a futuristic temple, slight breeze, sharp focus, intricate detail, wind blowing, in the style of John Woo",
+        "visual": {
+            "score": "4",
+            "comment": "The video presents a striking visual of a futuristic female samurai, with her face rendered in sharp clarity, which effectively draws the viewer's attention. However, the background appears noticeably blurred, detracting from the overall immersive experience. This disparity in focus creates an imbalance that may disrupt the viewer's engagement with the surrounding environment. While the intricate details of the character's armor are commendable, the lack of clarity in the background could benefit from improvement to enhance the depth and richness of the scene."
+        },
+        "t2v_align": {
+            "score": "4",
+            "comment": "The generated video features a female samurai dressed in full armor, but unfortunately, she lacks the 'lovingly' gaze that was specified in the text prompt. Instead of conveying deep emotion, her expression appears neutral, which detracts from the intended cinematic effect. This oversight affects the overall portrayal of the character and diminishes the emotional connection with the viewer."
+        },
+        "physical": {
+            "score": "3",
+            "comment": "The video features a futuristic female samurai whose face and body appear to undergo a continuous gradient transformation, which detracts from the overall physical consistency. The gradual blending of her appearance with the background architecture creates a surreal effect that feels unnatural. In a real-world scenario, the samurai's features and attire should remain distinct and stable, rather than shifting in an unrealistic manner. This inconsistency disrupts the immersion and believability of the scene, making it difficult for the viewer to engage fully with the narrative."
+        }
+    },
+    {
+        "video_name": "002495_j",
+        "video_path": "",
+        "prompt": "On a sunny afternoon, a white kitten was walking along a ridge in the countryside with some sludge stuck to its feet",
+        "visual": {
+            "score": "3",
+            "comment": "The video suffers from several visual quality issues that detract from the overall viewing experience. Firstly, there is noticeable instability in the footage, causing the image to shake intermittently. Additionally, an unexplained black stripe appears in the upper-left corner of the frame, which disrupts the visual consistency. Moreover, the kitten's paws seem to disappear abruptly at times, leading to confusion and a lack of coherence in the animation. These factors combined significantly hinder the clarity and smoothness of the video."
+        },
+        "t2v_align": {
+            "score": "5",
+            "comment": "The generated video generally aligns with the text prompt, capturing the essence of a sunny afternoon in the countryside. However, it could be enhanced by ensuring that the white kitten is more prominently featured, particularly highlighting the detail of the sludge stuck to its feet, which adds an important element to the scene. Overall, while the video meets the basic expectations, a few adjustments could improve its fidelity to the prompt."
+        },
+        "physical": {
+            "score": "2",
+            "comment": "The video depicts a white kitten walking along a ridge, but there are significant issues with physical consistency that detract from the overall quality. One particularly strange element is the animation of the kitten's paws, which appear to be absorbed into its face and then re-emerge. This bizarre depiction defies common sense and disrupts the natural movement one would expect from a living creature. Such an unnatural portrayal not only confuses viewers but also undermines the realism that is crucial in a text-to-video generation. Overall, this inconsistency severely impacts the believability of the scene."
+        }
+    },
+    {
+        "video_name": "003602_x",
+        "video_path": "",
+        "prompt": "A small, dilapidated house sits on stilts over calm water, surrounded by lush greenery. Its weathered concrete structure shows visible cracks and peeling paint. The tranquil scene reflects the house and surrounding foliage in the water, creating a serene atmosphere. No people or animals are present, and the steady camera captures the peaceful, rural setting",
+        "visual": {
+            "score": "5",
+            "comment": "The video exhibits commendable clarity, allowing for a clear view of the small, dilapidated house and its surroundings. The reflections on the water surface are beautifully rendered, with a natural and smooth wave effect that enhances the tranquil atmosphere. However, while the resolution is satisfactory, there are moments where the overall visual quality could be improved, particularly in the details of the house's weathered structure, which could benefit from sharper definition to emphasize the visible cracks and peeling paint. The camera stability is well-maintained, contributing to a serene viewing experience, though slight adjustments could enhance the smoothness of transitions within the scene."
+        },
+        "t2v_align": {
+            "score": "5",
+            "comment": "The generated video perfectly aligns with the text prompt, accurately depicting the small, dilapidated house on stilts above calm water. The weathered concrete structure is shown with visible cracks and peeling paint, effectively conveying its aged condition. The surrounding lush greenery is beautifully represented, and the tranquil reflection of the house and foliage in the water adds to the serene atmosphere described in the prompt. Additionally, the absence of people or animals follows the prompt's instructions, and the steady camera work enhances the peaceful, rural setting. Overall, the video captures the essence of the scene remarkably well."
+        },
+        "physical": {
+            "score": "5",
+            "comment": "The video presents a serene and tranquil scene that effectively captures the essence of a dilapidated house on stilts over calm water, surrounded by lush greenery. There are no apparent violations of common sense or physical laws; everything appears to be in harmony with the natural environment. The reflections in the water are consistent with the structure and foliage, enhancing the overall realism of the setting. The weathered appearance of the house, with its visible cracks and peeling paint, adds to the authenticity without introducing any unnatural elements. Overall, the physical consistency of this video is commendable."
+        }
+    },
+    {
+        "video_name": "001059_s",
+        "video_path": "",
+        "prompt": "A young woman picks up a fallen leaf, inspects its veins closely, then softly blows it away into the breeze",
+        "visual": {
+            "score": "5",
+            "comment": "The video demonstrates a clear visual quality, with the character's movements appearing fluid and well-coordinated. The overall resolution is satisfactory, contributing to a pleasant viewing experience. However, there are areas where the local clarity could be improved to enhance the finer details, particularly in close-up shots. Overall, the visual presentation effectively captures the essence of the scene."
+        },
+        "t2v_align": {
+            "score": "3",
+            "comment": "The generated video does not accurately depict the action described in the text prompt. Specifically, the young woman fails to perform the action of blowing the leaf away, which is a crucial part of the scene. This omission significantly impacts the alignment between the video and the prompt, as it leaves out an important detail that contributes to the overall narrative."
+        },
+        "physical": {
+            "score": "5",
+            "comment": "The video maintains a strong sense of physical consistency throughout. There are no evident violations of common sense or physical laws, and all actions performed by the young woman appear natural and believable. Her interaction with the fallen leaf, from picking it up to inspecting its veins closely, is depicted in a way that aligns well with reality. Moreover, the gentle blowing of the leaf into the breeze is executed smoothly, enhancing the overall realism of the scene. Overall, the video effectively captures the essence of the moment without any strange or unnatural elements."
+        }
+    },
+    {
+        "video_name": "004551_a",
+        "video_path": "",
+        "prompt": "IMAX shot of two mob bosses talking to each other in an Asian castle office, soft red fill light with dramatic key light",
+        "visual": {
+            "score": "3",
+            "comment": "The visual quality of the video suffers from noticeable issues, particularly with the character on the left. Their facial features appear unnatural, which detracts from the overall realism of the scene. Additionally, there is a distortion in the hands of this character, making them look misshapen. These discrepancies in form affect the viewer's immersion and enjoyment of the moment. Enhancing the rendering of human anatomy and ensuring more natural proportions would significantly improve the visual experience."
+        },
+        "t2v_align": {
+            "score": "5",
+            "comment": "The generated video aligns reasonably well with the text prompt. The setting of an Asian castle office is effectively depicted, capturing the essence of the environment. However, there could be improvements in the lighting. While the video does incorporate soft red fill light, the dramatic key light element seems to be lacking, which is essential for creating the intended atmosphere. Additionally, the interaction between the two mob bosses could be more pronounced to better reflect their dialogue and relationship as suggested by the prompt."
+        },
+        "physical": {
+            "score": "3",
+            "comment": "In the video, there is a noticeable issue with the left character's hands, which appear to be merging into a single form. This unusual visual effect detracts from the overall realism of the scene, creating a bizarre impression that is inconsistent with typical human anatomy. Such physical inconsistencies can disrupt the viewer's immersion and detract from the narrative impact of the dialogue between the two mob bosses."
+        }
+    },
+    {
+        "video_name": "000279_c",
+        "video_path": "",
+        "prompt": "Three anthropomorphic mice in astronaut suits sit inside a high-tech spacecraft, engaged in a lively conversation. One mouse in the foreground is particularly animated, using hand gestures to emphasize points, while the other two mice listen attentively. In the background, a larger character, possibly a regal human or animal, watches the interaction. The spacecraft is illuminated by bright, artificial lighting, and the control panels suggest a futuristic setting. The camera captures the expressive mice and their surroundings, focusing on their dynamic interaction",
+        "visual": {
+            "score": "5",
+            "comment": "The visual quality of the video is commendable, with a clear resolution that allows for the major details to be easily discerned. The overall clarity of the imagery enhances the viewing experience, making it easy to appreciate the intricacies of the characters' expressions and gestures. However, while the primary elements are well-rendered, there could be improvements in certain areas, such as ensuring a consistent smoothness throughout the video. Additionally, attention should be given to potential local blurriness and any abrupt transitions that may detract from the overall visual coherence. Overall, the video presents a visually engaging scene, but refining these aspects could elevate the quality further."
+        },
+        "t2v_align": {
+            "score": "5",
+            "comment": "The generated video mostly aligns with the text prompt, featuring three anthropomorphic mice in astronaut suits inside a high-tech spacecraft. The mice are engaged in a lively conversation, with one mouse in the foreground using hand gestures to emphasize its points, which adds to the dynamic nature of the scene. However, there are some noticeable gaps in the depiction. For instance, while the mice are expressive, the larger character that is supposed to observe the interaction is missing from the background. Additionally, the control panels and the futuristic setting are not distinctly highlighted, which detracts from the overall ambiance of the spacecraft. To enhance alignment with the prompt, these elements should be more clearly represented."
+        },
+        "physical": {
+            "score": "3",
+            "comment": "The video presents a charming scene with anthropomorphic mice in astronaut suits, but it suffers from notable physical inconsistencies. Most prominently, the noses and ears of the mice appear to penetrate through their helmets, which is not only unrealistic but also raises questions about the design of their protective gear. Furthermore, the depiction of the mice's hands is peculiar, as they are illustrated with only four fingers instead of a standard five. These discrepancies detract from the overall immersion in the high-tech environment and disrupt the viewer's suspension of disbelief."
+        }
+    },
+    {
+        "video_name": "001113_s",
+        "video_path": "",
+        "prompt": "A traveler pushes a suitcase through a busy airport, struggles to lift it over a small step, then pauses to catch their breath and check the time",
+        "visual": {
+            "score": "5",
+            "comment": "The video exhibits a high level of clarity, making the visuals appear quite realistic. The details of the airport environment are rendered well, enhancing the overall viewing experience. However, it's important to note that while the clarity is commendable, there are moments where minor blurriness can be observed, particularly during fast movements. Additionally, the brightness and contrast remain stable throughout the video, contributing positively to the visual appeal. Overall, the visual quality is impressive, though slight improvements could enhance the smoothness of transitions and minimize any local distortions."
+        },
+        "t2v_align": {
+            "score": "4",
+            "comment": "The generated video does not include the crucial action of the traveler lifting the suitcase over a small step, which is a significant part of the narrative described in the text prompt. This omission affects the overall alignment of the video with the prompt, as it misses a key moment that showcases the traveler's struggle and adds depth to the story."
+        },
+        "physical": {
+            "score": "5",
+            "comment": "The video depicts the traveler pushing a suitcase through a busy airport with a high level of realism. There are no noticeable logical inconsistencies or violations of physical laws present in the scene. The struggle to lift the suitcase over a small step is portrayed authentically, reflecting a common experience travelers face. Additionally, the character's pause to catch their breath and check the time adds to the believability of the scenario. Overall, the physical consistency in this video is commendable."
+        }
+    },
+    {
+        "video_name": "001502_e",
+        "video_path": "",
+        "prompt": "A masked panda bear with a champion belt practicing wrestling in a ring, drawn in black and white with great detail, panoramic scene, no deformities, dynamic postures, white background",
+        "visual": {
+            "score": "3",
+            "comment": "The visual quality of the video presents several notable issues. Firstly, the proportions of the panda bear's limbs appear unbalanced, which detracts from the overall realism of its movements. Additionally, the actions depicted do not seem natural, resulting in a lack of fluidity that diminishes the viewer's engagement. These factors significantly impact the visual experience, as they contribute to an unsettling and less immersive portrayal of the scene."
+        },
+        "t2v_align": {
+            "score": "3",
+            "comment": "The generated video does not accurately depict the text prompt, as the panda bear is missing its mask and the champion belt. These elements are crucial to the character's identity and the overall theme of the wrestling scene. Additionally, the absence of these details detracts from the intended visual impact of a black and white drawing with great detail. The video needs to better align with the prompt by incorporating these key features to create a more authentic representation."
+        },
+        "physical": {
+            "score": "3",
+            "comment": "The video presents a panda bear engaged in wrestling, but there are significant issues regarding physical consistency. Notably, the panda's limbs appear to be twisted and deformed, which detracts from the overall realism of the animation. Additionally, there is a jarring moment where the panda's eyes suddenly vanish from its face, creating a disconcerting visual effect. These abnormalities disrupt the viewer's immersion and raise questions about the adherence to common physical laws and natural representation."
+        }
+    },
+    {
+        "video_name": "001051_z",
+        "video_path": "",
+        "prompt": "A guy working in front of the computer as a designer, through the windows we can see that it is raining",
+        "visual": {
+            "score": "5",
+            "comment": "The visual quality of the video is commendable, with clear graphics that allow for the discernment of major details. The overall resolution is satisfactory, contributing to a pleasant viewing experience. However, there may be areas where finer details could be enhanced for an even sharper presentation."
+        },
+        "t2v_align": {
+            "score": "2",
+            "comment": "The generated video does not effectively depict the elements described in the text prompt. Notably, there is no visible computer present, which is central to the scene of a designer at work. Additionally, the absence of windows detracts from the intended setting, as we are meant to see the rainy weather outside. Overall, these omissions significantly impact the alignment of the video with the prompt."
+        },
+        "physical": {
+            "score": "3",
+            "comment": "I noticed a significant inconsistency in the video regarding the character's hand. The hand resting on the keyboard appears to have six fingers, which is not only physically impossible for a human but also distracts from the overall realism of the scene. This abnormality detracts from the viewer's immersion and raises questions about the attention to detail in the animation. It's essential for AI-generated videos to adhere to common human anatomy to create a believable and engaging experience."
+        }
+    },
+    {
+        "video_name": "004521_q",
+        "video_path": "",
+        "prompt": "A young man with glasses and a graphic black t-shirt stands in front of an industrial lathe machine, explaining its operation. He gestures with his hands, pointing at various parts of the machine and occasionally adjusting a red knob. The machine is old-fashioned, with a large spindle and mechanical components. The background is an industrial space with concrete floors and visible pipes, with bright, even lighting. The man's movements are clear and expressive, highlighting his focus on demonstrating how the machine works",
+        "visual": {
+            "score": "3",
+            "comment": "The visual quality of the video suffers significantly due to noticeable distortion in both the man's face and hands. This misalignment detracts from the overall clarity and realism of the presentation, making it difficult for viewers to fully engage with the content. The distortion creates an unsettling visual experience, overshadowing the informative nature of the demonstration. To enhance the watching experience, it is crucial to address these issues and ensure that the visual representation remains true to life."
+        },
+        "t2v_align": {
+            "score": "2",
+            "comment": "The generated video does not accurately depict the scene described in the prompt. There is no industrial lathe machine present, which is a critical element of the setting. Additionally, the young man is standing still without engaging in any explanations or demonstrations of the machine's operation. He does not gesture towards any parts of the lathe or adjust the red knob as specified in the prompt. Overall, the lack of action and interaction significantly detracts from the intended portrayal of the man's focus and the demonstration of the machine's workings."
+        },
+        "physical": {
+            "score": "2",
+            "comment": "The video presents a significant issue with physical consistency, particularly concerning the young man's hands. Instead of moving naturally, his hands appear to merge into a chaotic, indistinct mass, which defies common sense and physical laws. This bizarre representation detracts from the overall realism of the video, making it difficult for viewers to focus on the demonstration of the lathe machine. Such a disjointed portrayal of the man's hands disrupts the fluidity of his gestures and undermines the instructional aspect of the video."
+        }
+    },
+    {
+        "video_name": "001570_m",
+        "video_path": "",
+        "prompt": "Cityscape Sunrise Revelation: Generate a video of the city skyline at sunrise, with subtle details revealing the conclusion of a noir narrative. Use warm hues and soft lighting to evoke a sense of revelation. Pan right",
+        "visual": {
+            "score": "5",
+            "comment": "The video effectively showcases the primary elements of the city skyline at sunrise, allowing viewers to discern the intricate details within the scene. However, there are some visual quality issues that detract from the overall experience. The resolution appears to be inconsistent in certain areas, leading to a lack of clarity that hinders the viewer's ability to fully appreciate the subtle nuances of the noir narrative. Additionally, there are instances of local blurriness that disrupt the smoothness of the visuals, especially during the right pan. While the warm hues and soft lighting contribute positively to the atmosphere, some abrupt changes in brightness and contrast can be jarring, affecting the stability of the visual presentation. Addressing these aspects would significantly enhance the watching experience."
+        },
+        "t2v_align": {
+            "score": "5",
+            "comment": "The generated video generally aligns with the text prompt, depicting the city skyline at sunrise. The warm hues and soft lighting effectively create an atmosphere of revelation, which is fitting for the noir narrative. However, there could be more subtle details incorporated that clearly indicate the conclusion of the story, as this aspect seems underrepresented. Overall, while the main elements are present, enhancing these finer details would significantly improve the coherence with the prompt."
+        },
+        "physical": {
+            "score": "5",
+            "comment": "The video successfully captures the essence of a city skyline at sunrise, showcasing warm hues and soft lighting that evoke a beautiful sense of revelation. There are no apparent violations of common sense or physical laws in the depiction. The elements within the scene are coherent and harmonious, contributing to a smooth visual experience that aligns with the noir narrative theme."
+        }
+    },
+    {
+        "video_name": "000968_x",
+        "video_path": "",
+        "prompt": "Birds are flying over a forest with dried leaves and parched ground under the scorching midday sun, with a clear blue sky. Summer, Miyazaki comic style",
+        "visual": {
+            "score": "4",
+            "comment": "The video presents a striking scene of birds flying over a forest; however, there are several visual quality issues that detract from the overall experience. Firstly, a noticeable black line appears abruptly in the center of the frame, which disrupts the visual flow and draws attention away from the intended imagery. Additionally, the birds on the left side of the screen exhibit a lack of smoothness in their flight, resulting in a choppy motion that suggests frame drops. Furthermore, the bird in the upper right corner consistently remains partially out of frame, limiting the viewer's ability to fully appreciate the scene. These elements combined negatively impact the clarity and coherence of the visual presentation, making it difficult to engage with the intended artistic style."
+        },
+        "t2v_align": {
+            "score": "3",
+            "comment": "The generated video does not accurately reflect the Miyazaki comic style as specified in the prompt. The artistic elements and visual aesthetics associated with Miyazaki's work are noticeably absent, which detracts from the overall alignment with the intended style."
+        },
+        "physical": {
+            "score": "3",
+            "comment": "One notable issue observed in the video is the movement of the dried leaves on the ground, which appear to be writhing or undulating in a way that defies natural behavior. Under typical circumstances, leaves that are dry and parched would remain still, especially in the scorching midday sun. This unnatural movement creates a sense of physical inconsistency and disrupts the overall realism of the scene. The depiction of the forest and its elements should adhere to common physical laws, and the strange behavior of the leaves detracts from the video's authenticity."
+        }
+    },
+    {
+        "video_name": "004241_c",
+        "video_path": "",
+        "prompt": "A man in a black coat with black hair and purple glowing eyes is fighting with swords, blood flowing from his wounds",
+        "visual": {
+            "score": "4",
+            "comment": "The visual quality of the video is notably compromised by several factors. Firstly, the contrast appears to be quite low, which diminishes the overall impact of the visuals. Additionally, the clarity throughout the video is lacking, making it difficult to appreciate the finer details of the scene. Most concerning is the noticeable blurriness in the character's hands, which detracts from the realism and fluidity of the action. Improving these aspects would significantly enhance the viewing experience."
+        },
+        "t2v_align": {
+            "score": "5",
+            "comment": "The video successfully includes key elements from the prompt, such as a man in a black coat, black hair, and purple glowing eyes. Additionally, the depiction of the swords and the flowing blood from his wounds is effectively portrayed. However, it would be beneficial to enhance the overall visual coherence and intensity of the fight scene to better match the dramatic tone suggested by the prompt."
+        },
+        "physical": {
+            "score": "3",
+            "comment": "The video exhibits several significant issues related to physical consistency. Firstly, the amount of blood that is sprayed is excessively exaggerated, making the scene appear unrealistic and overly dramatic. Additionally, the character's eyes, nostrils, and mouth emit an unnatural glow, which detracts from the overall believability of the visual portrayal. Furthermore, the trajectory of the character's movements is chaotic and lacks coherence, resulting in an awkward representation of combat that does not align with typical physical laws or human anatomy. These inconsistencies collectively undermine the immersive experience of the video."
+        }
+    },
+    {
+        "video_name": "004205_z",
+        "video_path": "",
+        "prompt": "A female hand hitting a volleyball over the net with strength. Quick action. The hand is in the shot the whole time, as is the ball",
+        "visual": {
+            "score": "3",
+            "comment": "The visual quality of the video suffers from noticeable issues, particularly with the representation of the female hand. It appears unnatural, exhibiting distortion that detracts from the overall realism of the scene. This misalignment in the visual portrayal disrupts the viewing experience and diminishes the impact of the quick action of hitting the volleyball. Enhancing the clarity and stability of the visuals would significantly improve the overall quality."
+        },
+        "t2v_align": {
+            "score": "3",
+            "comment": "The generated video fails to accurately depict the elements mentioned in the prompt. Firstly, it does not clearly show that it is a female hand hitting the volleyball, which is a crucial aspect of the scene. Additionally, there is no footage of the hand actually striking the ball, which is essential to convey the action described. Instead, the video presents a confusing sequence where the hand appears to be tugging on the net, followed by the volleyball simply falling from above, which does not align with the prompt's requirement for dynamic action."
+        },
+        "physical": {
+            "score": "3",
+            "comment": "The video displays a striking physical inconsistency, particularly with the volleyball appearing to be embedded in the net during the action. This unnatural positioning breaks the common understanding of how a volleyball interacts with a net, as one would expect the ball to either clear the net or hit it directly without becoming stuck. Such an oversight detracts from the overall realism of the scene, making it feel less believable and detracting from the intended quick action of the hand striking the ball."
+        }
+    },
+    {
+        "video_name": "000756_c",
+        "video_path": "",
+        "prompt": "A man in a yellow graphic t-shirt and black jacket sits at a cluttered desk, holding a red and black glass globe. Surrounded by books, a notebook, and a smartphone, he focuses intently on the globe, adjusting his grip as he shifts his gaze. The room is dimly lit with natural light from a window, creating a cozy atmosphere",
+        "visual": {
+            "score": "4",
+            "comment": "The video exhibits significant visual quality issues, particularly with the man's hand, which appears distorted and warped. This misalignment detracts from the overall realism of the scene, making it difficult for viewers to fully engage with the content. Additionally, the clarity of the video could be improved, as certain elements seem to lack sharpness, contributing to a general sense of blurriness. Addressing these visual discrepancies would enhance the watching experience and create a more immersive atmosphere in the cozy, dimly lit setting."
+        },
+        "t2v_align": {
+            "score": "4",
+            "comment": "The generated video has a cozy atmosphere and effectively captures the dim lighting described in the prompt. However, it fails to include the smartphone that the man is supposed to be using, which is an important element of the scene. This missing detail detracts from the overall alignment of the video with the text prompt, as it does not fully represent the cluttered desk setup that was described."
+        },
+        "physical": {
+            "score": "4",
+            "comment": "The video presents a notable inconsistency regarding the glass globe held by the man. It appears to be floating in mid-air without any visible support, which defies the laws of physics and creates a sense of unnaturalness. This lack of grounding for the object not only disrupts the physical consistency of the scene but also distracts from the overall realism of the video. Such anomalies should be addressed to enhance the believability of the AI-generated content."
+        }
+    },
+    {
+        "video_name": "001513_c",
+        "video_path": "",
+        "prompt": "A man sitting on a chair, looking up at the sky in shock, surrounded by trees and a beautiful lake",
+        "visual": {
+            "score": "2",
+            "comment": "The visual quality of the video suffers significantly due to noticeable blurriness, which gives the impression that the scene is shaking. This lack of clarity makes it difficult to distinguish whether the image is showing the man's face or the back of his head. Overall, the instability in the visual presentation detracts from the viewing experience and fails to effectively convey the intended emotional impact."
+        },
+        "t2v_align": {
+            "score": "2",
+            "comment": "The video does not effectively convey the man's shock, as he is not shown looking up at the sky or displaying any facial expressions that would indicate his emotional state. This lack of action and expression fails to capture the essence of the prompt, leaving the viewer unable to fully understand the man's feelings in this moment."
+        },
+        "physical": {
+            "score": "5",
+            "comment": "The video presents a scene of a man sitting on a chair, gazing up at the sky in shock. However, one notable issue is that the character remains completely still throughout the duration of the video, which detracts from the overall realism and emotional impact of the moment. While the surrounding environment, featuring trees and a beautiful lake, appears visually appealing and consistent, the lack of any movement from the character creates an unnatural feeling. A more dynamic portrayal, such as subtle shifts in posture or facial expressions, would greatly enhance the authenticity of the scene."
         }
     }
 ]

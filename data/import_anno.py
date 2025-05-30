@@ -145,9 +145,9 @@ async def _refine_comment_gpt(comments,prompts,template,dim_def):
     return final_list
 
 
-def convert_anno(raw_anno_file,save_path):
+def convert_anno(raw_anno_file,save_path,n):
     with open(raw_anno_file,"r",encoding="utf-8") as f:
-        raw_annos=json.load(f)[:3]
+        raw_annos=json.load(f)[:n]
         
     data=[]
     prompts=[]
@@ -252,4 +252,4 @@ if __name__ =="__main__":
     input_path="data/test.json"
     save_path="data/test_save.json"
     
-    convert_anno(input_path,save_path)
+    convert_anno(input_path,save_path,200)
