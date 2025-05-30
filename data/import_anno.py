@@ -1,3 +1,4 @@
+from gettext import find
 import json
 import os
 import shutil
@@ -67,11 +68,16 @@ from prepare_video.prompts.utils_gpt_chat import *
 """
 
 data_dir="/data/xuan/videoscore2/data"
+video_dir=""
 all_data_path=f"{data_dir}/all_anno.json"
 COMMENT_REFINE_TEMPLATE=""
 shared_comments=json.load(open("./const/shared_comments.json","r"))
 MIN_SCORE=1
 MAX_SCORE=5
+
+
+def video_path(video_dir,video_name):
+    return None
 
 def convert_anno(raw_anno_file):
     with open(raw_anno_file,"r",encoding="utf-8") as f:
@@ -123,6 +129,7 @@ def convert_anno(raw_anno_file):
      
         data_item={
             "video_name":video_name,
+            "video_path":video_path(video_dir,video_name),
             "prompt":prompt_en,
             "visual":{
                 "score":visual_score,
