@@ -1,19 +1,13 @@
-from gettext import find
 import json
 import os
-import shutil
-import sys
-import time
 import re
 import asyncio
+import argparse
 from string import Template
-from zeno_build.models import lm_config
-parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-if parent_dir not in sys.path:
-    sys.path.insert(0, parent_dir)
-    # print(sys.path)
-from prepare_video.prompts.utils_gpt_chat import *
-
+from refine_cmt_async_gpt import _refine_cmt_async_gpt
+from refine_cmt_claude import _refine_cmt_claude
+from refine_cmt_gemini import _refine_cmt_gemini
+from refine_cmt_gpt import _refine_cmt_gpt
 
 
 """item format:
@@ -105,58 +99,37 @@ anno_keywords:
 $comment                
 """)
 
+def _hf_folder_size(repo_id,folder):
+    from huggingface_hub import list_repo_files
+    all_files = list_repo_files(repo_id=repo_id,repo_type="dataset")
+    files = set()
 
-def _video_path(video_dir,video_name):
-    return ""
+    for f in all_files:
+        if f.startswith(f"{folder}/"):
+            parts = f[len(folder) + 1:].split("/")
+            if parts:
+                files.add(parts[0])
+    return len(files)
 
-async def _refine_comment_gpt(comments,prompts,template,dim_def):
-    
-    # model_name="gpt-4o-2024-08-06"
-    model_name = "gpt-4o-mini"
-    model_config = lm_config.LMConfig(provider="openai_chat", model=model_name)
-    
-    date_time=time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-    os.makedirs(f"./logs",exist_ok=True)
-    logger=set_logger(f"./logs/import_anno_{date_time}.log")
-    
-    context_list=[]
-    for raw_comment,prompt in zip(comments,prompts):
-        context=dict(messages=
-            [{
-                "content":template.substitute(dim_def=dim_def,prompt=prompt,comment=raw_comment),
-                "role":"user"
-            }])
-        context_list.append(context)
-    
-    res_list = await generate_from_openai_chat_completion(
-        full_contexts = context_list,
-        model_config = model_config,
-        logger=logger,
-    )
-    final_list=[]
-    for res in res_list:
-        try:
-            res="{"+res.split("{")[-1].split("}")[0].strip()+"}"
-            eval_res = eval(res)
-            if isinstance(eval_res, dict) and 'comment' in eval_res:
-                final_list.append(eval_res["comment"])
-        except Exception as e:
-            final_list.append(" ")
-    return final_list
+def _hf_file_exist(repo_id,target_file):
+    from huggingface_hub import list_repo_files
+    all_files = list_repo_files(repo_id=repo_id,repo_type="dataset")
+    return target_file in all_files
+        
 
-
-def convert_anno(raw_anno_file,save_path,n):
-    with open(raw_anno_file,"r",encoding="utf-8") as f:
-        raw_annos=json.load(f)[:n]
+def convert_anno(anno_path,save_path,append_img=True):
+    with open(anno_path,"r",encoding="utf-8") as f:
+        raw_annos=json.load(f)[:5]
         
     data=[]
     prompts=[]
     visual_scores=[]
-    visual_comments=[]
+    visual_cmts=[]
     t2v_scores=[]
-    t2v_comments=[]
+    t2v_cmts=[]
     phy_scores=[]
-    phy_comments=[]
+    phy_cmts=[]
+    frames_2d_list=[]
     for anno in raw_annos:
         url=anno["info"]["data"][2]["content"]
         video_name=url.split("/")[-1].split(".")[0]
@@ -174,31 +147,43 @@ def convert_anno(raw_anno_file,save_path,n):
             print(f"t2v score not found for {video_name}")
             continue
         try:
-            physical_score=re.search(r'\d+', str(anno["labels"][4]["data"]["value"])).group()
+            phy_score=re.search(r'\d+', str(anno["labels"][4]["data"]["value"])).group()
         except:
             print(f"physical score not found for {video_name}")
             continue
         
-        visual_comment=anno["labels"][1]["data"]["value"]
-        t2v_comment=anno["labels"][3]["data"]["value"]
-        phy_comment=anno["labels"][5]["data"]["value"]
+        visual_cmt=anno["labels"][1]["data"]["value"]
+        t2v_cmt=anno["labels"][3]["data"]["value"]
+        phy_cmt=anno["labels"][5]["data"]["value"]
         if visual_score==MIN_SCORE or visual_score==MAX_SCORE:
-            visual_comment="NA"
+            visual_cmt="NA"
         if t2v_score==MAX_SCORE:
-            t2v_comment="NA"
-        if physical_score==MAX_SCORE:
-            phy_comment="NA"     
+            t2v_cmt="NA"
+        if phy_score==MAX_SCORE:
+            phy_cmt="NA"     
                
         visual_scores.append(visual_score)
-        visual_comments.append(visual_comment)
+        visual_cmts.append(visual_cmt)
         t2v_scores.append(t2v_score)
-        t2v_comments.append(t2v_comment)
-        phy_scores.append(physical_score)
-        phy_comments.append(phy_comment)
-    
+        t2v_cmts.append(t2v_cmt)
+        phy_scores.append(phy_score)
+        phy_cmts.append(phy_cmt)
+        if append_img:
+            # format of frames path: <video_frames_dir>/frames/<video_name>_<frame_idx>.jpg
+            try:
+                n_frames=_hf_folder_size(REPO_ID,video_name)
+                if not all(_hf_file_exist(REPO_ID,f"{video_name}/{video_name}_{i}.jpg") for i in range(n_frames)):
+                    print("not all frames exists, skipped")
+                    continue
+            except Exception as e:
+                print(e, "\nerror in fetch video frames.")
+                continue
+            
+            frames_2d_list.append([f"{IMG_HF_PREFIX}/{video_name}/{video_name}_{i}.jpg" for i in range(n_frames)])
+
+            
         data_item={
             "video_name":video_name,
-            "video_path":_video_path(video_dir,video_name),
             "prompt":prompt_en,
             "visual":{
                 "score":visual_score,
@@ -209,47 +194,101 @@ def convert_anno(raw_anno_file,save_path,n):
                 "comment":None,
             },
             "physical":{
-                "score":physical_score,
+                "score":phy_score,
                 "comment":None,
             }
         }
         data.append(data_item)
 
     print('len of data list: ',len(data))
-
-    visual_comments_refined=asyncio.run(_refine_comment_gpt(visual_comments,prompts,refine_template,dim_def=visual_def))
-    t2v_comments_refined=asyncio.run(_refine_comment_gpt(t2v_comments,prompts,refine_template,dim_def=t2v_def))
-    physical_comments_refined=asyncio.run(_refine_comment_gpt(phy_comments,prompts,refine_template,dim_def=phy_def))
+        
+    # visual_cmts_refined=asyncio.run(_refine_cmt_async_gpt(
+    #     visual_cmts,prompts,frames_2d_list,refine_template,visual_def))
+    # t2v_cmts_refined=asyncio.run(_refine_cmt_async_gpt(
+    #     t2v_cmts,prompts,frames_2d_list,refine_template,t2v_def))
+    # phy_cmts_refined=asyncio.run(_refine_cmt_async_gpt(
+    #     phy_cmts,prompts,frames_2d_list,refine_template,phy_def))
+    
+    if model_series=="gpt":
+        visual_cmts_refined=_refine_cmt_gpt(
+            model_name,model_access,visual_cmts,prompts,frames_2d_list,refine_template,visual_def)
+        t2v_cmts_refined=_refine_cmt_gpt(
+            model_name,model_access,t2v_cmts,prompts,frames_2d_list,refine_template,t2v_def)
+        phy_cmts_refined=_refine_cmt_gpt(
+            model_name,model_access,phy_cmts,prompts,frames_2d_list,refine_template,phy_def)
+        
+    elif model_series=="gemini":
+        visual_cmts_refined=_refine_cmt_gemini(
+            model_name,model_access,visual_cmts,prompts,frames_2d_list,refine_template,visual_def)
+        t2v_cmts_refined=_refine_cmt_gemini(
+            model_name,model_access,t2v_cmts,prompts,frames_2d_list,refine_template,t2v_def)
+        phy_cmts_refined=_refine_cmt_gemini(
+            model_name,model_access,phy_cmts,prompts,frames_2d_list,refine_template,phy_def)
+    
+    elif model_series=="claude":
+        visual_cmts_refined=_refine_cmt_claude(
+            model_name,model_access,visual_cmts,prompts,frames_2d_list,refine_template,visual_def)
+        t2v_cmts_refined=_refine_cmt_claude(
+            model_name,model_access,t2v_cmts,prompts,frames_2d_list,refine_template,t2v_def)
+        phy_cmts_refined=_refine_cmt_claude(
+            model_name,model_access,phy_cmts,prompts,frames_2d_list,refine_template,phy_def)
+    
     
     for idx in range(len(visual_scores)):     
-        data[idx]['visual']["comment"]=visual_comments_refined[idx]
-        data[idx]['t2v_align']["comment"]=t2v_comments_refined[idx]
-        data[idx]['physical']["comment"]=physical_comments_refined[idx]
+        data[idx]['visual']["comment"]=visual_cmts_refined[idx]
+        data[idx]['t2v_align']["comment"]=t2v_cmts_refined[idx]
+        data[idx]['physical']["comment"]=phy_cmts_refined[idx]
         if visual_scores[idx]==MIN_SCORE:
-            data[idx]['visual']["comment"]=shared_comments["visual_1"]
+            data[idx]['visual']["comment"]=shared_cmts["visual_1"]
         if visual_scores[idx]==MAX_SCORE:
-            data[idx]['visual']["comment"]=shared_comments["visual_5"]
-        if t2v_scores[idx]==MIN_SCORE:
-            data[idx]['t2v_align']["comment"]=shared_comments["t2v_1"]
-        if phy_scores[idx]==MIN_SCORE:
-            data[idx]['physical']["comment"]=shared_comments["physical_1"]
+            data[idx]['visual']["comment"]=shared_cmts["visual_5"]
+        if t2v_scores[idx]==MAX_SCORE:
+            data[idx]['t2v_align']["comment"]=shared_cmts["t2v_5"]
+        if phy_scores[idx]==MAX_SCORE:
+            data[idx]['physical']["comment"]=shared_cmts["phy_5"]
         
         
     with open(save_path,"a",encoding="utf-8") as f:
         json.dump(data,f,indent=4,ensure_ascii=False)
 
 
-    
+
 if __name__ =="__main__":
-    data_dir="/data/xuan/videoscore2/data"
-    video_dir=""
-    all_data_path=f"{data_dir}/all_anno.json"
-    shared_comments=json.load(open("./data/const/shared_comments.json","r"))
+    shared_cmts={
+        "visual_5": "",
+        "t2v_5": "",
+        "phy_5": "",
+        "visual_1": ""
+    }
     MIN_SCORE=1
     MAX_SCORE=5
-    os.environ["OPENAI_API_KEY"]=os.environ["DEEPBRICKS_KEY1"]
-    os.environ["OPENAI_BASE_URL"]=os.environ["DEEPBRICKS_URL"]
-    input_path="data/test.json"
-    save_path="data/test_save.json"
+    REPO_ID="hexuan21/VS2_frame_part_cache"
+    IMG_HF_PREFIX=f"https://huggingface.co/datasets/hexuan21/VS2_frame_part_cache/resolve/main"
     
-    convert_anno(input_path,save_path,200)
+    current_dir=os.path.dirname(os.path.abspath(__file__))
+    root_frames_dir=os.path.join(current_dir,"video_frames")
+    os.makedirs(root_frames_dir,exist_ok=True)
+    
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('--anno_path', type=str, required=True, default="test.json")
+    parser.add_argument('--model_series', type=str, required=True, default='gpt', choices=["gpt","gemini","claude"])
+    parser.add_argument('--model_name', type=str, required=True, default='gpt-4o-mini')
+    parser.add_argument('--append_img', type=bool, required=True, default=True)
+    parser.add_argument('--api_key', type=str, required=True,)
+    parser.add_argument('--basr_url', type=str, required=False,)
+
+    args = parser.parse_args()
+    
+    anno_path=args.anno_path
+    model_series=args.model_series         
+    model_name=args.model_name
+    model_access={
+        "api_key":args.api_key,
+        "base_url":args.basr_url,      # only gpt series need this field
+    } 
+    append_img=args.append_img
+    
+    save_path=os.path.join("converted_anno",f"res_{model_name}.json")
+    os.makedirs(os.path.dirname(save_path),exist_ok=True)
+    convert_anno(anno_path=anno_path,save_path=save_path)
