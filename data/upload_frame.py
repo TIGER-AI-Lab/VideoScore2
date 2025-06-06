@@ -70,7 +70,7 @@ def upload(frames_dir):
     
 
 if __name__ == "__main__":
-    HF_TOKEN='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'
+    HF_TOKEN=os.environ["HF_TOKEN"]
     anno_path="batch5.json"
     n=500
     with open(anno_path,"r",encoding="utf-8") as f:
