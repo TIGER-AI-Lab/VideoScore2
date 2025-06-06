@@ -117,10 +117,13 @@ def _hf_file_exist(repo_id,target_file):
     return target_file in all_files
         
 
-def convert_anno(anno_path,save_path,append_img=True):
+def convert_anno(anno_path,save_path,num,model_name,model_access,append_img):
     with open(anno_path,"r",encoding="utf-8") as f:
-        raw_annos=json.load(f)[:5]
-        
+        if type(num) is int:
+            raw_annos=json.load(f)[:num]
+        else:
+            raw_annos=json.load(f)
+            
     data=[]
     prompts=[]
     visual_scores=[]
@@ -209,7 +212,7 @@ def convert_anno(anno_path,save_path,append_img=True):
     # phy_cmts_refined=asyncio.run(_refine_cmt_async_gpt(
     #     phy_cmts,prompts,frames_2d_list,refine_template,phy_def))
     
-    if model_series=="gpt":
+    if "gpt" in model_name:
         visual_cmts_refined=_refine_cmt_gpt(
             model_name,model_access,visual_cmts,prompts,frames_2d_list,refine_template,visual_def)
         t2v_cmts_refined=_refine_cmt_gpt(
@@ -217,7 +220,7 @@ def convert_anno(anno_path,save_path,append_img=True):
         phy_cmts_refined=_refine_cmt_gpt(
             model_name,model_access,phy_cmts,prompts,frames_2d_list,refine_template,phy_def)
         
-    elif model_series=="gemini":
+    elif "gemini" in model_name:
         visual_cmts_refined=_refine_cmt_gemini(
             model_name,model_access,visual_cmts,prompts,frames_2d_list,refine_template,visual_def)
         t2v_cmts_refined=_refine_cmt_gemini(
@@ -225,14 +228,16 @@ def convert_anno(anno_path,save_path,append_img=True):
         phy_cmts_refined=_refine_cmt_gemini(
             model_name,model_access,phy_cmts,prompts,frames_2d_list,refine_template,phy_def)
     
-    elif model_series=="claude":
+    elif "claude" in model_name:
         visual_cmts_refined=_refine_cmt_claude(
             model_name,model_access,visual_cmts,prompts,frames_2d_list,refine_template,visual_def)
         t2v_cmts_refined=_refine_cmt_claude(
             model_name,model_access,t2v_cmts,prompts,frames_2d_list,refine_template,t2v_def)
         phy_cmts_refined=_refine_cmt_claude(
             model_name,model_access,phy_cmts,prompts,frames_2d_list,refine_template,phy_def)
-    
+    else:
+        print("model not supported, exited")
+        exit()
     
     for idx in range(len(visual_scores)):     
         data[idx]['visual']["comment"]=visual_cmts_refined[idx]
@@ -272,23 +277,21 @@ if __name__ =="__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--anno_path', type=str, required=True, default="test.json")
-    parser.add_argument('--model_series', type=str, required=True, default='gpt', choices=["gpt","gemini","claude"])
     parser.add_argument('--model_name', type=str, required=True, default='gpt-4o-mini')
     parser.add_argument('--append_img', type=bool, required=True, default=True)
     parser.add_argument('--api_key', type=str, required=True,)
     parser.add_argument('--basr_url', type=str, required=False,)
 
     args = parser.parse_args()
-    
-    anno_path=args.anno_path
-    model_series=args.model_series         
+          
     model_name=args.model_name
     model_access={
         "api_key":args.api_key,
         "base_url":args.basr_url,      # only gpt series need this field
     } 
-    append_img=args.append_img
     
     save_path=os.path.join("converted_anno",f"res_{model_name}.json")
     os.makedirs(os.path.dirname(save_path),exist_ok=True)
-    convert_anno(anno_path=anno_path,save_path=save_path)
+    convert_anno(anno_path=args.anno_path,save_path=save_path,num="all",
+                 model_name=args.model_name,model_access=model_access,
+                 append_img=args.append_img)

@@ -20,7 +20,11 @@ def _refine_cmt_gemini(model_name,model_access,comments,prompts,frames_2d_list,t
         for raw_comment,prompt in tqdm(zip(comments,prompts)):
             response = client.models.generate_content(
                 model=model_name,
-                contents=template.substitute(dim_def=dim_def,prompt=prompt,comment=raw_comment)
+                contents=template.substitute(dim_def=dim_def,prompt=prompt,comment=raw_comment),
+                config=types.GenerateContentConfig(
+                    system_instruction="You are an expert for evaluating and commenting on the quality of AI videos.",
+                    temperature=0.7,
+                )
             )
             try:
                 res=response.text
@@ -41,8 +45,11 @@ def _refine_cmt_gemini(model_name,model_access,comments,prompts,frames_2d_list,t
                 
                 ]+[
                     gemini_img_input(path) for path in frame_paths
-                ]
-                
+                ],
+                config=types.GenerateContentConfig(
+                    system_instruction="You are an expert for evaluating and commenting on the quality of AI videos.",
+                    temperature=0.7,
+                )
             )
             try:
                 res=response.text
