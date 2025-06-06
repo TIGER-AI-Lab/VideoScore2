@@ -7,10 +7,21 @@ from tqdm import tqdm
 def _refine_cmt_claude(model_name,model_access,comments,prompts,frames_2d_list,template,dim_def):
     os.environ["ANTHROPIC_API_KEY"]=model_access["api_key"]
     
-    def encode_image(image_path):
-        with open(image_path, "rb") as img_file:
-            return base64.standard_b64encode(img_file.read()).decode("utf-8")
-    
+    def claude_img_input(path_or_url):
+        if "http" in path_or_url:
+            return {
+                        "type":"url",
+                        "data":f"{path_or_url}"
+                    }
+        else:
+            with open(path_or_url, "rb") as img_file:
+                encoding=base64.standard_b64encode(img_file.read()).decode("utf-8")
+            return {
+                        "type":"base64",
+                        "media_type":"image/jpeg",
+                        "data":f"data:image/jpeg;base64,{encoding}"
+                    }
+
     
     client = anthropic.Anthropic()
     final_list=[]
@@ -66,7 +77,7 @@ def _refine_cmt_claude(model_name,model_access,comments,prompts,frames_2d_list,t
                                     "source":{
                                         "type":"base64",
                                         "media_type":"image/jpeg",
-                                        "data":f"data:image/jpeg;base64,{encode_image(path)}"
+                                        "data":f"data:image/jpeg;base64,{claude_img_input(path)}"
                                     },
                                 }  
                                 for path in frame_paths

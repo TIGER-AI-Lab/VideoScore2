@@ -5,7 +5,7 @@ from tqdm import tqdm
 
 
 def _refine_cmt_gpt(model_name,model_access,comments,prompts,frames_2d_list,template,dim_def):
-    def get_img_url(path_or_url):
+    def gpt_img_input(path_or_url):
         if "http" in path_or_url:
             return path_or_url
         else:
@@ -59,7 +59,7 @@ def _refine_cmt_gpt(model_name,model_access,comments,prompts,frames_2d_list,temp
                             *[
                                 {
                                     "type": "image_url",
-                                    "image_url": {"url": get_img_url(path_or_url)}
+                                    "image_url": {"url": gpt_img_input(path_or_url)}
                                 }  for path_or_url in frames_path
                             ]
                         ],

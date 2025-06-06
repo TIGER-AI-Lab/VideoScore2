@@ -4,7 +4,7 @@ from tqdm import tqdm
 import requests
 
 def _refine_cmt_gemini(model_name,model_access,comments,prompts,frames_2d_list,template,dim_def):  
-    def get_img_url(path_or_url):
+    def gemini_img_input(path_or_url):
         if "http" in path_or_url:
             image_bytes = requests.get(path_or_url).content
         else:
@@ -40,7 +40,7 @@ def _refine_cmt_gemini(model_name,model_access,comments,prompts,frames_2d_list,t
                                         +"\n\nHere is some frames of the video for your reference.",
                 
                 ]+[
-                    get_img_url(path) for path in frame_paths
+                    gemini_img_input(path) for path in frame_paths
                 ]
                 
             )
