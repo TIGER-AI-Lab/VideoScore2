@@ -71,10 +71,10 @@ def upload(frames_dir):
 
 if __name__ == "__main__":
     HF_TOKEN=os.environ["HF_TOKEN"]
-    anno_path="batch5.json"
-    n=500
+    anno_path="test_500.json"
+    num=500
     with open(anno_path,"r",encoding="utf-8") as f:
-        raw_annos=json.load(f)[:n]
+        raw_annos=json.load(f)[:num]
     
     current_dir=os.path.dirname(os.path.abspath(__file__))
     frame_temp_dir=os.path.join(current_dir,"video_frames")

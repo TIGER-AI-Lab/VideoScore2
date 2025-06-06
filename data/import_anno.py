@@ -140,16 +140,19 @@ def convert_anno(anno_path,save_path,num,model_name,model_access,append_img):
         prompt_cn=anno["info"]["data"][1]["content"].split("翻译为中文的Prompt")[1].split("\n")[0].strip(". :\n")
         prompts.append(prompt_en)
         try:
+            # visual_score=anno["labels"][0]["data"]["value"][0]
             visual_score=re.search(r'\d+', str(anno["labels"][0]["data"]["value"])).group()
         except:
             print(f"visual score not found for {video_name}")
             continue
         try:
+            # t2v_score=anno["labels"][2]["data"]["value"][0]
             t2v_score=re.search(r'\d+', str(anno["labels"][2]["data"]["value"])).group()
         except:
             print(f"t2v score not found for {video_name}")
             continue
         try:
+            # phy_score=anno["labels"][4]["data"]["value"][0]
             phy_score=re.search(r'\d+', str(anno["labels"][4]["data"]["value"])).group()
         except:
             print(f"physical score not found for {video_name}")
@@ -280,18 +283,18 @@ if __name__ =="__main__":
     parser.add_argument('--model_name', type=str, required=True, default='gpt-4o-mini')
     parser.add_argument('--append_img', type=bool, required=True, default=True)
     parser.add_argument('--api_key', type=str, required=True,)
-    parser.add_argument('--basr_url', type=str, required=False,)
+    parser.add_argument('--base_url', type=str, required=False,default=None)
 
     args = parser.parse_args()
           
     model_name=args.model_name
     model_access={
         "api_key":args.api_key,
-        "base_url":args.basr_url,      # only gpt series need this field
+        "base_url":args.base_url,      # only gpt series need this field
     } 
     
     save_path=os.path.join("converted_anno",f"res_{model_name}.json")
     os.makedirs(os.path.dirname(save_path),exist_ok=True)
-    convert_anno(anno_path=args.anno_path,save_path=save_path,num="all",
+    convert_anno(anno_path=args.anno_path,save_path=save_path,num=3,
                  model_name=args.model_name,model_access=model_access,
                  append_img=args.append_img)

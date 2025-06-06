@@ -41,7 +41,7 @@ def _refine_cmt_gemini(model_name,model_access,comments,prompts,frames_2d_list,t
             response = client.models.generate_content(
                 model=model_name,
                 contents=[template.substitute(dim_def=dim_def,prompt=prompt,comment=raw_comment)
-                                        +"\n\nHere is some frames of the video for your reference.",
+                                        +"\n\nHere is some frames of the video for your reference, If there is any discrepancy between the manual annotation and the video frames, please refer to the video frames as the standard.",
                 
                 ]+[
                     gemini_img_input(path) for path in frame_paths
