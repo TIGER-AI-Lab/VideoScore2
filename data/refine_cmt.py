@@ -29,7 +29,7 @@ refine_template=Template("""
 We are collecting and processing human annotations for the quality evaluation of AI-generated videos in text-to-video generation. 
 $dim_def
 
-Please expand and polish these keywords into a complete, natural human evaluation comment with appropriate style and length. 
+Please expand and polish these keywords into a complete, natural human evaluation comment with appropriate style and length. And refer to the dimension quality score by a human annotator and some key frames (if provided) to make your output more reliable. 
 
 Your response must follow the format below strictly:
 {
@@ -37,6 +37,8 @@ Your response must follow the format below strictly:
 }
 DO NOT include any text before or after the dict block
 
+the quality score for this dimension (1-5 scale): 
+$score
 the text prompt used to generate the video: 
 $prompt
 anno_keywords: 
@@ -71,27 +73,27 @@ def refine_cmt(repo_id,save_path,num,model_name,model_access,append_img):
 
         if "gpt" in model_name:
             visual_cmt_refined=_refine_cmt_gpt(
-                model_name,model_access,visual_cmt,prompt,eg_frames,refine_template,visual_def)
+                model_name,model_access,visual_score,visual_cmt,prompt,eg_frames,refine_template,visual_def)
             t2v_cmt_refined=_refine_cmt_gpt(
-                model_name,model_access,t2v_cmt,prompt,eg_frames,refine_template,t2v_def)
+                model_name,model_access,t2v_score,t2v_cmt,prompt,eg_frames,refine_template,t2v_def)
             phy_cmt_refined=_refine_cmt_gpt(
-                model_name,model_access,phy_cmt,prompt,eg_frames,refine_template,phy_def)
+                model_name,model_access,phy_score,phy_cmt,prompt,eg_frames,refine_template,phy_def)
             
         elif "gemini" in model_name:
             visual_cmt_refined=_refine_cmt_gemini(
-                model_name,model_access,visual_cmt,prompt,eg_frames,refine_template,visual_def)
+                model_name,model_access,visual_score,visual_cmt,prompt,eg_frames,refine_template,visual_def)
             t2v_cmt_refined=_refine_cmt_gemini(
-                model_name,model_access,t2v_cmt,prompt,eg_frames,refine_template,t2v_def)
+                model_name,model_access,t2v_score,t2v_cmt,prompt,eg_frames,refine_template,t2v_def)
             phy_cmt_refined=_refine_cmt_gemini(
-                model_name,model_access,phy_cmt,prompt,eg_frames,refine_template,phy_def)
+                model_name,model_access,phy_score,phy_cmt,prompt,eg_frames,refine_template,phy_def)
         
         elif "claude" in model_name:
             visual_cmt_refined=_refine_cmt_claude(
-                model_name,model_access,visual_cmt,prompt,eg_frames,refine_template,visual_def)
+                model_name,model_access,visual_score,visual_cmt,prompt,eg_frames,refine_template,visual_def)
             t2v_cmt_refined=_refine_cmt_claude(
-                model_name,model_access,t2v_cmt,prompt,eg_frames,refine_template,t2v_def)
+                model_name,model_access,t2v_score,t2v_cmt,prompt,eg_frames,refine_template,t2v_def)
             phy_cmt_refined=_refine_cmt_claude(
-                model_name,model_access,phy_cmt,prompt,eg_frames,refine_template,phy_def)
+                model_name,model_access,phy_score,phy_cmt,prompt,eg_frames,refine_template,phy_def)
         else:
             print("model not supported, exited")
             exit()
@@ -133,9 +135,11 @@ if __name__ =="__main__":
         "base_url":args.base_url,      # only gpt series need this field
     } 
     append_img=args.append_img
-    num=3
-    
-    save_path=os.path.join("refined_cmt",f"res_{model_name}.json")
+    num=100
+    if append_img:
+        save_path=os.path.join("refined_cmt",f"res_{model_name}_with_img.json")
+    else:
+        save_path=os.path.join("refined_cmt",f"res_{model_name}_no_img.json")
     os.makedirs(os.path.dirname(save_path),exist_ok=True)
     refine_cmt(REPO_ID,save_path,num,
                  model_name,model_access,append_img)

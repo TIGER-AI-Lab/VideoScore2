@@ -214,10 +214,10 @@ if __name__ == "__main__":
     HF_TOKEN=os.environ["HF_TOKEN"]
     
     shared_cmts={
-        "visual_5": "",
-        "t2v_5": "",
-        "phy_5": "",
-        "visual_1": ""
+        "visual_5": "High resolution, good clarity. No noticeable local blurriness or distortion, transitions between frames are smooth without any abrupt visual artifacts. Good and consistent brightness and contrast. A pleasant and immersive viewing experience, no distracting visual issues",
+        "t2v_5": "Aligns very well with prompt. All key elements (like characters, actions, environment and other details) are clearly represented.",
+        "phy_5": "high physical and commonsense consistency. All actions, object interactions, and environmental dynamics unfold in a natural and believable manner. No signs of unrealistic and unnatural events, temporal glitches, or spatial anomalies.",
+        "visual_1": "Low resolution and bad clarity. Local blurriness is present. Frequent visual distortions and misalignments. Abrupt and unsmooth transitions between adjacent frames. Unpolished and visually unstable, detracting from its watchability."
     }
     
     anno_path="test_500.json"
