@@ -1,4 +1,5 @@
 import os
+from time import sleep
 import cv2
 import re
 import numpy as np
@@ -20,12 +21,7 @@ def _fetch_frames(video_url,video_name,save_dir,):
     cap = cv2.VideoCapture(video_path)
     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     n_frames=None
-    if total_frames<=24:
-        n_frames=3
-    elif total_frames<=64 and total_frames>24:
-        n_frames=4
-    else:
-        n_frames=5
+    n_frames=int(total_frames // 6)
         
     frame_indices = np.linspace(0, total_frames - 1, num=n_frames, dtype=int)
     extracted_frames = []
@@ -117,7 +113,7 @@ def download_frames(anno_path,num,frame_temp_dir):
 
 
 
-def build_dataset(anno_path,num,frame_temp_dir):
+def build_raw_cmt_data(anno_path,batch_id,num,frame_temp_dir):
     with open(anno_path,"r",encoding="utf-8") as f:
         if type(num) is int:
             raw_annos=json.load(f)[:num]
@@ -160,7 +156,19 @@ def build_dataset(anno_path,num,frame_temp_dir):
         if phy_score==MAX_SCORE:
             phy_cmt=shared_cmts["phy_5"]     
         
-        n_frames=_fetch_frames(url,video_name,frame_temp_dir)
+        num_try=0
+        while True:
+            if num_try>3:
+                print(f"fetch frames for {video_name} failed")
+                exit()
+            try:
+                n_frames=_fetch_frames(url,video_name,frame_temp_dir)
+                break
+            except Exception as e:
+                print(f"fetch frames for {video_name} seems time out, sleeping for 60s")
+                num_try+=1
+                sleep(60)
+                
         eg_frame_paths=[os.path.join(frame_temp_dir,"frames",video_name,f"{video_name}_{i}.jpg") for i in range(n_frames)]
         if not all(os.path.exists(p) for p in eg_frame_paths):
             print(f"not all frames exists for {video_name}, skipped\n")
@@ -170,6 +178,7 @@ def build_dataset(anno_path,num,frame_temp_dir):
             "video_name":video_name,
             "video_url":url,
             "prompt":prompt_en,
+            "batch_id":batch_id,
             "visual_score":visual_score,
             "visual_comment_raw":visual_cmt,
             "t2v_align_score":t2v_score,
@@ -183,6 +192,7 @@ def build_dataset(anno_path,num,frame_temp_dir):
     features = Features({
         "video_name":Value("string"),
         "video_url":Value("string"),
+        "batch_id":Value("string"),
         "prompt":Value("string"),
         "visual_score":Value("int32"),
         "visual_comment_raw":Value("string"),
@@ -220,9 +230,10 @@ if __name__ == "__main__":
         "visual_1": "Low resolution and bad clarity. Local blurriness is present. Frequent visual distortions and misalignments. Abrupt and unsmooth transitions between adjacent frames. Unpolished and visually unstable, detracting from its watchability."
     }
     
-    anno_path="test_500.json"
+    anno_path="batch_13.json"
+    batch_id=13
     num="all"
     frame_temp_dir="/data/xuan/videoscore2/temp"
     download_frames(anno_path,num,frame_temp_dir)
-    build_dataset(anno_path,num,frame_temp_dir)
+    build_raw_cmt_data(anno_path,batch_id,num,frame_temp_dir)
     
