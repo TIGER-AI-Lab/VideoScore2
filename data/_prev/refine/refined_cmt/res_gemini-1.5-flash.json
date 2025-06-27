@@ -1,0 +1,44 @@
+[
+    {
+        "video_name": "000200_v",
+        "video_url": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/0000_0499/wanx21_1_3b/000200_v.mp4",
+        "prompt": "The bee was smaller and had wings that were a tad shorter. But what the bee lacked in size, he made up for with his courage and determination",
+        "visual_score": 5,
+        "visual_cmt_raw": "",
+        "visual_cmt_refined": "The visual quality of the video is acceptable but could be improved.  The resolution is sufficient for basic viewing, but there's a noticeable lack of sharpness, resulting in a slightly blurry image, particularly around the bee's wings.  The overall clarity is decent, but some minor inconsistencies in brightness and contrast are present throughout the video.  There are no major distortions or misalignments, and the video is relatively smooth and stable. However, enhancing the image sharpness would significantly improve the viewing experience and better showcase the detail of the bee.",
+        "t2v_score": 4,
+        "t2v_cmt_raw": "没有体现出蜜蜂的小 需要添加一些对比元素",
+        "t2v_cmt_refined": "The video doesn't effectively convey the bee's small size as described in the prompt.  The bee appears relatively large, lacking a clear sense of scale or comparison to show its diminutive stature.  Including a larger bee or another object for size comparison would significantly improve the video's alignment with the text prompt's description.",
+        "phy_score": 5,
+        "phy_cmt_raw": "",
+        "phy_cmt_refined": "The bee's physical characteristics are inconsistent with reality.  Its body appears disproportionately small compared to its wings, which are oddly large and shaped in an unnatural way. The wings' coloration and the overall build of the bee seem unrealistic, deviating significantly from the typical anatomy of a bee. This lack of physical realism detracts from the video's believability."
+    },
+    {
+        "video_name": "000200_k",
+        "video_url": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/0000_0499/text2video_zero/000200_k.mp4",
+        "prompt": "The bee was smaller and had wings that were a tad shorter. But what the bee lacked in size, he made up for with his courage and determination",
+        "visual_score": 1,
+        "visual_cmt_raw": "",
+        "visual_cmt_refined": "The visual quality of this video is severely compromised. The bee is poorly rendered, appearing as a distorted, blurry, and almost unrecognizable shape.  The background, intended to depict a honeycomb, suffers from significant color distortion and misalignment, creating a jarring and unpleasant visual experience. The overall resolution is low, and there's a noticeable lack of clarity and smoothness throughout the video.  The colors are also highly unrealistic and lack any semblance of natural tones. These issues severely detract from the watchability of the video.",
+        "t2v_score": 1,
+        "t2v_cmt_raw": "完全不符合文本描述内容",
+        "t2v_cmt_refined": "The generated video completely fails to depict the elements described in the text prompt.  The prompt describes a small bee with slightly shorter wings, showcasing courage and determination.  Instead, the video shows an abstract, unintelligible sequence of shapes and colors that bears no resemblance to a bee or any of the actions or qualities mentioned in the prompt. There is no bee, no indication of size or wing length, and no depiction of courage or determination.",
+        "phy_score": 1,
+        "phy_cmt_raw": "无法评估",
+        "phy_cmt_refined": "The video is incomprehensible and does not depict a bee with any physical consistency.  The visual representation is so abstract and distorted that it's impossible to assess any aspects of physical realism.  The bee is not recognizable as a bee, and there are no discernible features of movement or behavior that would suggest physical plausibility."
+    },
+    {
+        "video_name": "000200_c",
+        "video_url": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/0000_0499/mochi1_preview/000200_c.mp4",
+        "prompt": "The bee was smaller and had wings that were a tad shorter. But what the bee lacked in size, he made up for with his courage and determination",
+        "visual_score": 3,
+        "visual_cmt_raw": "画面清晰度不足",
+        "visual_cmt_refined": "The video suffers from insufficient visual clarity.  While the animation itself is understandable, the overall resolution and sharpness are noticeably low, resulting in a slightly blurry and less defined image. This detracts from the viewing experience and makes fine details difficult to discern.",
+        "t2v_score": 4,
+        "t2v_cmt_raw": "看出来身体和翅膀更小 但是有勇气和决心",
+        "t2v_cmt_refined": "The video successfully depicts two bees, one smaller than the other, with the smaller bee having slightly shorter wings.  However, the portrayal of 'courage and determination' is lacking. While the bees are shown, their actions don't visually communicate these qualities.  More dynamic animation or specific actions would better reflect these aspects of the prompt.",
+        "phy_score": 5,
+        "phy_cmt_raw": "",
+        "phy_cmt_refined": "The animation of the bees' flight is somewhat unnatural.  Their wings move in a way that doesn't convincingly generate lift or forward motion; it looks more like a flapping motion without realistic aerodynamic effect.  Additionally, the bees' movement appears jerky at times, lacking the smooth, fluid motion one would expect from flying insects. The overall effect detracts from the believability of the scene."
+    }
+]
