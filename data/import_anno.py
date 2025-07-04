@@ -6,9 +6,8 @@ import numpy as np
 import urllib.request
 import json
 from tqdm import tqdm
-from huggingface_hub import upload_file
+from huggingface_hub import upload_file,upload_folder
 from datasets import Dataset, Features, Value, Sequence, Image
-
 
 
 def _fetch_frames(video_url,video_name,save_dir,):
@@ -113,13 +112,21 @@ def download_frames(anno_path,num,frame_temp_dir):
 
 
 
-def build_raw_cmt_data(anno_path,batch_id,num,frame_temp_dir):
-    with open(anno_path,"r",encoding="utf-8") as f:
+def build_raw_cmt_data(anno_local_path,batch_name,num,frame_temp_dir):
+    upload_file(
+        path_or_fileobj=anno_local_path,
+        path_in_repo=f"raw_anno/{batch_name}.json",
+        repo_id=REPO_ID,
+        repo_type="dataset",
+        token=HF_TOKEN
+    )
+    
+    with open(anno_local_path,"r",encoding="utf-8") as f:
         if type(num) is int:
             raw_annos=json.load(f)[:num]
         else:
             raw_annos=json.load(f)
-    
+            
     data=[]
     for anno in tqdm(raw_annos):
         url=anno["info"]["data"][2]["content"]
@@ -178,7 +185,7 @@ def build_raw_cmt_data(anno_path,batch_id,num,frame_temp_dir):
             "video_name":video_name,
             "video_url":url,
             "prompt":prompt_en,
-            "batch_id":batch_id,
+            "batch_name":batch_name,
             "visual_score":visual_score,
             "visual_comment_raw":visual_cmt,
             "t2v_align_score":t2v_score,
@@ -192,7 +199,7 @@ def build_raw_cmt_data(anno_path,batch_id,num,frame_temp_dir):
     features = Features({
         "video_name":Value("string"),
         "video_url":Value("string"),
-        "batch_id":Value("string"),
+        "batch_name":Value("string"),
         "prompt":Value("string"),
         "visual_score":Value("int32"),
         "visual_comment_raw":Value("string"),
@@ -202,20 +209,33 @@ def build_raw_cmt_data(anno_path,batch_id,num,frame_temp_dir):
         "phy_comment_raw":Value("string"),
         "eg_frames": Sequence(Image()),
     })
-    dataset = Dataset.from_list(data, features=features)
     
-    dataset.push_to_hub(repo_id=REPO_ID,token=HF_TOKEN,private=False)
+    # json_file=f"data_part_{batch_id}.json"
+    # with open(json_file,"w") as f:
+    #     json.dump(data,f,indent=4)
+    # upload_file(
+    #     path_or_fileobj=json_file,
+    #     path_in_repo=f"json_data/{json_file}",
+    #     repo_id=REPO_ID,
+    #     repo_type="dataset",
+    #     token=HF_TOKEN
+    # )
     
-    with open("data_raw_cmt.json", "w") as f:
-        json.dump(dataset.to_dict(), f, indent=2)
+    ds = Dataset.from_list(data, features=features)
+    local_parquet_dir= f"parquet"
+    os.makedirs(local_parquet_dir, exist_ok=True)
+    parquet_name = f"batch_{batch_name}.parquet"
+    parquet_local_path = os.path.join(local_parquet_dir, parquet_name)
+    ds.to_parquet(parquet_local_path)
+    
     upload_file(
-        path_or_fileobj="data_raw_cmt.json",
-        path_in_repo="data_raw_cmt.json",
+        path_or_fileobj=parquet_local_path,
+        path_in_repo=parquet_name,
         repo_id=REPO_ID,
         repo_type="dataset",
         token=HF_TOKEN
     )
-    
+        
 
 if __name__ == "__main__":
     MIN_SCORE=1
@@ -230,10 +250,10 @@ if __name__ == "__main__":
         "visual_1": "Low resolution and bad clarity. Local blurriness is present. Frequent visual distortions and misalignments. Abrupt and unsmooth transitions between adjacent frames. Unpolished and visually unstable, detracting from its watchability."
     }
     
-    anno_path="batch_13.json"
-    batch_id=13
+    batch_name="batch_91_100_com"
+    anno_path=f"raw_anno/{batch_name}.json"
     num="all"
     frame_temp_dir="/data/xuan/videoscore2/temp"
     download_frames(anno_path,num,frame_temp_dir)
-    build_raw_cmt_data(anno_path,batch_id,num,frame_temp_dir)
+    build_raw_cmt_data(anno_path,batch_name,num,frame_temp_dir)
     
