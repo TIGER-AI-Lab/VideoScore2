@@ -179,5 +179,6 @@ prepare_video/prompts/*
 prepare_video/t2v_model/api*
 
 data/*
-!data/import_anno.py
-!data/refine*.py
+!data/**/*.py
+!data/_prev/
+!data/const/

@@ -40,20 +40,20 @@ from tqdm import tqdm
 ]
 """
 
-SYS_PROMPT='''
-You are an expert for evaluating and commenting on the quality of AI videos.
-'''
-
 visual_def='''
-The 'visual quality' cares about the video's visual and optical propertities, including 'resolution, overall clarity, local blurriness, smoothness, stability of brightness/contrast, distortion/misalignment, abrupt changes, and any other factors the affect the watching experience'. The keywords written by the annotators are also mostly derived from the above factors.
+The dimension 'visual quality' cares about the video's visual and optical propertities, including 'resolution, overall clarity, local blurriness, smoothness, stability of brightness/contrast, distortion/misalignment, abrupt changes, and any other factors the affect the watching experience'. The keywords written by the annotators are also mostly derived from the above factors.
 '''
 
 t2v_def='''
-The 't2v_alignment' dimension mainly assesses whether the generated video fully and accurately depicts the elements mentioned in the text prompt, such as characters, actions, animals, etc., as well as background, quantity, color, weather, and so on. So the keywords written by annotators sometimes only indicate the elements that are missing from the video.
+The dimension 't2v_alignment' mainly assesses whether the generated video fully and accurately depicts the elements mentioned in the text prompt, such as characters, actions, animals, etc., as well as background, quantity, color, weather, and so on. So the keywords written by annotators sometimes only indicate the elements that are missing from the video.
 '''
 
 phy_def='''
-The 'physical consistency' dimension mainly examines whether there are any violations of common sense, physical laws, or any other aspects in the video that appear strange or unnatural. Most of the keywords provided by annotators point out the specific abnormalities or inconsistencies they observed in the video.
+The dimension 'physical consistency' mainly examines whether there are any violations of common sense, physical laws, or any other aspects in the video that appear strange or unnatural. Most of the keywords provided by annotators point out the specific abnormalities or inconsistencies they observed in the video.
+'''
+
+SYS_PROMPT='''
+You are an expert for evaluating and thinking about the quality of AI videos from diverse dimensions.
 '''
 
 
@@ -71,8 +71,11 @@ def _download_video(url,name,save_dir):
         warnings.warn(f"Video {name} Already Exists!")
         return video_path
 
+    
+
 def build_sft_data(path,uid):
     data=json.load(open(path,"r",encoding='utf-8'))
+    data=_modify_score(data)
     convs=[]
         
     for x in tqdm(data):
@@ -179,8 +182,8 @@ if __name__ == "__main__":
             exist_ok=True
         )
     
-    uid="91_100"
+    uid="batch_91_100_com"
     video_save_dir=f"./videos_tmp_{uid}/"
-    data_path="refined_cmt/res_gpt-4o_with_img.json"
+    data_path=""
     build_sft_data(data_path,uid)
     

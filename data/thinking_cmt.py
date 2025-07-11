@@ -2,9 +2,9 @@ import os
 import json
 from tqdm import tqdm
 import argparse
-from utils_chat import _thinking_cmt_claude_few_shot
+from utils_chat import _thinking_cmt_claude_few_shot, _thinking_cmt_claude_few_shot_OR
 from string import Template
-from datasets import load_dataset, Features, Value, Sequence, Image
+from datasets import load_dataset
 import warnings 
 from time import sleep
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -35,9 +35,9 @@ $t2v_def
 
 $phy_def
 
-With the reference of some frames of the video and the comments of 3 dimensions from a human annotator, please do your best to  give a score between 1 and 5 for these dimensions, where 1 means very bad and 5 means very good. The score should be an integer.
+With the reference of some frames of the video and the comments of 3 dimensions from a human annotator, please do your best to  analyze and give a score between 1 and 5 for these dimensions, where 1 means very bad and 5 means very good. The score should be an integer.
 
-Your thinking process should be 2000-3000 tokens long.
+Your thinking process should be 2000-3000 tokens long. Some human comments may be brief or lacking in detail — please make sure to thoroughly perceive and analyze the video on your own. Your reasoning should be **specific, detailed, professional, and comprehensive**. **DO NOT mention any human comment in your thinking**; you should pretend not to know these comments, they are provided solely to inform and enhance your understanding for better evaluation. 
 
 Your response must follow the format below strictly:
 {
@@ -54,12 +54,12 @@ annotator comments:
 comment for 'visual quality':
 $comment_visual
 
-comment for 'text-to-video alignment':
+comment for 'text-to-video alignment' (mainly the elements not expressed or not aligned in the video):
 $comment_t2v
 
 comment for 'physical consistency':
 $comment_phy
-                
+                           
 """)
 
 
@@ -102,13 +102,18 @@ def process_single_sample(sample, model_access, save_path):
                             refined_comment["t2v_cmt_raw"],
                             refined_comment["phy_cmt_raw"]]
                 dim_defs=[ visual_def, t2v_def, phy_def ]
-                completion = _thinking_cmt_claude_few_shot(
-                    model_access, template, SYS_PROMPT, dim_defs, t2v_prompt, comments, eg_frames, few_shot_examples, SHOT_NUM)
+                if debug==True:
+                    completion = _thinking_cmt_claude_few_shot_OR(
+                        model_access, template, SYS_PROMPT, dim_defs, t2v_prompt, comments, eg_frames, few_shot_examples, SHOT_NUM)
+
+                else:
+                    completion = _thinking_cmt_claude_few_shot(
+                        model_access, template, SYS_PROMPT, dim_defs, t2v_prompt, comments, eg_frames, few_shot_examples, SHOT_NUM)
 
                 break
             except Exception as e:
                 print(e)
-                print(f"refine comment for {video_name}, something seems wrong, sleep for 120s")
+                print(f"thinking comment for {video_name}, something seems wrong, sleep for 120s")
                 num_try += 1
                 sleep(120)
                 
@@ -166,15 +171,16 @@ def process_single_sample(sample, model_access, save_path):
 
 def thinking_cmt(repo_id, batch_name, save_path, num, model_access):
     data = load_dataset(repo_id, data_files=f"{batch_name}.parquet",split="train")
-
-    if num >= len(data) or not isinstance(num, int):
+    if not isinstance(num, int):
+        num = len(data)
+    if isinstance(num, int) and num>=len(data):
         num = len(data)
     
     # Use ThreadPoolExecutor with 20 workers
-    with ThreadPoolExecutor(max_workers=20) as executor:
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
         # Submit all tasks
         futures = [executor.submit(process_single_sample, data[i], model_access, save_path) 
-                  for i in range(num)]
+                  for i in range(start_idx,num+start_idx)]
         
         # Process completed tasks with progress bar
         completed_count = 0
@@ -190,44 +196,45 @@ def thinking_cmt(repo_id, batch_name, save_path, num, model_access):
         
         print(f"Successfully processed {completed_count} out of {num} samples")
     
-    # good_items=[x for x in refined_comments 
-    #             if abs(x["visual_score"]-x["visual_score_model"])<=1 and 
-    #                 abs(x["t2v_score"]-x["t2v_score_model"])<=1 and
-    #                 abs(x["phy_score"]-x["phy_score_model"])<=1]
-    # bad_items=[x for x in refined_comments if x not in good_items]
-                    
-    # good_path=save_path.replace(".json","_good.json")
-    # bad_path=save_path.replace(".json","_bad.json")
-    # with open(good_path,"a",encoding="utf-8") as f:
-    #     json.dump(good_items,f,indent=4,ensure_ascii=False)
-    # with open(bad_path,"a",encoding="utf-8") as f:
-    #     json.dump(bad_items,f,indent=4,ensure_ascii=False)
-
-
 
 if __name__ =="__main__":
-    REPO_ID="hexuan21/VS2_raw_cmt"
+    REPO_ID="hexuan21/vs2_raw_comment"
     
     parser = argparse.ArgumentParser()
-    parser.add_argument('--model_name', type=str, required=True, default='claude-sonnet-4-20250514')
-    parser.add_argument('--batch_names', type=str, required=True, default=None)
-    # parser.add_argument('--api_key', type=str, required=True, default='')
+    parser.add_argument('--model_name', type=str, required=False, default='claude-sonnet-4-20250514')
+    parser.add_argument('--batch_names', type=str, required=False, default=None)
+    parser.add_argument('--debug', action="store_true")
     args = parser.parse_args()
     
     few_shot_eg_path="few_shot_examples.json"
     few_shot_examples=json.load(open(few_shot_eg_path,"r",encoding="utf-8")) if few_shot_eg_path else []
     SHOT_NUM=2
+    debug=args.debug
     
-    # Configuration with hardcoded API key
-    model_access={
-        "model_name": args.model_name,
-        # "api_key": args.api_key,
-        "api_key": "",
-        "base_url": None,      # only gpt series need this field
-    } 
-    batch_names=args.batch_names
-    num="all"
+    if debug==False:
+        model_access={
+            "model_name": args.model_name,
+        } 
+        batch_names=json.loads(args.batch_names)
+        max_workers=20
+        start_idx=0
+        num="all"
+        save_dir="thinking_cmt"
+        
+    if debug==True:
+        model_access={
+            "model_name":"anthropic/claude-sonnet-4",
+            "api_key":os.environ["OPEN_ROUTER_KEY1"],
+            "base_url":"https://openrouter.ai/api/v1",
+        }
+        batch_names=["13"]
+        max_workers=1
+        start_idx=10
+        num=3
+        save_dir="thinking_cmt_debug"
+        
+        
     for batch_name in batch_names:
-        save_path=os.path.join("thinking_cmt",f"thinking_{batch_name}.json")
+        save_path=os.path.join(save_dir,f"thinking_{batch_name}.json")
         os.makedirs(os.path.dirname(save_path),exist_ok=True)
         thinking_cmt(REPO_ID,batch_name,save_path,num,model_access)
