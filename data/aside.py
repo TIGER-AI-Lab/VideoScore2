@@ -157,11 +157,12 @@ path="VideoScore2.json"
 #         json.dump(new_data,f,indent=4,ensure_ascii=False)
 
 
-p="/home/brantley/workdir/VideoScore2/data/thinking_cmt/thinking_batch_91_100_com.json"
-data=json.load(open(p,"r",encoding="utf-8"))
+# p="/home/brantley/workdir/VideoScore2/data/thinking_cmt/thinking_batch_91_100_com.json"
+# data=json.load(open(p,"r",encoding="utf-8"))
 
-data=data[:100]
+# data=data[:20]
 
-with open("new.json","w") as f:
-    json.dump(data,f,indent=4,ensure_ascii=False)
-    
+# with open("new.json","w") as f:
+#     json.dump(data,f,indent=4,ensure_ascii=False)
+
+

@@ -9,37 +9,7 @@ from tqdm import tqdm
 from huggingface_hub import upload_file,upload_folder
 from datasets import Dataset, Features, Value, Sequence, Image
 
-def _fetch_frames(video_url,video_name,save_dir,):
-    
-    video_path=os.path.join(save_dir,"videos",f"{video_name}.mp4")
-    os.makedirs(os.path.dirname(video_path),exist_ok=True)
-    if not os.path.exists(video_path):
-        urllib.request.urlretrieve(video_url, video_path)    
-    
-    cap = cv2.VideoCapture(video_path)
-    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    n_frames=None
-    n_frames=int(total_frames // 6)
-        
-    frame_indices = np.linspace(0, total_frames - 1, num=n_frames, dtype=int)
-    extracted_frames = []
 
-    for idx in range(total_frames):
-        ret, frame = cap.read()
-        if not ret:
-            break
-        if idx in frame_indices:
-            extracted_frames.append(frame)
-    cap.release()
-    
-    for i, frame in enumerate(extracted_frames):
-        frame_path = os.path.join(save_dir,"frames",video_name,f"{video_name}_{i}.jpg")
-        if os.path.exists(frame_path):
-            continue
-        os.makedirs(os.path.dirname(frame_path),exist_ok=True)
-        cv2.imwrite(frame_path, frame)
-    
-    return n_frames
 
 
 
@@ -95,6 +65,37 @@ def _fetch_frames(video_url,video_name,save_dir,):
 },
 """
 
+def _fetch_frames(video_url,video_name,save_dir,):
+    
+    video_path=os.path.join(save_dir,"videos",f"{video_name}.mp4")
+    os.makedirs(os.path.dirname(video_path),exist_ok=True)
+    if not os.path.exists(video_path):
+        urllib.request.urlretrieve(video_url, video_path)    
+    
+    cap = cv2.VideoCapture(video_path)
+    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    n_frames=None
+    n_frames=int(total_frames // 6)
+        
+    frame_indices = np.linspace(0, total_frames - 1, num=n_frames, dtype=int)
+    extracted_frames = []
+
+    for idx in range(total_frames):
+        ret, frame = cap.read()
+        if not ret:
+            break
+        if idx in frame_indices:
+            extracted_frames.append(frame)
+    cap.release()
+    
+    for i, frame in enumerate(extracted_frames):
+        frame_path = os.path.join(save_dir,"frames",video_name,f"{video_name}_{i}.jpg")
+        if os.path.exists(frame_path):
+            continue
+        os.makedirs(os.path.dirname(frame_path),exist_ok=True)
+        cv2.imwrite(frame_path, frame)    
+    return n_frames
+
 
 
 def download_frames(anno_paths,frame_temp_dir):
@@ -108,12 +109,50 @@ def download_frames(anno_paths,frame_temp_dir):
             n_frames=_fetch_frames(url,video_name,frame_temp_dir)
 
 
-def load_image_bytes(path):
-    with open(path, "rb") as f:
-        return f.read()
+def rebuild_rej_data(rej_data_path,batch_name,frame_temp_dir):
+    rej_data=json.load(open(rej_data_path,"r"))
+    data=[]
+    for rej_item in rej_data:
+        video_name=rej_item["video_name"]
+        frame_names=os.listdir(os.path.join(frame_temp_dir,"frames",video_name))
+        print(frame_names)
+        frame_abs_paths=[os.path.join(frame_temp_dir,"frames",video_name,frame_name) for frame_name in frame_names]
+        print(frame_abs_paths)
+        exit()
+        data_item={
+            "video_name":video_name,
+            "video_url":rej_item["video_url"],
+            "prompt":rej_item["prompt"],
+            "batch_name":batch_name,
+            "visual_score":rej_item["visual_score"],
+            "visual_comment_raw":rej_item["visual_cmt_raw"],
+            "t2v_align_score":rej_item["t2v_score"],
+            "t2v_align_comment_raw":rej_item["t2v_cmt_raw"],
+            "phy_score":rej_item["phy_score"],
+            "phy_comment_raw":rej_item["phy_cmt_raw"],
+            "eg_frames":[{"bytes": open(p, "rb").read()} for p in frame_abs_paths]
+        }
+        data.append(data_item)
+    
+    ds = Dataset.from_list(data, features=FEATURES)
+    local_parquet_dir= f"anno_parquet"
+    os.makedirs(local_parquet_dir, exist_ok=True)
+    parquet_name = f"{batch_name}.parquet"
+    parquet_local_path = os.path.join(local_parquet_dir, parquet_name)
+    ds.to_parquet(parquet_local_path)
+    
+    upload_file(
+        path_or_fileobj=parquet_local_path,
+        path_in_repo=parquet_name,
+        repo_id=REPO_ID,
+        repo_type="dataset",
+        token=HF_TOKEN
+    )
+
 
 
 def build_raw_cmt_data(anno_local_paths,batch_name,frame_temp_dir):
+        
     raw_annos=[]
     for anno_local_path in anno_local_paths:
         upload_file(
@@ -172,13 +211,13 @@ def build_raw_cmt_data(anno_local_paths,batch_name,frame_temp_dir):
             continue
         
         if visual_score==MIN_SCORE:
-            visual_cmt=shared_cmts["visual_1"]
+            visual_cmt=SHARED_CMTS["visual_1"]
         if visual_score==MAX_SCORE:
-            visual_cmt=shared_cmts["visual_5"]
+            visual_cmt=SHARED_CMTS["visual_5"]
         if t2v_score==MAX_SCORE:
-            t2v_cmt=shared_cmts["t2v_5"]
+            t2v_cmt=SHARED_CMTS["t2v_5"]
         if phy_score==MAX_SCORE:
-            phy_cmt=shared_cmts["phy_5"]     
+            phy_cmt=SHARED_CMTS["phy_5"]     
         
         num_try=0
         while True:
@@ -193,8 +232,8 @@ def build_raw_cmt_data(anno_local_paths,batch_name,frame_temp_dir):
                 num_try+=1
                 sleep(60)
                 
-        eg_frame_paths=[os.path.join(frame_temp_dir,"frames",video_name,f"{video_name}_{i}.jpg") for i in range(n_frames)]
-        if not all(os.path.exists(p) for p in eg_frame_paths):
+        frame_abs_paths=[os.path.join(frame_temp_dir,"frames",video_name,f"{video_name}_{i}.jpg") for i in range(n_frames)]
+        if not all(os.path.exists(p) for p in frame_abs_paths):
             print(f"not all frames exists for {video_name}, skipped\n")
             continue
         
@@ -209,23 +248,9 @@ def build_raw_cmt_data(anno_local_paths,batch_name,frame_temp_dir):
             "t2v_align_comment_raw":t2v_cmt,
             "phy_score":phy_score,
             "phy_comment_raw":phy_cmt,
-            "eg_frames":[{"bytes": load_image_bytes(p)} for p in eg_frame_paths]
+            "eg_frames":[{"bytes": open(p, "rb").read()} for p in frame_abs_paths]
         }
         data.append(data_item)
-    
-    features = Features({
-        "video_name":Value("string"),
-        "video_url":Value("string"),
-        "batch_name":Value("string"),
-        "prompt":Value("string"),
-        "visual_score":Value("int32"),
-        "visual_comment_raw":Value("string"),
-        "t2v_align_score":Value("int32"),
-        "t2v_align_comment_raw":Value("string"),
-        "phy_score":Value("int32"),
-        "phy_comment_raw":Value("string"),
-        "eg_frames": Sequence(feature=Image(decode=True)),
-    })
     
     # json_file=f"data_part_{batch_id}.json"
     # with open(json_file,"w") as f:
@@ -238,7 +263,7 @@ def build_raw_cmt_data(anno_local_paths,batch_name,frame_temp_dir):
     #     token=HF_TOKEN
     # )
     
-    ds = Dataset.from_list(data, features=features)
+    ds = Dataset.from_list(data, features=FEATURES)
     local_parquet_dir= f"anno_parquet"
     os.makedirs(local_parquet_dir, exist_ok=True)
     parquet_name = f"{batch_name}.parquet"
@@ -259,16 +284,48 @@ if __name__ == "__main__":
     MAX_SCORE=5
     REPO_ID="hexuan21/vs2_raw_comment"
     HF_TOKEN=os.environ["HF_TOKEN"]
+    FEATURES = Features({
+        "video_name":Value("string"),
+        "video_url":Value("string"),
+        "batch_name":Value("string"),
+        "prompt":Value("string"),
+        "visual_score":Value("int32"),
+        "visual_comment_raw":Value("string"),
+        "t2v_align_score":Value("int32"),
+        "t2v_align_comment_raw":Value("string"),
+        "phy_score":Value("int32"),
+        "phy_comment_raw":Value("string"),
+        "eg_frames": Sequence(feature=Image(decode=True)),
+    })
     
-    shared_cmts={
+    SHARED_CMTS={
         "visual_5": "High resolution, good clarity. No noticeable local blurriness or distortion, transitions between frames are smooth without any abrupt visual artifacts. Good and consistent brightness and contrast. A pleasant and immersive viewing experience, no distracting visual issues",
         "t2v_5": "Aligns very well with prompt. All key elements (like characters, actions, environment and other details) are clearly represented.",
         "phy_5": "high physical and commonsense consistency. All actions, object interactions, and environmental dynamics unfold in a natural and believable manner. No signs of unrealistic and unnatural events, temporal glitches, or spatial anomalies.",
         "visual_1": "Low resolution and bad clarity. Local blurriness is present. Frequent visual distortions and misalignments. Abrupt and unsmooth transitions between adjacent frames. Unpolished and visually unstable, detracting from its watchability."
     }
     
-    batch_name="13"
+    
     anno_paths=[
+        
+        ]
+    
+    frame_temp_dir="/data/xuan/videoscore2/temp"
+    download_frames(anno_paths,frame_temp_dir)
+    # build_raw_cmt_data(anno_paths,batch_name,frame_temp_dir)
+    
+    # rej_path="thinking_rejected/xxxx.json"
+    # rej_batch_name="rej_xxxx"
+    # rebuild_rej_data(rej_path,rej_batch_name,frame_temp_dir)
+    
+    
+    
+    
+    
+    
+    
+    
+    [
         # "raw_anno/batch_91_100_com.json",
         
         # f"raw_anno/13.json",
@@ -282,31 +339,24 @@ if __name__ == "__main__":
         # f"raw_anno/22.json",
         # f"raw_anno/23.json",
         # f"raw_anno/24.json",
-        # f"raw_anno/25.json",
         # f"raw_anno/29.json",
         # f"raw_anno/30.json",
         # f"raw_anno/31.json",
         # f"raw_anno/32.json"
         
-        f"raw_anno/37.json",
-        f"raw_anno/38.json",
-        f"raw_anno/39.json",
-        f"raw_anno/40.json",
-        f"raw_anno/45.json",
-        f"raw_anno/46.json",
-        f"raw_anno/47.json",
-        f"raw_anno/48.json",
-        f"raw_anno/53.json",
-        f"raw_anno/54.json",
-        f"raw_anno/55.json",
-        f"raw_anno/56.json",
-        f"raw_anno/61.json",
-        f"raw_anno/69.json",
-        f"raw_anno/70.json"
-        ]
-    
-    frame_temp_dir="/data/xuan/videoscore2/temp"
-    download_frames(anno_paths,frame_temp_dir)
-    # build_raw_cmt_data(anno_paths,batch_name,frame_temp_dir)
-    
-    
+        # f"raw_anno/37.json",
+        # f"raw_anno/38.json",
+        # f"raw_anno/39.json",
+        # f"raw_anno/40.json",
+        # f"raw_anno/45.json",
+        # f"raw_anno/46.json",
+        # f"raw_anno/47.json",
+        # f"raw_anno/48.json",
+        # f"raw_anno/53.json",
+        # f"raw_anno/54.json",
+        # f"raw_anno/55.json",
+        # f"raw_anno/56.json",
+        # f"raw_anno/61.json",
+        # f"raw_anno/69.json",
+        # f"raw_anno/70.json"
+    ]
