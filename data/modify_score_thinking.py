@@ -81,7 +81,7 @@ def modify_score_thinking(src_path,save_path):
     with open(src_path,"r",encoding='utf-8') as f:
         data=json.load(f)
         
-    data=data[:20]
+    data=data[1000:2000]
     
     new_data=[]
     
@@ -158,16 +158,25 @@ def modify_score_thinking(src_path,save_path):
     
     print(len(modify_needed_items))
     
-    modified_items=asyncio.run(_bot_modify_thinking(modify_needed_items,MODEL_CONFIG,logger))
+    # modified_items=asyncio.run(_bot_modify_thinking(modify_needed_items,MODEL_CONFIG,logger))
     
-    for idx,_ in enumerate(new_data):
-        for m_x in modified_items:
-            if new_data[idx]["video_name"]==m_x["video_name"]:
-                new_data[idx]=m_x
+    # for idx,_ in enumerate(new_data):
+    #     for m_x in modified_items:
+    #         if new_data[idx]["video_name"]==m_x["video_name"]:
+    #             new_data[idx]=m_x
             
     # with open(save_path,"w") as f:
     #     json.dump(new_data,f,indent=4,ensure_ascii=False)
         
+    from _analyze import plot
+    batch_name="modified_com_5k"
+    v_scores=[x['visual_score'] for x in new_data]
+    t_scores=[x['t2v_score'] for x in new_data]
+    p_scores=[x['phy_score'] for x in new_data]
+    plot(v_scores,batch_name,1)
+    plot(t_scores,batch_name,2)
+    plot(p_scores,batch_name,3)    
+    
     # print(">=3",skip_num)
     # print("==2",avg_num)
     # print("==1",cover_num)
@@ -179,15 +188,15 @@ def modify_score_thinking(src_path,save_path):
     
 if __name__ == "__main__":
     # src_path="_prev/thinking/allin1_2shot/res_claude-sonnet-4-20250514.json"
-    src_path="thinking_cmt/thinking_batch_91_100_com.json"
+    src_path="thinking_cmt/thinking_com_5k.json"
     
     save_dir="thinking_final"
     os.makedirs(save_dir,exist_ok=True)
-    save_path=os.path.join(save_dir,f"final_{src_path.split("/")[1].split("thinking_")[1]}")
+    save_path=os.path.join(save_dir,f"final_{src_path.split('/')[1].split('thinking_')[1]}")
     
     rej_dir="thinking_rejected"
     os.makedirs(rej_dir,exist_ok=True)
-    rej_path=os.path.join(rej_dir,f"rej_{src_path.split("/")[1].split("thinking_")[1]}")
+    rej_path=os.path.join(rej_dir,f"rej_{src_path.split('/')[1].split('thinking_')[1]}")
     
     log_path="modify_logs/test.log"
     logger=set_logger(logger_file=log_path)

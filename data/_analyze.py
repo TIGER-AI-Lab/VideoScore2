@@ -65,7 +65,7 @@ def analyze(anno_local_paths,batch_name):
 
 
 anno_local_paths=[
-    "raw_anno/38.json"
+    "raw_anno/69.json"
     ]
-batch_name="38"
+batch_name="69"
 analyze(anno_local_paths,batch_name)

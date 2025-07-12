@@ -166,3 +166,44 @@ path="VideoScore2.json"
 #     json.dump(data,f,indent=4,ensure_ascii=False)
 
 
+from huggingface_hub import list_repo_files
+
+repo_id = "hexuan21/vs2_raw_comment"
+files = list_repo_files(repo_id=repo_id, repo_type="dataset")
+anno_paths=[
+        f"raw_anno/com_5k.json",
+        f"raw_anno/1.json",
+        f"raw_anno/2.json",
+        f"raw_anno/3.json",
+        f"raw_anno/4.json",
+        f"raw_anno/5.json",
+        f"raw_anno/13.json",
+        f"raw_anno/14.json",
+        f"raw_anno/15.json",
+        f"raw_anno/17.json",
+        f"raw_anno/18.json",
+        f"raw_anno/19.json",
+        f"raw_anno/20.json",
+        f"raw_anno/21.json",
+        f"raw_anno/22.json",
+        f"raw_anno/23.json",
+        f"raw_anno/24.json",
+        f"raw_anno/29.json",
+        f"raw_anno/30.json",
+        f"raw_anno/31.json",
+        f"raw_anno/32.json",
+        f"raw_anno/53.json",
+        f"raw_anno/54.json",
+        f"raw_anno/55.json",
+        f"raw_anno/61.json",
+        f"raw_anno/69.json",
+        f"raw_anno/70.json"
+]
+
+fs=[f"{x.split('/')[1].split('.')[0]}.parquet" for x in anno_paths]
+for f in fs:
+    target_file = f
+    if target_file in files:
+        print("✅ Found:", target_file)
+    else:
+        print("❌ Not found:", target_file)

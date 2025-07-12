@@ -7,6 +7,8 @@ import urllib.request
 import warnings
 import zipfile
 from tqdm import tqdm
+from datasets import load_dataset
+
 
 # LF data/dataset_info.json
 """
@@ -71,19 +73,74 @@ def _download_video(url,name,save_dir):
         warnings.warn(f"Video {name} Already Exists!")
         return video_path
 
-    
 
-def build_sft_data(path,uid):
-    data=json.load(open(path,"r",encoding='utf-8'))
-    data=_modify_score(data)
-    convs=[]
-        
+def upload_video_2(repo_id,parquet_names,batch_name,video_save_dir):
+    data = load_dataset(repo_id, data_files=[f"{p_n}.parquet" for p_n in parquet_names],split="train")
+    print(len(data))
+    
     for x in tqdm(data):
         video_name=x["video_name"]
         video_url=x["video_url"]
         if _download_video(video_url,video_name,video_save_dir) is None:
             continue
         
+    zip_file=f"{batch_name}.zip"
+    with zipfile.ZipFile(zip_file, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        for fname in os.listdir(video_save_dir):
+            if fname.endswith('.mp4'):
+                full_path = os.path.join(video_save_dir, fname)
+                zipf.write(full_path, arcname=fname)  
+                          
+    upload_file(
+        path_or_fileobj=zip_file,
+        path_in_repo=zip_file,
+        repo_id=VIDEO_REPO_ID,
+        repo_type="dataset",
+        token=HF_TOKEN
+    )
+    os.remove(zip_file)
+
+def upload_video(paths,batch_name,video_save_dir):
+    data=[]
+    for path in paths:
+        data.extend(json.load(open(path,"r",encoding='utf-8')))
+    print(len(data))
+    
+    for x in tqdm(data):
+        video_name=x["video_name"]
+        video_url=x["video_url"]
+        if _download_video(video_url,video_name,video_save_dir) is None:
+            continue
+        
+    zip_file=f"{batch_name}.zip"
+    with zipfile.ZipFile(zip_file, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        for fname in os.listdir(video_save_dir):
+            if fname.endswith('.mp4'):
+                full_path = os.path.join(video_save_dir, fname)
+                zipf.write(full_path, arcname=fname)  
+                          
+    upload_file(
+        path_or_fileobj=zip_file,
+        path_in_repo=zip_file,
+        repo_id=VIDEO_REPO_ID,
+        repo_type="dataset",
+        token=HF_TOKEN
+    )
+    os.remove(zip_file)
+
+
+def build_sft_data(path,batch_name,video_save_dir):
+    data=[]
+    for path in paths:
+        data.extend(json.load(open(path,"r",encoding='utf-8')))
+    
+    convs=[]
+    for x in tqdm(data):
+        video_name=x["video_name"]
+        video_url=x["video_url"]
+        if _download_video(video_url,video_name,video_save_dir) is None:
+            continue
+    
         prompt=x["prompt"]
         visual_score=x["visual_score"]
         t2v_score=x["t2v_score"]
@@ -135,7 +192,7 @@ def build_sft_data(path,uid):
     dataset = Dataset.from_list(data)
     dataset.push_to_hub(repo_id=REPO_ID,token=HF_TOKEN,private=False)
     
-    zip_file=f"{uid}.zip"
+    zip_file=f"{batch_name}.zip"
     with zipfile.ZipFile(zip_file, 'w', zipfile.ZIP_DEFLATED) as zipf:
         for fname in os.listdir(video_save_dir):
             if fname.endswith('.mp4'):
@@ -182,8 +239,21 @@ if __name__ == "__main__":
             exist_ok=True
         )
     
-    uid="batch_91_100_com"
-    video_save_dir=f"./videos_tmp_{uid}/"
-    data_path=""
-    build_sft_data(data_path,uid)
+    # data_paths=[
+    #     f"thinking_cmt/thinking_com_5k.json",
+        
+    # ]
+    
+    # batch_name="com_5k"
+    # video_save_dir=f"/data/xuan/videoscore2/videos_tmp_{batch_name}"
+    # upload_video(data_paths,batch_name,video_save_dir)
+    
+    parquet_names=[
+        "lab_12k_0712"
+    ]
+    batch_name="lab_12k_0712"
+    repo_id="hexuan21/vs2_raw_comment"
+    video_save_dir=f"/data/xuan/videoscore2/videos_tmp_{batch_name}"
+    upload_video_2(repo_id,parquet_names,batch_name,video_save_dir)
+    # build_sft_data(data_paths,batch_name,video_save_dir)
     

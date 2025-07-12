@@ -152,9 +152,8 @@ def rebuild_rej_data(rej_data_path,batch_name,frame_temp_dir):
 
 
 def build_raw_cmt_data(anno_local_paths,batch_name,frame_temp_dir):
-        
-    raw_annos=[]
-    for anno_local_path in anno_local_paths:
+
+    for anno_local_path,batch_name in zip(anno_local_paths,batch_names):
         upload_file(
             path_or_fileobj=anno_local_path,
             path_in_repo=f"raw_anno/{batch_name}.json",
@@ -162,122 +161,123 @@ def build_raw_cmt_data(anno_local_paths,batch_name,frame_temp_dir):
             repo_type="dataset",
             token=HF_TOKEN
         )
-        
+        raw_annos=[]
         with open(anno_local_path,"r",encoding="utf-8") as f:
             raw_annos.extend(json.load(f))
             
-    data=[]
-    for anno in tqdm(raw_annos):
-        url=anno["info"]["data"][2]["content"]
-        video_name=url.split("/")[-1].split(".")[0]
-        prompt_en=anno["info"]["data"][1]["content"].split("English Prompt")[1].split("\n")[0].strip(". :\n")
-        try:
-            visual_score=None
-            t2v_score=None
-            phy_score=None
-            visual_cmt=None
-            t2v_cmt=None
-            phy_cmt=None
-            for label_dict in anno["labels"]:
-                if "视觉质量评分" in label_dict["data"]["label"]:
-                    visual_score=int(re.search(r'\d+', str(label_dict["data"]["value"])).group())
-                if "文本符合度评分" in label_dict["data"]["label"]:
-                    t2v_score=int(re.search(r'\d+', str(label_dict["data"]["value"])).group())
-                if "物理符合度评分" in label_dict["data"]["label"]:
-                    phy_score=int(re.search(r'\d+', str(label_dict["data"]["value"])).group())
-                    
-                if "视觉质量描述" in label_dict["data"]["label"]:
-                    visual_cmt=str(label_dict["data"]["value"])
-                if "文本符合度描述" in label_dict["data"]["label"]:
-                    t2v_cmt=str(label_dict["data"]["value"])
-                if "物理符合度描述" in label_dict["data"]["label"]:
-                    phy_cmt=str(label_dict["data"]["value"])
-                
-            if visual_score is None:
-                raise ValueError(f"visual score not found for {video_name}")
-            if t2v_score is None:
-                raise ValueError(f"t2v score not found for {video_name}")
-            if phy_score is None:
-                raise ValueError(f"phy score not found for {video_name}")
-            if visual_cmt is None:
-                raise ValueError(f"visual cmt not found for {video_name}")
-            if t2v_cmt is None:
-                raise ValueError(f"t2v cmt not found for {video_name}")
-            if phy_cmt is None:
-                raise ValueError(f"phy cmt not found for {video_name}")
-            
-        except Exception as e:
-            print(e)
-            continue
-        
-        if visual_score==MIN_SCORE:
-            visual_cmt=SHARED_CMTS["visual_1"]
-        if visual_score==MAX_SCORE:
-            visual_cmt=SHARED_CMTS["visual_5"]
-        if t2v_score==MAX_SCORE:
-            t2v_cmt=SHARED_CMTS["t2v_5"]
-        if phy_score==MAX_SCORE:
-            phy_cmt=SHARED_CMTS["phy_5"]     
-        
-        num_try=0
-        while True:
-            if num_try>3:
-                print(f"fetch frames for {video_name} failed")
-                exit()
+        data=[]
+        for anno in tqdm(raw_annos):
+            url=anno["info"]["data"][2]["content"]
+            video_name=url.split("/")[-1].split(".")[0]
+            prompt_en=anno["info"]["data"][1]["content"].split("English Prompt")[1].split("\n")[0].strip(". :\n")
             try:
-                n_frames=_fetch_frames(url,video_name,frame_temp_dir)
-                break
-            except Exception as e:
-                print(f"fetch frames for {video_name} seems time out, sleeping for 60s")
-                num_try+=1
-                sleep(60)
+                visual_score=None
+                t2v_score=None
+                phy_score=None
+                visual_cmt=None
+                t2v_cmt=None
+                phy_cmt=None
+                for label_dict in anno["labels"]:
+                    if "视觉质量评分" in label_dict["data"]["label"]:
+                        visual_score=int(re.search(r'\d+', str(label_dict["data"]["value"])).group())
+                    if "文本符合度评分" in label_dict["data"]["label"]:
+                        t2v_score=int(re.search(r'\d+', str(label_dict["data"]["value"])).group())
+                    if "物理符合度评分" in label_dict["data"]["label"]:
+                        phy_score=int(re.search(r'\d+', str(label_dict["data"]["value"])).group())
+                        
+                    if "视觉质量描述" in label_dict["data"]["label"]:
+                        visual_cmt=str(label_dict["data"]["value"])
+                    if "文本符合度描述" in label_dict["data"]["label"]:
+                        t2v_cmt=str(label_dict["data"]["value"])
+                    if "物理符合度描述" in label_dict["data"]["label"]:
+                        phy_cmt=str(label_dict["data"]["value"])
+                    
+                if visual_score is None:
+                    raise ValueError(f"visual score not found for {video_name}")
+                if t2v_score is None:
+                    raise ValueError(f"t2v score not found for {video_name}")
+                if phy_score is None:
+                    raise ValueError(f"phy score not found for {video_name}")
+                if visual_cmt is None:
+                    raise ValueError(f"visual cmt not found for {video_name}")
+                if t2v_cmt is None:
+                    raise ValueError(f"t2v cmt not found for {video_name}")
+                if phy_cmt is None:
+                    raise ValueError(f"phy cmt not found for {video_name}")
                 
-        frame_abs_paths=[os.path.join(frame_temp_dir,"frames",video_name,f"{video_name}_{i}.jpg") for i in range(n_frames)]
-        if not all(os.path.exists(p) for p in frame_abs_paths):
-            print(f"not all frames exists for {video_name}, skipped\n")
-            continue
+            except Exception as e:
+                print(e)
+                continue
+            
+            if visual_score==MIN_SCORE:
+                visual_cmt=SHARED_CMTS["visual_1"]
+            if visual_score==MAX_SCORE:
+                visual_cmt=SHARED_CMTS["visual_5"]
+            if t2v_score==MAX_SCORE:
+                t2v_cmt=SHARED_CMTS["t2v_5"]
+            if phy_score==MAX_SCORE:
+                phy_cmt=SHARED_CMTS["phy_5"]     
+            
+            num_try=0
+            while True:
+                if num_try>3:
+                    print(f"fetch frames for {video_name} failed")
+                    exit()
+                try:
+                    n_frames=_fetch_frames(url,video_name,frame_temp_dir)
+                    break
+                except Exception as e:
+                    print(f"fetch frames for {video_name} seems time out, sleeping for 60s")
+                    num_try+=1
+                    sleep(60)
+                    
+            frame_abs_paths=[os.path.join(frame_temp_dir,"frames",video_name,f"{video_name}_{i}.jpg") for i in range(n_frames)]
+            if not all(os.path.exists(p) for p in frame_abs_paths):
+                print(f"not all frames exists for {video_name}, skipped\n")
+                continue
+            
+            data_item={
+                "video_name":video_name,
+                "video_url":url,
+                "prompt":prompt_en,
+                "batch_name":batch_name,
+                "visual_score":visual_score,
+                "visual_comment_raw":visual_cmt,
+                "t2v_align_score":t2v_score,
+                "t2v_align_comment_raw":t2v_cmt,
+                "phy_score":phy_score,
+                "phy_comment_raw":phy_cmt,
+                "eg_frames":[{"bytes": open(p, "rb").read()} for p in frame_abs_paths]
+            }
+            data.append(data_item)
         
-        data_item={
-            "video_name":video_name,
-            "video_url":url,
-            "prompt":prompt_en,
-            "batch_name":batch_name,
-            "visual_score":visual_score,
-            "visual_comment_raw":visual_cmt,
-            "t2v_align_score":t2v_score,
-            "t2v_align_comment_raw":t2v_cmt,
-            "phy_score":phy_score,
-            "phy_comment_raw":phy_cmt,
-            "eg_frames":[{"bytes": open(p, "rb").read()} for p in frame_abs_paths]
-        }
-        data.append(data_item)
-    
-    # json_file=f"data_part_{batch_id}.json"
-    # with open(json_file,"w") as f:
-    #     json.dump(data,f,indent=4)
-    # upload_file(
-    #     path_or_fileobj=json_file,
-    #     path_in_repo=f"json_data/{json_file}",
-    #     repo_id=REPO_ID,
-    #     repo_type="dataset",
-    #     token=HF_TOKEN
-    # )
-    
-    ds = Dataset.from_list(data, features=FEATURES)
-    local_parquet_dir= f"anno_parquet"
-    os.makedirs(local_parquet_dir, exist_ok=True)
-    parquet_name = f"{batch_name}.parquet"
-    parquet_local_path = os.path.join(local_parquet_dir, parquet_name)
-    ds.to_parquet(parquet_local_path)
-    
-    upload_file(
-        path_or_fileobj=parquet_local_path,
-        path_in_repo=parquet_name,
-        repo_id=REPO_ID,
-        repo_type="dataset",
-        token=HF_TOKEN
-    )
+        # json_file=f"data_part_{batch_id}.json"
+        # with open(json_file,"w") as f:
+        #     json.dump(data,f,indent=4)
+        # upload_file(
+        #     path_or_fileobj=json_file,
+        #     path_in_repo=f"json_data/{json_file}",
+        #     repo_id=REPO_ID,
+        #     repo_type="dataset",
+        #     token=HF_TOKEN
+        # )
         
+        ds = Dataset.from_list(data, features=FEATURES)
+        local_parquet_dir= f"anno_parquet"
+        os.makedirs(local_parquet_dir, exist_ok=True)
+        parquet_name = f"{batch_name}.parquet"
+        parquet_local_path = os.path.join(local_parquet_dir, parquet_name)
+        ds.to_parquet(parquet_local_path)
+        
+        upload_file(
+            path_or_fileobj=parquet_local_path,
+            path_in_repo=parquet_name,
+            repo_id=REPO_ID,
+            repo_type="dataset",
+            token=HF_TOKEN
+        )
+        
+
 
 if __name__ == "__main__":
     MIN_SCORE=1
@@ -299,20 +299,48 @@ if __name__ == "__main__":
     })
     
     SHARED_CMTS={
-        "visual_5": "High resolution, good clarity. No noticeable local blurriness or distortion, transitions between frames are smooth without any abrupt visual artifacts. Good and consistent brightness and contrast. A pleasant and immersive viewing experience, no distracting visual issues",
-        "t2v_5": "Aligns very well with prompt. All key elements (like characters, actions, environment and other details) are clearly represented.",
-        "phy_5": "high physical and commonsense consistency. All actions, object interactions, and environmental dynamics unfold in a natural and believable manner. No signs of unrealistic and unnatural events, temporal glitches, or spatial anomalies.",
+        "visual_5": "High resolution, good clarity. No noticeable visual issues",
+        "t2v_5": "Aligns well with prompt. Key elements are clearly represented.",
+        "phy_5": "Good physical and commonsense consistency. No noticable issues.",
         "visual_1": "Low resolution and bad clarity. Local blurriness is present. Frequent visual distortions and misalignments. Abrupt and unsmooth transitions between adjacent frames. Unpolished and visually unstable, detracting from its watchability."
     }
     
     
     anno_paths=[
-        
-        ]
+        f"raw_anno/com_5k.json",
+        f"raw_anno/1.json",
+        f"raw_anno/2.json",
+        f"raw_anno/3.json",
+        f"raw_anno/4.json",
+        f"raw_anno/5.json",
+        f"raw_anno/13.json",
+        f"raw_anno/14.json",
+        f"raw_anno/15.json",
+        f"raw_anno/17.json",
+        f"raw_anno/18.json",
+        f"raw_anno/19.json",
+        f"raw_anno/20.json",
+        f"raw_anno/21.json",
+        f"raw_anno/22.json",
+        f"raw_anno/23.json",
+        f"raw_anno/24.json",
+        f"raw_anno/29.json",
+        f"raw_anno/30.json",
+        f"raw_anno/31.json",
+        f"raw_anno/32.json",
+        f"raw_anno/53.json",
+        f"raw_anno/54.json",
+        f"raw_anno/55.json",
+        f"raw_anno/61.json",
+        f"raw_anno/69.json",
+        f"raw_anno/70.json"
+    ]
     
+    batch_names=[x.split('/')[1].split('.')[0] for x in anno_paths]
+
     frame_temp_dir="/data/xuan/videoscore2/temp"
-    download_frames(anno_paths,frame_temp_dir)
-    # build_raw_cmt_data(anno_paths,batch_name,frame_temp_dir)
+    # download_frames(anno_paths,frame_temp_dir)
+    build_raw_cmt_data(anno_paths,batch_names,frame_temp_dir)
     
     # rej_path="thinking_rejected/xxxx.json"
     # rej_batch_name="rej_xxxx"

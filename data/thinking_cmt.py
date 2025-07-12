@@ -9,6 +9,8 @@ import warnings
 from time import sleep
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import threading
+from huggingface_hub import list_repo_files
+
 
 visual_def='''
 The dimension 'visual quality' cares about the video's visual and optical propertities, including 'resolution, overall clarity, local blurriness, smoothness, stability of brightness/contrast, distortion/misalignment, abrupt changes, and any other factors the affect the watching experience'. The keywords written by the annotators are also mostly derived from the above factors.
@@ -37,7 +39,7 @@ $phy_def
 
 With the reference of some frames of the video and the comments of 3 dimensions from a human annotator, please do your best to  analyze and give a score between 1 and 5 for these dimensions, where 1 means very bad and 5 means very good. The score should be an integer.
 
-Your thinking process should be 2000-3000 tokens long. Some human comments may be brief or lacking in detail — please make sure to thoroughly perceive and analyze the video on your own. Your reasoning should be **specific, detailed, professional, and comprehensive**. **DO NOT mention any human comment in your thinking**; you should pretend not to know these comments, they are provided solely to inform and enhance your understanding for better evaluation. 
+Your thinking process should be 2000-3000 tokens long. Some human comments may be brief or lacking in detail, and some may be not very precise, — please make sure to thoroughly perceive and analyze the video on your own. Your reasoning should be **specific, detailed, professional, and comprehensive**. **DO NOT mention any human comment in your thinking**; you should pretend not to know these comments, they are provided solely to inform and enhance your understanding for better evaluation. 
 
 Your response must follow the format below strictly:
 {
@@ -195,7 +197,18 @@ def thinking_cmt(repo_id, batch_name, save_path, num, model_access):
                 pbar.update(1)
         
         print(f"Successfully processed {completed_count} out of {num} samples")
-    
+
+
+def hf_quick_check(repo_id,name):
+    files = list_repo_files(repo_id=repo_id, repo_type="dataset")
+    target_file = f"{name}.parquet"
+    if target_file in files:
+        print("✅ Found:", target_file)
+        return name
+    else:
+        print("❌ Not found:", target_file)
+        return None
+
 
 if __name__ =="__main__":
     REPO_ID="hexuan21/vs2_raw_comment"
@@ -227,13 +240,19 @@ if __name__ =="__main__":
             "api_key":os.environ["OPEN_ROUTER_KEY1"],
             "base_url":"https://openrouter.ai/api/v1",
         }
-        batch_names=["13"]
+        batch_names=["lab_18k_0712"]
         max_workers=1
         start_idx=10
-        num=3
-        save_dir="thinking_cmt_debug"
-        
-        
+        num=10
+        save_dir="temp/thinking_cmt_debug"
+    
+    missing=False
+    for batch_name in batch_names:
+        if hf_quick_check(REPO_ID,batch_name) is None:
+            missing=True
+    if missing:
+        exit(0)
+    
     for batch_name in batch_names:
         save_path=os.path.join(save_dir,f"thinking_{batch_name}.json")
         os.makedirs(os.path.dirname(save_path),exist_ok=True)
