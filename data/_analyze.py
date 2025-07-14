@@ -15,7 +15,7 @@ def plot(data,batch_name,dim_idx):
     plt.xlabel('Score')
     plt.ylabel('Frequency')
     plt.title(f'Batch {batch_name} {dim[dim_idx]} Score Distribution')
-    plt.savefig(f"plots/b{batch_name}_dim{dim_idx}.png")
+    plt.savefig(f"plots/{batch_name}_dim{dim_idx}.png")
     plt.clf()
     
     
@@ -64,8 +64,14 @@ def analyze(anno_local_paths,batch_name):
 
 
 
+
+
 anno_local_paths=[
-    "raw_anno/69.json"
-    ]
-batch_name="69"
+    'raw_anno/37.json',
+    'raw_anno/38.json',
+    'raw_anno/39.json',
+    'raw_anno/40.json'
+]
+batch_name="yiming"
+
 analyze(anno_local_paths,batch_name)

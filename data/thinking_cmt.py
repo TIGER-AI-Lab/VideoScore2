@@ -252,7 +252,7 @@ if __name__ =="__main__":
             missing=True
     if missing:
         exit(0)
-    
+
     for batch_name in batch_names:
         save_path=os.path.join(save_dir,f"thinking_{batch_name}.json")
         os.makedirs(os.path.dirname(save_path),exist_ok=True)

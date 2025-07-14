@@ -7,8 +7,8 @@ import urllib.request
 import json
 from tqdm import tqdm
 from huggingface_hub import upload_file,upload_folder
-from datasets import Dataset, Features, Value, Sequence, Image
-
+from datasets import Dataset, DatasetInfo, Features, Value, Sequence, Image
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 
@@ -65,60 +65,72 @@ from datasets import Dataset, Features, Value, Sequence, Image
 },
 """
 
-def _fetch_frames(video_url,video_name,save_dir,):
-    
-    video_path=os.path.join(save_dir,"videos",f"{video_name}.mp4")
-    os.makedirs(os.path.dirname(video_path),exist_ok=True)
-    if not os.path.exists(video_path):
-        urllib.request.urlretrieve(video_url, video_path)    
-    
-    cap = cv2.VideoCapture(video_path)
-    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    n_frames=None
-    n_frames=int(total_frames // 6)
+
+
+def _fetch_frames_single(video_name, video_url, f_v_save_dir):
+    try:
+        video_path=os.path.join(f_v_save_dir,"videos",f"{video_name}.mp4")
+        os.makedirs(os.path.dirname(video_path),exist_ok=True)
+        if not os.path.exists(video_path):
+            urllib.request.urlretrieve(video_url, video_path)    
         
-    frame_indices = np.linspace(0, total_frames - 1, num=n_frames, dtype=int)
-    extracted_frames = []
+        cap = cv2.VideoCapture(video_path)
+        total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+        n_frames=None
+        n_frames=int(total_frames // 6)
+            
+        frame_indices = np.linspace(0, total_frames - 1, num=n_frames, dtype=int)
+        extracted_frames = []
 
-    for idx in range(total_frames):
-        ret, frame = cap.read()
-        if not ret:
-            break
-        if idx in frame_indices:
-            extracted_frames.append(frame)
-    cap.release()
-    
-    for i, frame in enumerate(extracted_frames):
-        frame_path = os.path.join(save_dir,"frames",video_name,f"{video_name}_{i}.jpg")
-        if os.path.exists(frame_path):
-            continue
-        os.makedirs(os.path.dirname(frame_path),exist_ok=True)
-        cv2.imwrite(frame_path, frame)    
-    return n_frames
+        for idx in range(total_frames):
+            ret, frame = cap.read()
+            if not ret:
+                break
+            if idx in frame_indices:
+                extracted_frames.append(frame)
+        cap.release()
+        
+        for i, frame in enumerate(extracted_frames):
+            frame_path = os.path.join(f_v_save_dir,"frames",video_name,f"{video_name}_{i}.jpg")
+            if os.path.exists(frame_path):
+                continue
+            os.makedirs(os.path.dirname(frame_path),exist_ok=True)
+            cv2.imwrite(frame_path, frame)  
+            print(0)
+        return n_frames
+    except Exception as e:
+        return f"❌ {video_name} failed: {e}"
 
 
-
-def download_frames(anno_paths,frame_temp_dir):
+def download_frames(anno_paths, f_v_save_dir, max_workers=8):
+    all_annos = []
     for anno_path in anno_paths:
-        with open(anno_path,"r",encoding="utf-8") as f:
-            raw_annos=json.load(f)
+        with open(anno_path, "r", encoding="utf-8") as f:
+            all_annos.extend(json.load(f))
+    
+    video_urls=[anno["info"]["data"][2]["content"] for anno in all_annos]
+    video_names=[url.split("/")[-1].split(".")[0] for url in video_urls]
+    
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures = [executor.submit(_fetch_frames_single, video_name, video_url, f_v_save_dir) for video_name,video_url in zip(video_names,video_urls)]
 
-        for anno in tqdm(raw_annos):
-            url=anno["info"]["data"][2]["content"]
-            video_name=url.split("/")[-1].split(".")[0]
-            n_frames=_fetch_frames(url,video_name,frame_temp_dir)
+        for future in tqdm(as_completed(futures), total=len(futures), desc="Downloading frames"):
+            result = future.result()
+            
 
-
-def rebuild_rej_data(rej_data_path,batch_name,frame_temp_dir):
-    rej_data=json.load(open(rej_data_path,"r"))
+def rebuild_rej_data(rej_data_path,batch_name,f_v_save_dir):
+    with open(rej_data_path,"r") as f:
+        rej_data=json.load(f)
     data=[]
     for rej_item in rej_data:
         video_name=rej_item["video_name"]
-        frame_names=os.listdir(os.path.join(frame_temp_dir,"frames",video_name))
-        print(frame_names)
-        frame_abs_paths=[os.path.join(frame_temp_dir,"frames",video_name,frame_name) for frame_name in frame_names]
-        print(frame_abs_paths)
-        exit()
+        video_url=rej_item["video_url"]
+        frame_names=os.listdir(os.path.join(f_v_save_dir,"frames",video_name))
+        frame_abs_paths=[os.path.join(f_v_save_dir,"frames",video_name,frame_name) for frame_name in frame_names]
+        if not all(os.path.exists(p) for p in frame_abs_paths):
+            print(f"Some frames are missing for video {video_name}")
+            _fetch_frames_single(video_name,video_url,f_v_save_dir)
+            
         data_item={
             "video_name":video_name,
             "video_url":rej_item["video_url"],
@@ -151,12 +163,12 @@ def rebuild_rej_data(rej_data_path,batch_name,frame_temp_dir):
 
 
 
-def build_raw_cmt_data(anno_local_paths,batch_name,frame_temp_dir):
+def build_raw_cmt_data(anno_local_paths,batch_names,f_v_save_dir):
 
     for anno_local_path,batch_name in zip(anno_local_paths,batch_names):
         upload_file(
             path_or_fileobj=anno_local_path,
-            path_in_repo=f"raw_anno/{batch_name}.json",
+            path_in_repo=f"anno_raw/{batch_name}.json",
             repo_id=REPO_ID,
             repo_type="dataset",
             token=HF_TOKEN
@@ -206,7 +218,7 @@ def build_raw_cmt_data(anno_local_paths,batch_name,frame_temp_dir):
                     raise ValueError(f"phy cmt not found for {video_name}")
                 
             except Exception as e:
-                print(e)
+                print(f"[ERROR] {video_name}: {e}")
                 continue
             
             if visual_score==MIN_SCORE:
@@ -224,14 +236,14 @@ def build_raw_cmt_data(anno_local_paths,batch_name,frame_temp_dir):
                     print(f"fetch frames for {video_name} failed")
                     exit()
                 try:
-                    n_frames=_fetch_frames(url,video_name,frame_temp_dir)
+                    n_frames=_fetch_frames_single(url,video_name,f_v_save_dir)
                     break
                 except Exception as e:
                     print(f"fetch frames for {video_name} seems time out, sleeping for 60s")
                     num_try+=1
                     sleep(60)
                     
-            frame_abs_paths=[os.path.join(frame_temp_dir,"frames",video_name,f"{video_name}_{i}.jpg") for i in range(n_frames)]
+            frame_abs_paths=[os.path.join(f_v_save_dir,"frames",video_name,f"{video_name}_{i}.jpg") for i in range(n_frames)]
             if not all(os.path.exists(p) for p in frame_abs_paths):
                 print(f"not all frames exists for {video_name}, skipped\n")
                 continue
@@ -239,8 +251,8 @@ def build_raw_cmt_data(anno_local_paths,batch_name,frame_temp_dir):
             data_item={
                 "video_name":video_name,
                 "video_url":url,
-                "prompt":prompt_en,
                 "batch_name":batch_name,
+                "prompt":prompt_en,
                 "visual_score":visual_score,
                 "visual_comment_raw":visual_cmt,
                 "t2v_align_score":t2v_score,
@@ -262,20 +274,22 @@ def build_raw_cmt_data(anno_local_paths,batch_name,frame_temp_dir):
         #     token=HF_TOKEN
         # )
         
-        ds = Dataset.from_list(data, features=FEATURES)
-        local_parquet_dir= f"anno_parquet"
-        os.makedirs(local_parquet_dir, exist_ok=True)
+        ds = Dataset.from_list(data, features=FEATURES,info=DatasetInfo(features=FEATURES))
+        parquet_local_dir= f"anno_parquet"
+        os.makedirs(parquet_local_dir, exist_ok=True)
         parquet_name = f"{batch_name}.parquet"
-        parquet_local_path = os.path.join(local_parquet_dir, parquet_name)
+        parquet_local_path = os.path.join(parquet_local_dir, parquet_name)
         ds.to_parquet(parquet_local_path)
         
-        upload_file(
+        res=upload_file(
             path_or_fileobj=parquet_local_path,
             path_in_repo=parquet_name,
             repo_id=REPO_ID,
             repo_type="dataset",
             token=HF_TOKEN
         )
+        print(f"Uploaded {parquet_name}: {res}")
+        os.remove(parquet_local_path)
         
 
 
@@ -304,43 +318,48 @@ if __name__ == "__main__":
         "phy_5": "Good physical and commonsense consistency. No noticable issues.",
         "visual_1": "Low resolution and bad clarity. Local blurriness is present. Frequent visual distortions and misalignments. Abrupt and unsmooth transitions between adjacent frames. Unpolished and visually unstable, detracting from its watchability."
     }
-    
+    f_v_save_dir="/data/xuan/videoscore2/f_v_all"
     
     anno_paths=[
-        f"raw_anno/com_5k.json",
-        f"raw_anno/1.json",
-        f"raw_anno/2.json",
-        f"raw_anno/3.json",
-        f"raw_anno/4.json",
-        f"raw_anno/5.json",
-        f"raw_anno/13.json",
-        f"raw_anno/14.json",
-        f"raw_anno/15.json",
-        f"raw_anno/17.json",
-        f"raw_anno/18.json",
-        f"raw_anno/19.json",
-        f"raw_anno/20.json",
-        f"raw_anno/21.json",
-        f"raw_anno/22.json",
-        f"raw_anno/23.json",
-        f"raw_anno/24.json",
-        f"raw_anno/29.json",
-        f"raw_anno/30.json",
-        f"raw_anno/31.json",
-        f"raw_anno/32.json",
-        f"raw_anno/53.json",
-        f"raw_anno/54.json",
-        f"raw_anno/55.json",
-        f"raw_anno/61.json",
-        f"raw_anno/69.json",
-        f"raw_anno/70.json"
+        f"anno_raw/com_5k_0.json",
+        f"anno_raw/com_5k_1.json",
+        f"anno_raw/com_5k_2.json",
+        f"anno_raw/com_5k_3.json",
+        f"anno_raw/com_5k_4.json",
+        # f"anno_raw/1.json",
+        # f"anno_raw/2.json",
+        # f"anno_raw/3.json",
+        # f"anno_raw/4.json",
+        # f"anno_raw/5.json",
+        # f"anno_raw/13.json",
+        # f"anno_raw/14.json",
+        # f"anno_raw/15.json",
+        # f"anno_raw/17.json",
+        # f"anno_raw/18.json",
+        # f"anno_raw/19.json",
+        # f"anno_raw/20.json",
+        # f"anno_raw/21.json",
+        # f"anno_raw/22.json",
+        # f"anno_raw/23.json",
+        # f"anno_raw/24.json",
+        # f"anno_raw/29.json",
+        # f"anno_raw/30.json",
+        # f"anno_raw/31.json",
+        # f"anno_raw/32.json",
+        # f"anno_raw/53.json",
+        # f"anno_raw/54.json",
+        # f"anno_raw/55.json",
+        # f"anno_raw/61.json",
+        # f"anno_raw/69.json",
+        # f"anno_raw/70.json"
     ]
     
+    
+    
+    # download_frames(anno_paths,f_v_save_dir,max_workers=8)
+    
     batch_names=[x.split('/')[1].split('.')[0] for x in anno_paths]
-
-    frame_temp_dir="/data/xuan/videoscore2/temp"
-    # download_frames(anno_paths,frame_temp_dir)
-    build_raw_cmt_data(anno_paths,batch_names,frame_temp_dir)
+    build_raw_cmt_data(anno_paths,batch_names,f_v_save_dir)
     
     # rej_path="thinking_rejected/xxxx.json"
     # rej_batch_name="rej_xxxx"
@@ -354,37 +373,37 @@ if __name__ == "__main__":
     
     
     [
-        # "raw_anno/batch_91_100_com.json",
+        # "anno_raw/batch_91_100_com.json",
         
-        # f"raw_anno/13.json",
-        # f"raw_anno/14.json",
-        # f"raw_anno/15.json",
-        # f"raw_anno/17.json",
-        # f"raw_anno/18.json",
-        # f"raw_anno/19.json",
-        # f"raw_anno/20.json",
-        # f"raw_anno/21.json",
-        # f"raw_anno/22.json",
-        # f"raw_anno/23.json",
-        # f"raw_anno/24.json",
-        # f"raw_anno/29.json",
-        # f"raw_anno/30.json",
-        # f"raw_anno/31.json",
-        # f"raw_anno/32.json"
+        # f"anno_raw/13.json",
+        # f"anno_raw/14.json",
+        # f"anno_raw/15.json",
+        # f"anno_raw/17.json",
+        # f"anno_raw/18.json",
+        # f"anno_raw/19.json",
+        # f"anno_raw/20.json",
+        # f"anno_raw/21.json",
+        # f"anno_raw/22.json",
+        # f"anno_raw/23.json",
+        # f"anno_raw/24.json",
+        # f"anno_raw/29.json",
+        # f"anno_raw/30.json",
+        # f"anno_raw/31.json",
+        # f"anno_raw/32.json"
         
-        # f"raw_anno/37.json",
-        # f"raw_anno/38.json",
-        # f"raw_anno/39.json",
-        # f"raw_anno/40.json",
-        # f"raw_anno/45.json",
-        # f"raw_anno/46.json",
-        # f"raw_anno/47.json",
-        # f"raw_anno/48.json",
-        # f"raw_anno/53.json",
-        # f"raw_anno/54.json",
-        # f"raw_anno/55.json",
-        # f"raw_anno/56.json",
-        # f"raw_anno/61.json",
-        # f"raw_anno/69.json",
-        # f"raw_anno/70.json"
+        # f"anno_raw/37.json",
+        # f"anno_raw/38.json",
+        # f"anno_raw/39.json",
+        # f"anno_raw/40.json",
+        # f"anno_raw/45.json",
+        # f"anno_raw/46.json",
+        # f"anno_raw/47.json",
+        # f"anno_raw/48.json",
+        # f"anno_raw/53.json",
+        # f"anno_raw/54.json",
+        # f"anno_raw/55.json",
+        # f"anno_raw/56.json",
+        # f"anno_raw/61.json",
+        # f"anno_raw/69.json",
+        # f"anno_raw/70.json"
     ]

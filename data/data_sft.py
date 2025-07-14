@@ -8,7 +8,7 @@ import warnings
 import zipfile
 from tqdm import tqdm
 from datasets import load_dataset
-
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # LF data/dataset_info.json
 """
@@ -59,128 +59,114 @@ You are an expert for evaluating and thinking about the quality of AI videos fro
 '''
 
 
-def _download_video(url,name,save_dir):
-    video_path=os.path.join(save_dir,f"{name}.mp4")
-    os.makedirs(os.path.dirname(video_path),exist_ok=True)
+def _fetch_video_single(item, save_dir):
+    name = item["video_name"]
+    url = item["video_url"]
+    video_path = os.path.join(save_dir, f"{name}.mp4")
+    os.makedirs(os.path.dirname(video_path), exist_ok=True)
     if not os.path.exists(video_path):
         try:
-            urllib.request.urlretrieve(url, video_path) 
+            urllib.request.urlretrieve(url, video_path)
             return video_path
         except Exception as e:
-            print(e)
+            print(f"[ERROR] Download failed for {name}: {e}")
             return None
     else:
-        warnings.warn(f"Video {name} Already Exists!")
         return video_path
 
 
-def upload_video_2(repo_id,parquet_names,batch_name,video_save_dir):
+def download_video(paths,video_save_dir, max_workers=8):
+    data = []
+    for path in paths:
+        with open(path, "r", encoding='utf-8') as f:
+            data.extend(json.load(f))
+    print(f"Total videos to download: {len(data)}")
+
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures = [executor.submit(_fetch_video_single, x, video_save_dir) for x in data]
+
+        for future in tqdm(as_completed(futures), total=len(futures), desc="Downloading videos"):
+            result = future.result()
+            if result is None:
+                continue  
+
+
+
+def download_video_2(repo_id,parquet_names,video_save_dir,max_workers=8):
     data = load_dataset(repo_id, data_files=[f"{p_n}.parquet" for p_n in parquet_names],split="train")
     print(len(data))
     
-    for x in tqdm(data):
-        video_name=x["video_name"]
-        video_url=x["video_url"]
-        if _download_video(video_url,video_name,video_save_dir) is None:
-            continue
-        
-    zip_file=f"{batch_name}.zip"
-    with zipfile.ZipFile(zip_file, 'w', zipfile.ZIP_DEFLATED) as zipf:
-        for fname in os.listdir(video_save_dir):
-            if fname.endswith('.mp4'):
-                full_path = os.path.join(video_save_dir, fname)
-                zipf.write(full_path, arcname=fname)  
-                          
-    upload_file(
-        path_or_fileobj=zip_file,
-        path_in_repo=zip_file,
-        repo_id=VIDEO_REPO_ID,
-        repo_type="dataset",
-        token=HF_TOKEN
-    )
-    os.remove(zip_file)
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures = [executor.submit(_fetch_video_single, x, video_save_dir) for x in data]
 
-def upload_video(paths,batch_name,video_save_dir):
-    data=[]
-    for path in paths:
-        data.extend(json.load(open(path,"r",encoding='utf-8')))
-    print(len(data))
-    
-    for x in tqdm(data):
-        video_name=x["video_name"]
-        video_url=x["video_url"]
-        if _download_video(video_url,video_name,video_save_dir) is None:
-            continue
-        
-    zip_file=f"{batch_name}.zip"
-    with zipfile.ZipFile(zip_file, 'w', zipfile.ZIP_DEFLATED) as zipf:
-        for fname in os.listdir(video_save_dir):
-            if fname.endswith('.mp4'):
-                full_path = os.path.join(video_save_dir, fname)
-                zipf.write(full_path, arcname=fname)  
-                          
-    upload_file(
-        path_or_fileobj=zip_file,
-        path_in_repo=zip_file,
-        repo_id=VIDEO_REPO_ID,
-        repo_type="dataset",
-        token=HF_TOKEN
-    )
-    os.remove(zip_file)
+        for future in tqdm(as_completed(futures), total=len(futures), desc="Downloading videos"):
+            result = future.result()
+            if result is None:
+                continue  
 
 
-def build_sft_data(path,batch_name,video_save_dir):
+def build_sft_data(paths,sft_batch_name,video_save_dir):
     data=[]
     for path in paths:
         data.extend(json.load(open(path,"r",encoding='utf-8')))
     
+    video_abs_paths=[]
     convs=[]
     for x in tqdm(data):
         video_name=x["video_name"]
-        video_url=x["video_url"]
-        if _download_video(video_url,video_name,video_save_dir) is None:
+        video_path=_fetch_video_single(x,video_save_dir)
+        if video_path is None:
             continue
+        video_abs_paths.append(video_path)
     
-        prompt=x["prompt"]
-        visual_score=x["visual_score"]
-        t2v_score=x["t2v_score"]
-        phy_score=x["phy_score"]
+        t2v_prompt=x["prompt"]
+        v_score=x["visual_score"]
+        t_score=x["t2v_score"]
+        p_score=x["phy_score"]
         thinking=x["thinking"]
         
         # sharegpt format
-        human_input=f"""
+        human_input=Template(f"""
         <video>
-        {SYS_PROMPT}
+        $sys_prompt
         We would like to evaluate its quality from three dimensions: 'visual quality', 'text-to-video alignment' and 'physical consistency'. Below is the definition of each dimension: 
-        (1) {visual_def}
-        (2) {t2v_def}
-        (3) {phy_def}
+        (1) $visual_def
+        (2) $t2v_def
+        (3) $phy_def
         Here we provide an AI video generated by text-to-video models and its text prompt: 
-        {prompt}.
+        $t2v_prompt.
         Based on the video content and the dimension definitions, please evaluate the video quality, provide (1) the thinking process, and (2) the quality score. 
         The quality score must be in 1.0 - 5.0, and the thinking process should be of appropriate length and expression.
-        """
         
-        model_output=f"""
+        """)
+        
+        model_output=Template("""
         ### Thinking Process:
-        {thinking}
+        $thinking
         
         ### Score:
-        (1) visual quality: {visual_score}
-        (2) text-to-video alignment: {t2v_score}
-        (3) physical consistency: {phy_score}
-        """
+        (1) visual quality: $v_score
+        (2) text-to-video alignment: $t_score
+        (3) physical consistency: $p_score
+        """)
         
         
         conv={
             "conversations": [
             {
                 "from": "human",
-                "value": human_input
+                "value": human_input.substitute(sys_prompt=SYS_PROMPT,
+                                                visual_def=visual_def,
+                                                t2v_def=t2v_def,
+                                                phy_def=phy_def,
+                                                t2v_prompt=t2v_prompt)
             },
             {
                 "from": "gpt",
-                "value": model_output,
+                "value": model_output.substitute(thinking=thinking,
+                                                 v_score=v_score,
+                                                 t_score=t_score,
+                                                 p_score=p_score),
             }
             ],
             "videos": [
@@ -190,14 +176,15 @@ def build_sft_data(path,batch_name,video_save_dir):
         convs.append(conv)
             
     dataset = Dataset.from_list(data)
-    dataset.push_to_hub(repo_id=REPO_ID,token=HF_TOKEN,private=False)
+    # dataset.push_to_hub(repo_id=REPO_ID,token=HF_TOKEN,private=False)
     
-    zip_file=f"{batch_name}.zip"
+    zip_file=f"{sft_batch_name}.zip"
+    print("zipping videos...")
     with zipfile.ZipFile(zip_file, 'w', zipfile.ZIP_DEFLATED) as zipf:
-        for fname in os.listdir(video_save_dir):
-            if fname.endswith('.mp4'):
-                full_path = os.path.join(video_save_dir, fname)
-                zipf.write(full_path, arcname=fname)            
+        for v_p in tqdm(video_abs_paths):
+            f_name=v_p.split('/')[-1]
+            if v_p.endswith('.mp4'):
+                zipf.write(v_p, arcname=f_name)     
     upload_file(
         path_or_fileobj=zip_file,
         path_in_repo=zip_file,
@@ -207,7 +194,7 @@ def build_sft_data(path,batch_name,video_save_dir):
     )
     os.remove(zip_file)
     
-    tmp_save_path="vs2_data_sft.json"
+    tmp_save_path=f"vs2_data_sft_{sft_batch_name}.json"
     with open(tmp_save_path, "w") as f:
         json.dump(dataset.to_dict(), f, indent=2)
     upload_file(
@@ -239,21 +226,28 @@ if __name__ == "__main__":
             exist_ok=True
         )
     
-    # data_paths=[
-    #     f"thinking_cmt/thinking_com_5k.json",
-        
-    # ]
     
-    # batch_name="com_5k"
-    # video_save_dir=f"/data/xuan/videoscore2/videos_tmp_{batch_name}"
-    # upload_video(data_paths,batch_name,video_save_dir)
-    
-    parquet_names=[
-        "lab_12k_0712"
+    data_paths=[
+        f"thinking_cmt/thinking_com_5k_original.json", 
     ]
-    batch_name="lab_12k_0712"
-    repo_id="hexuan21/vs2_raw_comment"
-    video_save_dir=f"/data/xuan/videoscore2/videos_tmp_{batch_name}"
-    upload_video_2(repo_id,parquet_names,batch_name,video_save_dir)
-    # build_sft_data(data_paths,batch_name,video_save_dir)
+    sft_batch_name="com_5k"
+    video_save_dir=f"/data/xuan/videoscore2/f_v_all/videos"
+    download_video(data_paths,video_save_dir,max_workers=8)
+    
+    
+    # parquet_names=[
+    #     "lab_12k_0712"
+    # ]
+    # sft_batch_name="lab_12k_0712"
+    # repo_id="hexuan21/vs2_raw_comment"
+    # video_save_dir=f"/data/xuan/videoscore2/f_v_all/videos"
+    # download_video_2(repo_id,parquet_names,video_save_dir,max_workers=8)
+    
+    
+    # data_paths=[
+    #     f"thinking_final/final_com_5k_balance_rule2_debug.json",
+    # ]
+    # sft_batch_name="try_debug"
+    # video_save_dir=f"/data/xuan/videoscore2/f_v_all/videos"
+    # build_sft_data(data_paths,sft_batch_name,video_save_dir)
     
