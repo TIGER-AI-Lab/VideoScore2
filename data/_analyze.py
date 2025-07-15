@@ -4,6 +4,7 @@ from tqdm import tqdm
 import re
 import matplotlib.pyplot as plt
 
+
 def plot(data,batch_name,dim_idx):
     dim={
         1:"Visual Quality",
@@ -19,7 +20,7 @@ def plot(data,batch_name,dim_idx):
     plt.clf()
     
     
-def analyze(anno_local_paths,batch_name):
+def analyze_raw(anno_local_paths,batch_name):
     raw_annos=[]
     for anno_local_path in anno_local_paths:
         with open(anno_local_path,"r",encoding="utf-8") as f:
@@ -31,7 +32,6 @@ def analyze(anno_local_paths,batch_name):
     for anno in tqdm(raw_annos):
         url=anno["info"]["data"][2]["content"]
         video_name=url.split("/")[-1].split(".")[0]
-        prompt_en=anno["info"]["data"][1]["content"].split("English Prompt")[1].split("\n")[0].strip(". :\n")
         try:
             visual_score=None
             t2v_score=None
@@ -63,15 +63,40 @@ def analyze(anno_local_paths,batch_name):
     plot(p_scores,batch_name,3)
 
 
+def analyze_thinking(thinking_paths,batch_name):
+    items=[]
+    for p in thinking_paths:
+        with open(p,"r",encoding="utf-8") as f:
+            items.extend(json.load(f))
+    v_scores=[]
+    t_scores=[]
+    p_scores=[]
+    for item in tqdm(items):
+        v_scores.append(item["visual_score"])
+        t_scores.append(item["t2v_score"])
+        p_scores.append(item["phy_score"])
+        
+    plot(v_scores,batch_name,1)
+    plot(t_scores,batch_name,2)
+    plot(p_scores,batch_name,3)
+    
+    
 
 
+if __name__ == "__main__":
 
-anno_local_paths=[
-    'raw_anno/37.json',
-    'raw_anno/38.json',
-    'raw_anno/39.json',
-    'raw_anno/40.json'
-]
-batch_name="yiming"
-
-analyze(anno_local_paths,batch_name)
+    # anno_local_paths=[
+    #     'anno_raw/56.json',
+    #     # 'anno_raw/10.json',
+    #     # 'anno_raw/39.json',
+    #     # 'anno_raw/40.json'
+    # ]
+    # batch_name="56_keming"
+    # analyze_raw(anno_local_paths,batch_name)
+    
+    
+    thinking_paths=[
+        "temp/sft_17k_modidifed.json",
+    ]
+    batch_name="17k_modified"
+    analyze_thinking(thinking_paths,batch_name)

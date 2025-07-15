@@ -48,86 +48,6 @@ def build_few_shot():
                 break
 
     json.dump(data2, open("few_shot_examples_new.json", "w", encoding="utf-8"), indent=4, ensure_ascii=True)    
-    
-
-
-def split_batchs():
-
-    dict1={
-    13:
-    "67ff8a3c97cbd9edfc8fc4c2",
-    14:
-    "67ff8a3c97cbd9edfc8fc6b7",
-    15:
-    "67ff8a3c97cbd9edfc8fc8ac",
-    17:
-    "67ff8a3c97cbd9edfc8fcc96",
-    18:
-    "67ff8a3c97cbd9edfc8fce8b",
-    19:
-    "67ff8a3c97cbd9edfc8fd080",
-    20:
-    "67ff8a3c97cbd9edfc8fd275",
-    21:
-    "67ff8a3c97cbd9edfc8fd46a",
-    22:
-    "67ff8a3c97cbd9edfc8fd65f",
-    23:
-    "67ff8a3c97cbd9edfc8fd854",
-    24:
-    "67ff8a3c97cbd9edfc8fda49",
-    29:
-    "67ff8a3c97cbd9edfc8fe412",
-    30:
-    "67ff8a3c97cbd9edfc8fe607",
-    31:
-    "67ff8a3c97cbd9edfc8fe7fc",
-    32:
-    "67ff8a3c97cbd9edfc8fe9f1",
-    37:
-    "67ff8a3c97cbd9edfc8ff3ba",
-    38:
-    "67ff8a3c97cbd9edfc8ff5af",
-    39:
-    "67ff8a3c97cbd9edfc8ff7a4",
-    40:
-    "67ff8a3c97cbd9edfc8ff999",
-    45:
-    "67ff8a3c97cbd9edfc900362",
-    46:
-    "67ff8a3c97cbd9edfc900557",
-    47:
-    "67ff8a3c97cbd9edfc90074c",
-    48:
-    "67ff8a3c97cbd9edfc900941",
-    53:
-    "67ff8a3c97cbd9edfc90130a",
-    54:
-    "67ff8a3c97cbd9edfc9014ff",
-    55:
-    "67ff8a3c97cbd9edfc9016f4",
-    56:
-    "67ff8a3c97cbd9edfc9018e9",
-    61:
-    "67ff8a3c97cbd9edfc9022b2",
-    69:
-    "67ff8a3c97cbd9edfc90325a",
-    70:
-    "67ff8a3c97cbd9edfc90344f",
-
-    }
-
-
-    path="VideoScore2.json"
-    data=json.load(open(path,"r",encoding='utf-8'))
-    for batch_name, uid in dict1.items():
-        new_data=[]
-        for x in data:
-            if str(x["batchId"]) == uid:
-                new_data.append(x)
-        print(f"{batch_name}, {len(new_data)}")
-        with open(f"raw_anno/{batch_name}.json","w",encoding='utf-8') as f:
-            json.dump(new_data,f,indent=4,ensure_ascii=False)
 
 
 def check_hf_files():
@@ -175,49 +95,55 @@ def check_hf_files():
 
 
 
-def critical_modify():
+def split_batchs():
 
-    p="thinking_cmt/thinking_com_5k_original.json"
-    new_p="thinking_cmt/thinking_com_5k_v1.json"
-    data=json.load(open(p,"r"))
+    dict1={
+    9:
+    "67ff8a3c97cbd9edfc8fbcee",
+    10:
+    "67ff8a3c97cbd9edfc8fbee3",
 
-    excl_models=['stepvideo_t2v_low_vram']
+    }
 
-    v_good_models=['lavie_base','magictime','cogvideox_5b']
-    v_medium_models=['anidiff','cogvideox_2b','ltx_video_095',]
-    v_bad_models=['ltx_video_091','latte','vchitect2',]
 
-    p_good_models=['magictime',]
-    p_medium_models=['ltx_video_095','cogvideox_5b','lavie_base']
-    p_bad_models=['cogvideox_2b','anidiff','ltx_video_091','latte','vchitect2',]
+    path="VideoScore2.json"
+    data=json.load(open(path,"r",encoding='utf-8'))
+    for batch_name, uid in dict1.items():
+        new_data=[]
+        for x in data:
+            if str(x["batchId"]) == uid:
+                new_data.append(x)
+        print(f"{batch_name}, {len(new_data)}")
+        with open(f"anno_raw/{batch_name}.json","w",encoding='utf-8') as f:
+            json.dump(new_data,f,indent=4,ensure_ascii=False)
 
-    for idx, x in tqdm(enumerate(data)):
-        url=x["video_url"]
-        #"https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/4500_4999/vchitect2/004501_p.mp4"
-        t2v_model=url.split('/')[-2]
-        v_score=x["visual_score"]
-        t_score=x["t2v_score"]
-        p_score=x["phy_score"]
-        if t2v_model in v_bad_models:
-            data[idx]["visual_score"]=min(2,v_score)
-        if t2v_model in v_medium_models:
-            data[idx]["visual_score"]=min(3,v_score)
-        if t2v_model in v_good_models:
-            data[idx]["visual_score"]=min(4,v_score)
-        
-        if t2v_model not in excl_models:
-            data[idx]["t2v_score"]=min(4,t_score)
-            
-        if t2v_model in p_bad_models:
-            data[idx]["phy_score"]=min(2,p_score)
-        if t2v_model in p_medium_models:
-            data[idx]["phy_score"]=min(3,p_score)
-        if t2v_model in p_good_models:
-            data[idx]["phy_score"]=min(4,p_score)
-            
-    with open(new_p,'w') as f:
-        json.dump(data,f,indent=4,ensure_ascii=False)
-     
-     
-p1="/data/xuan/videoscore2/temp/videos/"
-p2="/data/xuan/videoscore2/videos_tmp_for_zip"
+
+
+
+
+
+
+def split_json_file(input_path, output_dir, chunk_size=1000):
+    import json
+    import os
+    os.makedirs(output_dir, exist_ok=True)
+
+    # 读取 JSON 数据
+    with open(input_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    total = len(data)
+    num_chunks = (total + chunk_size - 1) // chunk_size
+    print(f"Total items: {total}, Splitting into {num_chunks} chunks...")
+
+    for i in range(num_chunks):
+        chunk = data[i * chunk_size : (i + 1) * chunk_size]
+        out_path = os.path.join(output_dir, f"thinking_17k_{i}.json")
+        with open(out_path, "w", encoding="utf-8") as f:
+            json.dump(chunk, f, indent=2, ensure_ascii=False)
+        print(f"Saved {len(chunk)} items → {out_path}")
+
+if __name__ == "__main__":
+    input_file = "thinking_cmt/sft_17k_modified.json"     
+    output_folder = "thinking_split" 
+    split_json_file(input_file, output_folder, chunk_size=1000)

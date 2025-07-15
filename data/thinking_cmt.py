@@ -21,7 +21,7 @@ The dimension 't2v_alignment' mainly assesses whether the generated video fully 
 '''
 
 phy_def='''
-The dimension 'physical consistency' mainly examines whether there are any violations of common sense, physical laws, or any other aspects in the video that appear strange or unnatural. Most of the keywords provided by annotators point out the specific abnormalities or inconsistencies they observed in the video.
+The dimension 'physical/common-sense consistency' mainly examines whether there are any violations of common sense, physical laws, or any other aspects in the video that appear strange or unnatural. Most of the keywords provided by annotators point out the specific abnormalities or inconsistencies they observed in the video.
 '''
 
 SYS_PROMPT='''

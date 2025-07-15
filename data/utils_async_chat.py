@@ -91,7 +91,7 @@ async def generate_from_openai_chat_completion(
     temperature: float = 0.7,
     max_tokens: int = 8000,
     top_p: float = 1,
-    requests_per_minute: int = 80,
+    requests_per_minute: int = 60,
     tqdm: bool = True,
     num_samples: int = 1,
     logger=None,

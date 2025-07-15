@@ -66,6 +66,33 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 """
 
 
+MIN_SCORE=1
+MAX_SCORE=5
+REPO_ID="hexuan21/vs2_raw_comment"
+HF_TOKEN=os.environ["HF_TOKEN"]
+FEATURES = Features({
+    "video_name":Value("string"),
+    "video_url":Value("string"),
+    "batch_name":Value("string"),
+    "prompt":Value("string"),
+    "visual_score":Value("int32"),
+    "visual_comment_raw":Value("string"),
+    "t2v_align_score":Value("int32"),
+    "t2v_align_comment_raw":Value("string"),
+    "phy_score":Value("int32"),
+    "phy_comment_raw":Value("string"),
+    "eg_frames": Sequence(feature=Image(decode=True)),
+})
+
+SHARED_CMTS={
+    "visual_5": "High resolution, good clarity. No noticeable visual issues",
+    "t2v_5": "Aligns well with prompt. Key elements are clearly represented.",
+    "phy_5": "Good physical and commonsense consistency. No noticable issues.",
+    "visual_1": "Low resolution and bad clarity. Local blurriness is present. Frequent visual distortions and misalignments. Abrupt and unsmooth transitions between adjacent frames. Unpolished and visually unstable, detracting from its watchability.",
+    "t2v_1_alter":"The video content is completely inconsistent with the text prompt; there is a large discrepancy.",
+    "phy_1_alter":"The video content has very serious inconsistencies with common sense and physical laws.",
+}
+
 
 def _fetch_frames_single(video_name, video_url, f_v_save_dir):
     try:
@@ -96,10 +123,10 @@ def _fetch_frames_single(video_name, video_url, f_v_save_dir):
                 continue
             os.makedirs(os.path.dirname(frame_path),exist_ok=True)
             cv2.imwrite(frame_path, frame)  
-            print(0)
         return n_frames
     except Exception as e:
-        return f"❌ {video_name} failed: {e}"
+        print(f"❌ {video_name} failed: {e}")
+        return None
 
 
 def download_frames(anno_paths, f_v_save_dir, max_workers=8):
@@ -107,16 +134,146 @@ def download_frames(anno_paths, f_v_save_dir, max_workers=8):
     for anno_path in anno_paths:
         with open(anno_path, "r", encoding="utf-8") as f:
             all_annos.extend(json.load(f))
-    
     video_urls=[anno["info"]["data"][2]["content"] for anno in all_annos]
     video_names=[url.split("/")[-1].split(".")[0] for url in video_urls]
-    
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        futures = [executor.submit(_fetch_frames_single, video_name, video_url, f_v_save_dir) for video_name,video_url in zip(video_names,video_urls)]
-
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:     
+  
+        futures = [executor.submit(_fetch_frames_single, name, url, f_v_save_dir) for name, url in zip(video_names,video_urls)]
         for future in tqdm(as_completed(futures), total=len(futures), desc="Downloading frames"):
             result = future.result()
+
+
+
+def _build_raw_cmt_single(anno,batch_name,f_v_save_dir):
+    try:
+        url = anno["info"]["data"][2]["content"]
+        video_name = url.split("/")[-1].split(".")[0]
+        prompt_en = (
+            anno["info"]["data"][1]["content"]
+            .split("English Prompt", 1)[1]
+            .split("\n", 1)[0]
+            .strip(". :\n")
+        )
+
+        visual_score = t2v_score = phy_score = None
+        visual_cmt = t2v_cmt = phy_cmt = None
+        for label_dict in anno["labels"]:
+            label = label_dict["data"]["label"]
+            value = str(label_dict["data"]["value"])
+            if "视觉质量评分" in label:
+                visual_score = int(re.search(r"\d+", value).group())
+            elif "文本符合度评分" in label:
+                t2v_score = int(re.search(r"\d+", value).group())
+            elif "物理符合度评分" in label:
+                phy_score = int(re.search(r"\d+", value).group())
+            elif "视觉质量描述" in label:
+                visual_cmt = value
+            elif "文本符合度描述" in label:
+                t2v_cmt = value
+            elif "物理符合度描述" in label:
+                phy_cmt = value
+
+        if None in (visual_score, t2v_score, phy_score, visual_cmt, t2v_cmt, phy_cmt):
+            raise ValueError("missing score or comment")
+
+        
+        if visual_score == MAX_SCORE:
+            visual_cmt = SHARED_CMTS["visual_5"]
+        if t2v_score == MAX_SCORE:
+            t2v_cmt = SHARED_CMTS["t2v_5"]
+        if phy_score == MAX_SCORE:
+            phy_cmt = SHARED_CMTS["phy_5"]
+        if visual_score == MIN_SCORE:
+            visual_cmt = SHARED_CMTS["visual_1"]
             
+        # some annotators skip comments when t2v=1 or phy=1, the code below is to avoid empty comment
+        if t2v_score==MIN_SCORE and len(t2v_cmt)<=2:
+            t2v_cmt=SHARED_CMTS["t2v_1_alter"]
+        if phy_score==MIN_SCORE and len(phy_cmt)<=2:
+            phy_cmt=SHARED_CMTS["phy_1_alter"]
+        
+        num_try = 0
+        while True:
+            try:
+                n_frames = _fetch_frames_single(video_name, url, f_v_save_dir)
+                break
+            except Exception:
+                num_try += 1
+                if num_try > 3:
+                    raise RuntimeError("frame fetch failed 3 times")
+                sleep(60)
+
+        frame_abs_paths = [
+            os.path.join(f_v_save_dir, "frames", video_name, f"{video_name}_{i}.jpg")
+            for i in range(n_frames)
+        ]
+        if not all(os.path.exists(p) for p in frame_abs_paths):
+            raise FileNotFoundError("some frames missing")
+
+        return {
+            "video_name": video_name,
+            "video_url": url,
+            "batch_name": batch_name,
+            "prompt": prompt_en,
+            "visual_score": visual_score,
+            "visual_comment_raw": visual_cmt,
+            "t2v_align_score": t2v_score,
+            "t2v_align_comment_raw": t2v_cmt,
+            "phy_score": phy_score,
+            "phy_comment_raw": phy_cmt,
+            "eg_frames": [{"bytes": open(p, "rb").read()} for p in frame_abs_paths],
+        }
+    except Exception as e:
+        print(f"[ERROR] build item failed for {video_name}: {e}")
+        return None
+
+
+def build_raw_cmt_data(
+    anno_local_paths, batch_names, f_v_save_dir, max_workers=8
+):
+    for anno_local_path, batch_name in zip(anno_local_paths, batch_names):
+        upload_file(
+            path_or_fileobj=anno_local_path,
+            path_in_repo=f"anno_raw/{batch_name}.json",
+            repo_id=REPO_ID,
+            repo_type="dataset",
+            token=HF_TOKEN,
+        )
+
+        with open(anno_local_path, "r", encoding="utf-8") as f:
+            raw_annos = json.load(f)
+
+        data = []
+        with ThreadPoolExecutor(max_workers=max_workers) as ex:
+            futures = [
+                ex.submit(_build_raw_cmt_single, anno, batch_name, f_v_save_dir)
+                for anno in raw_annos
+            ]
+            for fut in tqdm(
+                as_completed(futures),
+                total=len(futures),
+                desc=f"Processing {batch_name}",
+            ):
+                item = fut.result()
+                if item is not None:
+                    data.append(item)
+
+        ds = Dataset.from_list(data, features=FEATURES,info=DatasetInfo(features=FEATURES))
+        out_dir= f"anno_parquet"
+        os.makedirs(out_dir, exist_ok=True)
+        f_name = f"{batch_name}.parquet"
+        f_path = os.path.join(out_dir, f_name)
+        ds.to_parquet(f_path)
+        
+        res=upload_file(
+            path_or_fileobj=f_path,
+            path_in_repo=f_name,
+            repo_id=REPO_ID,
+            repo_type="dataset",
+            token=HF_TOKEN
+        )
+        print(f"[OK] Uploaded {f_name} → {res}")
+        
 
 def rebuild_rej_data(rej_data_path,batch_name,f_v_save_dir):
     with open(rej_data_path,"r") as f:
@@ -163,161 +320,8 @@ def rebuild_rej_data(rej_data_path,batch_name,f_v_save_dir):
 
 
 
-def build_raw_cmt_data(anno_local_paths,batch_names,f_v_save_dir):
-
-    for anno_local_path,batch_name in zip(anno_local_paths,batch_names):
-        upload_file(
-            path_or_fileobj=anno_local_path,
-            path_in_repo=f"anno_raw/{batch_name}.json",
-            repo_id=REPO_ID,
-            repo_type="dataset",
-            token=HF_TOKEN
-        )
-        raw_annos=[]
-        with open(anno_local_path,"r",encoding="utf-8") as f:
-            raw_annos.extend(json.load(f))
-            
-        data=[]
-        for anno in tqdm(raw_annos):
-            url=anno["info"]["data"][2]["content"]
-            video_name=url.split("/")[-1].split(".")[0]
-            prompt_en=anno["info"]["data"][1]["content"].split("English Prompt")[1].split("\n")[0].strip(". :\n")
-            try:
-                visual_score=None
-                t2v_score=None
-                phy_score=None
-                visual_cmt=None
-                t2v_cmt=None
-                phy_cmt=None
-                for label_dict in anno["labels"]:
-                    if "视觉质量评分" in label_dict["data"]["label"]:
-                        visual_score=int(re.search(r'\d+', str(label_dict["data"]["value"])).group())
-                    if "文本符合度评分" in label_dict["data"]["label"]:
-                        t2v_score=int(re.search(r'\d+', str(label_dict["data"]["value"])).group())
-                    if "物理符合度评分" in label_dict["data"]["label"]:
-                        phy_score=int(re.search(r'\d+', str(label_dict["data"]["value"])).group())
-                        
-                    if "视觉质量描述" in label_dict["data"]["label"]:
-                        visual_cmt=str(label_dict["data"]["value"])
-                    if "文本符合度描述" in label_dict["data"]["label"]:
-                        t2v_cmt=str(label_dict["data"]["value"])
-                    if "物理符合度描述" in label_dict["data"]["label"]:
-                        phy_cmt=str(label_dict["data"]["value"])
-                    
-                if visual_score is None:
-                    raise ValueError(f"visual score not found for {video_name}")
-                if t2v_score is None:
-                    raise ValueError(f"t2v score not found for {video_name}")
-                if phy_score is None:
-                    raise ValueError(f"phy score not found for {video_name}")
-                if visual_cmt is None:
-                    raise ValueError(f"visual cmt not found for {video_name}")
-                if t2v_cmt is None:
-                    raise ValueError(f"t2v cmt not found for {video_name}")
-                if phy_cmt is None:
-                    raise ValueError(f"phy cmt not found for {video_name}")
-                
-            except Exception as e:
-                print(f"[ERROR] {video_name}: {e}")
-                continue
-            
-            if visual_score==MIN_SCORE:
-                visual_cmt=SHARED_CMTS["visual_1"]
-            if visual_score==MAX_SCORE:
-                visual_cmt=SHARED_CMTS["visual_5"]
-            if t2v_score==MAX_SCORE:
-                t2v_cmt=SHARED_CMTS["t2v_5"]
-            if phy_score==MAX_SCORE:
-                phy_cmt=SHARED_CMTS["phy_5"]     
-            
-            num_try=0
-            while True:
-                if num_try>3:
-                    print(f"fetch frames for {video_name} failed")
-                    exit()
-                try:
-                    n_frames=_fetch_frames_single(url,video_name,f_v_save_dir)
-                    break
-                except Exception as e:
-                    print(f"fetch frames for {video_name} seems time out, sleeping for 60s")
-                    num_try+=1
-                    sleep(60)
-                    
-            frame_abs_paths=[os.path.join(f_v_save_dir,"frames",video_name,f"{video_name}_{i}.jpg") for i in range(n_frames)]
-            if not all(os.path.exists(p) for p in frame_abs_paths):
-                print(f"not all frames exists for {video_name}, skipped\n")
-                continue
-            
-            data_item={
-                "video_name":video_name,
-                "video_url":url,
-                "batch_name":batch_name,
-                "prompt":prompt_en,
-                "visual_score":visual_score,
-                "visual_comment_raw":visual_cmt,
-                "t2v_align_score":t2v_score,
-                "t2v_align_comment_raw":t2v_cmt,
-                "phy_score":phy_score,
-                "phy_comment_raw":phy_cmt,
-                "eg_frames":[{"bytes": open(p, "rb").read()} for p in frame_abs_paths]
-            }
-            data.append(data_item)
-        
-        # json_file=f"data_part_{batch_id}.json"
-        # with open(json_file,"w") as f:
-        #     json.dump(data,f,indent=4)
-        # upload_file(
-        #     path_or_fileobj=json_file,
-        #     path_in_repo=f"json_data/{json_file}",
-        #     repo_id=REPO_ID,
-        #     repo_type="dataset",
-        #     token=HF_TOKEN
-        # )
-        
-        ds = Dataset.from_list(data, features=FEATURES,info=DatasetInfo(features=FEATURES))
-        parquet_local_dir= f"anno_parquet"
-        os.makedirs(parquet_local_dir, exist_ok=True)
-        parquet_name = f"{batch_name}.parquet"
-        parquet_local_path = os.path.join(parquet_local_dir, parquet_name)
-        ds.to_parquet(parquet_local_path)
-        
-        res=upload_file(
-            path_or_fileobj=parquet_local_path,
-            path_in_repo=parquet_name,
-            repo_id=REPO_ID,
-            repo_type="dataset",
-            token=HF_TOKEN
-        )
-        print(f"Uploaded {parquet_name}: {res}")
-        os.remove(parquet_local_path)
-        
-
-
 if __name__ == "__main__":
-    MIN_SCORE=1
-    MAX_SCORE=5
-    REPO_ID="hexuan21/vs2_raw_comment"
-    HF_TOKEN=os.environ["HF_TOKEN"]
-    FEATURES = Features({
-        "video_name":Value("string"),
-        "video_url":Value("string"),
-        "batch_name":Value("string"),
-        "prompt":Value("string"),
-        "visual_score":Value("int32"),
-        "visual_comment_raw":Value("string"),
-        "t2v_align_score":Value("int32"),
-        "t2v_align_comment_raw":Value("string"),
-        "phy_score":Value("int32"),
-        "phy_comment_raw":Value("string"),
-        "eg_frames": Sequence(feature=Image(decode=True)),
-    })
     
-    SHARED_CMTS={
-        "visual_5": "High resolution, good clarity. No noticeable visual issues",
-        "t2v_5": "Aligns well with prompt. Key elements are clearly represented.",
-        "phy_5": "Good physical and commonsense consistency. No noticable issues.",
-        "visual_1": "Low resolution and bad clarity. Local blurriness is present. Frequent visual distortions and misalignments. Abrupt and unsmooth transitions between adjacent frames. Unpolished and visually unstable, detracting from its watchability."
-    }
     f_v_save_dir="/data/xuan/videoscore2/f_v_all"
     
     anno_paths=[

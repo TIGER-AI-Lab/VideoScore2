@@ -7,6 +7,8 @@ from string import Template
 from zeno_build.models import lm_config
 from utils_async_chat import generate_from_openai_chat_completion,set_logger
 from tqdm import tqdm
+import argparse
+
 
 MODIFY_TEMPLATE=Template("""
 I'm conducting a multi-dimensional quality assessment of AI-generated videos, focusing on the dimensions of Visual Quality, Text-to-Video Consistency, and Physical Consistency (also referred to as Common-sense Consistency).
@@ -17,7 +19,9 @@ In the following I will provide a multi-dimensional analysis of a specific video
 
 (1) **Any human comment should NOT be mentioned in the output analysis**. If the input analysis quote or mention human comments, you should pretend not to know them in your output, they are provided solely to inform and enhance your understanding for better evaluation.
 
-(2) **DO NOT** alter the overall structure or core meaning of the analysis. Do not change the approximate length of analysis. Only revise specific expressions or phrases as needed so that the content reasonably reflects the provided scores.
+(2) **DO NOT** alter the overall structure or core meaning of the analysis. Only revise specific expressions or phrases as needed so that the content reasonably reflects the provided scores. 
+
+(3) **DO NOT** change the length of analysis, your output analysis should be no shorter than the input analysis. If you think the input analysis is not very specific, you can also extend it approximately.
 
 Your response must follow the format below strictly:
 {
@@ -79,7 +83,7 @@ async def _bot_modify_thinking(items,model_config,logger):
     return items
 
 
-def _difference_is_2(s1,s2):
+def _difference_is_2(s1,s2,dim_name):
     # s1: human_score
     # s2: model_score
     return int((s1+s2)/2)
@@ -98,15 +102,18 @@ def _difference_is_2(s1,s2):
     #     return 1
 
 
-def _difference_is_1(s1,s2):
+def _difference_is_1(s1,s2,dim_name):
     # s1: human_score
     # s2: model_score
-
-    if [s1,s2]==[5,4] or [s1,s2]==[4,5]:
-        return 4
-    else:
+    if dim_name in ["visual","t2v"]:
         return s1
-
+    
+    elif dim_name == "phy":
+        if [s1,s2]==[5,4] or [s1,s2]==[4,5]:
+            return 4
+        else:
+            return s1
+    
     # if [s1,s2]==[4,3]:
     #     return 4
     # if [s1,s2]==[3,4]:
@@ -122,13 +129,11 @@ def _difference_is_1(s1,s2):
 
 
 
-def modify_score_thinking(src_paths,save_path,rej_path):
+async def modify_score_thinking(src_paths,save_path,rej_path):
     data=[]
     for src_path in src_paths:
         with open(src_path,"r",encoding='utf-8') as f:
             data.extend(json.load(f))
-    
-    # data=data[2000:2500]
     
     new_data=[]
     skip_num=0
@@ -152,13 +157,6 @@ def modify_score_thinking(src_paths,save_path,rej_path):
         item_skipped=False
         
         new_item=item
-        new_item.pop("visual_score_model",None)
-        new_item.pop("t2v_score_model",None)
-        new_item.pop("phy_score_model",None)
-        new_item.pop("visual_cmt_raw",None)
-        new_item.pop("t2v_cmt_raw",None)
-        new_item.pop("phy_cmt_raw",None)
-        
         for dim_name, human_score, model_score in zip(["visual","t2v","phy"],
                                                       [v_score,t_score,p_score],
                                                       [v_score_model,t_score_model,p_score_model]):
@@ -168,14 +166,14 @@ def modify_score_thinking(src_paths,save_path,rej_path):
                 item_skipped=True
             
             if abs(human_score-model_score)==2:
-                new_score=_difference_is_2(human_score,model_score)  
+                new_score=_difference_is_2(human_score,model_score,dim_name)  
                 # new_score=human_score    
                 # new_score=model_score   
                 new_item[f"{dim_name}_score"]=new_score
                 diff2_num+=1
                 
             if abs(human_score-model_score)==1:
-                new_score=_difference_is_1(human_score,model_score)
+                new_score=_difference_is_1(human_score,model_score,dim_name)
                 # new_score=human_score
                 # new_score=model_score
                 new_item[f"{dim_name}_score"]=new_score
@@ -192,50 +190,56 @@ def modify_score_thinking(src_paths,save_path,rej_path):
             
             if new_item[f"{dim_name}_score"]!=model_score:
                 score_modified=True
-            
+        
         if item_skipped==True:
             skipped_items.append(item)
             continue
         
+        new_item.pop("visual_score_model",None)
+        new_item.pop("t2v_score_model",None)
+        new_item.pop("phy_score_model",None)
+        new_item.pop("visual_cmt_raw",None)
+        new_item.pop("t2v_cmt_raw",None)
+        new_item.pop("phy_cmt_raw",None)
         if score_modified==True:
             modify_needed_items.append(new_item)
             
         new_data.append(new_item)
     
     
-    # logger=set_logger(logger_file=log_path)
-    # print("1st round of modify: ", len(modify_needed_items))
-    # modified_items=asyncio.run(_bot_modify_thinking(modify_needed_items,MODEL_CONFIG,logger))
-    # for m_x in modified_items:
-    #     for idx,_ in enumerate(new_data):
-    #         if new_data[idx]["video_name"]==m_x["video_name"] and m_x['thinking'] is not None:
-    #             new_data[idx]=m_x
+    logger=set_logger(logger_file=log_path)
+    print("1st round of modify: ", len(modify_needed_items))
+    modified_items=await _bot_modify_thinking(modify_needed_items,MODEL_CONFIG,logger)
+    for m_x in modified_items:
+        for idx,_ in enumerate(new_data):
+            if new_data[idx]["video_name"]==m_x["video_name"] and m_x['thinking'] is not None:
+                new_data[idx]=m_x
     
-    # modify_needed_items=[x for x in modified_items if x['thinking'] is None]
-    # print("2nd round of modify: ", len(modify_needed_items))
-    # modified_items=asyncio.run(_bot_modify_thinking(modify_needed_items,MODEL_CONFIG,logger))
-    # for m_x in modified_items:
-    #     for idx,_ in enumerate(new_data):
-    #         if new_data[idx]["video_name"]==m_x["video_name"] and m_x['thinking'] is not None:
-    #             new_data[idx]=m_x
+    modify_needed_items=[x for x in modified_items if x['thinking'] is None]
+    print("2nd round of modify: ", len(modify_needed_items))
+    modified_items=await _bot_modify_thinking(modify_needed_items,MODEL_CONFIG,logger)
+    for m_x in modified_items:
+        for idx,_ in enumerate(new_data):
+            if new_data[idx]["video_name"]==m_x["video_name"] and m_x['thinking'] is not None:
+                new_data[idx]=m_x
     
-    # modify_needed_items=[x for x in modified_items if x['thinking'] is None]
-    # print("Remained error items: ", len(modify_needed_items))
+    modify_needed_items=[x for x in modified_items if x['thinking'] is None]
+    print("Remained error items: ", len(modify_needed_items))
     
-    # with open(save_path,"w") as f:
-    #     json.dump(new_data,f,indent=4,ensure_ascii=False)
+    with open(save_path,"w") as f:
+        json.dump(new_data,f,indent=4,ensure_ascii=False)
         
-    # with open(rej_path,"w") as f:
-    #     json.dump(skipped_items,f,indent=4,ensure_ascii=False)
+    with open(rej_path,"w") as f:
+        json.dump(skipped_items,f,indent=4,ensure_ascii=False)
     
-    from _analyze import plot
-    plot_batch_name="com_5k_balanced_rule2"
-    v_scores=[x['visual_score'] for x in new_data]
-    t_scores=[x['t2v_score'] for x in new_data]
-    p_scores=[x['phy_score'] for x in new_data]
-    plot(v_scores,plot_batch_name,1)
-    plot(t_scores,plot_batch_name,2)
-    plot(p_scores,plot_batch_name,3)    
+    
+    # from _analyze import plot
+    # v_scores=[x['visual_score'] for x in new_data]
+    # t_scores=[x['t2v_score'] for x in new_data]
+    # p_scores=[x['phy_score'] for x in new_data]
+    # plot(v_scores,batch_name,1)
+    # plot(t_scores,batch_name,2)
+    # plot(p_scores,batch_name,3)    
     
     # print(">=3",skip_num)
     # print("2",diff2_num)
@@ -248,13 +252,25 @@ def modify_score_thinking(src_paths,save_path,rej_path):
     
     
 if __name__ == "__main__":
-    # src_path="_prev/thinking/allin1_2shot/res_claude-sonnet-4-20250514.json"
+    # cd VideoScore2/data
+    # tmux new-session -s run0
+    # conda activate base
+    # python modify_score_thinking.py --run_idx=0
+    
+    
+    
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--run_idx", required=True)
+    args = ap.parse_args()
+    run_idx=args.run_idx
+    
     src_paths=[
-        "thinking_cmt/thinking_com_5k_v1.json",
+        f"thinking_split/thinking_17k_{run_idx}.json",
+        # "thinking_cmt/sft_17k_modified.json",
         # "thinking_cmt/thinking_com_5k_original.json"
     ]
-
-    batch_name="com_5k_balance_rule2_debug"
+    batch_name=f"sft_17k_{run_idx}"
+    
     save_dir="thinking_final"
     os.makedirs(save_dir,exist_ok=True)
     save_path=os.path.join(save_dir,f"final_{batch_name}.json")
@@ -263,11 +279,13 @@ if __name__ == "__main__":
     rej_path=os.path.join(rej_dir,f"rej_{batch_name}.json")
     
     log_path="modify_logs/test.log"
-    
-    os.environ["OPENAI_API_KEY"]=os.environ["DEEPBRICKS_KEY1"]
+    if int(run_idx)>=9:
+        os.environ["OPENAI_API_KEY"]=os.environ[f"DEEPBRICKS_KEY1"]
+    else:
+        os.environ["OPENAI_API_KEY"]=os.environ[f"DEEPBRICKS_KEY{run_idx}"]
     os.environ["OPENAI_BASE_URL"]=os.environ["DEEPBRICKS_URL"]
 
     model_name='gpt-4o-mini'
     MODEL_CONFIG= lm_config.LMConfig(provider="openai_chat", model=model_name)
     MAX_SCORE=5
-    modify_score_thinking(src_paths,save_path,rej_path)
+    asyncio.run(modify_score_thinking(src_paths,save_path,rej_path))

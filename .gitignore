@@ -181,4 +181,3 @@ prepare_video/t2v_model/api*
 data/*
 !data/**/*.py
 !data/_prev/
-!data/const/
