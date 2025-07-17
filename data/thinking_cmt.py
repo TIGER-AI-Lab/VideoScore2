@@ -31,15 +31,20 @@ You are an expert for evaluating and thinking about the quality of AI videos fro
 template=Template("""
 We are collecting and processing human annotations for the quality evaluation of AI-generated videos in text-to-video generation. 
 
+Dimension definitions:
+(1) Visual Quality: 
 $visual_def
-
+(2) Text-to-Video Alignment: 
 $t2v_def
-
+(3) Physical/Common-sense Consistency:
 $phy_def
 
-With the reference of some frames of the video and the comments of 3 dimensions from a human annotator, please do your best to  analyze and give a score between 1 and 5 for these dimensions, where 1 means very bad and 5 means very good. The score should be an integer.
+With the reference of some frames of the video, and the comments of 3 dimensions from a human annotator, please do your best to  analyze and give a score between 1 and 5 for these dimensions, where 1 means very bad, 3 means medium, and 5 means very good. 
 
-Your thinking process should be 2000-3000 tokens long. Some human comments may be brief or lacking in detail, and some may be not very precise, — please make sure to thoroughly perceive and analyze the video on your own. Your reasoning should be **specific, detailed, professional, and comprehensive**. **DO NOT mention any human comment in your thinking**; you should pretend not to know these comments, they are provided solely to inform and enhance your understanding for better evaluation. 
+The score should be an integer. Your thinking process should be 2000-3000 tokens long.
+
+Some human comments may be brief or lacking in detail, and some may be not very precise, — please check the aspects in dimension definitions and make sure to thoroughly perceive and analyze the video on your own.  
+Your reasoning should be **specific, detailed, professional, and comprehensive**. **DO NOT mention any human comment in your thinking**; you should pretend not to know these comments, they are provided solely to inform and enhance your understanding for better evaluation. 
 
 Your response must follow the format below strictly:
 {
@@ -59,8 +64,50 @@ $comment_visual
 comment for 'text-to-video alignment' (mainly the elements not expressed or not aligned in the video):
 $comment_t2v
 
-comment for 'physical consistency':
+comment for 'physical/common-sense consistency':
 $comment_phy
+                           
+""")
+
+
+template_no_cmt=Template("""
+We are collecting and processing human annotations for the quality evaluation of AI-generated videos in text-to-video generation. 
+
+Dimension definitions:
+(1) Visual Quality: 
+$visual_def
+(2) Text-to-Video Alignment: 
+$t2v_def
+(3) Physical/Common-sense Consistency:
+$phy_def
+
+With the reference of some frames of the video, and the comments of 3 dimensions from a human annotator may also be provided, please do your best to analyze and give a score between 1 and 5 for these dimensions, where 1 means very bad, 3 means medium, and 5 means very good. 
+
+The score should be an integer. Your thinking process should be 2000-3000 tokens long.
+
+Some human comments may be brief or lacking details, or the human comments may be null, — please check the aspects in dimension definitions and make sure to thoroughly perceive and analyze the video on your own.  
+Your reasoning should be **specific, detailed, professional, and comprehensive**. **DO NOT mention any human comment in your thinking**; you should pretend not to know these comments (if they are provided), they are provided solely to inform and enhance your understanding for better evaluation. 
+
+Your response must follow the format below strictly:
+{
+    'score_visual': "<quality score for this dimension>" (this field is only allowed to be a number between 1 and 5, inclusive),
+    'score_t2v': "<quality score for this dimension>" (this field is only allowed to be a number between 1 and 5, inclusive),
+    'score_phy': "<quality score for this dimension>" (this field is only allowed to be a number between 1 and 5, inclusive),
+}
+DO NOT include any text before or after the dict block
+
+the text prompt used to generate the video: 
+$prompt
+
+annotator comments: 
+comment for 'visual quality':
+$comment_visual (null)
+
+comment for 'text-to-video alignment' (mainly the elements not expressed or not aligned in the video):
+$comment_t2v (null)
+
+comment for 'physical/common-sense consistency':
+$comment_phy (null)
                            
 """)
 

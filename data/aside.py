@@ -114,6 +114,8 @@ def split_batchs():
             if str(x["batchId"]) == uid:
                 new_data.append(x)
         print(f"{batch_name}, {len(new_data)}")
+        if len(new_data)==0:
+            continue
         with open(f"anno_raw/{batch_name}.json","w",encoding='utf-8') as f:
             json.dump(new_data,f,indent=4,ensure_ascii=False)
 
@@ -143,7 +145,129 @@ def split_json_file(input_path, output_dir, chunk_size=1000):
             json.dump(chunk, f, indent=2, ensure_ascii=False)
         print(f"Saved {len(chunk)} items → {out_path}")
 
+
+def prelabel(p,new_p):
+    EXCL_MODELS=['stepvideo_t2v','stepvideo_t2v_low_vram','kling','sora','wanx21_14b','ruyi',]
+
+    V_4_MODELS=['lavie_base','magictime','cogvideox_5b','wanx21_1_3b','videocrafter2','opensora_plan_v1_3','pika_v2_2','cogvideox15_5b',]
+    V_3_MODELS=['anidiff','cogvideox_2b','ltx_video_095','mochi1_preview','opensora_v1_2','latte',]
+    V_2_MODELS=['vchitect2','hotshot_xl',]
+    V_1_MODELS=['ltx_video_091','text2video_zero','modelscope','zeroscope']
+
+    P_4_MODELS=['magictime','wanx21_1_3b','mochi1_preview','opensora_plan_v1_3','pika_v2_2','cogvideox15_5b',]
+    P_3_MODELS=['ltx_video_095','cogvideox_5b','lavie_base','hotshot_xl','videocrafter2','latte',]
+    P_2_MODELS=['opensora_v1_2','cogvideox_2b','anidiff','vchitect2',]
+    P_1_MODELS=['ltx_video_091','vchitect2','text2video_zero','modelscope','zeroscope']
+    
+    SCORE={
+        "5":"5-Very Good",
+        "4":"4-Very Good",
+        "3":"3-Medium",
+        "2":"2-Very Poor",
+        "1":"1-Very Poor",
+    }
+    
+    PRE_LABELS=[
+            {
+                "id": 1,
+                "hash": "1_视觉质量评分",
+                "label": "1_视觉质量评分",
+                "value": "",
+                "drawType": "QUESTION",
+                "count": 1
+            },
+            {
+                "id": 2,
+                "hash": "1_视觉质量描述",
+                "label": "1_视觉质量描述",
+                "value": "",
+                "drawType": "QUESTION",
+                "count": 1
+            },
+            {
+                "id": 3,
+                "hash": "1_文本符合度评分",
+                "label": "1_文本符合度评分",
+                "value": "",
+                "drawType": "QUESTION",
+                "count": 1
+            },
+            {
+                "id": 4,
+                "hash": "1_文本符合度描述",
+                "label": "1_文本符合度描述",
+                "value": "",
+                "drawType": "QUESTION",
+                "count": 1
+            },
+            {
+                "id": 5,
+                "hash": "1_物理符合度评分",
+                "label": "1_物理符合度评分",
+                "value": "",
+                "drawType": "QUESTION",
+                "count": 1
+            },
+            {
+                "id": 6,
+                "hash": "1_物理符合度描述",
+                "label": "1_物理符合度描述",
+                "value": "",
+                "drawType": "QUESTION",
+                "count": 1
+            }
+        ]
+    
+    with open(p,'r') as f:
+        data=json.load(f)
+    
+    for x,idx in enumerate(data):
+        url=x["info"]["data"][2]["content"]
+        video_name = url.split("/")[-1].split(".")[0]
+        t2v_model=url.split('/')[-2]
+        pre_labels=PRE_LABELS
+        if t2v_model in EXCL_MODELS:
+            pre_labels[0]["value"]=SCORE["5"]
+            pre_labels[2]["value"]=SCORE["5"]
+            pre_labels[4]["value"]=SCORE["5"]
+        else:
+            pre_labels[2]["value"]=SCORE["3"]
+            if t2v_model in V_4_MODELS:
+                pre_labels[0]["value"]=SCORE["4"]
+            if t2v_model in V_3_MODELS:
+                pre_labels[0]["value"]=SCORE["3"]
+            if t2v_model in V_2_MODELS:
+                pre_labels[0]["value"]=SCORE["2"]
+            if t2v_model in V_1_MODELS:
+                pre_labels[0]["value"]=SCORE["1"]
+                
+            if t2v_model in P_4_MODELS:
+                pre_labels[4]["value"]=SCORE["4"]
+            if t2v_model in P_3_MODELS:
+                pre_labels[4]["value"]=SCORE["3"]
+            if t2v_model in P_2_MODELS:
+                pre_labels[4]["value"]=SCORE["2"]
+            if t2v_model in P_1_MODELS:
+                pre_labels[4]["value"]=SCORE["1"]
+        data[idx]["preData"]=pre_labels
+    
+    with open(new_p,"w",encoding='utf-8') as f:
+        json.dump(data,f,indent=4,ensure_ascii=False)
+
+
 if __name__ == "__main__":
-    input_file = "thinking_cmt/sft_17k_modified.json"     
-    output_folder = "thinking_split" 
-    split_json_file(input_file, output_folder, chunk_size=1000)
+    # input_file = "thinking_cmt/sft_17k_modified.json"     
+    # output_folder = "thinking_split" 
+    # split_json_file(input_file, output_folder, chunk_size=1000)
+    
+    # p="/home/brantley/workdir/VideoScore2/data/0000_0499_videoscore_upload.json"
+    # with open(p,"r") as f:
+    #     ds=json.load(f)
+    # with open(p,"w",encoding='utf-8') as f:
+    #     json.dump(ds,f,indent=4,ensure_ascii=False) 
+      
+      
+        
+    # data = load_dataset("hexuan21/vs2_raw_comment", data_files=f"no_comment_5_trial.parquet",split="train")
+    
+    # print(data[0]["visual_comment_raw"])

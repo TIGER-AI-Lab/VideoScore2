@@ -5,14 +5,14 @@ import re
 from _analyze import plot
 import random
 
-EXCL_MODELS=['stepvideo_t2v','stepvideo_t2v_low_vram','kling','sora','pika_v2_2','cogvideox15_5b','wanx21_14b',]
+EXCL_MODELS=['stepvideo_t2v','stepvideo_t2v_low_vram','kling','sora','wanx21_14b','ruyi',]
 
-V_GOOD_MODELS=['lavie_base','magictime','cogvideox_5b','wanx21_1_3b','videocrafter2','ruyi','opensora_plan_v1_3']
+V_GOOD_MODELS=['lavie_base','magictime','cogvideox_5b','wanx21_1_3b','videocrafter2','opensora_plan_v1_3','pika_v2_2','cogvideox15_5b',]
 V_MEDIUM_MODELS=['anidiff','cogvideox_2b','ltx_video_095','hotshot_xl','mochi1_preview','opensora_v1_2','latte',]
 V_BAD_MODELS=['ltx_video_091','vchitect2','text2video_zero','modelscope','zeroscope']
 
-P_GOOD_MODELS=['magictime','wanx21_1_3b','mochi1_preview','ruyi','opensora_plan_v1_3']
-P_MEDIUM_MODELS=['ltx_video_095','cogvideox_5b','lavie_base','hotshot_xl','videocrafter2','latte']
+P_GOOD_MODELS=['magictime','wanx21_1_3b','mochi1_preview','opensora_plan_v1_3','pika_v2_2','cogvideox15_5b',]
+P_MEDIUM_MODELS=['ltx_video_095','cogvideox_5b','lavie_base','hotshot_xl','videocrafter2','latte',]
 P_BAD_MODELS=['opensora_v1_2','cogvideox_2b','anidiff','ltx_video_091','vchitect2','text2video_zero','modelscope','zeroscope']
 
 
@@ -63,7 +63,7 @@ def critical_modify_tk(paths,new_p,batch_name):
 def critical_modify_raw(paths,new_path,batch_name):
     data=[]
     for path in paths:
-        with open((path,"r")) as f:
+        with open(path,"r") as f:
             data.extend(json.load(f))
     new_data=[]
     for idx, raw_item in tqdm(enumerate(data)):
@@ -87,6 +87,12 @@ def critical_modify_raw(paths,new_path,batch_name):
                 t_score = int(re.search(r"\d+", value).group())
             elif "物理符合度评分" in label:
                 p_score = int(re.search(r"\d+", value).group())
+            elif "视觉质量描述" in label:
+                visual_cmt = value
+            elif "文本符合度描述" in label:
+                t2v_cmt = value
+            elif "物理符合度描述" in label:
+                phy_cmt = value
         
         if p_score in [3,4,5] and t2v_model not in EXCL_MODELS:
             p_score-=1
@@ -96,6 +102,12 @@ def critical_modify_raw(paths,new_path,batch_name):
         x['visual_score']=v_score
         x['t2v_score']=t_score
         x['phy_score']=p_score
+        x['visual_cmt_raw']=visual_cmt
+        x['t2v_cmt_raw']=t2v_cmt
+        x['phy_cmt_raw']=phy_cmt
+        x["visual_score_old"]=v_score
+        x["t2v_score_old"]=t_score
+        x["phy_score_old"]=p_score
         
         if t2v_model in V_BAD_MODELS:
             x["visual_score"]=min(2,v_score)
@@ -127,13 +139,15 @@ def critical_modify_raw(paths,new_path,batch_name):
     
     
 if __name__ == "__main__":
-    # batch_idx="56"
-    # path=f"anno_raw/{batch_idx}.json"
+    # batch_idx="48"
+    # paths=[
+    #     f"anno_raw/{batch_idx}.json"
+    # ]
     # new_temp_path=f"temp/{batch_idx}_raw_modified.json"   
     # batch_name=f"{batch_idx}_raw_modified"     
-    # critical_modify_raw(path,new_temp_path,batch_name)
+    # critical_modify_raw(paths,new_temp_path,batch_name)
 
     paths=[f"thinking_cmt_original/{fname}" for fname in os.listdir("thinking_cmt_original")]
     new_path="thinking_cmt/sft_17k_modified.json"
-    batch_name="17k_stage1"
+    batch_name="sft_17k_stage1"
     critical_modify_tk(paths,new_path,batch_name)

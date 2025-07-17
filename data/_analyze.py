@@ -86,12 +86,13 @@ def analyze_thinking(thinking_paths,batch_name):
 if __name__ == "__main__":
 
     # anno_local_paths=[
-    #     'anno_raw/56.json',
-    #     # 'anno_raw/10.json',
+    #     # 'anno_raw/37.json',
+    #     # 'anno_raw/38.json',
     #     # 'anno_raw/39.json',
-    #     # 'anno_raw/40.json'
+    #     # 'anno_raw/40.json',
+    #     'anno_raw/54.json'
     # ]
-    # batch_name="56_keming"
+    # batch_name="54_keming"
     # analyze_raw(anno_local_paths,batch_name)
     
     

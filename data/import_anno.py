@@ -221,6 +221,12 @@ def _build_raw_cmt_single(anno,batch_name,f_v_save_dir):
             "t2v_align_comment_raw": t2v_cmt,
             "phy_score": phy_score,
             "phy_comment_raw": phy_cmt,
+            # "visual_score": visual_score,
+            # "visual_comment_raw": "",
+            # "t2v_align_score": t2v_score,
+            # "t2v_align_comment_raw": "",
+            # "phy_score": phy_score,
+            # "phy_comment_raw": "",
             "eg_frames": [{"bytes": open(p, "rb").read()} for p in frame_abs_paths],
         }
     except Exception as e:
@@ -325,16 +331,16 @@ if __name__ == "__main__":
     f_v_save_dir="/data/xuan/videoscore2/f_v_all"
     
     anno_paths=[
-        f"anno_raw/com_5k_0.json",
-        f"anno_raw/com_5k_1.json",
-        f"anno_raw/com_5k_2.json",
-        f"anno_raw/com_5k_3.json",
-        f"anno_raw/com_5k_4.json",
+        # f"anno_raw/com_5k_0.json",
+        # f"anno_raw/com_5k_1.json",
+        # f"anno_raw/com_5k_2.json",
+        # f"anno_raw/com_5k_3.json",
+        # f"anno_raw/com_5k_4.json",
         # f"anno_raw/1.json",
         # f"anno_raw/2.json",
         # f"anno_raw/3.json",
         # f"anno_raw/4.json",
-        # f"anno_raw/5.json",
+        f"anno_raw/5.json",
         # f"anno_raw/13.json",
         # f"anno_raw/14.json",
         # f"anno_raw/15.json",
@@ -359,11 +365,14 @@ if __name__ == "__main__":
     ]
     
     
+    batch_names=["no_comment_5_trial"]
+    build_raw_cmt_data(anno_paths,batch_names,f_v_save_dir)
+    
     
     # download_frames(anno_paths,f_v_save_dir,max_workers=8)
     
-    batch_names=[x.split('/')[1].split('.')[0] for x in anno_paths]
-    build_raw_cmt_data(anno_paths,batch_names,f_v_save_dir)
+    # batch_names=[x.split('/')[1].split('.')[0] for x in anno_paths]
+    # build_raw_cmt_data(anno_paths,batch_names,f_v_save_dir)
     
     # rej_path="thinking_rejected/xxxx.json"
     # rej_batch_name="rej_xxxx"
