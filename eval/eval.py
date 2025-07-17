@@ -159,8 +159,8 @@ def eval(args):
         #     print(e)
         #     continue
         
-    with open(eval_res_path,"w",encoding='utf-8') as f:
-        json.dump(res_data,eval_res_path,indent=4,ensure_ascii=False)
+    # with open(eval_res_path,"w",encoding='utf-8') as f:
+    #     json.dump(res_data,f,indent=4,ensure_ascii=False)
     
     # from metrics import compute_accuracy,compute_spcc,compute_plcc
     # v_gt=[x["v_score_gt"] for x in res_data]
