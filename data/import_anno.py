@@ -9,7 +9,7 @@ from tqdm import tqdm
 from huggingface_hub import upload_file,upload_folder
 from datasets import Dataset, DatasetInfo, Features, Value, Sequence, Image
 from concurrent.futures import ThreadPoolExecutor, as_completed
-
+from utils_fetch_f_v import _fetch_frames_single, download_frames_from_anno
 
 
 
@@ -92,56 +92,6 @@ SHARED_CMTS={
     "t2v_1_alter":"The video content is completely inconsistent with the text prompt; there is a large discrepancy.",
     "phy_1_alter":"The video content has very serious inconsistencies with common sense and physical laws.",
 }
-
-
-def _fetch_frames_single(video_name, video_url, f_v_save_dir):
-    try:
-        video_path=os.path.join(f_v_save_dir,"videos",f"{video_name}.mp4")
-        os.makedirs(os.path.dirname(video_path),exist_ok=True)
-        if not os.path.exists(video_path):
-            urllib.request.urlretrieve(video_url, video_path)    
-        
-        cap = cv2.VideoCapture(video_path)
-        total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-        n_frames=None
-        n_frames=int(total_frames // 6)
-            
-        frame_indices = np.linspace(0, total_frames - 1, num=n_frames, dtype=int)
-        extracted_frames = []
-
-        for idx in range(total_frames):
-            ret, frame = cap.read()
-            if not ret:
-                break
-            if idx in frame_indices:
-                extracted_frames.append(frame)
-        cap.release()
-        
-        for i, frame in enumerate(extracted_frames):
-            frame_path = os.path.join(f_v_save_dir,"frames",video_name,f"{video_name}_{i}.jpg")
-            if os.path.exists(frame_path):
-                continue
-            os.makedirs(os.path.dirname(frame_path),exist_ok=True)
-            cv2.imwrite(frame_path, frame)  
-        return n_frames
-    except Exception as e:
-        print(f"❌ {video_name} failed: {e}")
-        return None
-
-
-def download_frames(anno_paths, f_v_save_dir, max_workers=8):
-    all_annos = []
-    for anno_path in anno_paths:
-        with open(anno_path, "r", encoding="utf-8") as f:
-            all_annos.extend(json.load(f))
-    video_urls=[anno["info"]["data"][2]["content"] for anno in all_annos]
-    video_names=[url.split("/")[-1].split(".")[0] for url in video_urls]
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:     
-  
-        futures = [executor.submit(_fetch_frames_single, name, url, f_v_save_dir) for name, url in zip(video_names,video_urls)]
-        for future in tqdm(as_completed(futures), total=len(futures), desc="Downloading frames"):
-            result = future.result()
-
 
 
 def _build_raw_cmt_single(anno,batch_name,f_v_save_dir):
@@ -369,7 +319,7 @@ if __name__ == "__main__":
     build_raw_cmt_data(anno_paths,batch_names,f_v_save_dir)
     
     
-    # download_frames(anno_paths,f_v_save_dir,max_workers=8)
+    # download_frames_from_anno(anno_paths,f_v_save_dir,max_workers=8)
     
     # batch_names=[x.split('/')[1].split('.')[0] for x in anno_paths]
     # build_raw_cmt_data(anno_paths,batch_names,f_v_save_dir)

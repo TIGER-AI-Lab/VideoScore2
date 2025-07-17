@@ -1,16 +1,14 @@
 import json
 import os
 from string import Template
+import zipfile
+import random
+from tqdm import tqdm
 from datasets import Dataset, Features, Value
 from huggingface_hub import upload_file, create_repo
-import urllib.request
-import warnings
-import zipfile
-from tqdm import tqdm
-from datasets import load_dataset
-from concurrent.futures import ThreadPoolExecutor, as_completed
-import random
 
+from utils_fetch_f_v import _fetch_frame_dir_single,_fetch_video_single, \
+                                download_video_from_data,download_video_from_parquet
 
 # LF data/dataset_info.json
 """
@@ -99,53 +97,7 @@ $thinking
 '''    
 
 
-def _fetch_video_single(item, save_dir):
-    name = item["video_name"]
-    url = item["video_url"]
-    video_path = os.path.join(save_dir, f"{name}.mp4")
-    os.makedirs(os.path.dirname(video_path), exist_ok=True)
-    if not os.path.exists(video_path):
-        try:
-            urllib.request.urlretrieve(url, video_path)
-            return video_path
-        except Exception as e:
-            print(f"[ERROR] Download failed for {name}: {e}")
-            return None
-    else:
-        return video_path
-
-
-def download_video(paths,video_save_dir, max_workers=8):
-    data = []
-    for path in paths:
-        with open(path, "r", encoding='utf-8') as f:
-            data.extend(json.load(f))
-    print(f"Total videos to download: {len(data)}")
-
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        futures = [executor.submit(_fetch_video_single, x, video_save_dir) for x in data]
-
-        for future in tqdm(as_completed(futures), total=len(futures), desc="Downloading videos"):
-            result = future.result()
-            if result is None:
-                continue  
-
-
-
-def download_video_2(repo_id,parquet_names,video_save_dir,max_workers=8):
-    data = load_dataset(repo_id, data_files=[f"{p_n}.parquet" for p_n in parquet_names],split="train")
-    print(len(data))
-    
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        futures = [executor.submit(_fetch_video_single, x, video_save_dir) for x in data]
-
-        for future in tqdm(as_completed(futures), total=len(futures), desc="Downloading videos"):
-            result = future.result()
-            if result is None:
-                continue  
-
-
-def build_sft_data(paths,sft_data_name,video_save_dir):
+def build_sft_data(paths,sft_data_name,f_v_save_dir,visual_format):
     data=[]
     for path in paths:
         data.extend(json.load(open(path,"r",encoding='utf-8')))
@@ -156,20 +108,28 @@ def build_sft_data(paths,sft_data_name,video_save_dir):
     data=data[TEST_NUM:]
     
     video_abs_paths=[]
+    frames_dir_abs_paths=[]
     convs=[]
     for x in tqdm(data):
         video_name=x["video_name"]
-        video_path=_fetch_video_single(x,video_save_dir)
-        if video_path is None:
-            continue
-        video_abs_paths.append(video_path)
-    
+        video_url=x["video_url"]
+        if visual_format in ["videos","video","v"]:
+            video_path=_fetch_video_single(video_name,video_url,f_v_save_dir)
+            if video_path is None:
+                continue
+            video_abs_paths.append(video_path)
+            
+        if visual_format in ["frames","frame","f"]:
+            frame_dir_path=_fetch_frame_dir_single(video_name,video_url,f_v_save_dir)
+            if frame_dir_path is None:
+                continue
+            frames_dir_abs_paths.append(frame_dir_path)
+        
         t2v_prompt=x["prompt"]
         v_score=x["visual_score"]
         t_score=x["t2v_score"]
         p_score=x["phy_score"]
         thinking=x["thinking"]
-        
         
         conv={
             "conversations": [
@@ -222,21 +182,43 @@ def build_sft_data(paths,sft_data_name,video_save_dir):
     )
     os.remove(test_path)
     
-    zip_file=f"{sft_data_name}.zip"
-    print("zipping videos...")
-    with zipfile.ZipFile(zip_file, 'w', zipfile.ZIP_DEFLATED) as zipf:
-        for v_p in tqdm(video_abs_paths):
-            f_name=v_p.split('/')[-1]
-            if v_p.endswith('.mp4'):
-                zipf.write(v_p, arcname=f_name)     
-    upload_file(
-        path_or_fileobj=zip_file,
-        path_in_repo=zip_file,
-        repo_id=VIDEO_REPO_ID,
-        repo_type="dataset",
-        token=HF_TOKEN
-    )
-    os.remove(zip_file)
+    if visual_format in ["frames","frame","f"]:
+        frame_zip=f"{sft_data_name}_frames.zip"
+        with zipfile.ZipFile(frame_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
+            for frame_dir in frames_dir_abs_paths:
+                frame_dir = os.path.abspath(frame_dir)
+                d_name = os.path.basename(frame_dir)
+                for frame in os.listdir(frame_dir):
+                    f_p = os.path.join(frame_dir, frame)
+                    if os.path.isfile(f_p):
+                        arcname = os.path.join(d_name, frame)
+                        zipf.write(f_p, arcname=arcname)
+
+        upload_file(
+            path_or_fileobj=frame_zip,
+            path_in_repo=frame_zip,
+            repo_id=VIDEO_REPO_ID,
+            repo_type="dataset",
+            token=HF_TOKEN
+        )
+        os.remove(frame_zip)
+        
+    if visual_format in ["videos","video","v"]:
+        video_zip=f"{sft_data_name}_videos.zip"
+        print("zipping videos...")
+        with zipfile.ZipFile(video_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
+            for v_p in tqdm(video_abs_paths):
+                f_name=v_p.split('/')[-1]
+                if v_p.endswith('.mp4'):
+                    zipf.write(v_p, arcname=f_name)     
+        upload_file(
+            path_or_fileobj=video_zip,
+            path_in_repo=video_zip,
+            repo_id=VIDEO_REPO_ID,
+            repo_type="dataset",
+            token=HF_TOKEN
+        )
+        os.remove(video_zip)
     
     
 
@@ -263,16 +245,18 @@ if __name__ == "__main__":
             exist_ok=True
         )
     
-    TEST_NUM=300
-    sft_data_name="sft_17k"
+    TEST_NUM=50
+    sft_data_name="try_debug"
+    visual_format="f"
     data_paths=[
-        f"thinking_final/{fname}" for fname in os.listdir("thinking_final") if sft_data_name in fname 
+        # f"thinking_final/{fname}" for fname in os.listdir("thinking_final") if sft_data_name in fname 
+        f"thinking_final/try_debug.json"
     ]
-    video_save_dir=f"/data/xuan/videoscore2/f_v_all/videos"
+    f_v_save_dir=f"/data/xuan/videoscore2/f_v_all"
 
-    # download_video(data_paths,video_save_dir,max_workers=8)
+    # download_video_from_data(data_paths,f_v_save_dir,max_workers=8)
     
-    build_sft_data(data_paths,sft_data_name,video_save_dir)
+    build_sft_data(data_paths,sft_data_name,f_v_save_dir,visual_format)
     
     
     
@@ -281,5 +265,5 @@ if __name__ == "__main__":
     # ]
     # sft_batch_name="lab_12k_0712"
     # repo_id="hexuan21/vs2_raw_comment"
-    # video_save_dir=f"/data/xuan/videoscore2/f_v_all/videos"
-    # download_video_2(repo_id,parquet_names,video_save_dir,max_workers=8)
+    # f_v_save_dir=f"/data/xuan/videoscore2/f_v_all"
+    # download_video_from_parquet(repo_id,parquet_names,f_v_save_dir,max_workers=8)
