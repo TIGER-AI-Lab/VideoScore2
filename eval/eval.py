@@ -37,7 +37,7 @@ def _download_file(url: str, save_path: str, overwrite: bool = False, timeout: i
     print(f"[ok] Downloaded → {save_path}")
 
 
-def load_benchmark(bench_name,num=100):
+def load_benchmark(bench_name,num=150):
     data=[]
     if bench_name == "vs2_test_sft_17k":
         repo_id="hexuan21/vs2_sft"
@@ -66,7 +66,7 @@ def eval(args):
         "method":"vs2",
         "bench":"vs2_test_sft_17k",
         "method_kwargs":{
-            "model_name":"DongfuJiang/vs2_qwen2_5vl_sft_17k",
+            "model_name":"DongfuJiang/vs2_qwen2_5vl_sft_17k_1e-5",
         }
     }
     method=args["method"]
@@ -75,15 +75,15 @@ def eval(args):
     
     bench_data=load_benchmark(bench)
     
-    eval_res_path=f"res_data/res_{bench}_{method}.json"
-    metrics_report_path=f"metrics_report/met_{bench}_{method}.json"
+    eval_res_path=f"res_data/res_{bench}/{method}.json"
+    metrics_report_path=f"metrics_report/met_{bench}/{method}.json"
     os.makedirs(os.path.dirname(eval_res_path),exist_ok=True)
     os.makedirs(os.path.dirname(metrics_report_path),exist_ok=True)
     
     if method=="vs2":
         model_name=method_kwargs.get("model_name")
-        eval_res_path=f"res_data/res_{bench}_{model_name.split("/")[1]}.json"
-        metrics_report_path=f"metrics_report/met_{bench}_{model_name}.json"
+        eval_res_path=f"res_data/res_{bench}/{model_name.split('/')[1]}.json"
+        metrics_report_path=f"metrics_report/met_{bench}/{model_name}.json"
         model=eval_VideoScore2(model_name)    
     
     res_data=[]

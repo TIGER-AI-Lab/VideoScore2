@@ -183,4 +183,5 @@ data/*
 !data/_prev/
 
 eval/*
+!eval/eval_methods/
 !eval/**/*.py
