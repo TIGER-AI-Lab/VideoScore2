@@ -150,6 +150,7 @@ def build_sft_data(paths,sft_data_name,video_save_dir):
     for path in paths:
         data.extend(json.load(open(path,"r",encoding='utf-8')))
     
+    random.seed(SEED)
     random.shuffle(data)
     test_data=data[:TEST_NUM]
     data=data[TEST_NUM:]
@@ -251,7 +252,8 @@ if __name__ == "__main__":
             private=False,
             exist_ok=True
         )
-    
+    SEED=42
+    random.seed(SEED)
     
     create_repo(
             repo_id=VIDEO_REPO_ID,
