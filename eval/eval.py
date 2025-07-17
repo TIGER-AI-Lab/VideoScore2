@@ -115,19 +115,19 @@ def eval(args):
             print(f"{v_score} {t_score} {p_score}")
             print("time cost: ",time.time()-s_t)
             
-            # pattern = r"visual quality:\s*(\d+).*?text-to-video alignment:\s*(\d+).*?physical/common-sense consistency:\s*(\d+)"
-            # match = re.search(pattern, output, re.DOTALL | re.IGNORECASE)
+            pattern = r"visual quality:\s*(\d+).*?text-to-video alignment:\s*(\d+).*?physical/common-sense consistency:\s*(\d+)"
+            match = re.search(pattern, output, re.DOTALL | re.IGNORECASE)
 
-            # if match:
-            #     res_item["v_score_model"] = int(match.group(1))
-            #     res_item["t_score_model"] = int(match.group(2))
-            #     res_item["p_score_model"] = int(match.group(3))
+            if match:
+                res_item["v_score_model"] = int(match.group(1))
+                res_item["t_score_model"] = int(match.group(2))
+                res_item["p_score_model"] = int(match.group(3))
             
-            # else:
-            #     res_item["v_score_model"] = None
-            #     res_item["t_score_model"] = None
+            else:
+                res_item["v_score_model"] = None
+                res_item["t_score_model"] = None
             
-            #     res_item["p_score_model"] = None
+                res_item["p_score_model"] = None
             
             res_item["output"]=output
             with open(eval_res_path,"r") as f:
