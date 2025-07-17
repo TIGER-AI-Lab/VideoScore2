@@ -110,8 +110,9 @@ def eval(args):
         
         try:
             s_t=time.time()
-            output=model.evaluate_video(INPUT_TEMPLATE,video_local_path,t2v_prompt,)
-            print(output[0][-100:])
+            output=model.evaluate_video(INPUT_TEMPLATE,video_local_path,t2v_prompt)
+            output=output[0]
+            print(output[-100:])
             print(f"{v_score} {t_score} {p_score}")
             print("time cost: ",time.time()-s_t)
             
