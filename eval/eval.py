@@ -1,21 +1,15 @@
 
 from eval_methods.vs2 import eval_VideoScore2
-from template import INPUT_TEMPLATE,DIM_NAMES
+from benchmark import INPUT_TEMPLATE,DIM_NAMES
 import importlib
-import ast
 import json
 import os
 import requests
 import argparse
-from datasets import load_dataset
 from tqdm import tqdm
 import time
 import re
 
-def _import_method_class(name):
-    if name in ["vs2"]:
-        module = importlib.import_module(f"eval_methods.eval_vs2")
-    return getattr(module, name) 
 
 def _download_file(url: str, save_path: str, overwrite: bool = False, timeout: int = 15):
     chunk_size=1<<14
@@ -39,10 +33,10 @@ def _download_file(url: str, save_path: str, overwrite: bool = False, timeout: i
 
 def load_benchmark(bench_name,num=150):
     data=[]
-    if bench_name == "vs2_test_sft_17k":
+    if bench_name == "vs2_test_sft_17k_v0":
         repo_id="hexuan21/vs2_sft"
-        url=f"https://huggingface.co/datasets/{repo_id}/resolve/main/sft_17k_test.json"
-        tmp_save=f"{bench_tmp_dir}/{bench_name}/sft_17k_test.json"
+        url=f"https://huggingface.co/datasets/{repo_id}/resolve/main/sft_17k_test_v0.json"
+        tmp_save=f"{bench_data_dir}/{bench_name}/sft_17k_test_v0.json"
         _download_file(url,tmp_save,overwrite=False)
         with open(tmp_save,"r") as f:
             data=json.load(f)
@@ -52,7 +46,23 @@ def load_benchmark(bench_name,num=150):
         for x in tqdm(data):
             v_name=x["video_name"]
             v_url=x["video_url"] 
-            v_save_path=f"{bench_tmp_dir}/{bench_name}/{v_name}.mp4"   
+            v_save_path=f"{bench_data_dir}/{bench_name}/videos/{v_name}.mp4"   
+            _download_file(v_url,v_save_path)
+    
+    if bench_name == "vs2_test_sft_17k":
+        repo_id="hexuan21/vs2_sft"
+        url=f"https://huggingface.co/datasets/{repo_id}/resolve/main/sft_17k_test.json"
+        tmp_save=f"{bench_data_dir}/{bench_name}/sft_17k_test.json"
+        _download_file(url,tmp_save,overwrite=False)
+        with open(tmp_save,"r") as f:
+            data=json.load(f)
+        
+        data=data[:num]
+        
+        for x in tqdm(data):
+            v_name=x["video_name"]
+            v_url=x["video_url"] 
+            v_save_path=f"{bench_data_dir}/{bench_name}/videos/{v_name}.mp4"   
             _download_file(v_url,v_save_path)
             
     return data
@@ -62,13 +72,7 @@ def eval(args):
     # bench=args.bench
     # method_kwargs = json.loads(args.method_kwargs)
 
-    args={
-        "method":"vs2",
-        "bench":"vs2_test_sft_17k",
-        "method_kwargs":{
-            "model_name":"DongfuJiang/vs2_qwen2_5vl_sft_17k_1e-5",
-        }
-    }
+    
     method=args["method"]
     bench=args["bench"]
     method_kwargs = args["method_kwargs"]
@@ -106,7 +110,7 @@ def eval(args):
             "t_score_gt":t_score,
             "p_score_gt":p_score,
         }
-        video_local_path=f"{bench_tmp_dir}/{bench}/{video_name}.mp4"
+        video_local_path=f"{bench_data_dir}/{bench}/videos/{video_name}.mp4"
         
         try:
             s_t=time.time()
@@ -127,7 +131,6 @@ def eval(args):
             else:
                 res_item["v_score_model"] = None
                 res_item["t_score_model"] = None
-            
                 res_item["p_score_model"] = None
             
             res_item["output"]=output
@@ -192,7 +195,7 @@ if __name__ == "__main__":
         
     ]
     
-    bench_tmp_dir="bench_temp"
+    bench_data_dir="bench_data"
     
     # ap = argparse.ArgumentParser()
     # ap.add_argument("--method")
@@ -200,7 +203,14 @@ if __name__ == "__main__":
     # ap.add_argument("--method_kwargs", type=str, default="{}") 
     # args = ap.parse_args()
     
-    args={}
+    args={
+        "method":"vs2",
+        "bench":"vs2_test_sft_17k_v0",
+        "method_kwargs":{
+            "model_name":"DongfuJiang/vs2_qwen2_5vl_sft_17k",
+            "infer_fp2":2.0
+        }
+    }
     
     eval(args)
     

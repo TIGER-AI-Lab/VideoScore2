@@ -9,7 +9,7 @@ from tqdm import tqdm
 from huggingface_hub import upload_file,upload_folder
 from datasets import Dataset, DatasetInfo, Features, Value, Sequence, Image
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from utils_fetch_f_v import _fetch_frames_single, download_frames_from_anno
+from utils_fetch_f_v import _fetch_eg_frames_single, download_eg_frames_from_anno
 
 
 
@@ -104,9 +104,13 @@ def _build_raw_cmt_single(anno,batch_name,f_v_save_dir):
             .split("\n", 1)[0]
             .strip(". :\n")
         )
-
+        # prompt_src=anno["info"]["data"][3]["content"].split("src:")[1].strip()
+        # prompt_srcid=anno["info"]["data"][3]["content"].split("src:")[0].split("src_id:")[1].strip()
+        
         visual_score = t2v_score = phy_score = None
         visual_cmt = t2v_cmt = phy_cmt = None
+        if anno["labels"] == []:
+            raise ValueError("no annotation")
         for label_dict in anno["labels"]:
             label = label_dict["data"]["label"]
             value = str(label_dict["data"]["value"])
@@ -137,15 +141,16 @@ def _build_raw_cmt_single(anno,batch_name,f_v_save_dir):
             visual_cmt = SHARED_CMTS["visual_1"]
             
         # some annotators skip comments when t2v=1 or phy=1, the code below is to avoid empty comment
-        if t2v_score==MIN_SCORE and len(t2v_cmt)<=2:
+        if t2v_score==MIN_SCORE and len(str(t2v_cmt).strip())<=2:
             t2v_cmt=SHARED_CMTS["t2v_1_alter"]
-        if phy_score==MIN_SCORE and len(phy_cmt)<=2:
+        if phy_score==MIN_SCORE and len(str(phy_cmt).strip())<=2:
             phy_cmt=SHARED_CMTS["phy_1_alter"]
         
         num_try = 0
         while True:
             try:
-                n_frames = _fetch_frames_single(video_name, url, f_v_save_dir)
+                frame_dir_abs_path = _fetch_eg_frames_single(video_name, url, f_v_save_dir)
+                n_frames = len(os.listdir(frame_dir_abs_path))
                 break
             except Exception:
                 num_try += 1
@@ -153,11 +158,11 @@ def _build_raw_cmt_single(anno,batch_name,f_v_save_dir):
                     raise RuntimeError("frame fetch failed 3 times")
                 sleep(60)
 
-        frame_abs_paths = [
-            os.path.join(f_v_save_dir, "frames", video_name, f"{video_name}_{i}.jpg")
+        eg_frame_abs_paths = [
+            os.path.join(f_v_save_dir, "frames_eg", video_name, f"{video_name}_{i}.jpg")
             for i in range(n_frames)
         ]
-        if not all(os.path.exists(p) for p in frame_abs_paths):
+        if not all(os.path.exists(p) for p in eg_frame_abs_paths):
             raise FileNotFoundError("some frames missing")
 
         return {
@@ -177,7 +182,7 @@ def _build_raw_cmt_single(anno,batch_name,f_v_save_dir):
             # "t2v_align_comment_raw": "",
             # "phy_score": phy_score,
             # "phy_comment_raw": "",
-            "eg_frames": [{"bytes": open(p, "rb").read()} for p in frame_abs_paths],
+            "eg_frames": [{"bytes": open(p, "rb").read()} for p in eg_frame_abs_paths],
         }
     except Exception as e:
         print(f"[ERROR] build item failed for {video_name}: {e}")
@@ -213,7 +218,8 @@ def build_raw_cmt_data(
                 item = fut.result()
                 if item is not None:
                     data.append(item)
-
+        exit()
+        
         ds = Dataset.from_list(data, features=FEATURES,info=DatasetInfo(features=FEATURES))
         out_dir= f"anno_parquet"
         os.makedirs(out_dir, exist_ok=True)
@@ -238,11 +244,11 @@ def rebuild_rej_data(rej_data_path,batch_name,f_v_save_dir):
     for rej_item in rej_data:
         video_name=rej_item["video_name"]
         video_url=rej_item["video_url"]
-        frame_names=os.listdir(os.path.join(f_v_save_dir,"frames",video_name))
-        frame_abs_paths=[os.path.join(f_v_save_dir,"frames",video_name,frame_name) for frame_name in frame_names]
-        if not all(os.path.exists(p) for p in frame_abs_paths):
+        frame_names=os.listdir(os.path.join(f_v_save_dir,"frames_eg",video_name))
+        eg_frame_abs_paths=[os.path.join(f_v_save_dir,"frames_eg",video_name,frame_name) for frame_name in frame_names]
+        if not all(os.path.exists(p) for p in eg_frame_abs_paths):
             print(f"Some frames are missing for video {video_name}")
-            _fetch_frames_single(video_name,video_url,f_v_save_dir)
+            _fetch_eg_frames_single(video_name,video_url,f_v_save_dir)
             
         data_item={
             "video_name":video_name,
@@ -255,7 +261,7 @@ def rebuild_rej_data(rej_data_path,batch_name,f_v_save_dir):
             "t2v_align_comment_raw":rej_item["t2v_cmt_raw"],
             "phy_score":rej_item["phy_score"],
             "phy_comment_raw":rej_item["phy_cmt_raw"],
-            "eg_frames":[{"bytes": open(p, "rb").read()} for p in frame_abs_paths]
+            "eg_frames":[{"bytes": open(p, "rb").read()} for p in eg_frame_abs_paths]
         }
         data.append(data_item)
     
@@ -290,7 +296,7 @@ if __name__ == "__main__":
         # f"anno_raw/2.json",
         # f"anno_raw/3.json",
         # f"anno_raw/4.json",
-        f"anno_raw/5.json",
+        # f"anno_raw/5.json",
         # f"anno_raw/13.json",
         # f"anno_raw/14.json",
         # f"anno_raw/15.json",
@@ -314,12 +320,23 @@ if __name__ == "__main__":
         # f"anno_raw/70.json"
     ]
     
+    # batch_names=["5"]
+    # build_raw_cmt_data(anno_paths,batch_names,f_v_save_dir)
     
-    batch_names=["no_comment_5_trial"]
-    build_raw_cmt_data(anno_paths,batch_names,f_v_save_dir)
-    
-    
-    # download_frames_from_anno(anno_paths,f_v_save_dir,max_workers=8)
+    anno_paths=[
+        "temp/8.json",
+        "temp/12.json",
+        "temp/51.json",
+        "temp/52.json",
+        "temp/50.json",
+        "temp/63.json",
+        "temp/64.json",
+        "temp/65.json",
+        "temp/66.json",
+        "temp/67.json",
+        "temp/68.json",
+    ]
+    download_eg_frames_from_anno(anno_paths,f_v_save_dir,max_workers=8)
     
     # batch_names=[x.split('/')[1].split('.')[0] for x in anno_paths]
     # build_raw_cmt_data(anno_paths,batch_names,f_v_save_dir)

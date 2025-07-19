@@ -7,8 +7,8 @@ from tqdm import tqdm
 from datasets import Dataset, Features, Value
 from huggingface_hub import upload_file, create_repo
 
-from utils_fetch_f_v import _fetch_frame_dir_single,_fetch_video_single, \
-                                download_video_from_data,download_video_from_parquet
+from utils_fetch_f_v import _fetch_all_frames_single,_fetch_video_single, \
+                                download_video_from_data,download_video_from_parquet,download_all_frames_from_data
 
 # LF data/dataset_info.json
 """
@@ -113,64 +113,81 @@ def build_sft_data(paths,sft_data_name,f_v_save_dir,visual_format):
     for x in tqdm(data):
         video_name=x["video_name"]
         video_url=x["video_url"]
+        t2v_prompt=x["prompt"]
+        v_score=x["visual_score"]
+        t_score=x["t2v_score"]
+        p_score=x["phy_score"]
+        thinking=x["thinking"]
+        human_input=INPUT_TEMPLATE.substitute(sys_prompt=SYS_PROMPT,visual_def=visual_def,t2v_def=t2v_def,phy_def=phy_def,t2v_prompt=t2v_prompt)
+        model_output=OUT_TEMPLATE.substitute(thinking=thinking,v_score=v_score,t_score=t_score,p_score=p_score)
+        
         if visual_format in ["videos","video","v"]:
             video_path=_fetch_video_single(video_name,video_url,f_v_save_dir)
             if video_path is None:
                 continue
             video_abs_paths.append(video_path)
             
+            conv={
+                "conversations": [
+                {
+                    "from": "human",
+                    "value": human_input
+                },
+                {
+                    "from": "gpt",
+                    "value": model_output
+                }
+                ],
+                "videos": [
+                    f"videos/{video_name}.mp4"
+                ]
+            }
+            
+            
         if visual_format in ["frames","frame","f"]:
-            frame_dir_path=_fetch_frame_dir_single(video_name,video_url,f_v_save_dir)
+            frame_dir_path=_fetch_all_frames_single(video_name,video_url,f_v_save_dir)
             if frame_dir_path is None:
                 continue
             frames_dir_abs_paths.append(frame_dir_path)
-        
-        t2v_prompt=x["prompt"]
-        v_score=x["visual_score"]
-        t_score=x["t2v_score"]
-        p_score=x["phy_score"]
-        thinking=x["thinking"]
-        
-        conv={
-            "conversations": [
-            {
-                "from": "human",
-                "value": INPUT_TEMPLATE.substitute(sys_prompt=SYS_PROMPT,
-                                                visual_def=visual_def,
-                                                t2v_def=t2v_def,
-                                                phy_def=phy_def,
-                                                t2v_prompt=t2v_prompt)
-            },
-            {
-                "from": "gpt",
-                "value": OUT_TEMPLATE.substitute(thinking=thinking,
-                                                 v_score=v_score,
-                                                 t_score=t_score,
-                                                 p_score=p_score),
+            human_input=human_input.replace("<video>","<image>"*len(os.listdir(frame_dir_path)))
+            human_input=human_input.replace("an AI video","the video frames of an AI video")
+            conv={
+                "conversations": [
+                {
+                    "from": "human",
+                    "value": human_input
+                },
+                {
+                    "from": "gpt",
+                    "value": model_output
+                }
+                ],
+                "images": [f"frames/{video_name}/{video_name}_{i}.jpg" for i in range(len(os.listdir(frame_dir_path)))]
             }
-            ],
-            "videos": [
-                f"videos/{video_name}.mp4"
-            ]
-        }
+        
         convs.append(conv)
             
     dataset = Dataset.from_list(convs)
     # dataset.push_to_hub(repo_id=REPO_ID,token=HF_TOKEN,private=False)
     
-    tmp_save_path=f"{sft_data_name}.json"
-    with open(tmp_save_path, "w") as f:
+    train_save_path=f"{sft_data_name}.json"
+    if visual_format in ["frames","frame","f"]:
+        train_save_path=f"{sft_data_name}_f.json"
+    with open(train_save_path, "w") as f:
         json.dump(convs, f, indent=4)
     upload_file(
-        path_or_fileobj=tmp_save_path,
-        path_in_repo=tmp_save_path,
+        path_or_fileobj=train_save_path,
+        path_in_repo=train_save_path,
         repo_id=REPO_ID,
         repo_type="dataset",
         token=HF_TOKEN
     )
-    os.remove(tmp_save_path)
+    os.remove(train_save_path)
     
     test_path=f"{sft_data_name}_test.json"
+    if visual_format in ["frames","frame","f"]:
+        test_path=f"{sft_data_name}_f_test.json"
+        
     with open(test_path, "w") as f:
         json.dump(test_data, f, indent=4)
     upload_file(
@@ -185,7 +202,7 @@ def build_sft_data(paths,sft_data_name,f_v_save_dir,visual_format):
     if visual_format in ["frames","frame","f"]:
         frame_zip=f"{sft_data_name}_frames.zip"
         with zipfile.ZipFile(frame_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
-            for frame_dir in frames_dir_abs_paths:
+            for frame_dir in tqdm(frames_dir_abs_paths):
                 frame_dir = os.path.abspath(frame_dir)
                 d_name = os.path.basename(frame_dir)
                 for frame in os.listdir(frame_dir):
@@ -247,7 +264,7 @@ if __name__ == "__main__":
     
     TEST_NUM=50
     sft_data_name="try_debug"
-    visual_format="f"
+    visual_format="v"
     data_paths=[
         # f"thinking_final/{fname}" for fname in os.listdir("thinking_final") if sft_data_name in fname 
         f"thinking_final/try_debug.json"

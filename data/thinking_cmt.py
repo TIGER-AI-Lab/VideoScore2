@@ -41,9 +41,10 @@ $phy_def
 
 With the reference of some frames of the video, and the comments of 3 dimensions from a human annotator, please do your best to  analyze and give a score between 1 and 5 for these dimensions, where 1 means very bad, 3 means medium, and 5 means very good. 
 
-The score should be an integer. Your thinking process should be 2000-3000 tokens long.
+The score should be an integer. Your thinking process should be **2000-3000 tokens** long.
 
-Some human comments may be brief or lacking in detail, and some may be not very precise, — please check the aspects in dimension definitions and make sure to thoroughly perceive and analyze the video on your own.  
+Some human comments may be brief or lacking in detail — please check the aspects in dimension definitions and do your best to thoroughly perceive and analyze the video. Especially for dimension-3: Physical/Common-sense Consistency, you can add more details and analysis in your output. Since it is often difficult to determine whether a video violates common sense or physical laws based solely on surface-level visual information from the frames, please pay special attention to the human comment in this dimension. These comments may be crucial for accurately understanding and evaluating the video.
+ 
 Your reasoning should be **specific, detailed, professional, and comprehensive**. **DO NOT mention any human comment in your thinking**; you should pretend not to know these comments, they are provided solely to inform and enhance your understanding for better evaluation. 
 
 Your response must follow the format below strictly:
@@ -64,7 +65,7 @@ $comment_visual
 comment for 'text-to-video alignment' (mainly the elements not expressed or not aligned in the video):
 $comment_t2v
 
-comment for 'physical/common-sense consistency':
+comment for 'physical/common-sense consistency' (mainly the elements or events that look weird, abnormal or unnatural):
 $comment_phy
                            
 """)
@@ -85,7 +86,8 @@ With the reference of some frames of the video, and the comments of 3 dimensions
 
 The score should be an integer. Your thinking process should be 2000-3000 tokens long.
 
-Some human comments may be brief or lacking details, or the human comments may be null, — please check the aspects in dimension definitions and make sure to thoroughly perceive and analyze the video on your own.  
+Some human comments may be brief or lacking details, or the human comments may be null, — please check the aspects in dimension definitions and make sure to thoroughly perceive and analyze the video. Especially for third dimension: Physical/Common-sense Consistency, you can add more details and analysis in your output.
+ 
 Your reasoning should be **specific, detailed, professional, and comprehensive**. **DO NOT mention any human comment in your thinking**; you should pretend not to know these comments (if they are provided), they are provided solely to inform and enhance your understanding for better evaluation. 
 
 Your response must follow the format below strictly:
@@ -106,7 +108,7 @@ $comment_visual (null)
 comment for 'text-to-video alignment' (mainly the elements not expressed or not aligned in the video):
 $comment_t2v (null)
 
-comment for 'physical/common-sense consistency':
+comment for 'physical/common-sense consistency' (mainly the elements or events that look weird, abnormal or unnatural):
 $comment_phy (null)
                            
 """)

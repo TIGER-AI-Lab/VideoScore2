@@ -254,6 +254,16 @@ def prelabel(p,new_p):
     with open(new_p,"w",encoding='utf-8') as f:
         json.dump(data,f,indent=4,ensure_ascii=False)
 
+def _get_video_fps(url_or_p:str):
+    import cv2
+    cap = cv2.VideoCapture(url_or_p)
+    if not cap.isOpened():
+        raise ValueError(f"Cannot open video: {url_or_p}")
+    
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    cap.release()
+    return fps
+
 
 if __name__ == "__main__":
     # input_file = "thinking_cmt/sft_17k_modified.json"     
@@ -265,9 +275,10 @@ if __name__ == "__main__":
     #     ds=json.load(f)
     # with open(p,"w",encoding='utf-8') as f:
     #     json.dump(ds,f,indent=4,ensure_ascii=False) 
-      
-      
         
     # data = load_dataset("hexuan21/vs2_raw_comment", data_files=f"no_comment_5_trial.parquet",split="train")
     
     # print(data[0]["visual_comment_raw"])
+    None
+    
+    

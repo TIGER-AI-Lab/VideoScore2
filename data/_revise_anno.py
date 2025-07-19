@@ -16,6 +16,27 @@ P_MEDIUM_MODELS=['ltx_video_095','cogvideox_5b','lavie_base','hotshot_xl','video
 P_BAD_MODELS=['opensora_v1_2','cogvideox_2b','anidiff','ltx_video_091','vchitect2','text2video_zero','modelscope','zeroscope']
 
 
+def modify_score(t2v_model,v_score,t_score,p_score):
+    if t2v_model in V_BAD_MODELS:
+        v_score_new=min(2,v_score)
+    if t2v_model in V_MEDIUM_MODELS:
+        v_score_new=min(3,v_score)
+    if t2v_model in V_GOOD_MODELS:
+        v_score_new=min(4,v_score)
+    
+    if t2v_model not in EXCL_MODELS:
+        t_score_new=min(4,t_score)
+        
+    if t2v_model in P_BAD_MODELS:
+        p_score_new=min(2,p_score)
+    if t2v_model in P_MEDIUM_MODELS:
+        p_score_new=min(3,p_score)
+    if t2v_model in P_GOOD_MODELS:
+        p_score_new=min(4,p_score)
+    
+    return v_score_new,t_score_new,p_score_new
+
+
 def critical_modify_tk(paths,new_p,batch_name):
     data=[]
     for path in paths:
@@ -31,22 +52,8 @@ def critical_modify_tk(paths,new_p,batch_name):
         v_score=x["visual_score"]
         t_score=x["t2v_score"]
         p_score=x["phy_score"]
-        if t2v_model in V_BAD_MODELS:
-            data[idx]["visual_score"]=min(2,v_score)
-        if t2v_model in V_MEDIUM_MODELS:
-            data[idx]["visual_score"]=min(3,v_score)
-        if t2v_model in V_GOOD_MODELS:
-            data[idx]["visual_score"]=min(4,v_score)
         
-        # if t2v_model not in EXCL_MODELS:
-        #     data[idx]["t2v_score"]=min(4,t_score)
-            
-        if t2v_model in P_BAD_MODELS:
-            data[idx]["phy_score"]=min(2,p_score)
-        if t2v_model in P_MEDIUM_MODELS:
-            data[idx]["phy_score"]=min(3,p_score)
-        if t2v_model in P_GOOD_MODELS:
-            data[idx]["phy_score"]=min(4,p_score)
+        data[idx]["visual_score"], data[idx]["t2v_score"], data[idx]["phy_score"]=modify_score(t2v_model,v_score,t_score,p_score)
     
     v_scores=[xx['visual_score'] for xx in data]
     t_scores=[xx['t2v_score'] for xx in data]
@@ -109,22 +116,8 @@ def critical_modify_raw(paths,new_path,batch_name):
         x["t2v_score_old"]=t_score
         x["phy_score_old"]=p_score
         
-        if t2v_model in V_BAD_MODELS:
-            x["visual_score"]=min(2,v_score)
-        if t2v_model in V_MEDIUM_MODELS:
-            x["visual_score"]=min(3,v_score)
-        if t2v_model in V_GOOD_MODELS:
-            x["visual_score"]=min(4,v_score)
+        x["visual_score"],x["visual_score"],x["visual_score"]=modify_score(t2v_model,v_score,t_score,p_score)
         
-        # if t2v_model not in EXCL_MODELS:
-        #     x["t2v_score"]=min(4,t_score)
-            
-        if t2v_model in P_BAD_MODELS:
-            x["phy_score"]=min(2,p_score)
-        if t2v_model in P_MEDIUM_MODELS:
-            x["phy_score"]=min(3,p_score)
-        if t2v_model in P_GOOD_MODELS:
-            x["phy_score"]=min(4,p_score)
         new_data.append(x)
         
     v_scores=[xx['visual_score'] for xx in new_data]

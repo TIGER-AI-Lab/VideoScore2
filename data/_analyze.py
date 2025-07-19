@@ -79,7 +79,49 @@ def analyze_thinking(thinking_paths,batch_name):
     plot(v_scores,batch_name,1)
     plot(t_scores,batch_name,2)
     plot(p_scores,batch_name,3)
+
+
+def think_len_dist(paths,data_name):
+    think_len_list=[]
+    for p in paths:
+        with open(p,'r',encoding='utf-8') as f:
+            data=json.load(f)
+        for x in data:
+            # if len(x['thinking'])<1000:
+            #     print(p)
+            #     print(x['video_name'])
+            #     exit()
+            if x['thinking'] is not None:
+                think_len_list.append(len(x['thinking']))
+            else:
+                print(p)
+                print(x['video_name'])
     
+    bin_range=list(range(min(think_len_list)-100,max(think_len_list)+100,100))
+    plt.hist(think_len_list, bins=bin_range, edgecolor='black', rwidth=0.8)
+    plt.xlabel('Thinking Length')
+    plt.ylabel('Frequency')
+    plt.title(f'Batch {data_name} Thinking Len Distribution')
+    os.makedirs('plots_think_len',exist_ok=True)
+    plt.savefig(f"plots_think_len/{data_name}_think_len.png")
+    plt.clf()
+    
+    from transformers import AutoTokenizer
+    tokenizer = AutoTokenizer.from_pretrained("gpt2")
+    token_num_list=[]
+    for p in paths:
+        with open(p,'r',encoding='utf-8') as f:
+            data=json.load(f)
+            for x in tqdm(data):
+                token_num_list.append(len(tokenizer.encode(x['thinking'])))
+    bin_range=list(range(min(token_num_list)-20,max(token_num_list)+20,20))
+    plt.hist(token_num_list, bins=bin_range, edgecolor='black', rwidth=0.8)
+    plt.xlabel('Thinking Tokens Num')
+    plt.ylabel('Frequency')
+    plt.title(f'Batch {data_name} Thinking Tokens Num Distribution')
+    os.makedirs('plots_think_len',exist_ok=True)
+    plt.savefig(f"plots_think_len/{data_name}_think_tk_num.png")
+    plt.clf()
     
 
 
@@ -96,8 +138,15 @@ if __name__ == "__main__":
     # analyze_raw(anno_local_paths,batch_name)
     
     
-    thinking_paths=[
-        "temp/sft_17k_modidifed.json",
+    # thinking_paths=[
+    #     "temp/sft_17k_modidifed.json",
+    # ]
+    # batch_name="17k_modified"
+    # analyze_thinking(thinking_paths,batch_name)
+    
+    paths=[
+        f"thinking_final/final_sft_17k_{i}.json"
+                for i in range(1)
     ]
-    batch_name="17k_modified"
-    analyze_thinking(thinking_paths,batch_name)
+    data_name="sft_17k_0"
+    think_len_dist(paths,data_name)

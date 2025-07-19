@@ -11,7 +11,7 @@ import argparse
 
 
 MODIFY_TEMPLATE=Template("""
-I'm conducting a multi-dimensional quality assessment of AI-generated videos, focusing on the dimensions of Visual Quality, Text-to-Video Consistency, and Physical Consistency (also referred to as Common-sense Consistency).
+I'm conducting a multi-dimensional quality assessment of AI-generated videos, focusing on the dimensions of (1) Visual Quality, (2) Text-to-Video Consistency, and (3) Physical/Common-sense Consistency.
 
 In the following I will provide a multi-dimensional analysis of a specific video. However, the scores assigned in the analysis may not be entirely accurate. I will provide the ground-truth scores for each dimension, and your task is to adjust the analysis text accordingly to ensure it aligns with the actual scores. The scale of score is [1, 2, 3, 4, 5].
 
@@ -21,7 +21,7 @@ In the following I will provide a multi-dimensional analysis of a specific video
 
 (2) **DO NOT** alter the overall structure or core meaning of the analysis. Only revise specific expressions or phrases as needed so that the content reasonably reflects the provided scores. 
 
-(3) **DO NOT** change the length of analysis, your output analysis should be no shorter than the input analysis. If you think the input analysis is not very specific, you can also extend it approximately.
+(3) **DO NOT** change the length of analysis, your output analysis should be no shorter than the input analysis. If you think the input analysis is not very specific, you can also extend it approximately. 
 
 Your response must follow the format below strictly:
 {
@@ -198,9 +198,9 @@ async def modify_score_thinking(src_paths,save_path,rej_path):
         new_item.pop("visual_score_model",None)
         new_item.pop("t2v_score_model",None)
         new_item.pop("phy_score_model",None)
-        new_item.pop("visual_cmt_raw",None)
-        new_item.pop("t2v_cmt_raw",None)
-        new_item.pop("phy_cmt_raw",None)
+        # new_item.pop("visual_cmt_raw",None)
+        # new_item.pop("t2v_cmt_raw",None)
+        # new_item.pop("phy_cmt_raw",None)
         if score_modified==True:
             modify_needed_items.append(new_item)
             
@@ -208,29 +208,29 @@ async def modify_score_thinking(src_paths,save_path,rej_path):
     
     
     logger=set_logger(logger_file=log_path)
-    print("1st round of modify: ", len(modify_needed_items))
-    modified_items=await _bot_modify_thinking(modify_needed_items,MODEL_CONFIG,logger)
-    for m_x in modified_items:
-        for idx,_ in enumerate(new_data):
-            if new_data[idx]["video_name"]==m_x["video_name"] and m_x['thinking'] is not None:
-                new_data[idx]=m_x
     
-    modify_needed_items=[x for x in modified_items if x['thinking'] is None]
-    print("2nd round of modify: ", len(modify_needed_items))
-    modified_items=await _bot_modify_thinking(modify_needed_items,MODEL_CONFIG,logger)
-    for m_x in modified_items:
-        for idx,_ in enumerate(new_data):
-            if new_data[idx]["video_name"]==m_x["video_name"] and m_x['thinking'] is not None:
-                new_data[idx]=m_x
+    for round_idx in range(MODIFY_ROUND_NUM):
+        print(f"modify round {round_idx}: ", len(modify_needed_items))
+        modified_items=await _bot_modify_thinking(modify_needed_items,MODEL_CONFIG,logger)
+        for m_x in modified_items:
+            for idx,_ in enumerate(new_data):
+                if new_data[idx]["video_name"]==m_x["video_name"] \
+                    and m_x['thinking'] is not None:
+                    new_data[idx]=m_x
+        modify_needed_items=[x for x in modified_items if (x['thinking'] is None)]
     
-    modify_needed_items=[x for x in modified_items if x['thinking'] is None]
     print("Remained error items: ", len(modify_needed_items))
     
-    with open(save_path,"w") as f:
-        json.dump(new_data,f,indent=4,ensure_ascii=False)
+    new_data=[x for x in new_data if x['thinking'] is not None]
+    print("Saved items: ",len(new_data))
+    
+    
+    
+    # with open(save_path,"w") as f:
+    #     json.dump(new_data,f,indent=4,ensure_ascii=False)
         
-    with open(rej_path,"w") as f:
-        json.dump(skipped_items,f,indent=4,ensure_ascii=False)
+    # with open(rej_path,"w") as f:
+    #     json.dump(skipped_items,f,indent=4,ensure_ascii=False)
     
     
     # from _analyze import plot
@@ -258,11 +258,12 @@ if __name__ == "__main__":
     # python modify_score_thinking.py --run_idx=0
     
     
+    # ap = argparse.ArgumentParser()
+    # ap.add_argument("--run_idx", required=True)
+    # args = ap.parse_args()
+    # run_idx=args.run_idx
     
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--run_idx", required=True)
-    args = ap.parse_args()
-    run_idx=args.run_idx
+    run_idx=0
     
     src_paths=[
         f"thinking_split/thinking_17k_{run_idx}.json",
@@ -272,10 +273,10 @@ if __name__ == "__main__":
     batch_name=f"sft_17k_{run_idx}"
     
     save_dir="thinking_final"
-    os.makedirs(save_dir,exist_ok=True)
-    save_path=os.path.join(save_dir,f"final_{batch_name}.json")
     rej_dir="thinking_rejected"
+    os.makedirs(save_dir,exist_ok=True)
     os.makedirs(rej_dir,exist_ok=True)
+    save_path=os.path.join(save_dir,f"final_{batch_name}.json")
     rej_path=os.path.join(rej_dir,f"rej_{batch_name}.json")
     
     log_path="modify_logs/test.log"
@@ -288,4 +289,5 @@ if __name__ == "__main__":
     model_name='gpt-4o-mini'
     MODEL_CONFIG= lm_config.LMConfig(provider="openai_chat", model=model_name)
     MAX_SCORE=5
+    MODIFY_ROUND_NUM=2
     asyncio.run(modify_score_thinking(src_paths,save_path,rej_path))

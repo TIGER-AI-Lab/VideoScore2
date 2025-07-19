@@ -45,8 +45,15 @@ class eval_VideoScore2:
     #     processor = AutoProcessor.from_pretrained(model_name)
     #     return model,processor        
         
-    def evaluate_video(self, q_template,video_path,t2v_prompt):
-        video_fps=_get_video_fps(video_path)
+    def evaluate_video(self,     
+            user_prompt: str,
+            video_path: str,
+            kwargs: dict
+        ) -> str | None:
+        
+        max_tokens=kwargs.get("max_tokens",4096)
+        infer_fps=kwargs.get("infer_fps",2.0)
+        # video_fps=_get_video_fps(video_path)
         
         messages = [
             {
@@ -55,11 +62,11 @@ class eval_VideoScore2:
                     {
                         "type": "video",
                         "video": video_path,
-                        "fps":video_fps
+                        "fps":infer_fps
                     },
                     {
                         "type": "text", 
-                        "text": q_template.substitute(t2v_prompt=t2v_prompt)
+                        "text": user_prompt
                     },
                 ],
             }
@@ -74,13 +81,13 @@ class eval_VideoScore2:
             text=[text],
             images=image_inputs,
             videos=video_inputs,
-            fps=video_fps,
+            fps=infer_fps,
             padding=True,
             return_tensors="pt",
         )
         inputs = inputs.to("cuda")
         
-        generated_ids = self.model.generate(**inputs, max_new_tokens=4096)
+        generated_ids = self.model.generate(**inputs, max_new_tokens=max_tokens)
         generated_ids_trimmed = [
             out_ids[len(in_ids):] for in_ids, out_ids in zip(inputs["input_ids"], generated_ids)
         ]
