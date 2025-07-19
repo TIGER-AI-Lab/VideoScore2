@@ -1,6 +1,5 @@
 
-from eval_methods.vs2 import eval_VideoScore2
-from benchmark import INPUT_TEMPLATE,DIM_NAMES
+
 import importlib
 import json
 import os
@@ -10,6 +9,8 @@ from tqdm import tqdm
 import time
 import re
 
+from eval_methods.vs2 import eval_VideoScore2
+from benchmark import INPUT_TEMPLATE,DIM_NAMES,load_benchmark
 
 def _download_file(url: str, save_path: str, overwrite: bool = False, timeout: int = 15):
     chunk_size=1<<14
@@ -31,53 +32,18 @@ def _download_file(url: str, save_path: str, overwrite: bool = False, timeout: i
     print(f"[ok] Downloaded → {save_path}")
 
 
-def load_benchmark(bench_name,num=150):
-    data=[]
-    if bench_name == "vs2_test_sft_17k_v0":
-        repo_id="hexuan21/vs2_sft"
-        url=f"https://huggingface.co/datasets/{repo_id}/resolve/main/sft_17k_test_v0.json"
-        tmp_save=f"{bench_data_dir}/{bench_name}/sft_17k_test_v0.json"
-        _download_file(url,tmp_save,overwrite=False)
-        with open(tmp_save,"r") as f:
-            data=json.load(f)
-        
-        data=data[:num]
-        
-        for x in tqdm(data):
-            v_name=x["video_name"]
-            v_url=x["video_url"] 
-            v_save_path=f"{bench_data_dir}/{bench_name}/videos/{v_name}.mp4"   
-            _download_file(v_url,v_save_path)
-    
-    if bench_name == "vs2_test_sft_17k":
-        repo_id="hexuan21/vs2_sft"
-        url=f"https://huggingface.co/datasets/{repo_id}/resolve/main/sft_17k_test.json"
-        tmp_save=f"{bench_data_dir}/{bench_name}/sft_17k_test.json"
-        _download_file(url,tmp_save,overwrite=False)
-        with open(tmp_save,"r") as f:
-            data=json.load(f)
-        
-        data=data[:num]
-        
-        for x in tqdm(data):
-            v_name=x["video_name"]
-            v_url=x["video_url"] 
-            v_save_path=f"{bench_data_dir}/{bench_name}/videos/{v_name}.mp4"   
-            _download_file(v_url,v_save_path)
-            
-    return data
+
 
 def eval(args):
     # method=args.method
     # bench=args.bench
     # method_kwargs = json.loads(args.method_kwargs)
 
-    
     method=args["method"]
     bench=args["bench"]
     method_kwargs = args["method_kwargs"]
-    
-    bench_data=load_benchmark(bench)
+
+    bench_data=load_benchmark(bench_data_dir,bench)
     
     eval_res_path=f"res_data/res_{bench}/{method}.json"
     metrics_report_path=f"metrics_report/met_{bench}/{method}.json"
@@ -113,8 +79,9 @@ def eval(args):
         video_local_path=f"{bench_data_dir}/{bench}/videos/{video_name}.mp4"
         
         try:
+            user_prompt=INPUT_TEMPLATE.substitute(t2v_prompt=t2v_prompt)
             s_t=time.time()
-            output=model.evaluate_video(INPUT_TEMPLATE,video_local_path,t2v_prompt)
+            output=model.evaluate_video(user_prompt,video_local_path,method_kwargs)
             output=output[0]
             print(output[-100:])
             print(f"{v_score} {t_score} {p_score}")
@@ -144,26 +111,6 @@ def eval(args):
             print(e)
             print(f"error in evaluation, skipped {video_name}")
         
-        
-        # res = "{" + res.split("{")[-1].split("}")[0].strip() + "}"
-        # try:
-        #     eval_res = ast.literal_eval(str(res))
-        #     if any(dim_name not in list(eval_res.keys()) for dim_name in DIM_NAMES):
-        #         print(f"CHECK 0: key error for eval res of {video_name}")
-        #         continue
-        #     res_item["v_score_gt"]=v_score
-        #     res_item["v_score_model"]=eval_res["visual quality"]
-        #     res_item["t_score_gt"]=t_score
-        #     res_item["t_score_model"]=eval_res["text-to-video alignment"]
-        #     res_item["p_score_gt"]=p_score
-        #     res_item["p_score_model"]=eval_res["physical/common-sense consistency"]
-        #     res_data.append(res_item)
-        # except Exception as e:
-        #     print(e)
-        #     continue
-        
-    # with open(eval_res_path,"w",encoding='utf-8') as f:
-    #     json.dump(res_data,f,indent=4,ensure_ascii=False)
     
     # from metrics import compute_accuracy,compute_spcc,compute_plcc
     # v_gt=[x["v_score_gt"] for x in res_data]

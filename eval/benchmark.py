@@ -35,8 +35,25 @@ DIM_NAMES=[
     ]
 
 
+
 def load_benchmark(bench_data_dir,bench_name,num=150):
     data=[]
+    if bench_name == "vs2_test_sft_17k_v0":
+        repo_id="hexuan21/vs2_sft"
+        url=f"https://huggingface.co/datasets/{repo_id}/resolve/main/sft_17k_test_v0.json"
+        tmp_save=f"{bench_data_dir}/{bench_name}/sft_17k_test_v0.json"
+        _download_file(url,tmp_save,overwrite=False)
+        with open(tmp_save,"r") as f:
+            data=json.load(f)
+        
+        data=data[:num]
+        
+        for x in tqdm(data):
+            v_name=x["video_name"]
+            v_url=x["video_url"] 
+            v_save_path=f"{bench_data_dir}/{bench_name}/videos/{v_name}.mp4"   
+            _download_file(v_url,v_save_path)
+    
     if bench_name == "vs2_test_sft_17k":
         repo_id="hexuan21/vs2_sft"
         url=f"https://huggingface.co/datasets/{repo_id}/resolve/main/sft_17k_test.json"
@@ -50,6 +67,7 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
         for x in tqdm(data):
             v_name=x["video_name"]
             v_url=x["video_url"] 
-            v_save_path=f"{bench_data_dir}/{bench_name}/{v_name}.mp4"   
+            v_save_path=f"{bench_data_dir}/{bench_name}/videos/{v_name}.mp4"   
             _download_file(v_url,v_save_path)
+            
     return data
