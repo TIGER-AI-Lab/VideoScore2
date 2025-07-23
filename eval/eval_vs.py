@@ -5,9 +5,7 @@ import os
 import argparse
 import time
 import re
-
-from eval_methods.vs2 import eval_VideoScore2
-from benchmark import INPUT_TEMPLATE,DIM_NAMES,load_benchmark
+from benchmark import VS2_QUERY_TEMPLATE,VS1_REG_QUERY_TEMPLATE,DIM_NAMES,load_benchmark
 
 
 def main(args):
@@ -15,25 +13,42 @@ def main(args):
     # bench=args.bench
     # method_kwargs = json.loads(args.method_kwargs)
 
+    method=args.get("method","vs2")
     bench=args.get("bench","vs2_testsft_17k")
     bench_data_num=args.get("bench_data_num",150)
     kwargs = args["kwargs"]
 
     bench_data=load_benchmark(bench_data_dir,bench,bench_data_num)
+    if method.lower() == "vs2":
+        from eval_methods.vs2 import eval_VideoScore2
+        model_name=kwargs.get("model_name")
+        model=eval_VideoScore2(model_name)    
+        q_template=VS2_QUERY_TEMPLATE
+        
+        infer_fps=kwargs.get("infer_fps",2.0)
+        if isinstance(infer_fps,float):
+            infer_fps=int(infer_fps)
+        if '/' in model_name:
+            model_name=model_name.split('/')[-1]
+        eval_res_path=f"res_data/res_{bench}/{model_name}_infer_{infer_fps}fps.json"
+        
+    elif method.lower() == "vs1":
+        from eval_methods.vs1 import eval_VideoScore1
+        model_name=kwargs.get("model_name")
+        model=eval_VideoScore1(model_name) 
+        q_template=VS1_REG_QUERY_TEMPLATE
+         
+        if '/' in model_name:
+            model_name=model_name.split('/')[-1]
+        eval_res_path=f"res_data/res_{bench}/{model_name}.json"
     
-    model_name=kwargs.get("model_name")
-    infer_fps=kwargs.get("infer_fps",2.0)
-    if isinstance(infer_fps,float):
-        infer_fps=int(infer_fps)
-    if '/' in model_name:
-        model_name=model_name.split('/')[-1]
-    eval_res_path=f"res_data/res_{bench}/{model_name}_infer_{infer_fps}fps.json"
+    else:
+        print("model not supported")
+        exit()
+    
     metrics_report_path=f"metrics_report/met_{bench}/{model_name}.json"
     os.makedirs(os.path.dirname(eval_res_path),exist_ok=True)
     os.makedirs(os.path.dirname(metrics_report_path),exist_ok=True)
-    
-    model=eval_VideoScore2(model_name)    
-    
     res_data=[]
     if not os.path.exists(eval_res_path):
         with open(eval_res_path,"w",encoding='utf-8') as f:
@@ -45,7 +60,7 @@ def main(args):
         video_local_path=os.path.abspath(f"{bench_data_dir}/{bench}/videos/{video_name}.mp4")
         
         try:
-            user_prompt=INPUT_TEMPLATE.substitute(t2v_prompt=t2v_prompt)
+            user_prompt=q_template.substitute(t2v_prompt=t2v_prompt)
             s_t=time.time()
             output=model.evaluate_video(user_prompt,video_local_path,kwargs)
             output=output[0]
@@ -90,9 +105,6 @@ def main(args):
             print("saved one item")
         
 
-                
-        
-    
 if __name__ == "__main__":    
     supported_benchs=[
         "vs2_test_sft_17k",
@@ -102,10 +114,12 @@ if __name__ == "__main__":
     bench_data_num=150
     
     ap = argparse.ArgumentParser()
-    ap.add_argument("--model_name")
-    ap.add_argument("--infer_fps")
-    # ap.add_argument("--kwargs", type=str, default="{}") 
+    ap.add_argument("--method",required=True,default="vs2")
+    ap.add_argument("--model_name",required=True)
+    ap.add_argument("--infer_fps",required=False,default=2.0)
+    ap.add_argument("--kwargs", type=str,required=False,default="{}") 
     t_args = ap.parse_args()
+    method=t_args.method
     model_name=t_args.model_name
     infer_fps=t_args.infer_fps
     
@@ -113,7 +127,7 @@ if __name__ == "__main__":
         infer_fps=float(infer_fps)
         
     args={
-        "method":"vs2",
+        "method":method,
         "bench":"vs2_test_sft_17k",
         "bench_data_num":bench_data_num,
         "kwargs":{

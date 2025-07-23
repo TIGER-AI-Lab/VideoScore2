@@ -3,7 +3,7 @@ from string import Template
 from tqdm import tqdm
 from eval_methods.utils import _download_file
 
-INPUT_TEMPLATE=Template("""
+VS2_QUERY_TEMPLATE=Template("""
 You are an expert for evaluating and thinking about the quality of AI videos from diverse dimensions.
 
 We would like to evaluate its quality from three dimensions: 'visual quality', 'text-to-video alignment' and 'physical consistency'. Below is the definition of each dimension: 
@@ -26,6 +26,31 @@ text-to-video alignment: <t_score>,
 physical/common-sense consistency: <p_score>
 
 DO NOT include any other things behind or after your output.
+""")
+
+
+VS1_REG_QUERY_TEMPLATE = Template("""
+Suppose you are an expert in judging and evaluating the quality of AI-generated videos,
+please watch the following frames of a given video and see the text prompt for generating the video,
+then give scores from 5 different dimensions:
+(1) visual quality: the quality of the video in terms of clearness, resolution, brightness, and color
+(2) temporal consistency, both the consistency of objects or humans and the smoothness of motion or movements
+(3) dynamic degree, the degree of dynamic changes
+(4) text-to-video alignment, the alignment between the text prompt and the video content
+(5) factual consistency, the consistency of the video content with the common-sense and factual knowledge
+for each dimension, output a float number from 1.0 to 4.0,
+the higher the number is, the better the video performs in that sub-score, 
+the lowest 1.0 means Bad, the highest 4.0 means Perfect/Real (the video is like a real video)
+Here is an output example:
+visual quality: 3.2
+temporal consistency: 2.7
+dynamic degree: 4.0
+text-to-video alignment: 2.3
+factual consistency: 1.8
+For this video, the text prompt is 
+$t2v_prompt
+
+all the frames of video are as follows:
 """)
 
 DIM_NAMES=[
