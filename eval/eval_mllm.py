@@ -14,7 +14,7 @@ from benchmark import INPUT_TEMPLATE, load_benchmark
 
 
 
-def eval(args):
+def main(args):
     # method=args.method
     # bench=args.bench
     # method_kwargs = json.loads(args.method_kwargs)
@@ -34,7 +34,6 @@ def eval(args):
     
     eval_res_path=f"res_data/res_{bench}/{model_name}_infer_{infer_fps}fps.json"
     metrics_report_path=f"res_metrics/met_{bench}/{model_name}.json"
-    
     os.makedirs(os.path.dirname(eval_res_path),exist_ok=True)
     os.makedirs(os.path.dirname(metrics_report_path),exist_ok=True)
     
@@ -42,7 +41,7 @@ def eval(args):
     
     if method=="claude":
         eval_one_video_func=claude_run_one_video
-    
+
     elif method=="gpt":
         eval_one_video_func=gpt_run_one_video
         if "thinking_effort" not in method_kwargs or method_kwargs["thinking_effort"] not in ["low","medium", "high"]:
@@ -70,10 +69,56 @@ def eval(args):
 
     eval_outputs=[]
     with ThreadPoolExecutor(max_workers=max_workers) as executor:     
-        futures = [executor.submit(eval_one_video_func, item, user_prompt, video_path, eval_res_path, method_kwargs) for item, user_prompt, video_path in zip(bench_data, user_prompts, video_paths)]
+        futures = [executor.submit(eval_one_video_func, user_prompt, video_path, method_kwargs) for user_prompt, video_path in zip(user_prompts, video_paths)]
         for future in tqdm(as_completed(futures), total=len(futures)):
             output = future.result()
             eval_outputs.append(output)
+    
+    assert len(bench_data)==len(eval_outputs),"len(bench_data)==len(eval_outputs)"
+    
+    for item,res in zip(bench_data,eval_outputs):
+        if res is None:
+            print(f"output for {video_name} is None")
+            v_score_model = t_score_model = p_score_model = None
+        
+        short_res=res[-100:]
+        print(short_res)
+        pattern = r"visual quality:\s*(\d+).*?text-to-video alignment:\s*(\d+).*?physical/common-sense consistency:\s*(\d+)"
+        match = re.search(pattern, short_res, re.DOTALL | re.IGNORECASE)
+        if match:
+            v_score_model = int(match.group(1))
+            t_score_model = int(match.group(2))
+            p_score_model = int(match.group(3))
+        else:
+            v_score_model = t_score_model = p_score_model = None
+        
+        if "vs2" in bench:
+            video_name=item['video_name']
+            v_score_gt=item['visual_score']
+            t_score_gt=item['t2v_score']
+            p_score_gt=item['phy_score']
+            print(f"gt: {v_score_gt} {t_score_gt} {p_score_gt}")  
+            
+            res_item={
+                "video_name":item["video_name"],
+                "video_url":item['video_url'],
+                "prompt":item['prompt'],
+                "v_score_gt":v_score_gt,
+                "t_score_gt":t_score_gt,
+                "p_score_gt":p_score_gt,
+                "v_score_model":v_score_model,
+                "t_score_model":t_score_model,
+                "p_score_model":p_score_model,
+                "output":res
+            }
+
+            with open(eval_res_path,"r") as f:
+                res_data=json.load(f)
+            res_data.append(res_item)
+            with open(eval_res_path,"w",encoding='utf-8') as f:
+                json.dump(res_data,f,indent=4,ensure_ascii=False)
+            print("saved one item")
+
     
 
     
@@ -115,5 +160,5 @@ if __name__ == "__main__":
     # ap.add_argument("--method_kwargs", type=str, default="{}") 
     # args = ap.parse_args()
 
-    eval(args)
+    main(args)
     

@@ -39,6 +39,37 @@ def extract_video_frames_base64(video_path: str, fps: float = 2.0) -> List[str]:
     return frames
 
 
+def extract_video_frame_imgs(video_path: str, fps: float = 4.0) -> List[str]:
+    cap = cv2.VideoCapture(video_path)
+    if not cap.isOpened():
+        raise ValueError(f"Cannot open video: {video_path}")
+
+    frame_paths = []
+    video_name = os.path.splitext(os.path.basename(video_path))[0]
+    base_dir = os.path.abspath(os.path.join(os.path.dirname(video_path), ".."))
+    frame_dir = os.path.join(base_dir, "frames", video_name)
+    os.makedirs(frame_dir, exist_ok=True)
+    video_fps = cap.get(cv2.CAP_PROP_FPS)
+    frame_interval = int(video_fps // fps) if video_fps > fps else 1
+
+    frame_id = 0
+    saved_id = 0
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            break
+        if frame_id % frame_interval == 0:
+            frame_path = os.path.join(temp_dir, f"frame_{saved_id}.jpg")
+            if not os.path.exists(frame_path):
+                cv2.imwrite(frame_path, frame)
+            frame_paths.append(frame_path)
+            saved_id += 1
+        frame_id += 1
+
+    cap.release()
+    return frame_paths
+
+
 def _download_file(url: str, save_path: str, overwrite: bool = False, timeout: int = 15):
     chunk_size=1<<14
     if os.path.exists(save_path) and not overwrite:

@@ -6,10 +6,8 @@ from openai import OpenAI
 from eval_methods.utils import extract_video_frames_base64
 
 def gpt_run_one_video(
-    x: dict,
     user_prompt: str,
     video_path: str,
-    res_path: str,
     chat_config: dict
 ) -> str | None:
     """
@@ -55,54 +53,8 @@ def gpt_run_one_video(
             )
 
         output = response.output_text
-
-        # 组织输出结构
-        video_name = x["video_name"]
-        v_score = x["visual_score"]
-        t_score = x["t2v_score"]
-        p_score = x["phy_score"]
-
-        res_item = {
-            "video_name": video_name,
-            "video_url": x["video_url"],
-            "prompt": x["prompt"],
-            "v_score_gt": v_score,
-            "t_score_gt": t_score,
-            "p_score_gt": p_score,
-        }
-
-        if output is None:
-            raise ValueError(f"output for {video_name} is None")
-
-        short_res = output[-100:]
-        print(short_res)
-        print(f"{v_score} {t_score} {p_score}")
-
-        pattern = r"visual quality:\s*(\d+).*?text-to-video alignment:\s*(\d+).*?physical/common-sense consistency:\s*(\d+)"
-        match = re.search(pattern, short_res, re.DOTALL | re.IGNORECASE)
-
-        if match:
-            res_item["v_score_model"] = int(match.group(1))
-            res_item["t_score_model"] = int(match.group(2))
-            res_item["p_score_model"] = int(match.group(3))
-        else:
-            res_item["v_score_model"] = None
-            res_item["t_score_model"] = None
-            res_item["p_score_model"] = None
-
-        res_item["output"] = output
-
-        # 写入结果文件
-        with open(res_path, "r") as f:
-            res_data = json.load(f)
-        res_data.append(res_item)
-        with open(res_path, "w", encoding="utf-8") as f:
-            json.dump(res_data, f, indent=4, ensure_ascii=False)
-
-        print("saved one item")
         return output
 
     except Exception as e:
         print(f"[ERROR] GPT run one video failed: {e}")
-        print(f"Skipped {x.get('video_name', 'unknown')}")
         return None
