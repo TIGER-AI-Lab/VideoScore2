@@ -144,7 +144,21 @@ if __name__ == "__main__":
     
     from metrics import get_metric
     method_name="vs2_sft_17k"
-    res_p='res_data/vs2_test_sft_17k_2e-5_2fps_8192.json'
+    # res_p='res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_sft_17k_5e-5_2fps_320_320_8192_infer_2fps.json'
+    # res_p="res_data/res_vs2_test_sft_17k/open-router-claude-sonnet-4.json"
+    # res_p="res_data/res_vs2_test_sft_17k/open-router-claude-sonnet-4_infer_4.0fps.json"
+    # res_p="res_data/res_vs2_test_sft_17k/open-router-gemini-2.5-flash.json"
+    # res_p="res_data/res_vs2_test_sft_17k/open-router-gemini-2.5-flash_infer_4.0fps.json"
+    # res_p="res_data/res_vs2_test_sft_17k/open-router-gemini-2.5-pro.json"
+    # res_p="res_data/res_vs2_test_sft_17k/open-router-gpt-4.1.json"
+    # res_p="res_data/res_vs2_test_sft_17k/open-router-grok-4.json"
+    # res_p="res_data/res_vs2_test_sft_17k/open-router-o4-mini.json"
+    # res_p="res_data/res_vs2_test_sft_17k/open-router-gemma-3-27b-it.json"
+    # res_p="res_data/res_vs2_test_sft_17k/open-router-llama-4-scout.json"
+    # res_p="res_data/res_vs2_test_sft_17k/open-router-llama-4-maverick.json"
+    # res_p="res_data/res_vs2_test_sft_17k/open-router-qwen2.5-vl-32b-instruct.json"
+    res_p="res_data/res_vs2_test_sft_17k/open-router-qwen2.5-vl-72b-instruct.json"
+    # res_p="res_data/res_vs2_test_sft_17k/open-router-glm-4.1v-9b-thinking.json"
     metrics_p=f'metrics_report/report_{method_name}.json'
     
     get_metric(method_name,res_p,metrics_p)
@@ -174,7 +188,7 @@ if __name__ == "__main__":
     #             {
     #                 "type": "video",
     #                 "video": video_path,
-    #                 "fps":4.0
+    #                 "fps":2.0
     #             },
     #             {
     #                 "type": "text", 
@@ -189,6 +203,25 @@ if __name__ == "__main__":
     # )
 
     # image_inputs, video_inputs = process_vision_info(messages)
+    
+    # video_frame_pixels = []
+    # for i, frame in enumerate(video_inputs):
+    #     if isinstance(frame, torch.Tensor):
+    #         # 如果frame已被处理为Tensor，shape是 (C, H, W)
+    #         print("torch tensor")
+    #         res = frame.shape
+    #     else:
+    #         # 原始PIL图像
+    #         res = frame.size
+    #     print(res)
+    #     # pixels = h * w
+    #     # video_frame_pixels.append(pixels)
+    #     # print(f"Frame {i}: {w}x{h} = {pixels} pixels")
+
+    # # 获取视频中最大帧的像素数
+    # # max_pixels = max(video_frame_pixels)
+    # # print(f"Max pixels among all frames: {max_pixels}")
+    
     # inputs = processor(
     #     text=[text],
     #     images=image_inputs,

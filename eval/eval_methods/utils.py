@@ -6,38 +6,37 @@ from tqdm import tqdm
 import requests
 
 
-def extract_video_frames_base64(video_path: str) -> List[str]:
-    MAX_FRAMES=64
-    SAMPLE_NUM_LOW=8
-    SAMPLE_NUM_HIGH=12
-    
-    cap = cv2.VideoCapture(video_path)
-    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    frames = []
-    if total_frames <= MAX_FRAMES:
-        target_indices = list(range(min(SAMPLE_NUM_LOW, total_frames)))
-    else:
-        step = total_frames / SAMPLE_NUM_HIGH
-        target_indices = [int(i * step) for i in range(12)]
+def extract_video_frames_base64(video_path: str, fps: float = 2.0) -> List[str]:
+    MAX_FRAMES = 64
 
-    current_frame = 0
-    target_set = set(target_indices)
-    
-    while cap.isOpened():
+    cap = cv2.VideoCapture(video_path)
+    if not cap.isOpened():
+        raise ValueError(f"Cannot open video: {video_path}")
+
+    video_fps = cap.get(cv2.CAP_PROP_FPS)
+    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    duration = total_frames / video_fps if video_fps > 0 else 0
+    target_num = min(int(duration * fps), MAX_FRAMES)
+
+    if target_num == 0:
+        raise ValueError("Too few frames to sample from the video.")
+
+    step = max(int(total_frames / target_num), 1)
+    frames = []
+
+    for i in range(0, total_frames, step):
+        cap.set(cv2.CAP_PROP_POS_FRAMES, i)
         ret, frame = cap.read()
         if not ret:
+            continue
+        _, buffer = cv2.imencode('.jpg', frame)
+        frame_b64 = base64.b64encode(buffer).decode("utf-8")
+        frames.append(frame_b64)
+        if len(frames) >= target_num:
             break
-        if current_frame in target_set:
-            _, buffer = cv2.imencode('.jpg', frame)
-            frame_b64 = base64.b64encode(buffer).decode("utf-8")
-            frames.append(frame_b64)
-            if len(frames) >= len(target_indices):
-                break
-        current_frame += 1
 
     cap.release()
     return frames
-
 
 
 def _download_file(url: str, save_path: str, overwrite: bool = False, timeout: int = 15):

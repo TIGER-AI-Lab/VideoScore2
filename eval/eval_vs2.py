@@ -12,38 +12,18 @@ import re
 from eval_methods.vs2 import eval_VideoScore2
 from benchmark import INPUT_TEMPLATE,DIM_NAMES,load_benchmark
 
-def _download_file(url: str, save_path: str, overwrite: bool = False, timeout: int = 15):
-    chunk_size=1<<14
-    if os.path.exists(save_path) and not overwrite:
-        print(f"[skip] {save_path} already exists")
-        return
 
-    os.makedirs(os.path.dirname(save_path), exist_ok=True)
-    with requests.get(url, stream=True, timeout=timeout) as r:
-        r.raise_for_status()
-        total = int(r.headers.get("content-length", 0))
-        bar = tqdm(total=total, unit="B", unit_scale=True, desc=os.path.basename(save_path))
-        with open(save_path, "wb") as f:
-            for chunk in r.iter_content(chunk_size):
-                if chunk:
-                    f.write(chunk)
-                    bar.update(len(chunk))
-        bar.close()
-    print(f"[ok] Downloaded → {save_path}")
-
-
-
-
-def eval(args):
+def eval_vs2(args):
     # method=args.method
     # bench=args.bench
     # method_kwargs = json.loads(args.method_kwargs)
 
-    method=args["method"]
-    bench=args["bench"]
+    method=args.get("method","vs2_test_sft_17k")
+    bench=args.get("bench","sft_17k")
+    bench_data_num=args.get("bench_data_num",150)
     method_kwargs = args["method_kwargs"]
 
-    bench_data=load_benchmark(bench_data_dir,bench)
+    bench_data=load_benchmark(bench_data_dir,bench,bench_data_num)
     
     eval_res_path=f"res_data/res_{bench}/{method}.json"
     metrics_report_path=f"metrics_report/met_{bench}/{method}.json"
@@ -52,7 +32,10 @@ def eval(args):
     
     if method=="vs2":
         model_name=method_kwargs.get("model_name")
-        eval_res_path=f"res_data/res_{bench}/{model_name.split('/')[1]}.json"
+        infer_fps=method_kwargs.get("infer_fps",2.0)
+        if isinstance(infer_fps,float):
+            infer_fps=int(infer_fps)
+        eval_res_path=f"res_data/res_{bench}/{model_name.split('/')[1]}_infer_{infer_fps}fps.json"
         metrics_report_path=f"metrics_report/met_{bench}/{model_name}.json"
         model=eval_VideoScore2(model_name)    
     
@@ -112,52 +95,39 @@ def eval(args):
             print(f"error in evaluation, skipped {video_name}")
         
     
-    # from metrics import compute_accuracy,compute_spcc,compute_plcc
-    # v_gt=[x["v_score_gt"] for x in res_data]
-    # v_pred=[x["v_score_model"] for x in res_data]
-    
-    # t_gt=[x["t_score_gt"] for x in res_data]
-    # t_pred=[x["t_score_model"] for x in res_data]
-    
-    # p_gt=[x["p_score_gt"] for x in res_data]
-    # p_pred=[x["p_score_model"] for x in res_data]
-    
-    # acc_dict={"visual":compute_accuracy(v_gt,v_pred),"t2v":compute_accuracy(t_gt,t_pred),"phy":compute_accuracy(p_gt,p_pred)}
-    # spcc_dict={"visual":compute_spcc(v_gt,v_pred),"t2v":compute_spcc(t_gt,t_pred),"phy":compute_spcc(p_gt,p_pred)}
-    # plcc_dict={"visual":compute_plcc(v_gt,v_pred),"t2v":compute_plcc(t_gt,t_pred),"phy":compute_plcc(p_gt,p_pred)}
-    # with open(metrics_report_path,"w") as f:
-    #     json.dump({
-    #         "acc":acc_dict,
-    #         "spcc":spcc_dict,
-    #         "plcc":plcc_dict
-    #     })
-    
 if __name__ == "__main__":
     supported_methods=[
-        "vs2_sft_17k"
+        "vs2"
     ]
     
     supported_benchs=[
         "vs2_test_sft_17k",
-        
     ]
     
     bench_data_dir="bench_data"
+    bench_data_num=150
     
-    # ap = argparse.ArgumentParser()
-    # ap.add_argument("--method")
-    # ap.add_argument("--bench")
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--model_name")
+    ap.add_argument("--infer_fps")
     # ap.add_argument("--method_kwargs", type=str, default="{}") 
-    # args = ap.parse_args()
+    t_args = ap.parse_args()
+    model_name=t_args.model_name
+    infer_fps=t_args.infer_fps
     
+    if infer_fps != "raw":
+        infer_fps=float(infer_fps)
+        
     args={
         "method":"vs2",
-        "bench":"vs2_test_sft_17k_v0",
+        "bench":"vs2_test_sft_17k",
+        "bench_data_num":bench_data_num,
         "method_kwargs":{
-            "model_name":"DongfuJiang/vs2_qwen2_5vl_sft_17k",
-            "infer_fp2":2.0
+            # "model_name":"videoscore2/vs2_qwen2_5vl_sft_17k_1e-5_2fps_warm005_8192",
+            "model_name":model_name,
+            "infer_fps":infer_fps
         }
     }
     
-    eval(args)
+    eval_vs2(args)
     

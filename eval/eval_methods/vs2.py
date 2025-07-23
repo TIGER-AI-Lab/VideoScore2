@@ -53,7 +53,8 @@ class eval_VideoScore2:
         
         max_tokens=kwargs.get("max_tokens",4096)
         infer_fps=kwargs.get("infer_fps",2.0)
-        # video_fps=_get_video_fps(video_path)
+        if infer_fps == "raw":
+            infer_fps=_get_video_fps(video_path)
         
         messages = [
             {

@@ -1,5 +1,5 @@
 
-ROUND_DIGIT=5
+ROUND_DIGIT=3
 
 def compute_accuracy(pred, ground_truth):
     assert len(pred) == len(ground_truth), "len(pred) should be the same as len(ground_truth)"
@@ -7,29 +7,45 @@ def compute_accuracy(pred, ground_truth):
     correct = sum(p == gt for p, gt in zip(pred, ground_truth))
     total = len(ground_truth)
     
-    return round(correct / total,ROUND_DIGIT)*100 if total > 0 else 0.0
+    return round(correct / total*100,ROUND_DIGIT) if total > 0 else 0.0
 
 
-def compute_accuracy_fuzzy(pred, ground_truth):
+def compute_accuracy_relaxed(pred, ground_truth):
     assert len(pred) == len(ground_truth), "len(pred) should be the same as len(ground_truth)"
-    
+    pred = [0 if x is None else x for x in pred]
     correct = sum(abs(p-gt)<=1 for p, gt in zip(pred, ground_truth))
     total = len(ground_truth)
     
-    return round(correct / total,ROUND_DIGIT)*100 if total > 0 else 0.0
+    return round(correct / total *100,ROUND_DIGIT) if total > 0 else 0.0
     
 def compute_spcc(pred, ground_truth):
+    filtered_pred = []
+    filtered_gt = []
+    for ai, bi in zip(pred, ground_truth):
+        if ai is not None and bi is not None:
+            filtered_pred.append(ai)
+            filtered_gt.append(bi)
+    
     from scipy.stats import spearmanr
-    assert len(pred) == len(ground_truth), "len(pred) should be the same as len(ground_truth)"
-    coefficient, _ = spearmanr(pred, ground_truth)
-    return round(coefficient,ROUND_DIGIT)*100
+    assert len(filtered_pred) == len(filtered_gt), "len(pred) should be the same as len(ground_truth)"
+    coefficient, _ = spearmanr(filtered_pred, filtered_gt)
+    coefficient=float(coefficient)
+    return round(coefficient *100 ,ROUND_DIGIT)
 
 
 def compute_plcc(pred, ground_truth):
+    filtered_pred = []
+    filtered_gt = []
+    for ai, bi in zip(pred, ground_truth):
+        if ai is not None and bi is not None:
+            filtered_pred.append(ai)
+            filtered_gt.append(bi)
+    
     from scipy.stats import pearsonr
-    assert len(pred) == len(ground_truth), "len(pred) should be the same as len(ground_truth)"
-    coefficient, _ = pearsonr(pred, ground_truth)
-    return round(coefficient,ROUND_DIGIT)*100
+    assert len(filtered_pred) == len(filtered_gt), "len(pred) should be the same as len(ground_truth)"
+    coefficient, _ = pearsonr(filtered_pred, filtered_gt)
+    coefficient=float(coefficient)
+    return round(coefficient*100, ROUND_DIGIT)
 
 
 def plot(data,batch_name,dim_idx):
@@ -99,19 +115,19 @@ def get_metric(method_name,res_p,metric_report_p):
                 t_scores_model.append(0)
                 p_scores_model.append(0)
     
-    batch_name="sft_model_score" 
-    plot(v_scores_model,batch_name,1)
-    plot(t_scores_model,batch_name,2)
-    plot(p_scores_model,batch_name,3)
+    # batch_name="sft_model_score" 
+    # plot(v_scores_model,batch_name,1)
+    # plot(t_scores_model,batch_name,2)
+    # plot(p_scores_model,batch_name,3)
         
     metrics_dict={
         "v_acc":compute_accuracy(v_scores_model,v_scores_gt),
         "t_acc":compute_accuracy(t_scores_model,t_scores_gt),
         "p_acc":compute_accuracy(p_scores_model,p_scores_gt),
         
-        "v_acc_fuzzy":compute_accuracy_fuzzy(v_scores_model,v_scores_gt),
-        "t_acc_fuzzy":compute_accuracy_fuzzy(t_scores_model,t_scores_gt),
-        "p_acc_fuzzy":compute_accuracy_fuzzy(p_scores_model,p_scores_gt),
+        "v_acc_relaxed":compute_accuracy_relaxed(v_scores_model,v_scores_gt),
+        "t_acc_relaxed":compute_accuracy_relaxed(t_scores_model,t_scores_gt),
+        "p_acc_relaxed":compute_accuracy_relaxed(p_scores_model,p_scores_gt),
         
         "v_spcc":compute_spcc(v_scores_model,v_scores_gt),
         "t_spcc":compute_spcc(t_scores_model,t_scores_gt),
@@ -121,7 +137,10 @@ def get_metric(method_name,res_p,metric_report_p):
         "t_plcc":compute_plcc(t_scores_model,t_scores_gt),
         "p_plcc":compute_plcc(p_scores_model,p_scores_gt),
         }
-    print(metrics_dict)
+    print(list(metrics_dict.items())[:3])
+    print(list(metrics_dict.items())[3:6])
+    print(list(metrics_dict.items())[6:9])
+    print(list(metrics_dict.items())[9:])
     # with open(metric_report_p,"w") as f:
     #     json.dump({
     #         method_name:metrics_dict

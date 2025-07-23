@@ -265,6 +265,56 @@ def _get_video_fps(url_or_p:str):
     return fps
 
 
+def collect_video():
+    import zipfile
+    from utils_fetch_f_v import _fetch_video_single
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+    batch_name="63"
+    anno_path=f"temp/{batch_name}.json"
+    annos=json.load(open(anno_path,"r",encoding='utf-8'))
+    video_paths=[]
+    video_names=[]
+    video_urls=[]
+    txt_list=[]
+    f_v_save_dir="/data/xuan/videoscore2/f_v_all"
+    for anno in annos:
+        prompt_en = (
+            anno["info"]["data"][1]["content"]
+            .split("English Prompt", 1)[1]
+            .split("\n", 1)[0]
+            .strip(". :\n")
+        )
+        
+        prompt_cn=anno["info"]["data"][1]["content"].split("翻译为中文的Prompt", 1)[1].strip(". :\n")
+        url = anno["info"]["data"][2]["content"]
+        video_name = url.split("/")[-1].split(".")[0]
+        video_urls.append(url)
+        video_names.append(video_name)
+        t2v_model = url.split("/")[-2]
+        video_paths.append(f"{f_v_save_dir}/videos/{video_name}.mp4")
+        txt_list.append(f"{video_name}\n{prompt_cn}        {prompt_en}")
+    
+    max_workers=8
+    
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures = [executor.submit(_fetch_video_single, name, url, f_v_save_dir) for name, url in zip(video_names,video_urls)]
+        for future in tqdm(as_completed(futures), total=len(futures), desc="Downloading videos"):
+            result = future.result()
+            if result is None:
+                continue  
+    
+    video_zip=f"temp/{batch_name}_videos.zip"
+    print("zipping videos...")
+    with zipfile.ZipFile(video_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        for v_p in tqdm(video_paths):
+            f_name=v_p.split('/')[-1]
+            if v_p.endswith('.mp4'):
+                zipf.write(v_p, arcname=f_name)     
+
+    with open(f"temp/{batch_name}.txt","w") as f:
+        for item in txt_list:
+            f.write(f"{item}\n\n")
+    
 if __name__ == "__main__":
     # input_file = "thinking_cmt/sft_17k_modified.json"     
     # output_folder = "thinking_split" 
@@ -280,5 +330,10 @@ if __name__ == "__main__":
     
     # print(data[0]["visual_comment_raw"])
     None
+    # collect_video()
     
+    # train_data=[]
+    # for i in range(18):
+    #     p1=f"/home/brantley/workdir/VideoScore2/data/thinking_final/final_sft_17k_{i}.json"
+    #     train_data.extend(json.load(open(p1,"r")))
     
