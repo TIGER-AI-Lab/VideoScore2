@@ -1,7 +1,7 @@
 
 # Load model directly
 import cv2
-from benchmark import INPUT_TEMPLATE
+from benchmark import VS2_QUERY_TEMPLATE
 import os
 import requests
 from tqdm import tqdm
@@ -51,7 +51,7 @@ def main():
     video_name="000931_e.mp4"
     video_url="https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/0500_0999/cogvideox_2b/000931_e.mp4"
     t2v_prompt="Elephant and baby elephant sharing a moment of triumph as they successfully navigate a dense jungle, emphasizing the power of perseverance"
-    q_template=INPUT_TEMPLATE
+    q_template=VS2_QUERY_TEMPALTE
     
     video_local_path=f"bench_temp/vs2_test_sft_17k/{video_name}"
     _download_file(video_url,video_local_path)
@@ -144,7 +144,7 @@ if __name__ == "__main__":
     
     from metrics import get_metric
     method_name="vs2_sft_17k"
-    # res_p='res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_sft_17k_5e-5_2fps_320_320_8192_infer_2fps.json'
+    
     # res_p="res_data/res_vs2_test_sft_17k/open-router-claude-sonnet-4.json"
     # res_p="res_data/res_vs2_test_sft_17k/open-router-claude-sonnet-4_infer_4.0fps.json"
     # res_p="res_data/res_vs2_test_sft_17k/open-router-gemini-2.5-flash.json"
@@ -157,8 +157,11 @@ if __name__ == "__main__":
     # res_p="res_data/res_vs2_test_sft_17k/open-router-llama-4-scout.json"
     # res_p="res_data/res_vs2_test_sft_17k/open-router-llama-4-maverick.json"
     # res_p="res_data/res_vs2_test_sft_17k/open-router-qwen2.5-vl-32b-instruct.json"
-    res_p="res_data/res_vs2_test_sft_17k/open-router-qwen2.5-vl-72b-instruct.json"
+    # res_p="res_data/res_vs2_test_sft_17k/open-router-qwen2.5-vl-72b-instruct.json"
     # res_p="res_data/res_vs2_test_sft_17k/open-router-glm-4.1v-9b-thinking.json"
+    res_p="res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_sft_17k_2e-4_4fps_8192_infer_2fps.json"
+    # res_p="res_data/res_vs2_test_sft_17k/VideoScore.json"
+    # res_p="res_data/res_vs2_test_sft_17k/feat_dino_sim.json"
     metrics_p=f'metrics_report/report_{method_name}.json'
     
     get_metric(method_name,res_p,metrics_p)

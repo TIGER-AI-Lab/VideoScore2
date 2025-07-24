@@ -11,7 +11,7 @@ def main(args):
     method_kwargs = args.get("metric_kwargs", {})
 
     bench_data = load_benchmark(bench_data_dir, bench, bench_data_num)
-    eval_res_path = f"res_data_feat/{bench}/{method_name}.json"
+    eval_res_path = f"res_data/res_{bench}/feat_{method_name}.json"
     metrics_report_path=f"metrics_report/met_{bench}/{method_name}.json"
     os.makedirs(os.path.dirname(eval_res_path),exist_ok=True)
     os.makedirs(os.path.dirname(metrics_report_path),exist_ok=True)
@@ -60,16 +60,17 @@ def main(args):
         model_or_process = [model,processor,device]
         feat_method_func = clip_score_output
         
-    elif method_name.lower() in ["xclip-score","xclip_score","xclip"]:
+    elif method_name.lower() in ["x-clip-score","x_clip_score","x_clip","x-clip"]:
         from eval_methods.feature_based.x_clip_score import x_clip_score_output
         from transformers import AutoTokenizer, AutoModel, AutoProcessor
         import torch
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        # device = "cpu"
         model_name = "microsoft/xclip-base-patch32"
         model = AutoModel.from_pretrained(model_name).to(device)
         processor = AutoProcessor.from_pretrained(model_name)
         tokenizer = AutoTokenizer.from_pretrained(model_name)
-        model_or_process = [model,processor,tokenizer,device]
+        model_or_process = [model,processor,tokenizer]
         feat_method_func = x_clip_score_output
         
     else:
@@ -84,13 +85,13 @@ def main(args):
         video_name=item['video_name']
         t2v_prompt=item['prompt']
         video_path = os.path.abspath(f"{bench_data_dir}/{bench}/videos/{video_name}.mp4")
-        try:
-            s_t=time.time()
-            score = feat_method_func(model_or_process,video_path, t2v_prompt)
-        except Exception as e:
-            print(e)
-            print(f"error in evaluation, skipped {video_name}")
-            continue
+        # try:
+        s_t=time.time()
+        score = feat_method_func(model_or_process,video_path, t2v_prompt)
+        # except Exception as e:
+        #     print(e)
+        #     print(f"error in evaluation, skipped {video_name}")
+        #     continue
             
         if "vs2" in bench:
             v_score_gt=item['visual_score']
@@ -125,7 +126,13 @@ if __name__ == "__main__":
     args = {
         "bench": "vs2_test_sft_17k",
         "bench_data_num": 150,
-        "feat_method_name": "DINO-sim",
+        # "feat_method_name": "piqe",
+        # "feat_method_name": "brisque",
+        # "feat_method_name": "dino_sim",
+        # "feat_method_name": "clip_sim",
+        # "feat_method_name": "ssim_sim",
+        # "feat_method_name": "clip_score",
+        "feat_method_name": "x_clip_score",
         "metric_kwargs": {
         }
     }

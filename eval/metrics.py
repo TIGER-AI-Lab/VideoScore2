@@ -18,6 +18,25 @@ def compute_accuracy_relaxed(pred, ground_truth):
     
     return round(correct / total *100,ROUND_DIGIT) if total > 0 else 0.0
     
+
+def acc_relaxed_whole_item(pred1,pred2,pred3,gt1,gt2,gt3):
+    matched=0
+    total = len(gt1)
+    assert len(pred1) == len(gt1) and len(pred2) == len(gt2) and len(pred3) == len(gt3), "len(pred) should be the same as len(ground_truth)"
+    for p1, p2, p3, g1, g2, g3 in zip(pred1, pred2, pred3, gt1, gt2, gt3):
+        if p1 is None or p2 is None or p3 is None:
+            continue
+        if g1 is None or g2 is None or g3 is None:
+            continue
+        if abs(p1 - g1) + abs(p2 - g2) + abs(p3 - g3) <= 0 and \
+            abs(p1 - g1) <= 1 and \
+            abs(p2 - g2) <= 1 and \
+            abs(p3 - g3) <= 1:
+            matched += 1
+            
+    return round(matched / total*100,ROUND_DIGIT) if total > 0 else 0.0
+
+    
 def compute_spcc(pred, ground_truth):
     filtered_pred = []
     filtered_gt = []
@@ -136,11 +155,14 @@ def get_metric(method_name,res_p,metric_report_p):
         "v_plcc":compute_plcc(v_scores_model,v_scores_gt),
         "t_plcc":compute_plcc(t_scores_model,t_scores_gt),
         "p_plcc":compute_plcc(p_scores_model,p_scores_gt),
+        
+        "acc_whole_item":acc_relaxed_whole_item(v_scores_model,t_scores_model,p_scores_model,v_scores_gt,t_scores_gt,p_scores_gt),
         }
     print(list(metrics_dict.items())[:3])
     print(list(metrics_dict.items())[3:6])
     print(list(metrics_dict.items())[6:9])
-    print(list(metrics_dict.items())[9:])
+    print(list(metrics_dict.items())[9:12])
+    print(list(metrics_dict.items())[12:])
     # with open(metric_report_p,"w") as f:
     #     json.dump({
     #         method_name:metrics_dict

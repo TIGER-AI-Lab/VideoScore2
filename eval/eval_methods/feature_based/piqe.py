@@ -14,10 +14,11 @@ def piqe_output(model_or_process, video_path: str, prompt: str = "") -> float:
     
     piqe_list = []
 
+    piqe_list=[]
     for frame_path in frame_paths:
-        image = Image.open(frame_path).convert("RGB")
-        tensor = torch.tensor(np.array(image)).permute(2, 0, 1).unsqueeze(0).float() / 255.0
-        tensor = tensor.to(device)
-        score, _, _, _ = piqe(tensor)
-        piqe_list.append(score.item())    
-    return float(np.mean(piqe_list)) if piqe_list else None
+        frame=np.array(Image.open(frame_path))
+        piqe_score, _,_,_ = piqe(frame)
+        piqe_list.append(piqe_score)
+    piqe_avg=np.mean(piqe_list)
+       
+    return piqe_avg if piqe_list else None
