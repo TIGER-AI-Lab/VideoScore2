@@ -51,7 +51,7 @@ def main():
     video_name="000931_e.mp4"
     video_url="https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/0500_0999/cogvideox_2b/000931_e.mp4"
     t2v_prompt="Elephant and baby elephant sharing a moment of triumph as they successfully navigate a dense jungle, emphasizing the power of perseverance"
-    q_template=VS2_QUERY_TEMPALTE
+    q_template=VS2_QUERY_TEMPLATE
     
     video_local_path=f"bench_temp/vs2_test_sft_17k/{video_name}"
     _download_file(video_url,video_local_path)
