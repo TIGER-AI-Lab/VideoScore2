@@ -1,0 +1,21 @@
+vs2_eval (for vs2, mllm, feat)
+pip install transformers
+pip install qwen-vl-utils
+pip install accelerate
+pip install opencv-python
+pip install datasets
+pip install requests
+pip install scipy
+pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0
+pip install matplotlib
+pip install openai
+pip install google-generativeai
+pip install anthropic
+pip install tqdm
+pip install pypiqe
+pip install brisque
+
+
+vs1_eval (copied from vs2_eval):
+pip install mantis-vl
+pip install transformers==4.45.0

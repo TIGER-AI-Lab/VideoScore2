@@ -183,6 +183,7 @@ data/*
 !data/_prev/
 
 eval/*
+!req.txt
 !eval/res_data/
 !eval/eval_methods/
 !eval/**/*.py
