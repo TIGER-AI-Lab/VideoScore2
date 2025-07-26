@@ -75,8 +75,7 @@ def open_router_run_one_video(
             payload["max_tokens"] = chat_config.get("max_tokens", 1024) + chat_config.get("thinking_budget", 2048)
 
         response = requests.post(url, headers=headers, data=json.dumps(payload))
-        print(response.json())
-        
+
         thinking = str(response.json()['choices'][0]['message'].get('reasoning', ''))
         output = str(response.json()['choices'][0]['message'].get('content', ''))
         
@@ -87,5 +86,7 @@ def open_router_run_one_video(
         return res
     
     except Exception as e:
-        print(f"[ERROR] GPT run one video failed: {e}")
+        print(f"[ERROR] Model run one video failed: {e}")
         return None
+    
+    

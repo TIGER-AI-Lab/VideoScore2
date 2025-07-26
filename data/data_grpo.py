@@ -43,7 +43,7 @@ def main(sft_data_path,save_path):
     with open(sft_data_path,"r",encoding='utf-8') as f:
         sft_data=json.load(f)
     
-    rl_data=[]
+    new_data=[]
     for item in sft_data:
         human_input=item['conversations'][0]['value']
         model_out=item['conversations'][1]['value']
@@ -63,22 +63,22 @@ def main(sft_data_path,save_path):
         new_item={
             "problem_id": video_name,
             "problem": INPUT_TEMPLATE.substitute(t2v_prompt=t2v_prompt),
-            "data_type": "videp",
+            "data_type": "video",
             "problem_type": "video eval",
             "options": [],
             "solution": f"<answer>visual quality: {v_score}; text-to-video alignment: {t_score}; physical/common-sense consistency: {p_score}</answer>",
             "path": f"./vs2_videos/{video_name}.mp4",
             "data_source": ""
         }
-        rl_data.append(new_item)
+        new_data.append(new_item)
         
     
     
     with open(save_path, "w") as f:
-        json.dump(rl_data, f, indent=4)
+        json.dump(new_data, f, indent=4)
     upload_file(
         path_or_fileobj=save_path,
-        path_in_repo=save_path,
+        path_in_repo=save_path.split("/")[-1],
         repo_id=REPO_ID,
         repo_type="dataset",
         token=HF_TOKEN
@@ -99,5 +99,5 @@ if __name__ == "__main__":
         exist_ok=True
         )
     sft_data_path="temp/sft_17k.json"
-    save_path="temp/rl_17k.json"
+    save_path="temp/grpo_17k.json"
     main(sft_data_path,save_path)
