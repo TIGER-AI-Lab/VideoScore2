@@ -97,5 +97,6 @@ class eval_VideoScore2:
             skip_special_tokens=True, 
             clean_up_tokenization_spaces=False
         )
-        return output_text
+        res=output_text[0]
+        return res
     

@@ -1,4 +1,8 @@
 import json
+import os
+import zipfile
+import csv
+import pandas as pd
 from string import Template
 from tqdm import tqdm
 from eval_methods.utils import _download_file
@@ -69,30 +73,141 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
         tmp_save=f"{bench_data_dir}/{bench_name}/sft_17k_test_v0.json"
         _download_file(url,tmp_save,overwrite=False)
         with open(tmp_save,"r") as f:
-            data=json.load(f)
+            all_data=json.load(f)
         
-        data=data[:num]
-        
-        for x in tqdm(data):
+        for x in tqdm(all_data):
             v_name=x["video_name"]
             v_url=x["video_url"] 
             v_save_path=f"{bench_data_dir}/{bench_name}/videos/{v_name}.mp4"   
-            _download_file(v_url,v_save_path)
-    
-    if bench_name == "vs2_test_sft_17k":
+            if _download_file(v_url,v_save_path) is None:
+                continue
+            data.append(x)
+            
+    elif bench_name == "vs2_test_sft_17k":
         repo_id="hexuan21/vs2_sft"
         url=f"https://huggingface.co/datasets/{repo_id}/resolve/main/sft_17k_test.json"
         tmp_save=f"{bench_data_dir}/{bench_name}/sft_17k_test.json"
         _download_file(url,tmp_save,overwrite=False)
         with open(tmp_save,"r") as f:
-            data=json.load(f)
+            all_data=json.load(f)
         
-        data=data[:num]
-        
-        for x in tqdm(data):
+        for x in tqdm(all_data):
             v_name=x["video_name"]
             v_url=x["video_url"] 
             v_save_path=f"{bench_data_dir}/{bench_name}/videos/{v_name}.mp4"   
-            _download_file(v_url,v_save_path)
+            if _download_file(v_url,v_save_path) is None:
+                continue
+            data.append(x)
+
+    elif bench_name in ["videogen_reward_bench","videogen-reward-bench"]:
+        csv_url="https://huggingface.co/datasets/KwaiVGI/VideoGen-RewardBench/resolve/main/videogen-rewardbench.csv"
+        csv_save_path=f"{bench_data_dir}/{bench_name}/videogen-rewardbench.csv"
+        json_save_path=f"{bench_data_dir}/{bench_name}/videogen-rewardbench.json"
+        zip_url="https://huggingface.co/datasets/KwaiVGI/VideoGen-RewardBench/resolve/main/videos.zip"
+        zip_save_path=f"{bench_data_dir}/{bench_name}/videogen_reward_bench_videos.zip"
+        video_save_dir=f"{bench_data_dir}/{bench_name}/videos"
+        
+        _download_file(csv_url,csv_save_path)
+        if not os.path.exists(video_save_dir):
+            _download_file(zip_url,zip_save_path)
+            with zipfile.ZipFile(zip_save_path, 'r') as zip_ref:
+                for zip_info in zip_ref.infolist():
+                    if zip_info.filename.endswith('.mp4') and not zip_info.is_dir():
+                        filename = os.path.basename(zip_info.filename)
+                        extracted_path = os.path.join(video_save_dir, filename)
+
+                        if os.path.exists(extracted_path):
+                            continue
+
+                        with zip_ref.open(zip_info) as source, open(extracted_path, 'wb') as target:
+                            target.write(source.read())
+                            
+        if os.path.exists(json_save_path):
+            with open(json_save_path,"r",encoding='utf-8') as f:
+                data=json.load(f)
+        else:
+            df = pd.read_csv(csv_save_path)
+            df = df.iloc[1:]
+            for index, row in df.iterrows():
+                video_name=row["path_A"].split('/')[-1].split('.mp4')[0]
+                t2v_prompt=row["prompt"]
+                fps=row["fps_A"]
+                n_frames=row["num_frames_A"]
+                item={
+                    "video_name":video_name,
+                    "prompt":t2v_prompt,
+                    "fps":fps,
+                    "n_frames":n_frames,
+                }
+                data.append(item)
+                video_name=row["path_B"].split('/')[-1].split('.mp4')[0]
+                t2v_prompt=row["prompt"]
+                fps=row["fps_B"]
+                n_frames=row["num_frames_B"]
+                item={
+                    "video_name":video_name,
+                    "prompt":t2v_prompt,
+                    "fps":fps,
+                    "n_frames":n_frames,
+                }
+                data.append(item)
+
+            data = list({frozenset(item.items()): item for item in data}.values())
+            print(len(data))
+            with open(json_save_path,"w",encoding='utf-8') as f:
+                json.dump(data,f,indent=4,ensure_ascii='False')
+    
+    elif bench_name in ["genai_bench","genai-bench"]:
+        from datasets import load_dataset
+        ds = load_dataset("TIGER-Lab/GenAI-Bench", data_dir="video_generation",split="test")
+        raw_data=[]
+        json_save_path=f"{bench_data_dir}/{bench_name}/genai_bench.json"
+        os.makedirs(os.path.dirname(os.path.abspath(json_save_path)),exist_ok=True)
+        for item in ds:
+            prompt=item['prompt']
+            t2v_model=item['left_model']
+            video_name=t2v_model+"_"+item['left_video'].split('/')[-1].split('.mp4')[0]
+            video_url=item['left_video']
+            new_item={
+                    "video_name":video_name,
+                    "video_url":video_url,
+                    "prompt":prompt,
+                    "t2v_model":t2v_model
+                }
+            raw_data.append(new_item)
+            t2v_model=item['right_model']
+            video_name=t2v_model+"_"+item['right_video'].split('/')[-1].split('.mp4')[0]
+            video_url=item['right_video']
+            new_item={
+                    "video_name":video_name,
+                    "video_url":video_url,
+                    "prompt":prompt,
+                    "t2v_model":t2v_model
+                }
+            raw_data.append(new_item)
             
+        raw_data = list({frozenset(item.items()): item for item in raw_data}.values())
+        print(len(raw_data))
+        
+        for x in tqdm(raw_data):
+            v_name=x["video_name"]
+            v_url=x["video_url"] 
+            v_save_path=f"{bench_data_dir}/{bench_name}/videos/{v_name}.mp4"   
+            if _download_file(v_url,v_save_path) is None:
+                continue
+            data.append(x)
+        
+        with open(json_save_path,"w",encoding='utf-8') as f:
+            json.dump(data,f,indent=4,ensure_ascii='False')
+        
+    data=data[:num]
+    
     return data
+
+
+if __name__ == "__main__":
+    bench_data_dir="/data/xuan/workdir/VideoScore2/eval/bench_data"
+    # bench_name="genai_bench"
+    bench_name="videogen_reward_bench"
+    data=load_benchmark(bench_data_dir,bench_name)
+    # print(len(data))

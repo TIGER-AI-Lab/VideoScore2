@@ -83,26 +83,27 @@ def main(args):
             
     for item in tqdm(bench_data):
         video_name=item['video_name']
-        t2v_prompt=item['prompt']
+        prompt=item['prompt']
         video_path = os.path.abspath(f"{bench_data_dir}/{bench}/videos/{video_name}.mp4")
         # try:
         s_t=time.time()
-        score = feat_method_func(model_or_process,video_path, t2v_prompt)
+        score = feat_method_func(model_or_process,video_path, prompt)
+        print("time cost: ",time.time()-s_t)
         # except Exception as e:
         #     print(e)
         #     print(f"error in evaluation, skipped {video_name}")
         #     continue
-            
-        if "vs2" in bench:
+        
+        if "vs2" in bench:    
             v_score_gt=item['visual_score']
             t_score_gt=item['t2v_score']
             p_score_gt=item['phy_score']
             print(f"gt: {v_score_gt} {t_score_gt} {p_score_gt}")  
-            print("time cost: ",time.time()-s_t)
+            
             res_item={
                 "video_name":video_name,
                 "video_url":item['video_url'],
-                "prompt":t2v_prompt,
+                "prompt":prompt,
                 "v_score_gt":v_score_gt,
                 "t_score_gt":t_score_gt,
                 "p_score_gt":p_score_gt,
@@ -112,12 +113,22 @@ def main(args):
                 "output":""
             }
 
-            with open(eval_res_path,"r") as f:
-                res_data=json.load(f)
-            res_data.append(res_item)
-            with open(eval_res_path,"w",encoding='utf-8') as f:
-                json.dump(res_data,f,indent=4,ensure_ascii=False)
-            print("saved one item")
+        elif bench in ["videogen_reward_bench","videogen-reward-bench","genai_bench","genai-bench"]:
+            res_item={
+                "video_name":item["video_name"],
+                "prompt":item['prompt'],
+                "v_score_model":score,
+                "t_score_model":score,
+                "p_score_model":score,
+                "output":""
+            }
+            
+        with open(eval_res_path,"r") as f:
+            res_data=json.load(f)
+        res_data.append(res_item)
+        with open(eval_res_path,"w",encoding='utf-8') as f:
+            json.dump(res_data,f,indent=4,ensure_ascii=False)
+        print("saved one item")
 
 
 if __name__ == "__main__":

@@ -14,7 +14,7 @@ pip install anthropic
 pip install tqdm
 pip install pypiqe
 pip install brisque
-
+pip install timm
 
 vs1_eval (copied from vs2_eval):
 pip install mantis-vl

@@ -70,21 +70,27 @@ def extract_video_frame_imgs(video_path: str, fps: float = 4.0) -> List[str]:
     return frame_paths
 
 
-def _download_file(url: str, save_path: str, overwrite: bool = False, timeout: int = 15):
+def _download_file(url: str, save_path: str, overwrite: bool = False, timeout: int = 15, log_enabled: bool = True):
     chunk_size=1<<14
     if os.path.exists(save_path) and not overwrite:
-        print(f"[skip] {save_path} already exists")
-        return
+        if log_enabled==True:
+            print(f"[skip] {save_path} already exists")
+        return save_path
 
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
-    with requests.get(url, stream=True, timeout=timeout) as r:
-        r.raise_for_status()
-        total = int(r.headers.get("content-length", 0))
-        bar = tqdm(total=total, unit="B", unit_scale=True, desc=os.path.basename(save_path))
-        with open(save_path, "wb") as f:
-            for chunk in r.iter_content(chunk_size):
-                if chunk:
-                    f.write(chunk)
-                    bar.update(len(chunk))
-        bar.close()
-    print(f"[ok] Downloaded → {save_path}")
+    try:
+        with requests.get(url, stream=True, timeout=timeout) as r:
+            r.raise_for_status()
+            total = int(r.headers.get("content-length", 0))
+            bar = tqdm(total=total, unit="B", unit_scale=True, desc=os.path.basename(save_path))
+            with open(save_path, "wb") as f:
+                for chunk in r.iter_content(chunk_size):
+                    if chunk:
+                        f.write(chunk)
+                        bar.update(len(chunk))
+            bar.close()
+        if log_enabled==True:
+            print(f"[ok] Downloaded → {save_path}")
+        return save_path
+    except Exception as e:
+        return None

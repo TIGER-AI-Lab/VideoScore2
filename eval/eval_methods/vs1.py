@@ -70,5 +70,5 @@ class eval_VideoScore1:
         scores=[min(5, max(1, round(s*VS2_VS1_SCALE))) for s in scores]
         print(scores)
         
-        res=[f"(1) visual quality: {scores[0]}\n (2) text-to-video alignment: {scores[3]}\n (3) physical/common-sense consistency: {scores[4]}\n"]
+        res=f"(1) visual quality: {scores[0]}\n (2) text-to-video alignment: {scores[3]}\n (3) physical/common-sense consistency: {scores[4]}\n"
         return res

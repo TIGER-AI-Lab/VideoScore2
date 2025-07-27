@@ -5,6 +5,7 @@ import os
 import argparse
 import time
 import re
+from tqdm import tqdm
 from benchmark import VS2_QUERY_TEMPLATE,VS1_REG_QUERY_TEMPLATE,DIM_NAMES,load_benchmark
 
 
@@ -19,6 +20,8 @@ def main(args):
     kwargs = args["kwargs"]
 
     bench_data=load_benchmark(bench_data_dir,bench,bench_data_num)
+    print("benchmark data loaded.")
+    
     if method.lower() == "vs2":
         from eval_methods.vs2 import eval_VideoScore2
         model_name=kwargs.get("model_name")
@@ -42,6 +45,17 @@ def main(args):
             model_name=model_name.split('/')[-1]
         eval_res_path=f"res_data/res_{bench}/{model_name}.json"
     
+    # elif method.lower() in ["mj","mj_video"]:
+    #     from eval_methods.mj_video import InternVL2VideoEvaluator
+    #     model_name=kwargs.get("model_name")
+    #     model=InternVL2VideoEvaluator(model_name)
+    #     print("model loaded.")
+    #     q_template=VS2_QUERY_TEMPLATE
+        
+    #     if '/' in model_name:
+    #         model_name=model_name.split('/')[-1]
+    #     eval_res_path=f"res_data/res_{bench}/{model_name}.json"
+        
     else:
         print("model not supported")
         exit()
@@ -54,41 +68,40 @@ def main(args):
         with open(eval_res_path,"w",encoding='utf-8') as f:
             json.dump(res_data,f,indent=4,ensure_ascii=False)
         
-    for item in bench_data:
+    for item in tqdm(bench_data):
         video_name=item['video_name']
-        t2v_prompt=item['prompt']
-        video_local_path=os.path.abspath(f"{bench_data_dir}/{bench}/videos/{video_name}.mp4")
+        prompt=item['prompt']
+        path_or_url=os.path.abspath(f"{bench_data_dir}/{bench}/videos/{video_name}.mp4")
         
-        try:
-            user_prompt=q_template.substitute(t2v_prompt=t2v_prompt)
-            s_t=time.time()
-            output=model.evaluate_video(user_prompt,video_local_path,kwargs)
-            output=output[0]
-            pattern = r"visual quality:\s*(\d+).*?text-to-video alignment:\s*(\d+).*?physical/common-sense consistency:\s*(\d+)"
-            match = re.search(pattern, output, re.DOTALL | re.IGNORECASE)
-            if match:
-                v_score_model = int(match.group(1))
-                t_score_model = int(match.group(2))
-                p_score_model = int(match.group(3))
-            else:
-                v_score_model = t_score_model = p_score_model = None
-            
-            print(output[-100:])
-        except Exception as e:
-            print(e)
-            print(f"error in evaluation, skipped {video_name}")
-            continue
-            
-        if "vs2" in bench: 
+        # try:
+        user_prompt=q_template.substitute(t2v_prompt=prompt)
+        s_t=time.time()
+        output=model.evaluate_video(user_prompt,path_or_url,kwargs)
+        print("time cost: ",time.time()-s_t)
+        pattern = r"visual quality:\s*(\d+).*?text-to-video alignment:\s*(\d+).*?physical/common-sense consistency:\s*(\d+)"
+        match = re.search(pattern, output, re.DOTALL | re.IGNORECASE)
+        if match:
+            v_score_model = int(match.group(1))
+            t_score_model = int(match.group(2))
+            p_score_model = int(match.group(3))
+        else:
+            v_score_model = t_score_model = p_score_model = None
+        
+        print(output[-100:])
+        # except Exception as e:
+        #     print(e)
+        #     print(f"error in evaluation, skipped {video_name}")
+        #     continue
+           
+        if "vs2" in bench:      
             v_score_gt=item['visual_score']
             t_score_gt=item['t2v_score']
             p_score_gt=item['phy_score']
             print(f"gt: {v_score_gt} {t_score_gt} {p_score_gt}")  
-            print("time cost: ",time.time()-s_t)
             res_item={
                 "video_name":video_name,
                 "video_url":item['video_url'],
-                "prompt":t2v_prompt,
+                "prompt":prompt,
                 "v_score_gt":v_score_gt,
                 "t_score_gt":t_score_gt,
                 "p_score_gt":p_score_gt,
@@ -97,30 +110,47 @@ def main(args):
                 "p_score_model":p_score_model,
                 "output":output
             }
-            with open(eval_res_path,"r") as f:
-                res_data=json.load(f)
-            res_data.append(res_item)
-            with open(eval_res_path,"w",encoding='utf-8') as f:
-                json.dump(res_data,f,indent=4,ensure_ascii=False)
-            print("saved one item")
         
+        elif bench in ["videogen_reward_bench","videogen-reward-bench","genai_bench","genai-bench"]:
+            res_item={
+                "video_name":video_name,
+                "prompt":prompt,
+                "v_score_model":v_score_model,
+                "t_score_model":t_score_model,
+                "p_score_model":p_score_model,
+                "output":output
+            }
+            
+        
+        with open(eval_res_path,"r") as f:
+            res_data=json.load(f)
+        res_data.append(res_item)
+        with open(eval_res_path,"w",encoding='utf-8') as f:
+            json.dump(res_data,f,indent=4,ensure_ascii=False)
+        print("saved one item")
+
 
 if __name__ == "__main__":    
     supported_benchs=[
+        "vs2_test_sft_17k_v0",
         "vs2_test_sft_17k",
+        "videogen_reward_bench",
     ]
     
     bench_data_dir="bench_data"
-    bench_data_num=150
     
     ap = argparse.ArgumentParser()
+    ap.add_argument("--bench",required=True,default="vs2_test_sft_17k")
     ap.add_argument("--method",required=True,default="vs2")
     ap.add_argument("--model_name",required=True)
+    ap.add_argument("--model_name",required=False,default=150)
     ap.add_argument("--infer_fps",required=False,default=2.0)
     ap.add_argument("--kwargs", type=str,required=False,default="{}") 
     t_args = ap.parse_args()
+    bench=t_args.bench
     method=t_args.method
     model_name=t_args.model_name
+    bench_data_num=t_args.bench_data_num
     infer_fps=t_args.infer_fps
     
     if infer_fps != "raw":
@@ -128,7 +158,7 @@ if __name__ == "__main__":
         
     args={
         "method":method,
-        "bench":"vs2_test_sft_17k",
+        "bench":bench,
         "bench_data_num":bench_data_num,
         "kwargs":{
             # "model_name":"videoscore2/vs2_qwen2_5vl_sft_17k_1e-5_2fps_warm005_8192",

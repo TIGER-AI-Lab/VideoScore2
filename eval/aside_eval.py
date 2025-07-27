@@ -165,7 +165,11 @@ if __name__ == "__main__":
     # res_p="res_data/res_vs2_test_sft_17k/feat_dino_sim.json"
     metrics_p=f'metrics_report/report_{method_name}.json'
     
-    get_metric(method_name,res_p,metrics_p)
+    # get_metric(method_name,res_p,metrics_p)
+    
+    
+    
+    
     
     
     # from transformers import AutoModel, AutoTokenizer, AutoProcessor
