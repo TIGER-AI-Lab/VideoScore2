@@ -70,9 +70,9 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
     if bench_name == "vs2_test_sft_17k_v0":
         repo_id="hexuan21/vs2_sft"
         url=f"https://huggingface.co/datasets/{repo_id}/resolve/main/sft_17k_test_v0.json"
-        tmp_save=f"{bench_data_dir}/{bench_name}/sft_17k_test_v0.json"
-        _download_file(url,tmp_save,overwrite=False)
-        with open(tmp_save,"r") as f:
+        save_p=f"{bench_data_dir}/{bench_name}/sft_17k_test_v0.json"
+        _download_file(url,save_p,overwrite=False)
+        with open(save_p,"r") as f:
             all_data=json.load(f)
         
         for x in tqdm(all_data):
@@ -86,9 +86,9 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
     elif bench_name == "vs2_test_sft_17k":
         repo_id="hexuan21/vs2_sft"
         url=f"https://huggingface.co/datasets/{repo_id}/resolve/main/sft_17k_test.json"
-        tmp_save=f"{bench_data_dir}/{bench_name}/sft_17k_test.json"
-        _download_file(url,tmp_save,overwrite=False)
-        with open(tmp_save,"r") as f:
+        save_p=f"{bench_data_dir}/{bench_name}/sft_17k_test.json"
+        _download_file(url,save_p,overwrite=False)
+        with open(save_p,"r") as f:
             all_data=json.load(f)
         
         for x in tqdm(all_data):
@@ -106,6 +106,7 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
         zip_url="https://huggingface.co/datasets/KwaiVGI/VideoGen-RewardBench/resolve/main/videos.zip"
         zip_save_path=f"{bench_data_dir}/{bench_name}/videogen_reward_bench_videos.zip"
         video_save_dir=f"{bench_data_dir}/{bench_name}/videos"
+        os.makedirs(video_save_dir,exist_ok=True)
         
         _download_file(csv_url,csv_save_path)
         if not os.path.exists(video_save_dir):
@@ -121,7 +122,8 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
 
                         with zip_ref.open(zip_info) as source, open(extracted_path, 'wb') as target:
                             target.write(source.read())
-                            
+            os.remove(zip_save_path)
+                        
         if os.path.exists(json_save_path):
             with open(json_save_path,"r",encoding='utf-8') as f:
                 data=json.load(f)
@@ -167,7 +169,7 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
             prompt=item['prompt']
             t2v_model=item['left_model']
             video_name=t2v_model+"_"+item['left_video'].split('/')[-1].split('.mp4')[0]
-            video_url=item['left_video']
+            video_url=item['left_video'].replace("blob/main","resolve/main")
             new_item={
                     "video_name":video_name,
                     "video_url":video_url,
@@ -177,7 +179,7 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
             raw_data.append(new_item)
             t2v_model=item['right_model']
             video_name=t2v_model+"_"+item['right_video'].split('/')[-1].split('.mp4')[0]
-            video_url=item['right_video']
+            video_url=item['right_video'].replace("blob/main","resolve/main")
             new_item={
                     "video_name":video_name,
                     "video_url":video_url,
@@ -193,14 +195,85 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
             v_name=x["video_name"]
             v_url=x["video_url"] 
             v_save_path=f"{bench_data_dir}/{bench_name}/videos/{v_name}.mp4"   
-            if _download_file(v_url,v_save_path) is None:
+            if _download_file(v_url,v_save_path,log_enabled=False) is None:
+                print("download failed", v_name)
                 continue
             data.append(x)
         
+        print(len(data))
         with open(json_save_path,"w",encoding='utf-8') as f:
             json.dump(data,f,indent=4,ensure_ascii='False')
+    
+    elif bench_name in ["mj_video_bench","mj_bench_video","mj-video-bench","mj-bench-video"]:
+        test_url="https://huggingface.co/datasets/MJ-Bench/MJ-BENCH-VIDEO/resolve/main/test.json"
+        json_save_path_raw=f"{bench_data_dir}/{bench_name}/mj_bench_video_raw.json"
+        json_save_path=f"{bench_data_dir}/{bench_name}/mj_bench_video.json"
+        _download_file(test_url,json_save_path_raw,overwrite=False)
+        with open(json_save_path_raw,"r") as f:
+            all_data=json.load(f)
         
-    data=data[:num]
+        zip_url="https://huggingface.co/datasets/MJ-Bench/MJ-BENCH-VIDEO/resolve/main/videos/test.zip"
+        zip_save_path=f"{bench_data_dir}/{bench_name}/mj_bench_videos.zip"
+        video_save_dir=f"{bench_data_dir}/{bench_name}/videos"
+        if not os.path.exists(video_save_dir):
+            os.makedirs(video_save_dir,exist_ok=True)
+            _download_file(zip_url,zip_save_path)
+            with zipfile.ZipFile(zip_save_path, 'r') as zip_ref:
+                for zip_info in zip_ref.infolist():
+                    if zip_info.filename.startswith("test/") and zip_info.filename.endswith(".mp4") and not zip_info.is_dir():
+                        filename = os.path.basename(zip_info.filename)
+                        target_path = os.path.join(video_save_dir, filename)
+
+                        if os.path.exists(target_path):
+                            base, ext = os.path.splitext(filename)
+                            i = 1
+                            while os.path.exists(os.path.join(video_save_dir, f"{base}_{i}{ext}")):
+                                i += 1
+                            target_path = os.path.join(video_save_dir, f"{base}_{i}{ext}")
+
+                        with zip_ref.open(zip_info) as src, open(target_path, "wb") as dst:
+                            dst.write(src.read())
+            os.remove(zip_save_path)
+            
+        for item in all_data:
+            prompt=item['caption']
+            video_name=item['video_0_path'].split('/')[-1].split('.mp4')[0]
+            aspect_score=item['video_0_overall_score']
+            total_score=item['video_0_total_score']
+            new_item={
+                "video_name":video_name,
+                "prompt":prompt,
+                "alignment": aspect_score['Alignment'],
+                "safety": aspect_score['Safety'],
+                "fineness": aspect_score['Fineness'],
+                "consistency": aspect_score['Consistency'],
+                "bias": aspect_score['Bias'],
+                "total_score":total_score,
+            }
+            data.append(new_item)
+            video_name=item['video_1_path'].split('/')[-1].split('.mp4')[0]
+            aspect_score=item['video_1_overall_score']
+            total_score=item['video_1_total_score']
+            new_item={
+                "video_name":video_name,
+                "prompt":prompt,
+                "alignment": aspect_score['Alignment'],
+                "safety": aspect_score['Safety'],
+                "fineness": aspect_score['Fineness'],
+                "consistency": aspect_score['Consistency'],
+                "bias": aspect_score['Bias'],
+                "total_score":total_score,
+            }
+            data.append(new_item)
+            
+        print(len(data))
+        with open(json_save_path,"w",encoding='utf-8') as f:
+            json.dump(data,f,indent=4,ensure_ascii='False')
+    else:
+        print(f"{bench_name} not supported. Exited.")
+    
+    if isinstance(num,int):
+        data=data[:num]
     
     return data
 
@@ -208,6 +281,10 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
 if __name__ == "__main__":
     bench_data_dir="/data/xuan/workdir/VideoScore2/eval/bench_data"
     # bench_name="genai_bench"
-    bench_name="videogen_reward_bench"
+    # bench_name="videogen_reward_bench"
+    bench_name="mj_bench_video"
     data=load_benchmark(bench_data_dir,bench_name)
-    # print(len(data))
+    print(len(data))
+    
+    # import os
+    # print(len(os.listdir("/data/xuan/workdir/VideoScore2/eval/bench_data/genai_bench/videos")))

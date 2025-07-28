@@ -112,18 +112,10 @@ def main(args):
                 "p_score_model":p_score_model,
                 "output":res
             }
-            
-        elif bench in ["videogen_reward_bench","videogen-reward-bench"]:
-            res_item={
-                "video_name":item["video_name"],
-                "prompt":item['prompt'],
-                "v_score_model":v_score_model,
-                "t_score_model":t_score_model,
-                "p_score_model":p_score_model,
-                "output":output
-            }
-        
-        elif bench in ["videogen_reward_bench","videogen-reward-bench","genai_bench","genai-bench"]:
+                    
+        elif bench in ["videogen_reward_bench","videogen-reward-bench",
+                       "genai_bench","genai-bench",
+                       "mj_video_bench","mj_bench_video","mj-video-bench","mj-bench-video",]:
             res_item={
                 "video_name":item["video_name"],
                 "prompt":item['prompt'],

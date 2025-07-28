@@ -85,7 +85,7 @@ def plot(data,batch_name,dim_idx):
     plt.clf()
 
 
-def get_metric(method_name,res_p,metric_report_p):
+def get_acc_corr(method_name,res_p,metric_report_p):
     import json
     import re
     

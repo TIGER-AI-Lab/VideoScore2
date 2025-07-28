@@ -113,7 +113,9 @@ def main(args):
                 "output":""
             }
 
-        elif bench in ["videogen_reward_bench","videogen-reward-bench","genai_bench","genai-bench"]:
+        elif bench in ["videogen_reward_bench","videogen-reward-bench",
+                       "genai_bench","genai-bench",
+                       "mj_video_bench","mj_bench_video","mj-video-bench","mj-bench-video",]:
             res_item={
                 "video_name":item["video_name"],
                 "prompt":item['prompt'],

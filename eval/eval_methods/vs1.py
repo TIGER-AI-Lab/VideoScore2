@@ -6,6 +6,7 @@ from typing import List
 from transformers import AutoProcessor
 from transformers import AutoConfig
 from mantis.models.idefics2 import Idefics2ForSequenceClassification
+import os
 
 MAX_NUM_FRAMES = 48
 ROUND_DIGIT = 3
@@ -52,6 +53,8 @@ class eval_VideoScore1:
         return frames
 
     def evaluate_video(self, user_prompt: str, video_path: str, kwargs: dict) -> str:
+        if not os.path.exists(video_path):
+            raise ValueError(f"not exist: {video_path}")
         frames = self._read_video_frames(video_path, max_frames=MAX_NUM_FRAMES)
 
         eval_prompt = user_prompt
@@ -68,7 +71,4 @@ class eval_VideoScore1:
         num_aspects = logits.shape[-1]
         scores = [round(logits[0, i].item(), ROUND_DIGIT) for i in range(num_aspects)]
         scores=[min(5, max(1, round(s*VS2_VS1_SCALE))) for s in scores]
-        print(scores)
-        
-        res=f"(1) visual quality: {scores[0]}\n (2) text-to-video alignment: {scores[3]}\n (3) physical/common-sense consistency: {scores[4]}\n"
-        return res
+        return scores[0], scores[3], scores[4], str(scores)

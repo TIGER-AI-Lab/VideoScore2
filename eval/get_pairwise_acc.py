@@ -3,6 +3,7 @@ import json
 
 
 def main(bench,kwargs):
+    # ========================= VideoGen-Reward-Bench =========================
     if bench in ["videogen_reward_bench","videogen-reward-bench"]:
         csv_path = kwargs["src_csv"]
         json_path = kwargs["score_json"]
@@ -27,7 +28,14 @@ def main(bench,kwargs):
             
             if video_A not in score_dict or video_B not in score_dict:
                 continue
-
+            if None in [score_dict[video_A]["v_score_model"],
+                        score_dict[video_A]["t_score_model"],
+                        score_dict[video_A]["p_score_model"],
+                        score_dict[video_B]["v_score_model"],
+                        score_dict[video_B]["t_score_model"],
+                        score_dict[video_B]["p_score_model"],]:
+                continue
+            
             v_A = int(score_dict[video_A]["v_score_model"])
             v_B = int(score_dict[video_B]["v_score_model"])
             t_A = int(score_dict[video_A]["t_score_model"])
@@ -35,9 +43,29 @@ def main(bench,kwargs):
             p_A = int(score_dict[video_A]["p_score_model"])
             p_B = int(score_dict[video_B]["p_score_model"])
             
-            v_pref = "A" if v_A > v_B else "B"
-            t_pref = "A" if t_A > t_B else "B"
-            overall_pref = "A" if v_A+t_A+p_A>v_B+t_B+p_B else "B"
+            v_pref=None
+            if v_A > v_B:
+                v_pref="A"
+            elif v_A < v_B:
+                v_pref="B"
+            else:
+                v_pref="same"
+            
+            t_pref=None
+            if t_A > t_B:
+                t_pref="A"
+            elif t_A < t_B:
+                t_pref="B"
+            else:
+                t_pref="same"
+
+            overall_pref=None
+            if v_A+t_A+p_A>v_B+t_B+p_B:
+                overall_pref="A"
+            elif v_A+t_A+p_A<v_B+t_B+p_B:
+                overall_pref="B"
+            else:
+                overall_pref="same"
             
             if v_pref == gt_vq:
                 vq_correct += 1
@@ -52,7 +80,8 @@ def main(bench,kwargs):
         print(f"TA Pairwise Accuracy: {ta_correct}/{total} = {ta_correct/total:.3f}")
         print(f"Overall Pairwise Accuracy: {ta_correct}/{total} = {ta_correct/total:.3f}")
 
-    if bench in ["genai_bench","genai-bench"]:
+    # ========================= GenAI-Bench =========================
+    elif bench in ["genai_bench","genai-bench"]:
         from datasets import load_dataset
         benchmark_data = load_dataset("TIGER-Lab/GenAI-Bench", data_dir="video_generation",split="test")
         with open(json_path, 'r') as f:
@@ -75,8 +104,14 @@ def main(bench,kwargs):
                 continue
             left_score = score_dict[left_video]
             right_score = score_dict[right_video]
-            pred_vote = "leftvote" if left_score > right_score else "rightvote"
-
+            pred_vote = None
+            if left_score > right_score:
+                pred_vote = "leftvote"
+            elif left_score < right_score:
+                pred_vote = "rightvote"
+            else:
+                pred_vote = "bothbad_vote"
+                
             if pred_vote == vote:
                 correct += 1
             total += 1
@@ -88,7 +123,61 @@ def main(bench,kwargs):
         else:
             print("No valid pairs found.")
 
+    # ========================= MJ-Bench-Video =========================
+    elif bench in ["mj_video_bench","mj_bench_video","mj-video-bench","mj-bench-video"]:
+        src_json_path = kwargs["src_json"]
+        score_json_path = kwargs["score_json"]
+        with open(src_json_path, "r") as f:
+            src_data = json.load(f)
+        with open(score_json_path, "r") as f:
+            score_data = json.load(f)
+
+        score_dict = {
+            item["video_name"]: {
+                "v": item["v_score_model"],
+                "t": item["t_score_model"],
+                "p": item["p_score_model"]
+            }
+            for item in score_data
+        }
+        category2score = {
+            "Fineness": "v",
+            "Alignment": "t",
+            "Coherence & Consistency": "p"
+        }
+        correct_counts = {cat: 0 for cat in category2score}
+        correct_counts["Overall"] = 0
+        total = 0
         
+        def compare(score1, score2):
+            if abs(score1 - score2) < 1e-4:
+                return "Same"
+            return "Video 1 better" if score1 > score2 else "Video 2 better"
+
+        for item in src_data:
+            video1 = item["video_0_path"].split("/")[-1]
+            video2 = item["video_1_path"].split("/")[-1]
+            if video1 not in score_dict or video2 not in score_dict:
+                continue
+            scores1 = score_dict[video1]
+            scores2 = score_dict[video2]
+            total += 1
+            for category, score_key in category2score.items():
+                pred = compare(scores1[score_key], scores2[score_key])
+                gt = item["category_preference"].get(category)
+                if pred == gt:
+                    correct_counts[category] += 1
+
+            avg1 = (scores1["v"] + scores1["t"] + scores1["p"]) / 3
+            avg2 = (scores2["v"] + scores2["t"] + scores2["p"]) / 3
+            pred_overall = compare(avg1, avg2)
+            if pred_overall == item["overall_preference"]:
+                correct_counts["Overall"] += 1
+
+        for cat, correct in correct_counts.items():
+            acc = correct / total if total > 0 else 0
+            print(f"{cat} Pairwise Accuracy: {correct}/{total} = {acc:.3f}")
+
         
 if __name__ == "__main__":
     bench="videogen_reward_bench"

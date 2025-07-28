@@ -6,6 +6,7 @@ from eval_methods.utils import extract_video_frames_base64
 import json
 import re
 import requests
+import os
 
 OPEN_ROUTER_URL="https://openrouter.ai/api/v1"
 
@@ -27,6 +28,8 @@ def open_router_run_one_video(
     }
     """
     try:
+        if not os.path.exists(video_path):
+            raise ValueError(f"not exist: {video_path}")
         infer_fps=chat_config.get("infer_fps",2.0)
         base64_str_list = extract_video_frames_base64(video_path,infer_fps)
 

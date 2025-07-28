@@ -3,7 +3,8 @@ from transformers import AutoModel, AutoTokenizer, AutoProcessor
 from transformers import AutoProcessor, AutoModelForVision2Seq
 from qwen_vl_utils import process_vision_info
 import cv2
-
+import os
+import re
 
 def _get_video_fps(url_or_p:str):
     cap = cv2.VideoCapture(url_or_p)
@@ -50,7 +51,8 @@ class eval_VideoScore2:
             video_path: str,
             kwargs: dict
         ) -> str | None:
-        
+        if not os.path.exists(video_path):
+            raise ValueError(f"not exist: {video_path}")
         max_tokens=kwargs.get("max_tokens",4096)
         infer_fps=kwargs.get("infer_fps",2.0)
         if infer_fps == "raw":
@@ -76,8 +78,11 @@ class eval_VideoScore2:
         text = self.processor.apply_chat_template(
             messages, tokenize=False, add_generation_prompt=True
         )
+        try:
+            image_inputs, video_inputs = process_vision_info(messages)
+        except Exception as e:
+            raise ValueError(f"error when reading: {video_path}")
 
-        image_inputs, video_inputs = process_vision_info(messages)
         inputs = self.processor(
             text=[text],
             images=image_inputs,
@@ -98,5 +103,13 @@ class eval_VideoScore2:
             clean_up_tokenization_spaces=False
         )
         res=output_text[0]
-        return res
+        pattern = r"visual quality:\s*(\d+).*?text-to-video alignment:\s*(\d+).*?physical/common-sense consistency:\s*(\d+)"
+        match = re.search(pattern, res, re.DOTALL | re.IGNORECASE)
+        if match:
+            v_score_model = int(match.group(1))
+            t_score_model = int(match.group(2))
+            p_score_model = int(match.group(3))
+        else:
+            v_score_model = t_score_model = p_score_model = None
+        return v_score_model, t_score_model, p_score_model, res
     
