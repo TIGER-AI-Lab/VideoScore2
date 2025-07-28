@@ -3,7 +3,8 @@ ROUND_DIGIT=3
 
 def compute_accuracy(pred, ground_truth):
     assert len(pred) == len(ground_truth), "len(pred) should be the same as len(ground_truth)"
-    
+    pred = [0 if x is None else x for x in pred]
+    ground_truth  = [-1 if gt is None else gt for gt in ground_truth]
     correct = sum(p == gt for p, gt in zip(pred, ground_truth))
     total = len(ground_truth)
     
@@ -13,6 +14,7 @@ def compute_accuracy(pred, ground_truth):
 def compute_accuracy_relaxed(pred, ground_truth):
     assert len(pred) == len(ground_truth), "len(pred) should be the same as len(ground_truth)"
     pred = [0 if x is None else x for x in pred]
+    ground_truth  = [-1 if gt is None else gt for gt in ground_truth]
     correct = sum(abs(p-gt)<=1 for p, gt in zip(pred, ground_truth))
     total = len(ground_truth)
     
@@ -85,10 +87,9 @@ def plot(data,batch_name,dim_idx):
     plt.clf()
 
 
-def get_acc_corr(method_name,res_p,metric_report_p):
+def get_acc_corr(method_name,bench_name,res_p,metric_report_p):
     import json
     import re
-    
     
     with open(res_p,"r") as f:
         data=json.load(f)
@@ -134,11 +135,25 @@ def get_acc_corr(method_name,res_p,metric_report_p):
                 t_scores_model.append(0)
                 p_scores_model.append(0)
     
-    # batch_name="sft_model_score" 
-    # plot(v_scores_model,batch_name,1)
-    # plot(t_scores_model,batch_name,2)
-    # plot(p_scores_model,batch_name,3)
-        
+    # rescale model-score or ground-truth
+    if "vs2" in bench_name:
+        None
+    elif bench_name in ["aigve_bench","aigve-bench"]:
+        # In AIGVE-Bench, phy dim only has score 1,3,5
+        # (1,2)->1, (3,4)->3, 5->5
+        p_scores_model=[1 if x == 2 else 3 if x == 4 else x for x in p_scores_model]            
+    elif bench_name in ["video_phy","video_phy_test_public"]:
+        # In Video-Phy-test, sa and pc dim only have score 0,1
+        # (1,2,3)->0, (4,5)->1
+        t_scores_model = [0 if x in (1, 2, 3) else 1 for x in t_scores_model]
+        p_scores_model = [0 if x in (1, 2, 3) else 1 for x in p_scores_model]
+    elif bench_name in ["mj_video_bench","mj_bench_video","mj-video-bench","mj-bench-video"]:
+        # In Video-Phy-test, v and t dim have score 0,1,2
+        # (1,2)->0, (3,4)->1, 5->2
+        t_scores_model = [0 if x in (1, 2) else 1 if x in (3, 4) else 2 for x in t_scores_model]
+        p_scores_model = [0 if x in (1, 2) else 1 if x in (3, 4) else 2 for x in p_scores_model]
+
+    
     metrics_dict={
         "v_acc":compute_accuracy(v_scores_model,v_scores_gt),
         "t_acc":compute_accuracy(t_scores_model,t_scores_gt),
@@ -163,6 +178,12 @@ def get_acc_corr(method_name,res_p,metric_report_p):
     print(list(metrics_dict.items())[6:9])
     print(list(metrics_dict.items())[9:12])
     print(list(metrics_dict.items())[12:])
+    
+    # batch_name="sft_model_score" 
+    # plot(v_scores_model,batch_name,1)
+    # plot(t_scores_model,batch_name,2)
+    # plot(p_scores_model,batch_name,3)
+    
     # with open(metric_report_p,"w") as f:
     #     json.dump({
     #         method_name:metrics_dict

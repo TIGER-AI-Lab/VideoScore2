@@ -57,6 +57,22 @@ $t2v_prompt
 all the frames of video are as follows:
 """)
 
+AIGVE_MACS_QUERY_TEMPLATE = Template("""You are an expert in evaluating AI-Generated Videos, you evaluate videos in the following 9 aspects: 
+1. technical_quality: including whether the resolution is sufficient for object recognition, whether the colors are natural, and whether there is an absence of noise or artifacts. 
+2. dynamic: the extent of pixel changes throughout the video, focusing on significant object or camera movements and changes in environmental factors such as daylight, weather, or seasons. 
+3. consistency: whether objects in the video maintain consistent properties, avoiding glitches, flickering, or unexpected changes. 
+4. physics: Determines if the scene adheres to physical laws. 
+5. element_presentence: Checks if all objects mentioned in the instructions are present in the video. 
+6. element_quality: Assesses the realism and fidelity of objects in the video, awarding higher scores for detailed, natural, and visually appealing appearances. 
+7. action_presentence: Evaluates whether all actions and interactions described in the instructions are accurately represented in the video. 
+8. action_quality: Measures the naturalness and smoothness of actions and interactions, with higher scores for those that are realistic, lifelike, and seamlessly integrated into the scene. 
+9. overall: Reflects the comprehensive quality of the video based on all metrics. 
+The score can be chosen from [0, 5] with whole numbers. You should also include the comment for each score. 
+Please output as a JSON. 
+The video instruction is: 
+$t2v_prompt
+""")
+
 DIM_NAMES=[
         "visual quality",
         "text-to-video alignment",
@@ -67,6 +83,7 @@ DIM_NAMES=[
 
 def load_benchmark(bench_data_dir,bench_name,num=150):
     data=[]
+    # ========================= VideoScore2-Bench =========================
     if bench_name == "vs2_test_sft_17k_v0":
         repo_id="hexuan21/vs2_sft"
         url=f"https://huggingface.co/datasets/{repo_id}/resolve/main/sft_17k_test_v0.json"
@@ -99,6 +116,7 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
                 continue
             data.append(x)
 
+    # ========================= VideoGen-Reward-Bench =========================
     elif bench_name in ["videogen_reward_bench","videogen-reward-bench"]:
         csv_url="https://huggingface.co/datasets/KwaiVGI/VideoGen-RewardBench/resolve/main/videogen-rewardbench.csv"
         csv_save_path=f"{bench_data_dir}/{bench_name}/videogen-rewardbench.csv"
@@ -106,11 +124,11 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
         zip_url="https://huggingface.co/datasets/KwaiVGI/VideoGen-RewardBench/resolve/main/videos.zip"
         zip_save_path=f"{bench_data_dir}/{bench_name}/videogen_reward_bench_videos.zip"
         video_save_dir=f"{bench_data_dir}/{bench_name}/videos"
-        os.makedirs(video_save_dir,exist_ok=True)
         
         _download_file(csv_url,csv_save_path)
         if not os.path.exists(video_save_dir):
             _download_file(zip_url,zip_save_path)
+            os.makedirs(video_save_dir,exist_ok=True)
             with zipfile.ZipFile(zip_save_path, 'r') as zip_ref:
                 for zip_info in zip_ref.infolist():
                     if zip_info.filename.endswith('.mp4') and not zip_info.is_dir():
@@ -159,6 +177,7 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
             with open(json_save_path,"w",encoding='utf-8') as f:
                 json.dump(data,f,indent=4,ensure_ascii='False')
     
+    # ========================= GenAI-Bench =========================
     elif bench_name in ["genai_bench","genai-bench"]:
         from datasets import load_dataset
         ds = load_dataset("TIGER-Lab/GenAI-Bench", data_dir="video_generation",split="test")
@@ -204,6 +223,7 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
         with open(json_save_path,"w",encoding='utf-8') as f:
             json.dump(data,f,indent=4,ensure_ascii='False')
     
+    # ========================= MJ-Bench-Video =========================
     elif bench_name in ["mj_video_bench","mj_bench_video","mj-video-bench","mj-bench-video"]:
         test_url="https://huggingface.co/datasets/MJ-Bench/MJ-BENCH-VIDEO/resolve/main/test.json"
         json_save_path_raw=f"{bench_data_dir}/{bench_name}/mj_bench_video_raw.json"
@@ -269,12 +289,108 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
         print(len(data))
         with open(json_save_path,"w",encoding='utf-8') as f:
             json.dump(data,f,indent=4,ensure_ascii='False')
+    
+    # ========================= AIGVE-Bench =========================
+    elif bench_name in ["aigve_bench","aigve-bench"]:
+        csv_url="https://huggingface.co/datasets/xiaoliux/AIGVE-Bench/resolve/main/AIGVE-Bench1.0.csv"
+        csv_save_path=f"{bench_data_dir}/{bench_name}/aigve_bench.csv"
+        json_save_path=f"{bench_data_dir}/{bench_name}/aigve_bench.json"
+        zip_url="https://huggingface.co/datasets/xiaoliux/AIGVE-Bench/resolve/main/AIGVE-Bench%20Videos.zip"
+        zip_save_path=f"{bench_data_dir}/{bench_name}/aigve_bench_videos.zip"
+        video_save_dir=f"{bench_data_dir}/{bench_name}/videos"
+        
+        _download_file(csv_url,csv_save_path)
+        if not os.path.exists(video_save_dir):
+            os.makedirs(video_save_dir,exist_ok=True)
+            _download_file(zip_url,zip_save_path)
+            with zipfile.ZipFile(zip_save_path, 'r') as zip_ref:
+                for zip_info in zip_ref.infolist():
+                    if zip_info.filename.startswith("videos/") and zip_info.filename.endswith(".mp4") and not zip_info.is_dir():
+                        filename = os.path.basename(zip_info.filename)
+                        target_path = os.path.join(video_save_dir, filename)
+
+                        if os.path.exists(target_path):
+                            base, ext = os.path.splitext(filename)
+                            i = 1
+                            while os.path.exists(os.path.join(video_save_dir, f"{base}_{i}{ext}")):
+                                i += 1
+                            target_path = os.path.join(video_save_dir, f"{base}_{i}{ext}")
+
+                        with zip_ref.open(zip_info) as src, open(target_path, "wb") as dst:
+                            dst.write(src.read())
+            os.remove(zip_save_path)
+                        
+
+        df = pd.read_csv(csv_save_path)
+        df = df.iloc[1:]
+        for index, row in df.iterrows():
+            video_name=row["Video_Path"].split('.mp4')[0]
+            t2v_prompt=row["Prompt"]
+            tq=row["Technical_Quality"]
+            ele_q=row["Element_Quality"]
+            phy=row["Physics"]
+            ele_presence=row["Element_Presentence"]
+            act_presence=row["Element_Action_Presentence"]
+            item={
+                "video_name":video_name,
+                "prompt":t2v_prompt,
+                "tech_quality":tq,
+                "ele_quality":ele_q,
+                "ele_presence":ele_presence,
+                "act_presence":act_presence,
+                "physics":phy,
+            }
+            data.append(item)
+        print(len(data))
+        with open(json_save_path,"w",encoding='utf-8') as f:
+            json.dump(data,f,indent=4,ensure_ascii='False')
+    
+    # ========================= VideoPhy-test-public =========================
+    elif bench_name in ["video_phy","video_phy_test_public"]:
+        csv_url="https://huggingface.co/datasets/videophysics/videophy_test_public/resolve/main/videophy_test_public.csv"
+        csv_save_path=f"{bench_data_dir}/{bench_name}/videophy_test_public.csv"
+        json_save_path=f"{bench_data_dir}/{bench_name}/videophy_test_public.json"
+        video_save_dir=f"{bench_data_dir}/{bench_name}/videos"
+        os.makedirs(video_save_dir,exist_ok=True)
+        
+        _download_file(csv_url,csv_save_path)
+
+        raw_data=[]
+        df = pd.read_csv(csv_save_path)
+        df = df.iloc[1:]
+        for index, row in df.iterrows():
+            video_url=row["video_url"]
+            video_name=video_url.split('/')[-1].split('.mp4')[0]
+            t2v_prompt=row["caption"]
+            semantic=row["majority_sa"]
+            phy=row["majority_pc"]
+            item={
+                "video_name":video_name,
+                "video_url":video_url,
+                "prompt":t2v_prompt,
+                "semantic":semantic,
+                "physical":phy,
+            }
+            raw_data.append(item)
+                            
+        for x in tqdm(raw_data):
+            v_name=x["video_name"]
+            v_url=x["video_url"] 
+            v_save_path=f"{bench_data_dir}/{bench_name}/videos/{v_name}.mp4"   
+            if _download_file(v_url,v_save_path,log_enabled=False) is None:
+                print("download failed", v_name)
+                continue
+            data.append(x)
+        
+        print(len(data))
+        with open(json_save_path,"w",encoding='utf-8') as f:
+            json.dump(data,f,indent=4,ensure_ascii='False')
+        
     else:
         print(f"{bench_name} not supported. Exited.")
     
     if isinstance(num,int):
         data=data[:num]
-    
     return data
 
 
@@ -282,7 +398,9 @@ if __name__ == "__main__":
     bench_data_dir="/data/xuan/workdir/VideoScore2/eval/bench_data"
     # bench_name="genai_bench"
     # bench_name="videogen_reward_bench"
-    bench_name="mj_bench_video"
+    # bench_name="mj_bench_video"
+    bench_name="aigve_bench"
+    # bench_name="video_phy"
     data=load_benchmark(bench_data_dir,bench_name)
     print(len(data))
     

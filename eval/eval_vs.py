@@ -6,7 +6,7 @@ import argparse
 import time
 import re
 from tqdm import tqdm
-from benchmark import VS2_QUERY_TEMPLATE,VS1_REG_QUERY_TEMPLATE,DIM_NAMES,load_benchmark
+from benchmark import VS2_QUERY_TEMPLATE,VS1_REG_QUERY_TEMPLATE,AIGVE_MACS_QUERY_TEMPLATE,DIM_NAMES,load_benchmark
 from string import Template
 
 def main(args):
@@ -28,32 +28,24 @@ def main(args):
         model=eval_VideoScore2(model_name_or_path)    
         q_template=VS2_QUERY_TEMPLATE
         
-        infer_fps=kwargs.get("infer_fps",2.0)
-        if isinstance(infer_fps,float):
-            infer_fps=int(infer_fps)
-        if '/' in model_name_or_path:
-            model_name_or_path=model_name_or_path.split('/')[-1]
-        eval_res_path=f"res_data/res_{bench}/{model_name_or_path}_infer_{infer_fps}fps.json"
-        
     elif method.lower() == "vs1":
         from eval_methods.vs1 import eval_VideoScore1
         model_name_or_path=kwargs.get("model_name_or_path")
         model=eval_VideoScore1(model_name_or_path) 
         q_template=VS1_REG_QUERY_TEMPLATE
-         
-        if '/' in model_name_or_path:
-            model_name_or_path=model_name_or_path.split('/')[-1]
-        eval_res_path=f"res_data/res_{bench}/{model_name_or_path}.json"
     
     elif method.lower() == "video_reward":
         from eval_methods.video_reward import eval_VideoReward
         model_name_or_path=kwargs.get("model_name_or_path")
         model=eval_VideoReward(model_name_or_path) 
         q_template=Template("""$t2v_prompt""")
-        if '/' in model_name_or_path:
-            model_name_or_path=model_name_or_path.split('/')[-1]
-        eval_res_path=f"res_data/res_{bench}/{model_name_or_path}.json"
-        
+    
+    elif method.lower() == "aigve_macs":
+        from eval_methods.aigve_macs import eval_AIGVE_MACS
+        model_name_or_path=kwargs.get("model_name_or_path")
+        model=eval_AIGVE_MACS(model_name_or_path) 
+        q_template=AIGVE_MACS_QUERY_TEMPLATE
+     
     # elif method.lower() in ["mj","mj_video"]:
     #     from eval_methods.mj_video import InternVL2VideoEvaluator
     #     model_name=kwargs.get("model_name")
@@ -68,6 +60,15 @@ def main(args):
     else:
         print("model not supported")
         exit()
+        
+    if '/' in model_name_or_path:
+        model_name_or_path=model_name_or_path.split('/')[-1]
+    eval_res_path=f"res_data/res_{bench}/{model_name_or_path}.json"
+    if "vs2" in method:
+        infer_fps=kwargs.get("infer_fps",2.0)
+        if isinstance(infer_fps,float):
+            infer_fps=int(infer_fps)
+        eval_res_path=f"res_data/res_{bench}/{model_name_or_path}_infer_{infer_fps}fps.json"
     
     metrics_report_path=f"metrics_report/met_{bench}/{model_name_or_path}.json"
     os.makedirs(os.path.dirname(eval_res_path),exist_ok=True)
@@ -92,36 +93,44 @@ def main(args):
             print(f"{e}\nerror in evaluation, skipped {video_name}")
             continue
            
-        if "vs2" in bench:      
-            v_gt=item['visual_score']
-            t_gt=item['t2v_score']
-            p_gt=item['phy_score']
+        if "vs2" in bench \
+            or bench in ["aigve_bench","aigve-bench",
+                         "video_phy","video_phy_test_public"]:  
+            if "vs2" in bench:    
+                v_gt=item['visual_score']
+                t_gt=item['t2v_score']
+                p_gt=item['phy_score']
+            elif bench in ["aigve_bench","aigve-bench"]:
+                v_gt=int(round((item['tech_quality']+item['ele_quality'])/2))
+                t_gt=int(round((item['ele_presence']+item['act_presence'])/2))
+                p_gt=item['physics']
+            elif bench in ["video_phy","video_phy_test_public"]:
+                v_gt=None
+                t_gt=item['semantic']
+                p_gt=item['physical']
+            elif bench in ["mj_video_bench","mj_bench_video","mj-video-bench","mj-bench-video"]:
+                v_gt=item['fineness']
+                t_gt=item['alignment']
+                p_gt=None
             print(f"gt: {v_gt} {t_gt} {p_gt}")  
             res_item={
                 "video_name":video_name,
                 "video_url":item['video_url'],
                 "prompt":prompt,
-                "v_score_gt":v_gt,
-                "t_score_gt":t_gt,
-                "p_score_gt":p_gt,
-                "v_score_model":v_out,
-                "t_score_model":t_out,
-                "p_score_model":p_out,
+                "v_score_gt":v_gt, "t_score_gt":t_gt, "p_score_gt":p_gt,
+                "v_score_model":v_out, "t_score_model":t_out, "p_score_model":p_out,
                 "output":raw_output
             }
-        
+            
         elif bench in ["videogen_reward_bench","videogen-reward-bench",
                        "genai_bench","genai-bench",
                        "mj_video_bench","mj_bench_video","mj-video-bench","mj-bench-video",]:
             res_item={
                 "video_name":video_name,
                 "prompt":prompt,
-                "v_score_model":v_out,
-                "t_score_model":t_out,
-                "p_score_model":p_out,
+                "v_score_model":v_out, "t_score_model":t_out, "p_score_model":p_out,
                 "output":raw_output
             }
-            
         
         with open(eval_res_path,"r") as f:
             res_data=json.load(f)
@@ -136,6 +145,8 @@ if __name__ == "__main__":
         "vs2_test_sft_17k_v0",
         "vs2_test_sft_17k",
         "videogen_reward_bench",
+        "genai_bench",
+        "aigve_bench"
     ]
     
     bench_data_dir="bench_data"
