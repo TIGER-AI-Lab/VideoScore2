@@ -6,6 +6,11 @@ import numpy as np
 
 from eval_methods.utils import extract_video_frame_imgs
 
+CLIPSIM_POINT_1=0.75
+CLIPSIM_POINT_2=0.82
+CLIPSIM_POINT_3=0.9
+CLIPSIM_POINT_4=0.97
+
 
 def clip_inter_frame(model, processor, frame_path_list: List[str]) -> float:
     device = model.device
@@ -32,4 +37,15 @@ def clip_sim_output(model_or_process, video_path: str, prompt: str = "") -> floa
     processor=model_or_process[1]
 
     frame_paths = extract_video_frame_imgs(video_path, fps=2)
-    return clip_inter_frame(model, processor, frame_paths)
+    score = clip_inter_frame(model, processor, frame_paths)
+    if score < CLIPSIM_POINT_1:
+        score = 1
+    elif score >= CLIPSIM_POINT_1 and score < CLIPSIM_POINT_2:
+        score = 2
+    elif score >= CLIPSIM_POINT_2 and score < CLIPSIM_POINT_3:
+        score = 3
+    elif score >= CLIPSIM_POINT_3 and score < CLIPSIM_POINT_4:
+        score = 4
+    else:
+        score=5
+    return score

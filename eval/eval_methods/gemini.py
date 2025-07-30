@@ -75,8 +75,16 @@ def gemini_run_one_video(
             elif part.text:
                 output += part.text
 
-        final_output = f"<think>{thinking}</think>\n{output}" if thinking_enabled else output
-        return final_output
+        res = f"<think>{thinking}</think>\n{output}" if thinking_enabled else output
+        pattern = r"visual quality:\s*(\d+).*?text-to-video alignment:\s*(\d+).*?physical/common-sense consistency:\s*(\d+)"
+        match = re.search(pattern, res, re.DOTALL | re.IGNORECASE)
+        if match:
+            v_score_model = int(match.group(1))
+            t_score_model = int(match.group(2))
+            p_score_model = int(match.group(3))
+        else:
+            v_score_model = t_score_model = p_score_model = None
+        return v_score_model, t_score_model, p_score_model, res
 
     except Exception as e:
         print(f"[ERROR] GPT run one video failed: {e}")

@@ -155,4 +155,4 @@ class eval_VideoReward:
                 max_pixels=max_pixels,
                 use_norm=use_norm
             )
-            return rewards[0]["VQ"], rewards[0]["TA"], None, str(rewards[0])
+            return round(float(rewards[0]["VQ"]),4), round(float(rewards[0]["TA"]),4), None, str(rewards[0])

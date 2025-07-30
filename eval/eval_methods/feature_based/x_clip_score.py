@@ -9,6 +9,10 @@ from eval_methods.utils import extract_video_frame_imgs
 MAX_LENGTH = 77
 MAX_NUM_FRAMES = 8
 
+X_CLIP_POINT_1=0.15
+X_CLIP_POINT_2=0.2
+X_CLIP_POINT_3=0.25
+X_CLIP_POINT_4=0.30
 
 def x_clip_score_output(model_or_process, video_path: str, prompt: str) -> float:
     model=model_or_process[0]
@@ -32,5 +36,15 @@ def x_clip_score_output(model_or_process, video_path: str, prompt: str) -> float
     
     input_video = processor(videos=list(video), return_tensors="pt").to(device)
     video_feature = model.get_video_features(**input_video).flatten()
-    cos_sim=F.cosine_similarity(text_feature, video_feature, dim=0).item()
-    return cos_sim
+    score=F.cosine_similarity(text_feature, video_feature, dim=0).item()
+    if score < X_CLIP_POINT_1:
+        score = 1
+    elif score >= X_CLIP_POINT_1 and score < X_CLIP_POINT_2:
+        score = 2
+    elif score >= X_CLIP_POINT_2 and score < X_CLIP_POINT_3:
+        score = 3
+    elif score >= X_CLIP_POINT_3 and score < X_CLIP_POINT_4:
+        score = 4
+    else:
+        score=5
+    return score

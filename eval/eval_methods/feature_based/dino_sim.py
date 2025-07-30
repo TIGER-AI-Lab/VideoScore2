@@ -4,6 +4,11 @@ from PIL import Image
 import numpy as np
 import cv2
 
+DINOSIM_POINT_1=0.75
+DINOSIM_POINT_2=0.82
+DINOSIM_POINT_3=0.9
+DINOSIM_POINT_4=0.95
+
 def compute_dino_similarity(model, video_path: str, prompt: str = "") -> float:
     preprocess = transforms.Compose([
         transforms.Resize(256),
@@ -43,4 +48,15 @@ def compute_dino_similarity(model, video_path: str, prompt: str = "") -> float:
         np.dot(feats[i], feats[j]) / (np.linalg.norm(feats[i]) * np.linalg.norm(feats[j]) + 1e-8)
         for i in range(len(feats)) for j in range(i + 1, len(feats))
     ])
-    return float(sim)
+    score=float(sim)
+    if score < DINOSIM_POINT_1:
+        score = 1
+    elif score >= DINOSIM_POINT_1 and score < DINOSIM_POINT_2:
+        score = 2
+    elif score >= DINOSIM_POINT_2 and score < DINOSIM_POINT_3:
+        score = 3
+    elif score >= DINOSIM_POINT_3 and score < DINOSIM_POINT_4:
+        score = 4
+    else:
+        score=5
+    return score

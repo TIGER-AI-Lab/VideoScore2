@@ -142,40 +142,38 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
                             target.write(source.read())
             os.remove(zip_save_path)
                         
-        if os.path.exists(json_save_path):
-            with open(json_save_path,"r",encoding='utf-8') as f:
-                data=json.load(f)
-        else:
-            df = pd.read_csv(csv_save_path)
-            df = df.iloc[1:]
-            for index, row in df.iterrows():
-                video_name=row["path_A"].split('/')[-1].split('.mp4')[0]
-                t2v_prompt=row["prompt"]
-                fps=row["fps_A"]
-                n_frames=row["num_frames_A"]
-                item={
-                    "video_name":video_name,
-                    "prompt":t2v_prompt,
-                    "fps":fps,
-                    "n_frames":n_frames,
-                }
-                data.append(item)
-                video_name=row["path_B"].split('/')[-1].split('.mp4')[0]
-                t2v_prompt=row["prompt"]
-                fps=row["fps_B"]
-                n_frames=row["num_frames_B"]
-                item={
-                    "video_name":video_name,
-                    "prompt":t2v_prompt,
-                    "fps":fps,
-                    "n_frames":n_frames,
-                }
-                data.append(item)
+        df = pd.read_csv(csv_save_path)
+        df = df.iloc[1:]
+        for index, row in df.iterrows():
+            video_name=row["path_A"].split('/')[-1].split('.mp4')[0]
+            t2v_prompt=row["prompt"]
+            fps=row["fps_A"]
+            n_frames=row["num_frames_A"]
+            item={
+                "video_name":video_name,
+                "video_url":None,
+                "prompt":t2v_prompt,
+                "fps":fps,
+                "n_frames":n_frames,
+            }
+            data.append(item)
+            video_name=row["path_B"].split('/')[-1].split('.mp4')[0]
+            t2v_prompt=row["prompt"]
+            fps=row["fps_B"]
+            n_frames=row["num_frames_B"]
+            item={
+                "video_name":video_name,
+                "video_url":None,
+                "prompt":t2v_prompt,
+                "fps":fps,
+                "n_frames":n_frames,
+            }
+            data.append(item)
 
-            data = list({frozenset(item.items()): item for item in data}.values())
-            print(len(data))
-            with open(json_save_path,"w",encoding='utf-8') as f:
-                json.dump(data,f,indent=4,ensure_ascii='False')
+        data = list({frozenset(item.items()): item for item in data}.values())
+        print(len(data))
+        with open(json_save_path,"w",encoding='utf-8') as f:
+            json.dump(data,f,indent=4,ensure_ascii='False')
     
     # ========================= GenAI-Bench =========================
     elif bench_name in ["genai_bench","genai-bench"]:
@@ -262,6 +260,7 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
             total_score=item['video_0_total_score']
             new_item={
                 "video_name":video_name,
+                "video_url":None,
                 "prompt":prompt,
                 "alignment": aspect_score['Alignment'],
                 "safety": aspect_score['Safety'],
@@ -333,6 +332,7 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
             act_presence=row["Element_Action_Presentence"]
             item={
                 "video_name":video_name,
+                "video_url":None,
                 "prompt":t2v_prompt,
                 "tech_quality":tq,
                 "ele_quality":ele_q,
@@ -341,12 +341,13 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
                 "physics":phy,
             }
             data.append(item)
+            
         print(len(data))
         with open(json_save_path,"w",encoding='utf-8') as f:
             json.dump(data,f,indent=4,ensure_ascii='False')
     
-    # ========================= VideoPhy-test-public =========================
-    elif bench_name in ["video_phy","video_phy_test_public"]:
+    # ========================= VideoPhy-test =========================
+    elif bench_name in ["video_phy","video_phy_test"]:
         csv_url="https://huggingface.co/datasets/videophysics/videophy_test_public/resolve/main/videophy_test_public.csv"
         csv_save_path=f"{bench_data_dir}/{bench_name}/videophy_test_public.csv"
         json_save_path=f"{bench_data_dir}/{bench_name}/videophy_test_public.json"
@@ -385,7 +386,51 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
         print(len(data))
         with open(json_save_path,"w",encoding='utf-8') as f:
             json.dump(data,f,indent=4,ensure_ascii='False')
+    
+    # ========================= VideoPhy2-test =========================
+    elif bench_name in ["video_phy2","video_phy2_test"]:
+        csv_url="https://huggingface.co/datasets/videophysics/videophy2_test/resolve/main/videophy2_test.csv"
+        csv_save_path=f"{bench_data_dir}/{bench_name}/videophy2_test.csv"
+        json_save_path=f"{bench_data_dir}/{bench_name}/videophy2_test.json"
+        video_save_dir=f"{bench_data_dir}/{bench_name}/videos"
+        os.makedirs(video_save_dir,exist_ok=True)
+        _download_file(csv_url,csv_save_path)
+
+        raw_data=[]
+        df = pd.read_csv(csv_save_path)
+        df = df.iloc[1:]
+        for index, row in df.iterrows():
+            video_url=row["video_url"]
+            video_name=video_url.split('/')[-1].split('.mp4')[0]
+            t2v_prompt=row["caption"]
+            semantic_score=row["sa"]
+            phy_score=row["pc"]
+            is_hard=row["is_hard"]
+            t2v_model=row["model_name"]
+            item={
+                "video_name":video_name,
+                "video_url":video_url,
+                "prompt":t2v_prompt,
+                "semantic":semantic_score,
+                "physical":phy_score,
+                "is_hard":is_hard,
+                "t2v_model":t2v_model,
+            }
+            raw_data.append(item)
+                            
+        for x in tqdm(raw_data):
+            v_name=x["video_name"]
+            v_url=x["video_url"] 
+            v_save_path=f"{bench_data_dir}/{bench_name}/videos/{v_name}.mp4"   
+            if _download_file(v_url,v_save_path,log_enabled=False) is None:
+                print("download failed", v_name)
+                continue
+            data.append(x)
         
+        print(len(data))
+        with open(json_save_path,"w",encoding='utf-8') as f:
+            json.dump(data,f,indent=4,ensure_ascii='False')
+
     else:
         print(f"{bench_name} not supported. Exited.")
     
@@ -399,8 +444,9 @@ if __name__ == "__main__":
     # bench_name="genai_bench"
     # bench_name="videogen_reward_bench"
     # bench_name="mj_bench_video"
-    bench_name="aigve_bench"
+    # bench_name="aigve_bench"
     # bench_name="video_phy"
+    bench_name="video_phy2"
     data=load_benchmark(bench_data_dir,bench_name)
     print(len(data))
     

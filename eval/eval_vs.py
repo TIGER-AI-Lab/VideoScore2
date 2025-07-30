@@ -45,7 +45,13 @@ def main(args):
         model_name_or_path=kwargs.get("model_name_or_path")
         model=eval_AIGVE_MACS(model_name_or_path) 
         q_template=AIGVE_MACS_QUERY_TEMPLATE
-     
+    
+    elif method.lower() == "video_phy2":
+        from eval_methods.video_phy2 import eval_VideoPhy2
+        model_name_or_path=kwargs.get("model_name_or_path")
+        model=eval_VideoPhy2(model_name_or_path) 
+        q_template=Template("""$t2v_prompt""")
+    
     # elif method.lower() in ["mj","mj_video"]:
     #     from eval_methods.mj_video import InternVL2VideoEvaluator
     #     model_name=kwargs.get("model_name")
@@ -95,7 +101,8 @@ def main(args):
            
         if "vs2" in bench \
             or bench in ["aigve_bench","aigve-bench",
-                         "video_phy","video_phy_test_public"]:  
+                         "video_phy","video_phy_test_public",
+                         "mj_video_bench","mj_bench_video","mj-video-bench","mj-bench-video"]:  
             if "vs2" in bench:    
                 v_gt=item['visual_score']
                 t_gt=item['t2v_score']
@@ -123,8 +130,7 @@ def main(args):
             }
             
         elif bench in ["videogen_reward_bench","videogen-reward-bench",
-                       "genai_bench","genai-bench",
-                       "mj_video_bench","mj_bench_video","mj-video-bench","mj-bench-video",]:
+                       "genai_bench","genai-bench",]:
             res_item={
                 "video_name":video_name,
                 "prompt":prompt,

@@ -7,6 +7,7 @@ def main(bench,kwargs):
     if bench in ["videogen_reward_bench","videogen-reward-bench"]:
         csv_path = kwargs["src_csv"]
         json_path = kwargs["score_json"]
+        with_ties = kwargs["with_ties"]
         df = pd.read_csv(csv_path)
 
         with open(json_path, 'r') as f:
@@ -67,6 +68,10 @@ def main(bench,kwargs):
             else:
                 overall_pref="same"
             
+            if with_ties==False:
+                if "same" in [gt_vq, gt_ta, gt_all]:
+                    continue
+            
             if v_pref == gt_vq:
                 vq_correct += 1
             if t_pref == gt_ta:
@@ -84,26 +89,32 @@ def main(bench,kwargs):
     elif bench in ["genai_bench","genai-bench"]:
         from datasets import load_dataset
         benchmark_data = load_dataset("TIGER-Lab/GenAI-Bench", data_dir="video_generation",split="test")
+        json_path = kwargs["score_json"]
+        with_ties = kwargs["with_ties"]
+        
         with open(json_path, 'r') as f:
             score_data = json.load(f)
+            
+        score_dict = {}
+        for item in score_data:
+            if None in [item["v_score_model"],item["t_score_model"],item["p_score_model"]]:
+                continue
+            score_dict[item["video_name"]] = (item["v_score_model"] + item["t_score_model"] + item["p_score_model"]) / 3
 
-        score_dict = {
-            item["video_name"]: (
-                item["v_score_model"] + item["t_score_model"] + item["p_score_model"]
-            ) / 3
-            for item in score_data
-        }
         correct = 0
         total = 0
 
         for item in benchmark_data:
-            left_video = item["left_video"].split("/")[-1].split('.mp4')[0]
-            right_video = item["right_video"].split("/")[-1].split('.mp4')[0]
+            left_model = item["left_model"]
+            left_video = left_model+"_"+item["left_video"].split("/")[-1].split('.mp4')[0]
+            right_model = item["right_model"]
+            right_video = right_model+"_"+item["right_video"].split("/")[-1].split('.mp4')[0]
             vote = item["vote_type"]  
             if left_video not in score_dict or right_video not in score_dict:
                 continue
             left_score = score_dict[left_video]
             right_score = score_dict[right_video]
+            
             pred_vote = None
             if left_score > right_score:
                 pred_vote = "leftvote"
@@ -112,6 +123,10 @@ def main(bench,kwargs):
             else:
                 pred_vote = "bothbad_vote"
                 
+            if with_ties==False:
+                if vote == "bothbad_vote":
+                    continue
+            
             if pred_vote == vote:
                 correct += 1
             total += 1
@@ -127,6 +142,7 @@ def main(bench,kwargs):
     elif bench in ["mj_video_bench","mj_bench_video","mj-video-bench","mj-bench-video"]:
         src_json_path = kwargs["src_json"]
         score_json_path = kwargs["score_json"]
+        with_ties = kwargs["with_ties"]
         with open(src_json_path, "r") as f:
             src_data = json.load(f)
         with open(score_json_path, "r") as f:
@@ -161,6 +177,10 @@ def main(bench,kwargs):
                 continue
             scores1 = score_dict[video1]
             scores2 = score_dict[video2]
+            if with_ties == False:
+                if "Same" in list(item["category_preference"].values()) or item["overall_preference"] == "Same":
+                    continue
+            
             total += 1
             for category, score_key in category2score.items():
                 pred = compare(scores1[score_key], scores2[score_key])
@@ -180,15 +200,17 @@ def main(bench,kwargs):
 
         
 if __name__ == "__main__":
-    bench="videogen_reward_bench"
-    kwargs={
-        "src_csv":"bench_data/videogen_reward_bench/videogen-rewardbench.csv",
-        "score_json":"res_data/res_videogen_reward_bench/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192_infer_2fps.json",
-    }
-    
-    # bench="genai_bench"
+    # bench="videogen_reward_bench"
     # kwargs={
-    #     "score_json":"res_data/res_genai_bench/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192_infer_2fps.json",
+    #     "src_csv":"bench_data/videogen_reward_bench/videogen-rewardbench.csv",
+    #     "score_json":"res_data/res_videogen_reward_bench/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192_infer_2fps.json",
+    #     "with_ties":True
     # }
+    
+    bench="genai_bench"
+    kwargs={
+        "score_json":"res_data/res_genai_bench/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192_infer_2fps.json",
+        "with_ties":True
+    }
     
     main(bench,kwargs)

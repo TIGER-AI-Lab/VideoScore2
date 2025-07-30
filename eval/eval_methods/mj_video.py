@@ -143,7 +143,7 @@ class InternVL2VideoEvaluator:
         video_prefix = ''.join([f'Frame{i + 1}: <image>\n' for i in range(len(num_patches_list))])
         full_prompt = video_prefix + user_prompt
 
-        response, history = self.model.chat(
+        res, history = self.model.chat(
             self.tokenizer,
             pixel_values,
             full_prompt,
@@ -152,5 +152,13 @@ class InternVL2VideoEvaluator:
             history=None,
             return_history=True
         )
-        return response
+        pattern = r"visual quality:\s*(\d+).*?text-to-video alignment:\s*(\d+).*?physical/common-sense consistency:\s*(\d+)"
+        match = re.search(pattern, res, re.DOTALL | re.IGNORECASE)
+        if match:
+            v_score_model = int(match.group(1))
+            t_score_model = int(match.group(2))
+            p_score_model = int(match.group(3))
+        else:
+            v_score_model = t_score_model = p_score_model = None
+        return v_score_model, t_score_model, p_score_model, res
 

@@ -85,8 +85,17 @@ def open_router_run_one_video(
         if thinking_enabled:
             res = "<think>"+thinking+"</think>"+"\n"+output
         else:
-            res = output    
-        return res
+            res = output
+            
+        pattern = r"visual quality:\s*(\d+).*?text-to-video alignment:\s*(\d+).*?physical/common-sense consistency:\s*(\d+)"
+        match = re.search(pattern, res, re.DOTALL | re.IGNORECASE)
+        if match:
+            v_score_model = int(match.group(1))
+            t_score_model = int(match.group(2))
+            p_score_model = int(match.group(3))
+        else:
+            v_score_model = t_score_model = p_score_model = None
+        return v_score_model, t_score_model, p_score_model, res    
     
     except Exception as e:
         print(f"[ERROR] Model run one video failed: {e}")

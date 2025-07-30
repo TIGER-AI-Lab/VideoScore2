@@ -70,59 +70,64 @@ def main(args):
     with ThreadPoolExecutor(max_workers=max_workers) as executor:     
         futures = [executor.submit(eval_one_video_func, user_prompt, video_path, method_kwargs) for user_prompt, video_path in zip(user_prompts, video_paths)]
         for future in tqdm(as_completed(futures), total=len(futures)):
-            output = future.result()
-            eval_outputs.append(output)
+            res_tuple = future.result()
+            eval_outputs.append(res_tuple)
     
     assert len(bench_data)==len(eval_outputs),"len(bench_data)==len(eval_outputs)"
     
-    for item,res in zip(bench_data,eval_outputs):
+    for item,res_tuple in zip(bench_data,eval_outputs):
         video_name=item['video_name']
         prompt=item['prompt']
-        if res is None:
+        if res_tuple is None:
             print(f"output for {video_name} is None")
-            v_score_model = t_score_model = p_score_model = None
+            v_out = t_out = p_out = raw_output = None
+            
+        v_out, t_out, p_out, raw_output = res_tuple[0], res_tuple[1], res_tuple[2], res_tuple[3]
         
-        short_res=res[-100:]
-        print(short_res)
-        pattern = r"visual quality:\s*(\d+).*?text-to-video alignment:\s*(\d+).*?physical/common-sense consistency:\s*(\d+)"
-        match = re.search(pattern, short_res, re.DOTALL | re.IGNORECASE)
-        if match:
-            v_score_model = int(match.group(1))
-            t_score_model = int(match.group(2))
-            p_score_model = int(match.group(3))
-        else:
-            v_score_model = t_score_model = p_score_model = None
-        
-        if "vs2" in bench:
+        if "vs2" in bench \
+            or bench in ["aigve_bench","aigve-bench",
+                         "video_phy","video_phy_test_public"]: 
             video_name=item['video_name']
-            v_score_gt=item['visual_score']
-            t_score_gt=item['t2v_score']
-            p_score_gt=item['phy_score']
-            print(f"gt: {v_score_gt} {t_score_gt} {p_score_gt}")  
+            if "vs2" in bench:    
+                v_gt=item['visual_score']
+                t_gt=item['t2v_score']
+                p_gt=item['phy_score']
+            elif bench in ["aigve_bench","aigve-bench"]:
+                v_gt=int(round((item['tech_quality']+item['ele_quality'])/2))
+                t_gt=int(round((item['ele_presence']+item['act_presence'])/2))
+                p_gt=item['physics']
+            elif bench in ["video_phy","video_phy_test_public"]:
+                v_gt=None
+                t_gt=item['semantic']
+                p_gt=item['physical']
+            elif bench in ["mj_video_bench","mj_bench_video","mj-video-bench","mj-bench-video"]:
+                v_gt=item['fineness']
+                t_gt=item['alignment']
+                p_gt=None
+            print(f"gt: {v_gt} {t_gt} {p_gt}")   
             
             res_item={
                 "video_name":item["video_name"],
                 "video_url":item['video_url'],
                 "prompt":item['prompt'],
-                "v_score_gt":v_score_gt,
-                "t_score_gt":t_score_gt,
-                "p_score_gt":p_score_gt,
-                "v_score_model":v_score_model,
-                "t_score_model":t_score_model,
-                "p_score_model":p_score_model,
-                "output":res
+                "v_score_gt":v_gt,
+                "t_score_gt":t_gt,
+                "p_score_gt":p_gt,
+                "v_score_model":v_out,
+                "t_score_model":t_out,
+                "p_score_model":p_out,
+                "output":raw_output
             }
                     
         elif bench in ["videogen_reward_bench","videogen-reward-bench",
-                       "genai_bench","genai-bench",
-                       "mj_video_bench","mj_bench_video","mj-video-bench","mj-bench-video",]:
+                       "genai_bench","genai-bench",]:
             res_item={
                 "video_name":item["video_name"],
                 "prompt":item['prompt'],
-                "v_score_model":v_score_model,
-                "t_score_model":t_score_model,
-                "p_score_model":p_score_model,
-                "output":output
+                "v_score_model":v_out,
+                "t_score_model":t_out,
+                "p_score_model":p_out,
+                "output":raw_output
             }
 
 
@@ -135,7 +140,6 @@ def main(args):
 
     
 
-    
 if __name__ == "__main__":
 
     bench_data_dir="bench_data"

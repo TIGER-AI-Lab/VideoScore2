@@ -94,19 +94,35 @@ def main(args):
         #     print(f"error in evaluation, skipped {video_name}")
         #     continue
         
-        if "vs2" in bench:    
-            v_score_gt=item['visual_score']
-            t_score_gt=item['t2v_score']
-            p_score_gt=item['phy_score']
-            print(f"gt: {v_score_gt} {t_score_gt} {p_score_gt}")  
+        if "vs2" in bench \
+            or bench in ["aigve_bench","aigve-bench",
+                         "video_phy","video_phy_test_public",
+                         "mj_video_bench","mj_bench_video","mj-video-bench","mj-bench-video"]:  
+            if "vs2" in bench:    
+                v_gt=item['visual_score']
+                t_gt=item['t2v_score']
+                p_gt=item['phy_score']
+            elif bench in ["aigve_bench","aigve-bench"]:
+                v_gt=int(round((item['tech_quality']+item['ele_quality'])/2))
+                t_gt=int(round((item['ele_presence']+item['act_presence'])/2))
+                p_gt=item['physics']
+            elif bench in ["video_phy","video_phy_test_public"]:
+                v_gt=None
+                t_gt=item['semantic']
+                p_gt=item['physical']
+            elif bench in ["mj_video_bench","mj_bench_video","mj-video-bench","mj-bench-video"]:
+                v_gt=item['fineness']
+                t_gt=item['alignment']
+                p_gt=None
+            print(f"gt: {v_gt} {t_gt} {p_gt}")
             
             res_item={
                 "video_name":video_name,
                 "video_url":item['video_url'],
                 "prompt":prompt,
-                "v_score_gt":v_score_gt,
-                "t_score_gt":t_score_gt,
-                "p_score_gt":p_score_gt,
+                "v_score_gt":v_gt,
+                "t_score_gt":t_gt,
+                "p_score_gt":p_gt,
                 "v_score_model":score,
                 "t_score_model":score,
                 "p_score_model":score,
@@ -114,8 +130,7 @@ def main(args):
             }
 
         elif bench in ["videogen_reward_bench","videogen-reward-bench",
-                       "genai_bench","genai-bench",
-                       "mj_video_bench","mj_bench_video","mj-video-bench","mj-bench-video",]:
+                       "genai_bench","genai-bench",]:
             res_item={
                 "video_name":item["video_name"],
                 "prompt":item['prompt'],

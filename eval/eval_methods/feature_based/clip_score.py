@@ -8,9 +8,13 @@ from eval_methods.utils import extract_video_frame_imgs
 MAX_LENGTH = 77
 DEFAULT_FPS = 4
 
+CLIP_POINT_1=0.25
+CLIP_POINT_2=0.283
+CLIP_POINT_3=0.316
+CLIP_POINT_4=0.35
+
+
 def clip_score_output(model_or_process, video_path: str, prompt: str) -> float:
-    
-    
     model=model_or_process[0]
     processor=model_or_process[1]
     device=model_or_process[2]
@@ -29,6 +33,15 @@ def clip_score_output(model_or_process, video_path: str, prompt: str) -> float:
             cos_sim = F.cosine_similarity(text_feat, image_feat, dim=0).item()
             cos_sim_list.append(cos_sim)
 
-        avg_score = float(np.mean(cos_sim_list)) if cos_sim_list else 0.0
-
-    return avg_score
+        score = float(np.mean(cos_sim_list)) if cos_sim_list else 0.0
+    if score < CLIP_POINT_1:
+        score = 1
+    elif score >= CLIP_POINT_1 and score < CLIP_POINT_2:
+        score = 2
+    elif score >= CLIP_POINT_2 and score < CLIP_POINT_3:
+        score = 3
+    elif score >= CLIP_POINT_3 and score < CLIP_POINT_4:
+        score = 4
+    else:
+        score=5
+    return score
