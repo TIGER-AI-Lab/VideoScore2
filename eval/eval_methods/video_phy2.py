@@ -123,7 +123,7 @@ class eval_VideoPhy2:
             print(f"[Warning] Could not parse output '{output}'. Defaulting to {score}.")
         return score, output
 
-    def evaluate_video(self, caption: str, video_path: str, ) -> tuple[int, int, str, str]:
+    def evaluate_video(self, caption: str, video_path: str, kwargs: dict) -> tuple[int, int, str, str]:
         """
         Returns: (sa_score, pc_score, sa_output_text, pc_output_text)
         """

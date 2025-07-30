@@ -1,8 +1,6 @@
 import json
 import os
 import zipfile
-import csv
-import pandas as pd
 from string import Template
 from tqdm import tqdm
 from eval_methods.utils import _download_file
@@ -87,9 +85,9 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
     if bench_name == "vs2_test_sft_17k_v0":
         repo_id="hexuan21/vs2_sft"
         url=f"https://huggingface.co/datasets/{repo_id}/resolve/main/sft_17k_test_v0.json"
-        save_p=f"{bench_data_dir}/{bench_name}/sft_17k_test_v0.json"
-        _download_file(url,save_p,overwrite=False)
-        with open(save_p,"r") as f:
+        json_save_path=f"{bench_data_dir}/{bench_name}/sft_17k_test_v0.json"
+        _download_file(url,json_save_path,overwrite=False)
+        with open(json_save_path,"r") as f:
             all_data=json.load(f)
         
         for x in tqdm(all_data):
@@ -103,9 +101,9 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
     elif bench_name == "vs2_test_sft_17k":
         repo_id="hexuan21/vs2_sft"
         url=f"https://huggingface.co/datasets/{repo_id}/resolve/main/sft_17k_test.json"
-        save_p=f"{bench_data_dir}/{bench_name}/sft_17k_test.json"
-        _download_file(url,save_p,overwrite=False)
-        with open(save_p,"r") as f:
+        json_save_path=f"{bench_data_dir}/{bench_name}/sft_17k_test.json"
+        _download_file(url,json_save_path,overwrite=False)
+        with open(json_save_path,"r") as f:
             all_data=json.load(f)
         
         for x in tqdm(all_data):
@@ -141,7 +139,8 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
                         with zip_ref.open(zip_info) as source, open(extracted_path, 'wb') as target:
                             target.write(source.read())
             os.remove(zip_save_path)
-                        
+            
+        import pandas as pd         
         df = pd.read_csv(csv_save_path)
         df = df.iloc[1:]
         for index, row in df.iterrows():
@@ -171,7 +170,6 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
             data.append(item)
 
         data = list({frozenset(item.items()): item for item in data}.values())
-        print(len(data))
         with open(json_save_path,"w",encoding='utf-8') as f:
             json.dump(data,f,indent=4,ensure_ascii='False')
     
@@ -216,8 +214,6 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
                 print("download failed", v_name)
                 continue
             data.append(x)
-        
-        print(len(data))
         with open(json_save_path,"w",encoding='utf-8') as f:
             json.dump(data,f,indent=4,ensure_ascii='False')
     
@@ -284,8 +280,6 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
                 "total_score":total_score,
             }
             data.append(new_item)
-            
-        print(len(data))
         with open(json_save_path,"w",encoding='utf-8') as f:
             json.dump(data,f,indent=4,ensure_ascii='False')
     
@@ -294,7 +288,7 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
         csv_url="https://huggingface.co/datasets/xiaoliux/AIGVE-Bench/resolve/main/AIGVE-Bench1.0.csv"
         csv_save_path=f"{bench_data_dir}/{bench_name}/aigve_bench.csv"
         json_save_path=f"{bench_data_dir}/{bench_name}/aigve_bench.json"
-        zip_url="https://huggingface.co/datasets/xiaoliux/AIGVE-Bench/resolve/main/AIGVE-Bench%20Videos.zip"
+        zip_url="https://huggingface.co/datasets/jayw/t2v-gen-eval/resolve/main/videos.tar.gz"
         zip_save_path=f"{bench_data_dir}/{bench_name}/aigve_bench_videos.zip"
         video_save_dir=f"{bench_data_dir}/{bench_name}/videos"
         
@@ -318,8 +312,8 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
                         with zip_ref.open(zip_info) as src, open(target_path, "wb") as dst:
                             dst.write(src.read())
             os.remove(zip_save_path)
-                        
-
+            
+        import pandas as pd            
         df = pd.read_csv(csv_save_path)
         df = df.iloc[1:]
         for index, row in df.iterrows():
@@ -327,6 +321,7 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
             t2v_prompt=row["Prompt"]
             tq=row["Technical_Quality"]
             ele_q=row["Element_Quality"]
+            act_q=row["Element_Action_Quality"]
             phy=row["Physics"]
             ele_presence=row["Element_Presentence"]
             act_presence=row["Element_Action_Presentence"]
@@ -334,15 +329,14 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
                 "video_name":video_name,
                 "video_url":None,
                 "prompt":t2v_prompt,
-                "tech_quality":tq,
-                "ele_quality":ele_q,
-                "ele_presence":ele_presence,
-                "act_presence":act_presence,
+                "technical_quality":tq,
+                "element_quality":ele_q,
+                "action_quality":act_q,
+                "element_presence":ele_presence,
+                "action_presence":act_presence,
                 "physics":phy,
             }
             data.append(item)
-            
-        print(len(data))
         with open(json_save_path,"w",encoding='utf-8') as f:
             json.dump(data,f,indent=4,ensure_ascii='False')
     
@@ -355,7 +349,8 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
         os.makedirs(video_save_dir,exist_ok=True)
         
         _download_file(csv_url,csv_save_path)
-
+        
+        import pandas as pd
         raw_data=[]
         df = pd.read_csv(csv_save_path)
         df = df.iloc[1:]
@@ -382,8 +377,6 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
                 print("download failed", v_name)
                 continue
             data.append(x)
-        
-        print(len(data))
         with open(json_save_path,"w",encoding='utf-8') as f:
             json.dump(data,f,indent=4,ensure_ascii='False')
     
@@ -396,6 +389,7 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
         os.makedirs(video_save_dir,exist_ok=True)
         _download_file(csv_url,csv_save_path)
 
+        import pandas as pd
         raw_data=[]
         df = pd.read_csv(csv_save_path)
         df = df.iloc[1:]
@@ -426,13 +420,47 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
                 print("download failed", v_name)
                 continue
             data.append(x)
-        
-        print(len(data))
         with open(json_save_path,"w",encoding='utf-8') as f:
             json.dump(data,f,indent=4,ensure_ascii='False')
 
+    # ========================= TVGE / T2V GenEval =========================
+    elif bench_name in ["tvge"]:
+        
+        csv_url="https://huggingface.co/datasets/jayw/t2v-gen-eval/resolve/main/labels.csv"
+        csv_save_path=f"{bench_data_dir}/{bench_name}/tvge.csv"
+        json_save_path=f"{bench_data_dir}/{bench_name}/tvge.json"
+        zip_url="https://huggingface.co/datasets/xiaoliux/AIGVE-Bench/resolve/main/AIGVE-Bench%20Videos.zip"
+        zip_save_path=f"{bench_data_dir}/{bench_name}/tvge_videos.zip"
+        video_save_dir=f"{bench_data_dir}/{bench_name}/videos"
+        
+        _download_file(csv_url,csv_save_path)
+        if not os.path.exists(video_save_dir):
+            os.makedirs(video_save_dir,exist_ok=True)
+            _download_file(zip_url,zip_save_path)
+        
+        import pandas as pd
+        df = pd.read_csv(csv_save_path)
+        df = df.iloc[1:]
+        for index, row in df.iterrows():
+            video_name=row["model_name"]+"_"+row["video_id"]
+            t2v_prompt=row["prompt"]
+            visual_score=row["video_quality_score"]
+            align_score=row["text_alignment_score"]
+            item={
+                "video_name":video_name,
+                "video_url":None,
+                "prompt":t2v_prompt,
+                "video_quality_score":visual_score,
+                "text_alignment_score":align_score,
+            }
+            data.append(item)
+        with open(json_save_path,"w",encoding='utf-8') as f:
+            json.dump(data,f,indent=4,ensure_ascii='False')
     else:
         print(f"{bench_name} not supported. Exited.")
+    
+    print(bench_name)
+    print(len(data))
     
     if isinstance(num,int):
         data=data[:num]
@@ -444,9 +472,9 @@ if __name__ == "__main__":
     # bench_name="genai_bench"
     # bench_name="videogen_reward_bench"
     # bench_name="mj_bench_video"
-    # bench_name="aigve_bench"
+    bench_name="aigve_bench"
     # bench_name="video_phy"
-    bench_name="video_phy2"
+    # bench_name="video_phy2"
     data=load_benchmark(bench_data_dir,bench_name)
     print(len(data))
     

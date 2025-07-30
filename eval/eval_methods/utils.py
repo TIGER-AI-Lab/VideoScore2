@@ -1,5 +1,5 @@
 import base64
-import cv2
+
 from typing import List
 import os
 from tqdm import tqdm
@@ -7,6 +7,7 @@ import requests
 import time
 
 def extract_video_frames_base64(video_path: str, fps: float = 2.0) -> List[str]:
+    import cv2
     MAX_FRAMES = 64
 
     cap = cv2.VideoCapture(video_path)
@@ -40,6 +41,7 @@ def extract_video_frames_base64(video_path: str, fps: float = 2.0) -> List[str]:
 
 
 def extract_video_frame_imgs(video_path: str, fps: float = 4.0) -> List[str]:
+    import cv2
     cap = cv2.VideoCapture(video_path)
     if not cap.isOpened():
         raise ValueError(f"Cannot open video: {video_path}")
@@ -73,8 +75,8 @@ def extract_video_frame_imgs(video_path: str, fps: float = 4.0) -> List[str]:
 def _download_file(url: str, save_path: str, overwrite: bool = False, timeout: int = 15, log_enabled: bool = True):
     chunk_size=1<<14
     if os.path.exists(save_path) and not overwrite:
-        if log_enabled==True:
-            print(f"[skip] {save_path} already exists")
+        # if log_enabled==True:
+        #     print(f"[skip] {save_path} already exists")
         return save_path
 
     os.makedirs(os.path.dirname(save_path), exist_ok=True)

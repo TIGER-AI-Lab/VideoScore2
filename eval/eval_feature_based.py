@@ -106,7 +106,7 @@ def main(args):
                 v_gt=int(round((item['tech_quality']+item['ele_quality'])/2))
                 t_gt=int(round((item['ele_presence']+item['act_presence'])/2))
                 p_gt=item['physics']
-            elif bench in ["video_phy","video_phy_test_public"]:
+            elif bench in ["video_phy","video_phy_test","video_phy2","video_phy2_test"]:
                 v_gt=None
                 t_gt=item['semantic']
                 p_gt=item['physical']
@@ -114,30 +114,23 @@ def main(args):
                 v_gt=item['fineness']
                 t_gt=item['alignment']
                 p_gt=None
-            print(f"gt: {v_gt} {t_gt} {p_gt}")
-            
+            print(f"gt: {v_gt} {t_gt} {p_gt}")  
             res_item={
                 "video_name":video_name,
                 "video_url":item['video_url'],
                 "prompt":prompt,
-                "v_score_gt":v_gt,
-                "t_score_gt":t_gt,
-                "p_score_gt":p_gt,
-                "v_score_model":score,
-                "t_score_model":score,
-                "p_score_model":score,
-                "output":""
+                "v_score_gt":v_gt, "t_score_gt":t_gt, "p_score_gt":p_gt,
+                "v_score_model":v_out, "t_score_model":t_out, "p_score_model":p_out,
+                "output":raw_output
             }
-
+            
         elif bench in ["videogen_reward_bench","videogen-reward-bench",
                        "genai_bench","genai-bench",]:
             res_item={
-                "video_name":item["video_name"],
-                "prompt":item['prompt'],
-                "v_score_model":score,
-                "t_score_model":score,
-                "p_score_model":score,
-                "output":""
+                "video_name":video_name,
+                "prompt":prompt,
+                "v_score_model":v_out, "t_score_model":t_out, "p_score_model":p_out,
+                "output":raw_output
             }
             
         with open(eval_res_path,"r") as f:

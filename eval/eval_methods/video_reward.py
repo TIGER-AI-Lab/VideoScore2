@@ -2,12 +2,12 @@ import os
 import json
 import torch
 from collections.abc import Mapping
-from eval_methods.utils_video_reward.prompt_template import build_prompt 
-from eval_methods.utils_video_reward.vision_process import process_vision_info 
-from eval_methods.utils_video_reward.utils import ModelConfig, PEFTLoraConfig, TrainingConfig
-from eval_methods.utils_video_reward.utils import load_model_from_checkpoint
-from eval_methods.utils_video_reward.data import DataConfig
-from eval_methods.utils_video_reward.train_reward import create_model_and_processor
+from eval_methods.video_reward_utils.prompt_template import build_prompt 
+from eval_methods.video_reward_utils.vision_process import process_vision_info 
+from eval_methods.video_reward_utils.utils import ModelConfig, PEFTLoraConfig, TrainingConfig
+from eval_methods.video_reward_utils.utils import load_model_from_checkpoint
+from eval_methods.video_reward_utils.data import DataConfig
+from eval_methods.video_reward_utils.train_reward import create_model_and_processor
 
 
 class VideoVLMRewardInference:
@@ -155,4 +155,8 @@ class eval_VideoReward:
                 max_pixels=max_pixels,
                 use_norm=use_norm
             )
-            return round(float(rewards[0]["VQ"]),4), round(float(rewards[0]["TA"]),4), None, str(rewards[0])
+            vq=round(float(rewards[0]["VQ"]),4)
+            ta=round(float(rewards[0]["TA"]),4)
+            pc=None
+            raw_output=str(rewards[0])
+            return vq, ta, pc, raw_output

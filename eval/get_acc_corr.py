@@ -87,19 +87,17 @@ def plot(data,batch_name,dim_idx):
     plt.clf()
 
 
-def get_acc_corr(method_name,bench_name,res_p,metric_report_p):
+
+def load_scores(score_res_path):
     import json
     import re
-    
-    with open(res_p,"r") as f:
+    with open(score_res_path,"r") as f:
         data=json.load(f)
 
     v_scores_gt=[x['v_score_gt'] for x in data]
     t_scores_gt=[x['t_score_gt'] for x in data]
     p_scores_gt=[x['p_score_gt'] for x in data]
-    v_scores_model=[]
-    t_scores_model=[]
-    p_scores_model=[]
+    v_scores_model=t_scores_model=p_scores_model=[]
     
     if all(f"{dim}_score_model" in x for dim in ["v","t","p"] for x in data) :
         v_scores_model=[x['v_score_model'] for x in data]
@@ -110,17 +108,13 @@ def get_acc_corr(method_name,bench_name,res_p,metric_report_p):
         pattern = r"visual quality:\s*(\d+).*?text-to-video alignment:\s*(\d+).*?physical/common-sense consistency:\s*(\d+)"
         for x in data:
             video_name=x['video_name']
-            output=x['output'][0][-150:]
+            output=x['output'][-150:]
             try:
                 match = re.search(pattern, output, re.DOTALL | re.IGNORECASE)
                 if match:
-                    v_score=max(int(match.group(1)),1)
-                    t_score=max(int(match.group(2)),1)
-                    p_score=max(int(match.group(3)),1)
-                    
-                    v_scores_model.append(v_score)
-                    t_scores_model.append(t_score)
-                    p_scores_model.append(p_score)
+                    v_scores_model.append(max(int(match.group(1)),1))
+                    t_scores_model.append(max(int(match.group(2)),1))
+                    p_scores_model.append(max(int(match.group(3)),1))
             
                 else:
                     print(f"{video_name} no matched score")
@@ -135,7 +129,35 @@ def get_acc_corr(method_name,bench_name,res_p,metric_report_p):
                 t_scores_model.append(0)
                 p_scores_model.append(0)
     
-    # rescale model-score or ground-truth
+    return v_scores_gt, t_scores_gt, p_scores_gt, v_scores_model, t_scores_model, p_scores_model
+    
+    
+def get_acc(method_name,bench_name,score_res_path,metric_report_p):
+    v_scores_gt, t_scores_gt, p_scores_gt, v_scores_model, t_scores_model, p_scores_model \
+        = load_scores(score_res_path)
+    
+
+    # To calculate Accuracy, rescale for different reward models / eval methods
+    if method_name in ["aigve_macs"]:
+        None
+    if method_name in ["vision_reward"]:
+        # VisionReward has 1 dim (broadcast to 3), raw score is in [-1, 1]. Rescale to [1,2,3,4,5]  
+        v_scores_model = [int(round((x+1)*2.5)) for x in v_scores_model]
+        t_scores_model = [int(round((x+1)*2.5)) for x in t_scores_model]
+        p_scores_model = [int(round((x+1)*2.5)) for x in p_scores_model]
+    if method_name in ["video_reward"]:
+        # VideoReward has 2 dim (v t), raw score is in [0, 1]. Rescale to [1,2,3,4,5]  
+        v_scores_model = [max(min(int(round(x*5)),5),1) for x in v_scores_model]
+        t_scores_model = [max(min(int(round(x*5)),5),1) for x in t_scores_model]
+        p_scores_model = [-1 for x in p_scores_model]        
+        print(v_scores_model)
+    if method_name in ["video_phy2"]:
+        # VideoPhy2-AutoEval has 2 dim (t p), score in [1,2,3,4,5]  
+        v_scores_model = [-1 for x in v_scores_model]
+    
+    
+    
+    # To calculate Accuracy, rescale for different benchmarks
     if "vs2" in bench_name:
         None
     elif bench_name in ["aigve_bench","aigve-bench"]:
@@ -163,6 +185,66 @@ def get_acc_corr(method_name,bench_name,res_p,metric_report_p):
         "t_acc_relaxed":compute_accuracy_relaxed(t_scores_model,t_scores_gt),
         "p_acc_relaxed":compute_accuracy_relaxed(p_scores_model,p_scores_gt),
         
+        "acc_whole_item":acc_relaxed_whole_item(v_scores_model,t_scores_model,p_scores_model,v_scores_gt,t_scores_gt,p_scores_gt),
+        }
+    print(list(metrics_dict.items())[:3])
+    print(list(metrics_dict.items())[3:6])
+    print(list(metrics_dict.items())[6:])
+    
+    # batch_name="sft_model_score" 
+    # plot(v_scores_model,batch_name,1)
+    # plot(t_scores_model,batch_name,2)
+    # plot(p_scores_model,batch_name,3)
+    
+    # with open(metric_report_p,"w") as f:
+    #     json.dump({
+    #         method_name:metrics_dict
+    #     },f,indent=4)
+    
+    
+    
+def get_corr(method_name,bench_name,score_res_path,metric_report_p):
+    v_scores_gt, t_scores_gt, p_scores_gt, v_scores_model, t_scores_model, p_scores_model \
+        = load_scores(score_res_path)
+    
+    # rescale for different **reward models / eval methods**
+    if method_name in ["aigve_macs"]:
+        None
+    if method_name in ["vision_reward"]:
+        # VisionReward has 1 dim (broadcast to 3), raw score is in [-1, 1]. Rescale to [1,2,3,4,5]  
+        # use raw VisionReward score to calculate SPCC/PLCC
+        None
+    if method_name in ["video_reward"]:
+        # VideoReward has 2 dim  (v t), raw score is in [0, 1]. Rescale to [1,2,3,4,5]  
+        v_scores_model = [max(min(int(round(x*5)),5),1) for x in v_scores_model]
+        t_scores_model = [max(min(int(round(x*5)),5),1) for x in t_scores_model]
+        p_scores_model = [-1 for x in p_scores_model]    
+    if method_name in ["video_phy2"]:
+        # VideoPhy2-AutoEval has 2 dim (t p), score in [1,2,3,4,5]  
+        v_scores_model = [-1 for x in v_scores_model]
+    
+    
+    
+    # rescale for different **benchmarks**
+    if "vs2" in bench_name:
+        None
+    elif bench_name in ["aigve_bench","aigve-bench"]:
+        # In AIGVE-Bench, phy dim only has score 1,3,5
+        # (1,2)->1, (3,4)->3, 5->5
+        p_scores_model=[1 if x == 2 else 3 if x == 4 else x for x in p_scores_model]            
+    elif bench_name in ["video_phy","video_phy_test_public"]:
+        # In Video-Phy-test, sa and pc dim only have score 0,1
+        # (1,2,3)->0, (4,5)->1
+        t_scores_model = [0 if x in (1, 2, 3) else 1 for x in t_scores_model]
+        p_scores_model = [0 if x in (1, 2, 3) else 1 for x in p_scores_model]
+    elif bench_name in ["mj_video_bench","mj_bench_video","mj-video-bench","mj-bench-video"]:
+        # In Video-Phy-test, v and t dim have score 0,1,2
+        # (1,2)->0, (3,4)->1, 5->2
+        t_scores_model = [0 if x in (1, 2) else 1 if x in (3, 4) else 2 for x in t_scores_model]
+        p_scores_model = [0 if x in (1, 2) else 1 if x in (3, 4) else 2 for x in p_scores_model]
+
+    
+    metrics_dict={        
         "v_spcc":compute_spcc(v_scores_model,v_scores_gt),
         "t_spcc":compute_spcc(t_scores_model,t_scores_gt),
         "p_spcc":compute_spcc(p_scores_model,p_scores_gt),
@@ -170,14 +252,9 @@ def get_acc_corr(method_name,bench_name,res_p,metric_report_p):
         "v_plcc":compute_plcc(v_scores_model,v_scores_gt),
         "t_plcc":compute_plcc(t_scores_model,t_scores_gt),
         "p_plcc":compute_plcc(p_scores_model,p_scores_gt),
-        
-        "acc_whole_item":acc_relaxed_whole_item(v_scores_model,t_scores_model,p_scores_model,v_scores_gt,t_scores_gt,p_scores_gt),
-        }
+         }
     print(list(metrics_dict.items())[:3])
     print(list(metrics_dict.items())[3:6])
-    print(list(metrics_dict.items())[6:9])
-    print(list(metrics_dict.items())[9:12])
-    print(list(metrics_dict.items())[12:])
     
     # batch_name="sft_model_score" 
     # plot(v_scores_model,batch_name,1)

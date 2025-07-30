@@ -1,6 +1,6 @@
 
 # Load model directly
-import cv2
+
 from benchmark import VS2_QUERY_TEMPLATE
 import os
 import requests
@@ -33,6 +33,7 @@ def _download_file(url: str, save_path: str, overwrite: bool = False, timeout: i
     
 
 def _get_video_fps(url):
+    import cv2
     cap = cv2.VideoCapture(url)
     if not cap.isOpened():
         raise ValueError(f"Cannot open video: {url}")
@@ -146,8 +147,8 @@ def rewrite_eval_res():
 if __name__ == "__main__":
     # main()
     
-    from get_acc_corr import get_acc_corr
-    method_name="vs2_sft_17k"
+    from get_acc_corr import get_acc, get_corr
+    
     
     # res_p="res_data/res_vs2_test_sft_17k/open-router-claude-sonnet-4.json"
     # res_p="res_data/res_vs2_test_sft_17k/open-router-claude-sonnet-4_infer_4fps.json"
@@ -163,14 +164,19 @@ if __name__ == "__main__":
     # res_p="res_data/res_vs2_test_sft_17k/open-router-qwen2.5-vl-32b-instruct_infer_4fps.json"
     # res_p="res_data/res_vs2_test_sft_17k/open-router-qwen2.5-vl-72b-instruct_infer_4fps.json"
     # res_p="res_data/res_vs2_test_sft_17k/open-router-glm-4.1v-9b-thinking_infer_4fps.json"
-    res_p="res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_sft_17k_2e-4_8fps_16384_infer_8fps.json"
+    # res_p="res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_sft_17k_2e-4_8fps_16384_infer_8fps.json"
     # res_p="res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192_infer_8fps.json"
     # res_p="res_data/res_vs2_test_sft_17k/VideoScore.json"
     # res_p="res_data/res_vs2_test_sft_17k/feat_dino_sim.json"
+    res_p="res_data/res_vs2_test_sft_17k/VisionReward-Video.json"
+    res_p="res_data/res_vs2_test_sft_17k/VideoReward.json"
+    res_p="res_data/res_vs2_test_sft_17k/videophy_2_auto.json"
+    method_name="video_phy2"
+    bench_name="vs2_test_sft_17k"
     metrics_p=f'metrics_report/report_{method_name}.json'
     
-    # get_acc_corr(method_name,res_p,metrics_p)
-    
+    get_acc(method_name,bench_name,res_p,metrics_p)
+    get_corr(method_name,bench_name,res_p,metrics_p)
     
     
     

@@ -93,6 +93,8 @@ class eval_AIGVE_MACS:
             clean_up_tokenization_spaces=False
         )[0]
         out_dict=ast.literal_eval(output_text)
-        tq=out_dict["technical_quality"]["score"]
+        
+        tq=int(round((out_dict['technical_quality']['score']+out_dict['element_quality']['score']+out_dict['action_quality']['score'])/3))
+        align_score=int(round((out_dict['element_presentence']["score"]+out_dict['action_presentence']["score"])/2))
         phy=out_dict["physics"]["score"]
-        return tq, None, phy, output_text
+        return tq, align_score, phy, output_text

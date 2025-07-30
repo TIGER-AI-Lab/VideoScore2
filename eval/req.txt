@@ -1,4 +1,4 @@
-vs2_eval (for vs2, mllm, feat)
+vs2_eval (for vs2, mllm, feat, aigve_macs)
 pip install transformers
 pip install qwen-vl-utils
 pip install accelerate
@@ -16,6 +16,41 @@ pip install pypiqe
 pip install brisque
 pip install timm
 
+
 vs1_eval (copied from vs2_eval):
 pip install mantis-vl
 pip install transformers==4.45.0
+
+
+video_reward
+(refer to https://github.com/KwaiVGI/VideoAlign)
+### set up env
+git clone https://github.com/KwaiVGI/VideoAlign
+cd VideoAlign
+conda env create -f environment.yaml
+conda activate VideoReward
+pip install flash-attn==2.5.8 --no-build-isolation
+### download ckpt
+cd checkpoints
+git lfs install
+git clone https://huggingface.co/KwaiVGI/VideoReward
+### Other
+pip install numpy
+pip install pandas
+
+vision_reward
+git clone https://github.com/zai-org/VisionReward.git
+cd VisionReward
+conda create -n vision_reward python=3.11 -y
+conda activate vision_reward
+pip install -r requirements.txt
+
+
+videophy2
+git clone https://github.com/Hritikbansal/videophy.git
+cd videophy
+conda create -n videophy python=3.10 -y
+conda activate videophy
+pip install -r requirements.txt
+
+pip install transformers==4.46.1

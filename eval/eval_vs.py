@@ -34,24 +34,30 @@ def main(args):
         model=eval_VideoScore1(model_name_or_path) 
         q_template=VS1_REG_QUERY_TEMPLATE
     
-    elif method.lower() == "video_reward":
-        from eval_methods.video_reward import eval_VideoReward
-        model_name_or_path=kwargs.get("model_name_or_path")
-        model=eval_VideoReward(model_name_or_path) 
-        q_template=Template("""$t2v_prompt""")
-    
     elif method.lower() == "aigve_macs":
         from eval_methods.aigve_macs import eval_AIGVE_MACS
         model_name_or_path=kwargs.get("model_name_or_path")
         model=eval_AIGVE_MACS(model_name_or_path) 
         q_template=AIGVE_MACS_QUERY_TEMPLATE
     
-    elif method.lower() == "video_phy2":
+    elif method.lower() == "video_reward":
+        from eval_methods.video_reward import eval_VideoReward
+        model_name_or_path=kwargs.get("model_name_or_path")
+        model=eval_VideoReward(model_name_or_path) 
+        q_template=Template("""$t2v_prompt""")
+    
+    elif method.lower() == "vision_reward":
+        from eval_methods.vision_reward import eval_VisionReward
+        model_name_or_path=kwargs.get("model_name_or_path")
+        model=eval_VisionReward(model_name_or_path) 
+        q_template=Template("""$t2v_prompt""")
+    
+    elif method.lower() == "video_phy2_auto_eval":
         from eval_methods.video_phy2 import eval_VideoPhy2
         model_name_or_path=kwargs.get("model_name_or_path")
         model=eval_VideoPhy2(model_name_or_path) 
         q_template=Template("""$t2v_prompt""")
-    
+        
     # elif method.lower() in ["mj","mj_video"]:
     #     from eval_methods.mj_video import InternVL2VideoEvaluator
     #     model_name=kwargs.get("model_name")
@@ -108,16 +114,20 @@ def main(args):
                 t_gt=item['t2v_score']
                 p_gt=item['phy_score']
             elif bench in ["aigve_bench","aigve-bench"]:
-                v_gt=int(round((item['tech_quality']+item['ele_quality'])/2))
-                t_gt=int(round((item['ele_presence']+item['act_presence'])/2))
+                v_gt=int(round((item['technical_quality']+item['element_quality']+item['action_quality'])/3))
+                t_gt=int(round((item['element_presence']+item['action_presence'])/2))
                 p_gt=item['physics']
-            elif bench in ["video_phy","video_phy_test_public"]:
+            elif bench in ["video_phy","video_phy_test","video_phy2","video_phy2_test"]:
                 v_gt=None
                 t_gt=item['semantic']
                 p_gt=item['physical']
             elif bench in ["mj_video_bench","mj_bench_video","mj-video-bench","mj-bench-video"]:
                 v_gt=item['fineness']
                 t_gt=item['alignment']
+                p_gt=None
+            elif bench in ["tvge"]:
+                v_gt=item['video_quality_score']
+                t_gt=item['text_alignment_score']
                 p_gt=None
             print(f"gt: {v_gt} {t_gt} {p_gt}")  
             res_item={
@@ -147,13 +157,7 @@ def main(args):
 
 
 if __name__ == "__main__":    
-    supported_benchs=[
-        "vs2_test_sft_17k_v0",
-        "vs2_test_sft_17k",
-        "videogen_reward_bench",
-        "genai_bench",
-        "aigve_bench"
-    ]
+
     
     bench_data_dir="bench_data"
     
