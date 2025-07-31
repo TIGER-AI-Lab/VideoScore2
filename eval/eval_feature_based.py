@@ -135,8 +135,8 @@ def main(args):
                 "video_url":item['video_url'],
                 "prompt":prompt,
                 "v_score_gt":v_gt, "t_score_gt":t_gt, "p_score_gt":p_gt,
-                "v_score_model":v_out, "t_score_model":t_out, "p_score_model":p_out,
-                "output":raw_output
+                "v_score_model":score, "t_score_model":score, "p_score_model":score,
+                "output":None
             }
             
         elif bench in ["videogen_reward_bench","videogen-reward-bench",
@@ -144,8 +144,8 @@ def main(args):
             res_item={
                 "video_name":video_name,
                 "prompt":prompt,
-                "v_score_model":v_out, "t_score_model":t_out, "p_score_model":p_out,
-                "output":raw_output
+                "v_score_model":score, "t_score_model":score, "p_score_model":score,
+                "output":None
             }
             
         with open(eval_res_path,"r") as f:
