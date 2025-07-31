@@ -40,34 +40,39 @@ def acc_relaxed_whole_item(pred1,pred2,pred3,gt1,gt2,gt3):
 
     
 def compute_spcc(pred, ground_truth):
-    filtered_pred = []
-    filtered_gt = []
-    for ai, bi in zip(pred, ground_truth):
-        if ai is not None and bi is not None:
-            filtered_pred.append(ai)
-            filtered_gt.append(bi)
-    
-    from scipy.stats import spearmanr
-    assert len(filtered_pred) == len(filtered_gt), "len(pred) should be the same as len(ground_truth)"
-    coefficient, _ = spearmanr(filtered_pred, filtered_gt)
-    coefficient=float(coefficient)
-    return round(coefficient *100 ,ROUND_DIGIT)
+    try:
+        filtered_pred = []
+        filtered_gt = []
+        for ai, bi in zip(pred, ground_truth):
+            if ai is not None and bi is not None:
+                filtered_pred.append(ai)
+                filtered_gt.append(bi)
+        
+        from scipy.stats import spearmanr
+        assert len(filtered_pred) == len(filtered_gt), "len(pred) should be the same as len(ground_truth)"
+        coefficient, _ = spearmanr(filtered_pred, filtered_gt)
+        coefficient=float(coefficient)
+        return round(coefficient *100 ,ROUND_DIGIT)
+    except:
+        None
 
 
 def compute_plcc(pred, ground_truth):
-    filtered_pred = []
-    filtered_gt = []
-    for ai, bi in zip(pred, ground_truth):
-        if ai is not None and bi is not None:
-            filtered_pred.append(ai)
-            filtered_gt.append(bi)
-    
-    from scipy.stats import pearsonr
-    assert len(filtered_pred) == len(filtered_gt), "len(pred) should be the same as len(ground_truth)"
-    coefficient, _ = pearsonr(filtered_pred, filtered_gt)
-    coefficient=float(coefficient)
-    return round(coefficient*100, ROUND_DIGIT)
-
+    try:
+        filtered_pred = []
+        filtered_gt = []
+        for ai, bi in zip(pred, ground_truth):
+            if ai is not None and bi is not None:
+                filtered_pred.append(ai)
+                filtered_gt.append(bi)
+        
+        from scipy.stats import pearsonr
+        assert len(filtered_pred) == len(filtered_gt), "len(pred) should be the same as len(ground_truth)"
+        coefficient, _ = pearsonr(filtered_pred, filtered_gt)
+        coefficient=float(coefficient)
+        return round(coefficient*100, ROUND_DIGIT)
+    except:
+        return None
 
 def plot(data,batch_name,dim_idx):
     import matplotlib.pyplot as plt

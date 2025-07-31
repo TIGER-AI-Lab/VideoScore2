@@ -461,7 +461,6 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
     
     print(bench_name)
     print("total len:", len(data))
-    
     if isinstance(num,int):
         data=data[:num]
     print("loaded:", len(data))
@@ -473,11 +472,11 @@ if __name__ == "__main__":
     # bench_name="genai_bench"
     # bench_name="videogen_reward_bench"
     # bench_name="mj_bench_video"
-    bench_name="aigve_bench"
+    # bench_name="aigve_bench"
     # bench_name="video_phy"
-    # bench_name="video_phy2"
+    bench_name="video_phy2"
     data=load_benchmark(bench_data_dir,bench_name)
     print(len(data))
-    
+
     # import os
     # print(len(os.listdir("/data/xuan/workdir/VideoScore2/eval/bench_data/genai_bench/videos")))

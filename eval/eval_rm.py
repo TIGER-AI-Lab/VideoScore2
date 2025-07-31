@@ -16,7 +16,7 @@ def main(args):
 
     method=args.get("method","vs2")
     bench=args.get("bench","vs2_testsft_17k")
-    bench_data_num=args.get("bench_data_num","all")
+    bench_data_num=args.get("bench_data_num")
     kwargs = args["kwargs"]
     if isinstance(eval(bench_data_num),int):
         bench_data_num=eval(bench_data_num)
@@ -110,6 +110,7 @@ def main(args):
         if "vs2" in bench \
             or bench in ["aigve_bench","aigve-bench",
                          "video_phy","video_phy_test_public",
+                         "video_phy2","video_phy2_test",
                          "mj_video_bench","mj_bench_video","mj-video-bench","mj-bench-video"]:  
             if "vs2" in bench:    
                 v_gt=item['visual_score']
@@ -119,7 +120,8 @@ def main(args):
                 v_gt=int(round((item['technical_quality']+item['element_quality']+item['action_quality'])/3))
                 t_gt=int(round((item['element_presence']+item['action_presence'])/2))
                 p_gt=item['physics']
-            elif bench in ["video_phy","video_phy_test","video_phy2","video_phy2_test"]:
+            elif bench in ["video_phy","video_phy_test",
+                           "video_phy2","video_phy2_test",]:
                 v_gt=None
                 t_gt=item['semantic']
                 p_gt=item['physical']
@@ -167,7 +169,7 @@ if __name__ == "__main__":
     ap.add_argument("--bench",required=True,default="vs2_test_sft_17k")
     ap.add_argument("--method",required=True,default="vs2")
     ap.add_argument("--model_name_or_path",required=True)
-    ap.add_argument("--bench_data_num",required=False)
+    ap.add_argument("--bench_data_num",required=False,default='all')
     ap.add_argument("--infer_fps",required=False,default=2.0)
     ap.add_argument("--kwargs", type=str,required=False,default="{}") 
     t_args = ap.parse_args()
