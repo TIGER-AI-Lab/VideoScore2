@@ -52,5 +52,10 @@ cd videophy
 conda create -n videophy python=3.10 -y
 conda activate videophy
 pip install -r requirements.txt
-
 pip install transformers==4.46.1
+
+
+image_reward
+pip install image-reward
+pip install opencv-python-headless
+pip install clip

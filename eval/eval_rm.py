@@ -43,18 +43,28 @@ def main(args):
         q_template=AIGVE_MACS_QUERY_TEMPLATE
     
     elif method.lower() == "video_reward":
+        ## conda activate video_reward
         from eval_methods.video_reward import eval_VideoReward
         model_name_or_path=kwargs.get("model_name_or_path")
         model=eval_VideoReward(model_name_or_path) 
         q_template=Template("""$t2v_prompt""")
     
     elif method.lower() == "vision_reward":
+        ## conda activate vision_reward
         from eval_methods.vision_reward import eval_VisionReward
         model_name_or_path=kwargs.get("model_name_or_path")
         model=eval_VisionReward(model_name_or_path) 
         q_template=Template("""$t2v_prompt""")
     
+    elif method.lower() == "image_reward":
+        ## conda activate image_reward
+        from eval_methods.image_reward import eval_ImageReward
+        model_name_or_path=kwargs.get("model_name_or_path")
+        model=eval_ImageReward(model_name_or_path) 
+        q_template=Template("""$t2v_prompt""")
+    
     elif method.lower() == "video_phy2_auto_eval":
+        ## conda activate videophy
         from eval_methods.video_phy2 import eval_VideoPhy2
         model_name_or_path=kwargs.get("model_name_or_path")
         model=eval_VideoPhy2(model_name_or_path) 
@@ -187,7 +197,6 @@ if __name__ == "__main__":
         "bench":bench,
         "bench_data_num":bench_data_num,
         "kwargs":{
-            # "model_name":"videoscore2/vs2_qwen2_5vl_sft_17k_1e-5_2fps_warm005_8192",
             "model_name_or_path":model_name_or_path,
             "infer_fps":infer_fps
         }

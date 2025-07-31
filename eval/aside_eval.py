@@ -172,19 +172,28 @@ if __name__ == "__main__":
     # res_p="res_data/res_vs2_test_sft_17k/VideoReward.json"
     # res_p="res_data/res_vs2_test_sft_17k/videophy_2_auto.json"
     # res_p="res_data/res_vs2_test_sft_17k/AIGVE-MACS.json"
-    # res_p="res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_grpo_17k_try_1e-6_1000_infer_2fps.json"
+    res_p="res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_grpo_17k_try_1e-6_800_infer_4fps.json"
+    # res_p="res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_grpo_17k_1e-6_reward_2_800_infer_2fps.json"
     # res_p="res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192_infer_4fps.json"
     
-    # method_name="vs2"
-    # bench_name="vs2_test_sft_17k"
-    
-    res_p="res_data/res_video_phy/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192_infer_4fps.json"
     method_name="vs2"
-    bench_name="video_phy"
+    bench_name="vs2_test_sft_17k"
+    
+    # res_p="res_data/res_video_phy/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192_infer_4fps.json"
+    # method_name="vs2"
+    # bench_name="video_phy"
 
     # res_p="res_data/res_aigve_bench/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192_infer_4fps.json"
     # method_name="vs2"
     # bench_name="aigve_bench"
+
+    # res_p="res_data/res_vs2_test_sft_17k/VisionReward-Video.json"
+    # method_name="vision_reward"
+    # bench_name="vs2_test_sft_17k"
+    
+    # res_p="res_data/res_vs2_test_sft_17k/VideoReward.json"
+    # method_name="video_reward"
+    # bench_name="vs2_test_sft_17k"
     
     metrics_p=f'metrics_report/report_{method_name}.json'
     get_acc(method_name,bench_name,res_p,metrics_p)

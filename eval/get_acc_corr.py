@@ -1,79 +1,6 @@
 
 ROUND_DIGIT=3
 
-def compute_accuracy(pred, ground_truth):
-    assert len(pred) == len(ground_truth), "len(pred) should be the same as len(ground_truth)"
-    pred = [0 if x is None else x for x in pred]
-    ground_truth  = [-1 if gt is None else gt for gt in ground_truth]
-    correct = sum(p == gt for p, gt in zip(pred, ground_truth))
-    total = len(ground_truth)
-    
-    return round(correct / total*100,ROUND_DIGIT) if total > 0 else 0.0
-
-
-def compute_accuracy_relaxed(pred, ground_truth):
-    assert len(pred) == len(ground_truth), "len(pred) should be the same as len(ground_truth)"
-    pred = [0 if x is None else x for x in pred]
-    ground_truth  = [-1 if gt is None else gt for gt in ground_truth]
-    correct = sum(abs(p-gt)<=1 for p, gt in zip(pred, ground_truth))
-    total = len(ground_truth)
-    
-    return round(correct / total *100,ROUND_DIGIT) if total > 0 else 0.0
-    
-
-def acc_relaxed_whole_item(pred1,pred2,pred3,gt1,gt2,gt3):
-    matched=0
-    total = len(gt1)
-    assert len(pred1) == len(gt1) and len(pred2) == len(gt2) and len(pred3) == len(gt3), "len(pred) should be the same as len(ground_truth)"
-    for p1, p2, p3, g1, g2, g3 in zip(pred1, pred2, pred3, gt1, gt2, gt3):
-        if p1 is None or p2 is None or p3 is None:
-            continue
-        if g1 is None or g2 is None or g3 is None:
-            continue
-        if abs(p1 - g1) + abs(p2 - g2) + abs(p3 - g3) <= 0 and \
-            abs(p1 - g1) <= 1 and \
-            abs(p2 - g2) <= 1 and \
-            abs(p3 - g3) <= 1:
-            matched += 1
-            
-    return round(matched / total*100,ROUND_DIGIT) if total > 0 else 0.0
-
-    
-def compute_spcc(pred, ground_truth):
-    try:
-        filtered_pred = []
-        filtered_gt = []
-        for ai, bi in zip(pred, ground_truth):
-            if ai is not None and bi is not None:
-                filtered_pred.append(ai)
-                filtered_gt.append(bi)
-        
-        from scipy.stats import spearmanr
-        assert len(filtered_pred) == len(filtered_gt), "len(pred) should be the same as len(ground_truth)"
-        coefficient, _ = spearmanr(filtered_pred, filtered_gt)
-        coefficient=float(coefficient)
-        return round(coefficient *100 ,ROUND_DIGIT)
-    except:
-        None
-
-
-def compute_plcc(pred, ground_truth):
-    try:
-        filtered_pred = []
-        filtered_gt = []
-        for ai, bi in zip(pred, ground_truth):
-            if ai is not None and bi is not None:
-                filtered_pred.append(ai)
-                filtered_gt.append(bi)
-        
-        from scipy.stats import pearsonr
-        assert len(filtered_pred) == len(filtered_gt), "len(pred) should be the same as len(ground_truth)"
-        coefficient, _ = pearsonr(filtered_pred, filtered_gt)
-        coefficient=float(coefficient)
-        return round(coefficient*100, ROUND_DIGIT)
-    except:
-        return None
-
 def plot(data,batch_name,dim_idx):
     import matplotlib.pyplot as plt
     import os
@@ -91,6 +18,25 @@ def plot(data,batch_name,dim_idx):
     plt.savefig(f"plots/{batch_name}_dim{dim_idx}.png")
     plt.clf()
 
+
+def plot_float(data,batch_name,dim_idx):
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import os
+    bin_width = 0.01
+    min_val = np.floor(min(data))
+    max_val = np.ceil(max(data))
+    bins = np.arange(min_val, max_val + bin_width, bin_width)
+    counts, bin_edges, _ = plt.hist(data, bins=bins, edgecolor='black')
+
+    plt.xlabel('Score')
+    plt.ylabel('Frequency')
+    plt.title("Histogram with Bin Size 0.5")
+    plt.grid(True)
+    plt.title(f'{batch_name} dim{dim_idx} Score Distribution')
+    os.makedirs("plots",exist_ok=True)
+    plt.savefig(f"plots/{batch_name}_dim{dim_idx}.png")
+    plt.clf()
 
 
 def load_scores(score_res_path):
@@ -137,29 +83,152 @@ def load_scores(score_res_path):
     return v_scores_gt, t_scores_gt, p_scores_gt, v_scores_model, t_scores_model, p_scores_model
     
     
+def remove_null_scores(v_scores_gt, t_scores_gt, p_scores_gt, v_scores_model, t_scores_model, p_scores_model):
+    new_v_gt = new_t_gt = new_p_gt = new_v_model = new_t_model = new_p_model = []
+    for v_g, t_g, p_g, v_m, t_m, p_m in zip(v_scores_gt, t_scores_gt, p_scores_gt, v_scores_model, t_scores_model, p_scores_model):
+        if None not in (v_g, t_g, p_g, v_m, t_m, p_m):
+            new_v_gt.append(v_g)
+            new_t_gt.append(t_g)
+            new_p_gt.append(p_g)
+            new_v_model.append(v_m)
+            new_t_model.append(t_m)
+            new_p_model.append(p_m)
+
+    return new_v_gt, new_t_gt, new_p_gt, new_v_model, new_t_model, new_p_model
+
+def compute_accuracy(pred, ground_truth):
+    assert len(pred) == len(ground_truth), "len(pred) should be the same as len(ground_truth)"
+    pred = [0 if x is None else x for x in pred]
+    ground_truth  = [-1 if gt is None else gt for gt in ground_truth]
+    correct = sum(p == gt for p, gt in zip(pred, ground_truth))
+    total = len(ground_truth)
+    
+    return round(correct / total*100,ROUND_DIGIT) if total > 0 else 0.0
+
+
+def compute_accuracy_relaxed(pred, ground_truth):
+    assert len(pred) == len(ground_truth), "len(pred) should be the same as len(ground_truth)"
+    pred = [0 if x is None else x for x in pred]
+    ground_truth  = [-1 if gt is None else gt for gt in ground_truth]
+    correct = sum(abs(p-gt)<=1 for p, gt in zip(pred, ground_truth))
+    total = len(ground_truth)
+    
+    return round(correct / total *100,ROUND_DIGIT) if total > 0 else 0.0
+    
+
+def acc_relaxed_whole_item(pred1,pred2,pred3,gt1,gt2,gt3):
+    matched=0
+    total = len(gt1)
+    assert len(pred1) == len(gt1) and len(pred2) == len(gt2) and len(pred3) == len(gt3), "len(pred) should be the same as len(ground_truth)"
+    for p1, p2, p3, g1, g2, g3 in zip(pred1, pred2, pred3, gt1, gt2, gt3):
+        if p1 is None or p2 is None or p3 is None:
+            continue
+        if g1 is None or g2 is None or g3 is None:
+            continue
+        if abs(p1 - g1) + abs(p2 - g2) + abs(p3 - g3) <= 0 and \
+            abs(p1 - g1) <= 1 and \
+            abs(p2 - g2) <= 1 and \
+            abs(p3 - g3) <= 1:
+            matched += 1
+            
+    return round(matched / total*100,ROUND_DIGIT) if total > 0 else 0.0
+
+    
+def compute_spcc(pred, ground_truth):
+    try:
+        new_pred = []
+        new_gt = []
+        for ai, bi in zip(pred, ground_truth):
+            if ai is not None and bi is not None:
+                new_pred.append(ai)
+                new_gt.append(bi)
+        
+        from scipy.stats import spearmanr
+        assert len(new_pred) == len(new_gt), "len(pred) should be the same as len(ground_truth)"
+        coefficient, _ = spearmanr(new_pred, new_gt)
+        coefficient=float(coefficient)
+        return round(coefficient *100 ,ROUND_DIGIT)
+    except:
+        None
+
+
+def compute_plcc(pred, ground_truth):
+    try:
+        new_pred = []
+        new_gt = []
+        for ai, bi in zip(pred, ground_truth):
+            if ai is not None and bi is not None:
+                new_pred.append(ai)
+                new_gt.append(bi)
+        
+        from scipy.stats import pearsonr
+        assert len(new_pred) == len(new_gt), "len(pred) should be the same as len(ground_truth)"
+        coefficient, _ = pearsonr(new_pred, new_gt)
+        coefficient=float(coefficient)
+        return round(coefficient*100, ROUND_DIGIT)
+    except:
+        return None
+
+    
+    
 def get_acc(method_name,bench_name,score_res_path,metric_report_p):
     v_scores_gt, t_scores_gt, p_scores_gt, v_scores_model, t_scores_model, p_scores_model \
         = load_scores(score_res_path)
     
-
     # To calculate Accuracy, rescale for different reward models / eval methods
     if method_name in ["aigve_macs"]:
         None
+        
     if method_name in ["vision_reward"]:
-        # VisionReward has 1 dim (broadcast to 3), raw score is in [-1, 1]. Rescale to [1,2,3,4,5]  
-        v_scores_model = [int(round((x+1)*2.5)) for x in v_scores_model]
-        t_scores_model = [int(round((x+1)*2.5)) for x in t_scores_model]
-        p_scores_model = [int(round((x+1)*2.5)) for x in p_scores_model]
+        # VisionReward has 1 dim (broadcast to 3), raw score is in [-0.25, 0.25]. Assume Gaussian Dist(0, 0.2). Rescale to [1,2,3,4,5]  
+        from scipy.stats import norm  
+        v_scores_model = t_scores_model = p_scores_model =\
+        [
+            1 if z/0.2 < norm.ppf(0.2) else 
+            2 if z/0.2 < norm.ppf(0.4) else 
+            3 if z/0.2 < norm.ppf(0.6) else 
+            4 if z/0.2 < norm.ppf(0.8) else 5
+            for z in v_scores_model
+        ]
+        
     if method_name in ["video_reward"]:
-        # VideoReward has 2 dim (v t), raw score is in [0, 1]. Rescale to [1,2,3,4,5]  
-        v_scores_model = [max(min(int(round(x*5)),5),1) for x in v_scores_model]
-        t_scores_model = [max(min(int(round(x*5)),5),1) for x in t_scores_model]
+        # VideoReward has 2 dim (v t), v [-2,2], t [-3,3]. Assume Gaussian Dist. Rescale to [1,2,3,4,5]  
+        from scipy.stats import norm 
+        v_scores_model = [
+            1 if z < norm.ppf(0.2) else 
+            2 if z < norm.ppf(0.4) else 
+            3 if z < norm.ppf(0.6) else 
+            4 if z < norm.ppf(0.8) else 5
+            for z in v_scores_model
+        ]
+        t_scores_model = [
+            1 if z/1.5 < norm.ppf(0.2) else 
+            2 if z/1.5 < norm.ppf(0.4) else 
+            3 if z/1.5 < norm.ppf(0.6) else 
+            4 if z/1.5 < norm.ppf(0.8) else 5
+            for z in t_scores_model
+        ]
         p_scores_model = [-1 for x in p_scores_model]        
-        print(v_scores_model)
+        
     if method_name in ["video_phy2"]:
         # VideoPhy2-AutoEval has 2 dim (t p), score in [1,2,3,4,5]  
         v_scores_model = [-1 for x in v_scores_model]
-    
+    if method_name in ["image_reward"]:
+        # ImageReward is normalized to have mean=1 and std=1. Assume Gaussian Dist. Rescale to [1,2,3,4,5]  
+        from scipy.stats import norm 
+        v_scores_model = [
+            1 if z < norm.ppf(0.2) else 2 if z < norm.ppf(0.4) else 3 if z < norm.ppf(0.6) else 4 if z < norm.ppf(0.8) else 5
+            for z in v_scores_model
+        ]
+        t_scores_model = [
+            1 if z < norm.ppf(0.2) else 2 if z < norm.ppf(0.4) else 3 if z < norm.ppf(0.6) else 4 if z < norm.ppf(0.8) else 5
+            for z in t_scores_model
+        ]
+        p_scores_model = [
+            1 if z < norm.ppf(0.2) else 2 if z < norm.ppf(0.4) else 3 if z < norm.ppf(0.6) else 4 if z < norm.ppf(0.8) else 5
+            for z in p_scores_model
+        ]
+        
     
     
     # To calculate Accuracy, rescale for different benchmarks
@@ -215,39 +284,25 @@ def get_corr(method_name,bench_name,score_res_path,metric_report_p):
     # rescale for different **reward models / eval methods**
     if method_name in ["aigve_macs"]:
         None
-    if method_name in ["vision_reward"]:
-        # VisionReward has 1 dim (broadcast to 3), raw score is in [-1, 1]. Rescale to [1,2,3,4,5]  
+    if method_name in ["vision_reward"]: 
         # use raw VisionReward score to calculate SPCC/PLCC
         None
     if method_name in ["video_reward"]:
-        # VideoReward has 2 dim  (v t), raw score is in [0, 1]. Rescale to [1,2,3,4,5]  
-        v_scores_model = [max(min(int(round(x*5)),5),1) for x in v_scores_model]
-        t_scores_model = [max(min(int(round(x*5)),5),1) for x in t_scores_model]
+        # VideoPhy2-AutoEval has 2 dim (v t), ignore dim3
+        # use raw VideoReward score to calculate SPCC/PLCC
         p_scores_model = [-1 for x in p_scores_model]    
     if method_name in ["video_phy2"]:
-        # VideoPhy2-AutoEval has 2 dim (t p), score in [1,2,3,4,5]  
+        # VideoPhy2-AutoEval has 2 dim (t p), ignore dim1
+        # use raw VideoPhy2-AutoEval score to calculate SPCC/PLCC
         v_scores_model = [-1 for x in v_scores_model]
+    if method_name in ["image_reward"]:
+        # use raw ImageReward score to calculate SPCC/PLCC
+        None
     
     
     
     # rescale for different **benchmarks**
-    if "vs2" in bench_name:
-        None
-    elif bench_name in ["aigve_bench","aigve-bench"]:
-        # In AIGVE-Bench, phy dim only has score 1,3,5
-        # (1,2)->1, (3,4)->3, 5->5
-        p_scores_model=[1 if x == 2 else 3 if x == 4 else x for x in p_scores_model]            
-    elif bench_name in ["video_phy","video_phy_test_public"]:
-        # In Video-Phy-test, sa and pc dim only have score 0,1
-        # (1,2,3)->0, (4,5)->1
-        t_scores_model = [0 if x in (1, 2, 3) else 1 for x in t_scores_model]
-        p_scores_model = [0 if x in (1, 2, 3) else 1 for x in p_scores_model]
-    elif bench_name in ["mj_video_bench","mj_bench_video","mj-video-bench","mj-bench-video"]:
-        # In Video-Phy-test, v and t dim have score 0,1,2
-        # (1,2)->0, (3,4)->1, 5->2
-        t_scores_model = [0 if x in (1, 2) else 1 if x in (3, 4) else 2 for x in t_scores_model]
-        p_scores_model = [0 if x in (1, 2) else 1 if x in (3, 4) else 2 for x in p_scores_model]
-
+    None
     
     metrics_dict={        
         "v_spcc":compute_spcc(v_scores_model,v_scores_gt),

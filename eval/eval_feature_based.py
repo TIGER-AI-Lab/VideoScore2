@@ -49,6 +49,16 @@ def main(args):
         model_or_process.eval()
         feat_method_func = compute_dino_similarity
     
+    elif method_name.lower() in ["pick_score","pickscore"]:
+        from eval_methods.feature_based.pick_score import pick_score_output
+        import torch
+        from transformers import AutoProcessor, AutoModel
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        processor = AutoProcessor.from_pretrained("laion/CLIP-ViT-H-14-laion2B-s32B-b79K")
+        model = AutoModel.from_pretrained("yuvalkirstain/PickScore_v1").eval().to(device)
+        model_or_process = [model,processor,device]
+        feat_method_func = pick_score_output
+    
     elif method_name.lower() in ["clip-score","clip_score"]:
         from eval_methods.feature_based.clip_score import clip_score_output
         from transformers import CLIPProcessor, CLIPModel
@@ -72,7 +82,12 @@ def main(args):
         tokenizer = AutoTokenizer.from_pretrained(model_name)
         model_or_process = [model,processor,tokenizer]
         feat_method_func = x_clip_score_output
-        
+    
+    elif method_name.lower() in ["simple_vqa","simplevqa","simple-vqa"]:
+        from eval_methods.feature_based.simple_vqa import simple_vqa_output
+        model_or_process = None
+        feat_method_func = simple_vqa_output
+    
     else:
         raise ValueError(f"Unsupported metric: {method_name}")
 
