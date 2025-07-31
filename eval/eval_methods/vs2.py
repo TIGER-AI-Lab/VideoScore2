@@ -32,8 +32,13 @@ class eval_VideoScore2:
         # device_map = infer_auto_device_map(model, max_memory={i: "40GiB" for i in range(torch.cuda.device_count())})
         model = AutoModelForVision2Seq.from_pretrained(
             model_name,
+            trust_remote_code=True,
         ).to('cuda')
-        processor = AutoProcessor.from_pretrained(model_name)
+        processor = AutoProcessor.from_pretrained(
+            model_name,
+            trust_remote_code=True,
+            # "Qwen/Qwen2.5-VL-7B-Instruct"
+        )
         return model,processor
     
     # def load_model_processor(self,model_name):

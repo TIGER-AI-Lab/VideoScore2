@@ -460,10 +460,11 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
         print(f"{bench_name} not supported. Exited.")
     
     print(bench_name)
-    print(len(data))
+    print("total len:", len(data))
     
     if isinstance(num,int):
         data=data[:num]
+    print("loaded:", len(data))
     return data
 
 

@@ -16,8 +16,10 @@ def main(args):
 
     method=args.get("method","vs2")
     bench=args.get("bench","vs2_testsft_17k")
-    bench_data_num=args.get("bench_data_num",150)
+    bench_data_num=args.get("bench_data_num","all")
     kwargs = args["kwargs"]
+    if isinstance(eval(bench_data_num),int):
+        bench_data_num=eval(bench_data_num)
 
     bench_data=load_benchmark(bench_data_dir,bench,bench_data_num)
     print("benchmark data loaded.")
@@ -165,7 +167,7 @@ if __name__ == "__main__":
     ap.add_argument("--bench",required=True,default="vs2_test_sft_17k")
     ap.add_argument("--method",required=True,default="vs2")
     ap.add_argument("--model_name_or_path",required=True)
-    ap.add_argument("--bench_data_num",required=False,default=150)
+    ap.add_argument("--bench_data_num",required=False)
     ap.add_argument("--infer_fps",required=False,default=2.0)
     ap.add_argument("--kwargs", type=str,required=False,default="{}") 
     t_args = ap.parse_args()
