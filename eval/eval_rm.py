@@ -70,6 +70,13 @@ def main(args):
         model=eval_VideoPhy2(model_name_or_path) 
         q_template=Template("""$t2v_prompt""")
         
+    elif method.lower() == "unified_reward":
+        ## conda activate unifiedreward
+        from eval_methods.video_phy2 import eval_VideoPhy2
+        model_name_or_path=kwargs.get("model_name_or_path")
+        model=eval_VideoPhy2(model_name_or_path) 
+        q_template=Template("""$t2v_prompt""")
+        
     # elif method.lower() in ["mj","mj_video"]:
     #     from eval_methods.mj_video import InternVL2VideoEvaluator
     #     model_name=kwargs.get("model_name")

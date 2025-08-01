@@ -178,6 +178,13 @@ def get_acc(method_name,bench_name,score_res_path,metric_report_p):
     # To calculate Accuracy, rescale for different reward models / eval methods
     if method_name in ["aigve_macs"]:
         None
+    
+    if method_name in ["unified_reward"]:
+        # UnifiedReward (the version for video generation point score) 
+        # has 1 dim (broadcast to 3), raw score (float) from 1.0 to 4.0. Rescale to [1,2,3,4,5]      
+        v_scores_model = t_scores_model = p_scores_model =[
+            int(round(x*1.25)) for x in v_scores_model
+        ]
         
     if method_name in ["vision_reward"]:
         # VisionReward has 1 dim (broadcast to 3), raw score is in [-0.25, 0.25]. Assume Gaussian Dist(0, 0.2). Rescale to [1,2,3,4,5]  
@@ -209,10 +216,7 @@ def get_acc(method_name,bench_name,score_res_path,metric_report_p):
             for z in t_scores_model
         ]
         p_scores_model = [-1 for x in p_scores_model]        
-        
-    if method_name in ["video_phy2"]:
-        # VideoPhy2-AutoEval has 2 dim (t p), score in [1,2,3,4,5]  
-        v_scores_model = [-1 for x in v_scores_model]
+    
     if method_name in ["image_reward"]:
         # ImageReward is normalized to have mean=1 and std=1. Assume Gaussian Dist. Rescale to [1,2,3,4,5]  
         from scipy.stats import norm 
@@ -229,6 +233,10 @@ def get_acc(method_name,bench_name,score_res_path,metric_report_p):
             for z in p_scores_model
         ]
         
+    if method_name in ["video_phy2"]:
+        # VideoPhy2-AutoEval has 2 dim (t p), score in [1,2,3,4,5]  
+        v_scores_model = [-1 for x in v_scores_model]    
+    
     
     
     # To calculate Accuracy, rescale for different benchmarks
