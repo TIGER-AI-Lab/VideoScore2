@@ -4,8 +4,8 @@ from string import Template
 
 # model_name = "Qwen/Qwen2.5-VL-7B-Instruct"
 # model_name = "/data/xuan/workdir/Video-R1/src/r1-v/log/Qwen2.5-VL-7B-GRPO/checkpoint-700"
-# model_name = "videoscore2/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192"
-model_name = "videoscore2/vs2_qwen2_5_vl_grpo_17k_try_1e-6_800"
+model_name = "videoscore2/vs2_qwen2_5vl_sft_17k_2e-4_2fps_960_720_8192"
+# model_name = "videoscore2/vs2_qwen2_5_vl_grpo_17k_try_1e-6_800"
 vs2 = eval_VideoScore2(model_name)
 
 
@@ -34,11 +34,12 @@ physical/common-sense consistency: <p_score>
 DO NOT include any other things behind or after your output.
 """)
 
-video_path = "/data/xuan/workdir/VideoScore2/other/example_high_res_videos/000000_r.mp4"
-video_path = "/data/xuan/workdir/VideoScore2/other/example_high_res_videos/001000_s.mp4"
-video_path = "/data/xuan/workdir/VideoScore2/other/example_high_res_videos/001500_t.mp4"
-video_path = "/data/xuan/workdir/VideoScore2/other/example_high_res_videos/002500_g.mp4"
-t2v_prompt = "None, a dog is flying in the sky."
+# video_path = "/data/xuan/workdir/VideoScore2/other/example_videos/000000_r.mp4"
+# video_path = "/data/xuan/workdir/VideoScore2/other/example_videos/001000_s.mp4"
+video_path = "/data/xuan/workdir/VideoScore2/other/example_videos/001500_t.mp4"
+# video_path = "/data/xuan/workdir/VideoScore2/other/example_videos/002500_g.mp4"
+# video_path = "/data/xuan/workdir/VideoScore2/other/example_videos/p100784.mp4"
+t2v_prompt = "Many Lego figures are playing in the park made of building blocks"
 user_prompt=temp.substitute(t2v_prompt=t2v_prompt)
 method_kwargs = {
     "max_tokens": 1024,     

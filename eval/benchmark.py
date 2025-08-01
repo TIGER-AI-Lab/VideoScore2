@@ -468,7 +468,7 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
 
 
 if __name__ == "__main__":
-    bench_data_dir="/data/xuan/workdir/VideoScore2/eval/bench_data"
+    bench_data_dir="./eval/bench_data"
     # bench_name="genai_bench"
     # bench_name="videogen_reward_bench"
     # bench_name="mj_bench_video"
