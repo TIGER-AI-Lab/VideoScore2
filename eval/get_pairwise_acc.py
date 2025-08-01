@@ -83,7 +83,7 @@ def main(bench,kwargs):
         print("Result for VideoGen-Reward-Bench: ")
         print(f"VQ Pairwise Accuracy: {vq_correct}/{total} = {vq_correct/total:.3f}")
         print(f"TA Pairwise Accuracy: {ta_correct}/{total} = {ta_correct/total:.3f}")
-        print(f"Overall Pairwise Accuracy: {ta_correct}/{total} = {ta_correct/total:.3f}")
+        print(f"Overall Pairwise Accuracy: {overall_correct}/{total} = {overall_correct/total:.3f}")
 
     # ========================= GenAI-Bench =========================
     elif bench in ["genai_bench","genai-bench"]:
@@ -200,17 +200,17 @@ def main(bench,kwargs):
 
         
 if __name__ == "__main__":
-    # bench="videogen_reward_bench"
-    # kwargs={
-    #     "src_csv":"bench_data/videogen_reward_bench/videogen-rewardbench.csv",
-    #     "score_json":"res_data/res_videogen_reward_bench/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192_infer_2fps.json",
-    #     "with_ties":True
-    # }
-    
-    bench="genai_bench"
+    bench="videogen_reward_bench"
     kwargs={
-        "score_json":"res_data/res_genai_bench/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192_infer_2fps.json",
+        "src_csv":"bench_data/videogen_reward_bench/videogen-rewardbench.csv",
+        "score_json":"res_data/res_videogen_reward_bench/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192_infer_2fps.json",
         "with_ties":True
     }
+
+    # bench="genai_bench"
+    # kwargs={
+    #     "score_json":"res_data/res_genai_bench/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192_infer_2fps.json",
+    #     "with_ties":False
+    # }
     
     main(bench,kwargs)

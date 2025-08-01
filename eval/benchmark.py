@@ -79,7 +79,7 @@ DIM_NAMES=[
 
 
 
-def load_benchmark(bench_data_dir,bench_name,num=150):
+def load_benchmark(bench_data_dir,bench_name,num="all"):
     data=[]
     # ========================= VideoScore2-Bench =========================
     if bench_name == "vs2_test_sft_17k_v0":
@@ -116,6 +116,7 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
 
     # ========================= VideoGen-Reward-Bench =========================
     elif bench_name in ["videogen_reward_bench","videogen-reward-bench"]:
+        bench_name = "videogen_reward_bench"
         csv_url="https://huggingface.co/datasets/KwaiVGI/VideoGen-RewardBench/resolve/main/videogen-rewardbench.csv"
         csv_save_path=f"{bench_data_dir}/{bench_name}/videogen-rewardbench.csv"
         json_save_path=f"{bench_data_dir}/{bench_name}/videogen-rewardbench.json"
@@ -175,6 +176,7 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
     
     # ========================= GenAI-Bench =========================
     elif bench_name in ["genai_bench","genai-bench"]:
+        bench_name = "genai_bench"
         from datasets import load_dataset
         ds = load_dataset("TIGER-Lab/GenAI-Bench", data_dir="video_generation",split="test")
         raw_data=[]
@@ -219,6 +221,7 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
     
     # ========================= MJ-Bench-Video =========================
     elif bench_name in ["mj_video_bench","mj_bench_video","mj-video-bench","mj-bench-video"]:
+        bench_name = "mj_bench_video"
         test_url="https://huggingface.co/datasets/MJ-Bench/MJ-BENCH-VIDEO/resolve/main/test.json"
         json_save_path_raw=f"{bench_data_dir}/{bench_name}/mj_bench_video_raw.json"
         json_save_path=f"{bench_data_dir}/{bench_name}/mj_bench_video.json"
@@ -271,6 +274,7 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
             total_score=item['video_1_total_score']
             new_item={
                 "video_name":video_name,
+                "video_url":None,
                 "prompt":prompt,
                 "alignment": aspect_score['Alignment'],
                 "safety": aspect_score['Safety'],
@@ -285,6 +289,7 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
     
     # ========================= AIGVE-Bench =========================
     elif bench_name in ["aigve_bench","aigve-bench"]:
+        bench_name = "aigve_bench"
         csv_url="https://huggingface.co/datasets/xiaoliux/AIGVE-Bench/resolve/main/AIGVE-Bench1.0.csv"
         csv_save_path=f"{bench_data_dir}/{bench_name}/aigve_bench.csv"
         json_save_path=f"{bench_data_dir}/{bench_name}/aigve_bench.json"
@@ -342,6 +347,7 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
     
     # ========================= VideoPhy-test =========================
     elif bench_name in ["video_phy","video_phy_test"]:
+        bench_name = "video_phy"
         csv_url="https://huggingface.co/datasets/videophysics/videophy_test_public/resolve/main/videophy_test_public.csv"
         csv_save_path=f"{bench_data_dir}/{bench_name}/videophy_test_public.csv"
         json_save_path=f"{bench_data_dir}/{bench_name}/videophy_test_public.json"
@@ -382,6 +388,7 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
     
     # ========================= VideoPhy2-test =========================
     elif bench_name in ["video_phy2","video_phy2_test"]:
+        bench_name = "video_phy2"
         csv_url="https://huggingface.co/datasets/videophysics/videophy2_test/resolve/main/videophy2_test.csv"
         csv_save_path=f"{bench_data_dir}/{bench_name}/videophy2_test.csv"
         json_save_path=f"{bench_data_dir}/{bench_name}/videophy2_test.json"
@@ -442,7 +449,7 @@ def load_benchmark(bench_data_dir,bench_name,num=150):
         df = pd.read_csv(csv_save_path)
         df = df.iloc[1:]
         for index, row in df.iterrows():
-            video_name=row["model_name"]+"_"+row["video_id"]
+            video_name=str(row["model_name"])+"_"+str(row["video_id"])
             t2v_prompt=row["prompt"]
             visual_score=row["video_quality_score"]
             align_score=row["text_alignment_score"]
@@ -474,7 +481,8 @@ if __name__ == "__main__":
     # bench_name="mj_bench_video"
     # bench_name="aigve_bench"
     # bench_name="video_phy"
-    bench_name="video_phy2"
+    # bench_name="video_phy2"
+    bench_name="tvge"
     data=load_benchmark(bench_data_dir,bench_name)
     print(len(data))
 

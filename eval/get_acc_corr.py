@@ -248,7 +248,8 @@ def get_acc(method_name,bench_name,score_res_path,metric_report_p):
         # (1,2)->0, (3,4)->1, 5->2
         t_scores_model = [0 if x in (1, 2) else 1 if x in (3, 4) else 2 for x in t_scores_model]
         p_scores_model = [0 if x in (1, 2) else 1 if x in (3, 4) else 2 for x in p_scores_model]
-
+    elif bench_name in ["tvge","t2v_gen_eval"]:
+        None
     
     metrics_dict={
         "v_acc":compute_accuracy(v_scores_model,v_scores_gt),
