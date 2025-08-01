@@ -172,9 +172,9 @@ if __name__ == "__main__":
     # res_p="res_data/res_vs2_test_sft_17k/VideoReward.json"
     # res_p="res_data/res_vs2_test_sft_17k/videophy_2_auto.json"
     # res_p="res_data/res_vs2_test_sft_17k/AIGVE-MACS.json"
-    res_p="res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_grpo_17k_try_1e-6_800_infer_4fps.json"
+    # res_p="res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_grpo_17k_try_1e-6_800_infer_4fps.json"
     # res_p="res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_grpo_17k_1e-6_reward_2_800_infer_2fps.json"
-    # res_p="res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192_infer_4fps.json"
+    res_p="res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_sft_17k_2e-4_4fps_512_512_8192_infer_8fps.json"
     
     method_name="vs2"
     bench_name="vs2_test_sft_17k"
