@@ -1,22 +1,27 @@
+shared:
+pip install datasets
+pip install gdown
+pip install tqdm
+pip install matplotlib
+
+
 vs2_eval (for vs2, mllm, feat, aigve_macs)
 pip install transformers
 pip install qwen-vl-utils
 pip install accelerate
-pip install opencv-python
-pip install datasets
+pip install opencv-python-headless
 pip install requests
 pip install scipy
 pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0
-pip install matplotlib
 pip install openai
 pip install google-generativeai
 pip install anthropic
-pip install tqdm
 pip install pypiqe
 pip install brisque
 pip install timm
 pip install joblib
 pip install scikit-learn
+
 
 vs1_eval (copied from vs2_eval):
 pip install mantis-vl
@@ -39,6 +44,7 @@ git clone https://huggingface.co/KwaiVGI/VideoReward
 pip install numpy
 pip install pandas
 
+
 vision_reward
 git clone https://github.com/zai-org/VisionReward.git
 cd VisionReward
@@ -60,3 +66,19 @@ image_reward
 pip install image-reward
 pip install opencv-python-headless
 pip install clip
+
+
+unified_reward
+
+
+dover
+git clone https://github.com/QualityAssessment/DOVER.git 
+cd DOVER 
+pip install -e .  
+mkdir pretrained_weights 
+cd pretrained_weights 
+wget https://github.com/QualityAssessment/DOVER/releases/download/v0.1.0/DOVER.pth 
+wget https://github.com/QualityAssessment/DOVER/releases/download/v0.5.0/DOVER-Mobile.pth
+cd ..
+pip uninstall opencv-python
+pip install opencv-python-headless

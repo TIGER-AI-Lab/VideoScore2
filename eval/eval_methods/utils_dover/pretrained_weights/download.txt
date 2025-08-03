@@ -1,0 +1,6 @@
+Please download model weights and put it in dir `pretrained_weights /`.
+
+```bash
+wget https://github.com/QualityAssessment/DOVER/releases/download/v0.1.0/DOVER.pth 
+wget https://github.com/QualityAssessment/DOVER/releases/download/v0.5.0/DOVER-Mobile.pth
+```

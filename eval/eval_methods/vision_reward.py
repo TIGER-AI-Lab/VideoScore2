@@ -11,8 +11,8 @@ class eval_VisionReward:
     def __init__(
         self,
         model_path: str = "THUDM/VisionReward-Video",
-        questions_path: str = "eval_methods/vision_reward_utils/VisionReward_video_qa_select.txt",
-        weight_path: str = "eval_methods/vision_reward_utils/weight.json"
+        questions_path: str = "eval_methods/utils_vision_reward/VisionReward_video_qa_select.txt",
+        weight_path: str = "eval_methods/utils_vision_reward/weight.json"
     ):
         self.model_path = model_path
         self.questions_path = questions_path

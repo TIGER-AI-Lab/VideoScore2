@@ -48,7 +48,7 @@ from transformers.trainer_callback import TrainerControl, TrainerState
 from transformers.trainer_pt_utils import nested_detach, find_batch_size
 from transformers.training_args import TrainingArguments
 from trl import RewardTrainer
-from eval_methods.video_reward_utils.utils import get_peft_state_non_lora_maybe_zero_3
+from eval_methods.utils_video_reward.utils import get_peft_state_non_lora_maybe_zero_3
 
 
 if is_torch_xla_available():

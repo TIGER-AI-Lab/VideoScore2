@@ -36,45 +36,59 @@ def main(args):
         model=eval_VideoScore1(model_name_or_path) 
         q_template=VS1_REG_QUERY_TEMPLATE
     
-    elif method.lower() == "aigve_macs":
-        from eval_methods.aigve_macs import eval_AIGVE_MACS
-        model_name_or_path=kwargs.get("model_name_or_path")
-        model=eval_AIGVE_MACS(model_name_or_path) 
-        q_template=AIGVE_MACS_QUERY_TEMPLATE
+    elif method.lower() == "unified_reward":
+        ## conda activate unifiedreward
+        from eval_methods.unified_reward import eval_UnifiedReward
+        model_name_or_path="CodeGoat24/UnifiedReward-7b"
+        model=eval_UnifiedReward(model_name_or_path) 
+        q_template=Template("""$t2v_prompt""")
     
     elif method.lower() == "video_reward":
         ## conda activate video_reward
         from eval_methods.video_reward import eval_VideoReward
-        model_name_or_path=kwargs.get("model_name_or_path")
+        model_name_or_path="./eval_methods/utils_video_reward/checkpoints/VideoReward"
         model=eval_VideoReward(model_name_or_path) 
         q_template=Template("""$t2v_prompt""")
     
     elif method.lower() == "vision_reward":
         ## conda activate vision_reward
         from eval_methods.vision_reward import eval_VisionReward
-        model_name_or_path=kwargs.get("model_name_or_path")
+        model_name_or_path="THUDM/VisionReward-Video"
         model=eval_VisionReward(model_name_or_path) 
         q_template=Template("""$t2v_prompt""")
     
     elif method.lower() == "image_reward":
         ## conda activate image_reward
         from eval_methods.image_reward import eval_ImageReward
-        model_name_or_path=kwargs.get("model_name_or_path")
+        model_name_or_path="ImageReward-v1.0"
         model=eval_ImageReward(model_name_or_path) 
         q_template=Template("""$t2v_prompt""")
+    
+    elif method.lower() == "aigve_macs":
+        from eval_methods.aigve_macs import eval_AIGVE_MACS
+        model_name_or_path="xiaoliux/AIGVE-MACS"
+        model=eval_AIGVE_MACS(model_name_or_path) 
+        q_template=AIGVE_MACS_QUERY_TEMPLATE
     
     elif method.lower() == "video_phy2_auto_eval":
         ## conda activate videophy
         from eval_methods.video_phy2 import eval_VideoPhy2
-        model_name_or_path=kwargs.get("model_name_or_path")
+        model_name_or_path="./eval_methods/utils_video_phy2/checkpoints/videophy_2_auto" 
         model=eval_VideoPhy2(model_name_or_path) 
         q_template=Template("""$t2v_prompt""")
-        
-    elif method.lower() == "unified_reward":
-        ## conda activate unifiedreward
-        from eval_methods.video_phy2 import eval_VideoPhy2
-        model_name_or_path=kwargs.get("model_name_or_path")
-        model=eval_VideoPhy2(model_name_or_path) 
+    
+    elif method.lower() == "dover":
+        ## conda activate dover
+        from eval_methods.dover import eval_DOVER
+        model_name_or_path="dover"
+        model=eval_DOVER() 
+        q_template=Template("""$t2v_prompt""")
+    
+    elif method.lower() == "q_insight":
+        ## conda activate q_insight
+        from eval_methods.q_insight import eval_QInsight
+        model_name_or_path="ByteDance/Q-Insight"
+        model=eval_QInsight(model_name_or_path) 
         q_template=Template("""$t2v_prompt""")
         
     # elif method.lower() in ["mj","mj_video"]:
@@ -113,16 +127,16 @@ def main(args):
         video_name=item['video_name']
         prompt=item['prompt']
         path_or_url=os.path.abspath(f"{bench_data_dir}/{bench}/videos/{video_name}.mp4")
-        
-        try:
-            user_prompt=q_template.substitute(t2v_prompt=prompt)
-            s_t=time.time()
-            v_out, t_out, p_out, raw_output = model.evaluate_video(user_prompt, path_or_url, kwargs)
-            print("time cost: ",time.time()-s_t)
+        res_item=item
+        # try:
+        user_prompt=q_template.substitute(t2v_prompt=prompt)
+        s_t=time.time()
+        v_out, t_out, p_out, raw_output = model.evaluate_video(user_prompt, path_or_url, kwargs)
+        print("time cost: ",time.time()-s_t)
             
-        except Exception as e:
-            print(f"{e}\nerror in evaluation, skipped {video_name}")
-            continue
+        # except Exception as e:
+        #     print(f"{e}\nerror in evaluation, skipped {video_name}")
+        #     continue
            
         if "vs2" in bench \
             or bench in ["aigve_bench","aigve-bench",
@@ -145,29 +159,26 @@ def main(args):
             elif bench in ["mj_video_bench","mj_bench_video","mj-video-bench","mj-bench-video"]:
                 v_gt=item['fineness']
                 t_gt=item['alignment']
-                p_gt=None
+                p_gt=item['consistency']
             elif bench in ["tvge"]:
                 v_gt=item['video_quality_score']
                 t_gt=item['text_alignment_score']
                 p_gt=None
             print(f"gt: {v_gt} {t_gt} {p_gt}")  
-            res_item={
-                "video_name":video_name,
-                "video_url":item['video_url'],
-                "prompt":prompt,
+            res_item.update({
                 "v_score_gt":v_gt, "t_score_gt":t_gt, "p_score_gt":p_gt,
                 "v_score_model":v_out, "t_score_model":t_out, "p_score_model":p_out,
                 "output":raw_output
-            }
+            })
             
         elif bench in ["videogen_reward_bench","videogen-reward-bench",
                        "genai_bench","genai-bench",]:
-            res_item={
+            res_item.update({
                 "video_name":video_name,
                 "prompt":prompt,
                 "v_score_model":v_out, "t_score_model":t_out, "p_score_model":p_out,
                 "output":raw_output
-            }
+            })
         
         with open(eval_res_path,"r") as f:
             res_data=json.load(f)
@@ -185,7 +196,7 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--bench",required=True,default="vs2_test_sft_17k")
     ap.add_argument("--method",required=True,default="vs2")
-    ap.add_argument("--model_name_or_path",required=True)
+    ap.add_argument("--model_name_or_path",required=False)
     ap.add_argument("--bench_data_num",required=False,default='all')
     ap.add_argument("--infer_fps",required=False,default=2.0)
     ap.add_argument("--kwargs", type=str,required=False,default="{}") 

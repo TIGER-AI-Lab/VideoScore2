@@ -4,13 +4,13 @@ from typing import Optional, List, Union
 
 import pandas as pd
 import torch
-from eval_methods.video_reward_utils.prompt_template import build_prompt
+from eval_methods.utils_video_reward.prompt_template import build_prompt
 # from qwen_vl_utils import process_vision_info
-from eval_methods.video_reward_utils.vision_process import process_vision_info
+from eval_methods.utils_video_reward.vision_process import process_vision_info
 from torch.utils.data import Dataset
 import torchvision.transforms.functional as F
 
-from eval_methods.video_reward_utils.utils import save_video
+from eval_methods.utils_video_reward.utils import save_video
 
 @dataclass
 class DataConfig:

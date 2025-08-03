@@ -1,0 +1,6 @@
+Please download checkpoints from [Huggingface](https://huggingface.co/KwaiVGI/VideoReward) and put it in dir `checkpoints/`.
+
+```bash
+git lfs install
+git clone https://huggingface.co/KwaiVGI/VideoReward
+```

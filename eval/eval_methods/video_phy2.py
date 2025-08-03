@@ -5,9 +5,11 @@ import pandas as pd
 from collections import defaultdict
 
 from peft import LoraConfig, get_peft_model
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "utils_video_phy2")))
 from transformers.models.llama.tokenization_llama import LlamaTokenizer
-from eval_methods.video_phy2_utils.mplug_owl_video.modeling_mplug_owl import MplugOwlForConditionalGeneration
-from eval_methods.video_phy2_utils.mplug_owl_video.processing_mplug_owl import MplugOwlImageProcessor, MplugOwlProcessor
+from mplug_owl_video.modeling_mplug_owl import MplugOwlForConditionalGeneration
+from mplug_owl_video.processing_mplug_owl import MplugOwlImageProcessor, MplugOwlProcessor
 
 
 PROMPT_SA = (

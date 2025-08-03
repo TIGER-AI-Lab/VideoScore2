@@ -1,6 +1,6 @@
 import pandas as pd
 import json
-
+from datasets import load_dataset
 
 def main(bench,kwargs):
     # ========================= VideoGen-Reward-Bench =========================
@@ -84,10 +84,9 @@ def main(bench,kwargs):
         print(f"VQ Pairwise Accuracy: {vq_correct}/{total} = {vq_correct/total:.3f}")
         print(f"TA Pairwise Accuracy: {ta_correct}/{total} = {ta_correct/total:.3f}")
         print(f"Overall Pairwise Accuracy: {overall_correct}/{total} = {overall_correct/total:.3f}")
-
+    
     # ========================= GenAI-Bench =========================
     elif bench in ["genai_bench","genai-bench"]:
-        from datasets import load_dataset
         benchmark_data = load_dataset("TIGER-Lab/GenAI-Bench", data_dir="video_generation",split="test")
         json_path = kwargs["score_json"]
         with_ties = kwargs["with_ties"]
@@ -100,7 +99,6 @@ def main(bench,kwargs):
             if None in [item["v_score_model"],item["t_score_model"],item["p_score_model"]]:
                 continue
             score_dict[item["video_name"]] = (item["v_score_model"] + item["t_score_model"] + item["p_score_model"]) / 3
-
         correct = 0
         total = 0
 
@@ -138,6 +136,53 @@ def main(bench,kwargs):
         else:
             print("No valid pairs found.")
 
+    # ========================= VisionRewardDB-Video =========================
+    elif bench in ["vision_reward_db_video"]:
+        benchmark_data = load_dataset("zai-org/VisionRewardDB-Video", "test")["test"]
+        json_path = kwargs["score_json"]
+        with_ties = kwargs["with_ties"]
+        with open(json_path, 'r') as f:
+            score_data = json.load(f)
+            
+        score_dict = {}
+        for item in score_data:
+            if None in [item["v_score_model"],item["t_score_model"],item["p_score_model"]]:
+                continue
+            score_dict[item["video_name"]] = (item["v_score_model"] + item["t_score_model"] + item["p_score_model"]) / 3
+        correct = 0
+        total = 0
+        for item in benchmark_data:
+            video1 = item["video1_path"].split("/")[-1].split('.mp4')[0]
+            video2 = item["video2_path"].split("/")[-1].split('.mp4')[0]
+            ans = item["standard_answer"]  
+            if video1 not in score_dict or video2 not in score_dict:
+                continue
+            score1 = score_dict[video1]
+            score2 = score_dict[video2]
+            
+            pred_ans = None
+            if score1 > score2:
+                pred_ans = "video1"
+            elif score1 < score2:
+                pred_ans = "video2"
+            else:
+                pred_ans = "tie"
+                
+            if with_ties==False:
+                if vote == "tie":
+                    continue
+            
+            if pred_vote == vote:
+                correct += 1
+            total += 1
+
+        if total > 0:
+            acc = correct / total
+            print("Result for GenAI-Bench: ")
+            print(f"Pairwise accuracy: {correct}/{total} = {acc:.3f}")
+        else:
+            print("No valid pairs found.")
+    
     # ========================= MJ-Bench-Video =========================
     elif bench in ["mj_video_bench","mj_bench_video","mj-video-bench","mj-bench-video"]:
         src_json_path = kwargs["src_json"]
@@ -210,6 +255,12 @@ if __name__ == "__main__":
     # bench="genai_bench"
     # kwargs={
     #     "score_json":"res_data/res_genai_bench/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192_infer_2fps.json",
+    #     "with_ties":False
+    # }
+    
+    # bench="vision_reward_db_video"
+    # kwargs={
+    #     "score_json":"res_data/res_vision_reward_db_video/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192_infer_2fps.json",
     #     "with_ties":False
     # }
     

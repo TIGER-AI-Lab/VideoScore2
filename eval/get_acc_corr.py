@@ -175,8 +175,11 @@ def get_acc(method_name,bench_name,score_res_path,metric_report_p):
     v_scores_gt, t_scores_gt, p_scores_gt, v_scores_model, t_scores_model, p_scores_model \
         = load_scores(score_res_path)
     
+    overall_scores_gt=[None]
+    overall_scores_model=[None]
+    
     # To calculate Accuracy, rescale for different reward models / eval methods
-    if method_name in ["aigve_macs"]:
+    if method_name in ["vs2"]:
         None
     
     if method_name in ["unified_reward"]:
@@ -232,10 +235,18 @@ def get_acc(method_name,bench_name,score_res_path,metric_report_p):
             1 if z < norm.ppf(0.2) else 2 if z < norm.ppf(0.4) else 3 if z < norm.ppf(0.6) else 4 if z < norm.ppf(0.8) else 5
             for z in p_scores_model
         ]
-        
-    if method_name in ["video_phy2"]:
+    
+    if method_name in ["aigve_macs"]:
+        None
+    
+    if method_name in ["video_phy2_auto_eval"]:
         # VideoPhy2-AutoEval has 2 dim (t p), score in [1,2,3,4,5]  
         v_scores_model = [-1 for x in v_scores_model]    
+        
+    if method_name in ["dover"]:
+        # DOVER is used for VQ, broadcast to 3 dim, float [0,1]
+        v_scores_model = t_scores_model = p_scores_model =  [int(x*5) for x in v_scores_model]  
+          
     
     
     
@@ -249,13 +260,20 @@ def get_acc(method_name,bench_name,score_res_path,metric_report_p):
     elif bench_name in ["video_phy","video_phy_test_public"]:
         # In Video-Phy-test, sa and pc dim only have score 0,1
         # (1,2,3)->0, (4,5)->1
-        t_scores_model = [0 if x in (1, 2, 3) else 1 for x in t_scores_model]
-        p_scores_model = [0 if x in (1, 2, 3) else 1 for x in p_scores_model]
+        t_scores_model = [0 if x in [1, 2, 3] else 1 for x in t_scores_model]
+        p_scores_model = [0 if x in [1, 2, 3] else 1 for x in p_scores_model]
     elif bench_name in ["mj_video_bench","mj_bench_video","mj-video-bench","mj-bench-video"]:
-        # In Video-Phy-test, v and t dim have score 0,1,2
+        # In MJ-Bench-Video, v and t dim have score 0,1,2
         # (1,2)->0, (3,4)->1, 5->2
-        t_scores_model = [0 if x in (1, 2) else 1 if x in (3, 4) else 2 for x in t_scores_model]
-        p_scores_model = [0 if x in (1, 2) else 1 if x in (3, 4) else 2 for x in p_scores_model]
+        v_scores_model = [0 if x in [1,2] else 1 if x in [3,4] else 2 for x in v_scores_model]
+        t_scores_model = [0 if x in [1] else 1 if x in [2, 3] else 2 for x in t_scores_model]
+        import json
+        with open(score_res_path,"r") as f:
+            tmp_data=json.load(f)
+        overall_scores_gt=[x["total_score"] for x in tmp_data]
+        overall_scores_model=[int((x["v_score_out"]+x["t_score_out"]+x["p_score_out"])/3) for x in tmp_data]
+        overall_scores_model=[0 if x in [1] else 1 if x in [2, 3] else 2 for x in overall_scores_model]
+        
     elif bench_name in ["tvge","t2v_gen_eval"]:
         None
     
@@ -268,11 +286,14 @@ def get_acc(method_name,bench_name,score_res_path,metric_report_p):
         "t_acc_relaxed":compute_accuracy_relaxed(t_scores_model,t_scores_gt),
         "p_acc_relaxed":compute_accuracy_relaxed(p_scores_model,p_scores_gt),
         
+        "overall_acc":compute_accuracy(overall_scores_model,overall_scores_gt),
+        
         "acc_whole_item":acc_relaxed_whole_item(v_scores_model,t_scores_model,p_scores_model,v_scores_gt,t_scores_gt,p_scores_gt),
         }
     print(list(metrics_dict.items())[:3])
     print(list(metrics_dict.items())[3:6])
-    print(list(metrics_dict.items())[6:])
+    print(list(metrics_dict.items())[6:7])
+    print(list(metrics_dict.items())[7:])
     
     # batch_name="sft_model_score" 
     # plot(v_scores_model,batch_name,1)
@@ -283,6 +304,9 @@ def get_acc(method_name,bench_name,score_res_path,metric_report_p):
     #     json.dump({
     #         method_name:metrics_dict
     #     },f,indent=4)
+    
+    
+    
     
     
     

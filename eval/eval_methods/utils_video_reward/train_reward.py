@@ -12,10 +12,10 @@ from peft import LoraConfig, get_peft_model
 from transformers import AutoProcessor, HfArgumentParser
 from trl import get_kbit_device_map, get_quantization_config
 
-from eval_methods.video_reward_utils.trainer import Qwen2VLRewardModelBT, VideoVLMRewardTrainer, compute_multi_attr_accuracy, PartialEmbeddingUpdateCallback
-from eval_methods.video_reward_utils.data import DataConfig, QWen2VLDataCollator, convert_GSB_csv_to_reward_data
-from eval_methods.video_reward_utils.utils import ModelConfig, PEFTLoraConfig, TrainingConfig
-from eval_methods.video_reward_utils.utils import load_model_from_checkpoint
+from eval_methods.utils_video_reward.trainer import Qwen2VLRewardModelBT, VideoVLMRewardTrainer, compute_multi_attr_accuracy, PartialEmbeddingUpdateCallback
+from eval_methods.utils_video_reward.data import DataConfig, QWen2VLDataCollator, convert_GSB_csv_to_reward_data
+from eval_methods.utils_video_reward.utils import ModelConfig, PEFTLoraConfig, TrainingConfig
+from eval_methods.utils_video_reward.utils import load_model_from_checkpoint
 
 
 def save_configs_to_json(data_config, training_args, model_config, peft_lora_config):

@@ -2,12 +2,12 @@ import os
 import json
 import torch
 from collections.abc import Mapping
-from eval_methods.video_reward_utils.prompt_template import build_prompt 
-from eval_methods.video_reward_utils.vision_process import process_vision_info 
-from eval_methods.video_reward_utils.utils import ModelConfig, PEFTLoraConfig, TrainingConfig
-from eval_methods.video_reward_utils.utils import load_model_from_checkpoint
-from eval_methods.video_reward_utils.data import DataConfig
-from eval_methods.video_reward_utils.train_reward import create_model_and_processor
+from eval_methods.utils_video_reward.prompt_template import build_prompt 
+from eval_methods.utils_video_reward.vision_process import process_vision_info 
+from eval_methods.utils_video_reward.utils import ModelConfig, PEFTLoraConfig, TrainingConfig
+from eval_methods.utils_video_reward.utils import load_model_from_checkpoint
+from eval_methods.utils_video_reward.data import DataConfig
+from eval_methods.utils_video_reward.train_reward import create_model_and_processor
 
 
 class VideoVLMRewardInference:
