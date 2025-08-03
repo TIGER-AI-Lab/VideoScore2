@@ -13,5 +13,10 @@
         "video_name": "VideoReward_20241104_test-1123_1",
         "video_url": null,
         "prompt": "Create a video of termites in a house."
+    },
+    {
+        "video_name": "VideoReward_20241104_test-1123_2",
+        "video_url": null,
+        "prompt": "Create a video of termites in a house."
     }
 ]

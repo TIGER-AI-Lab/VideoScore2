@@ -187,5 +187,11 @@ eval/*
 !req.txt
 !eval/res_data/
 !eval/eval_methods/
-eval/eval_methods/video_reward_utils/checkpoints
-eval/eval_methods/video_phy2_utils/checkpoints
+eval/eval_methods/utils_video_reward/checkpoints/*
+!eval/eval_methods/utils_video_reward/checkpoints/download.txt
+eval/eval_methods/utils_video_phy2/checkpoints/*
+!eval/eval_methods/utils_video_phy2_/checkpoints/download.txt
+eval/eval_methods/utils_dover/pretrained_weights/*
+!eval/eval_methods/utils_dover/pretrained_weights/download.txt
+
+diff/*
