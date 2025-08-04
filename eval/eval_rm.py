@@ -41,7 +41,7 @@ def main(args):
         from eval_methods.unified_reward import eval_UnifiedReward
         model_name_or_path="CodeGoat24/UnifiedReward-7b"
         model=eval_UnifiedReward(model_name_or_path) 
-        q_template=Template("""$t2v_prompt""")
+        q_template=VS2_QUERY_TEMPLATE
     
     elif method.lower() == "video_reward":
         ## conda activate video_reward
@@ -77,6 +77,14 @@ def main(args):
         model=eval_VideoPhy2(model_name_or_path) 
         q_template=Template("""$t2v_prompt""")
     
+    elif method.lower() == "lift":
+        ## conda activate lift
+        from eval_methods.lift import eval_LiFT
+        model_name_or_path="Fudan-FUXI/LiFT-Critic-13b-lora-v1.5"
+        # model_name_or_path="Fudan-FUXI/LiFT-Critic-40b-lora-v1.5"
+        model=eval_LiFT(model_name_or_path) 
+        q_template=Template("""$t2v_prompt""")
+    
     elif method.lower() == "dover":
         ## conda activate dover
         from eval_methods.dover import eval_DOVER
@@ -86,11 +94,26 @@ def main(args):
     
     elif method.lower() == "q_insight":
         ## conda activate q_insight
-        from eval_methods.q_insight import eval_QInsight
+        from eval_methods.q_insight import eval_Q_Insight
         model_name_or_path="ByteDance/Q-Insight"
-        model=eval_QInsight(model_name_or_path) 
+        model=eval_Q_Insight(model_name_or_path) 
         q_template=Template("""$t2v_prompt""")
-        
+    
+    elif method.lower() == "q_align":
+        ## conda activate q_align
+        from eval_methods.q_align import eval_Q_Align
+        model_name_or_path="Q-Align"
+        model=eval_Q_Align() 
+        q_template=Template("""$t2v_prompt""")
+    
+    elif method.lower() == "deqa":
+        ## conda activate deqa
+        from eval_methods.deqa import eval_DeQA
+        model_name_or_path="zhiyuanyou/DeQA-Score-Mix3"
+        model=eval_DeQA(model_name_or_path) 
+        q_template=Template("""$t2v_prompt""")
+    
+    
     # elif method.lower() in ["mj","mj_video"]:
     #     from eval_methods.mj_video import InternVL2VideoEvaluator
     #     model_name=kwargs.get("model_name")
@@ -133,7 +156,8 @@ def main(args):
         s_t=time.time()
         v_out, t_out, p_out, raw_output = model.evaluate_video(user_prompt, path_or_url, kwargs)
         print("time cost: ",time.time()-s_t)
-            
+        print("out:", v_out, t_out, p_out)
+        
         # except Exception as e:
         #     print(f"{e}\nerror in evaluation, skipped {video_name}")
         #     continue
@@ -164,7 +188,7 @@ def main(args):
                 v_gt=item['video_quality_score']
                 t_gt=item['text_alignment_score']
                 p_gt=None
-            print(f"gt: {v_gt} {t_gt} {p_gt}")  
+            print(f"gt: {v_gt} {t_gt} {p_gt}")
             res_item.update({
                 "v_score_gt":v_gt, "t_score_gt":t_gt, "p_score_gt":p_gt,
                 "v_score_model":v_out, "t_score_model":t_out, "p_score_model":p_out,

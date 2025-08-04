@@ -10,7 +10,7 @@ from transformers import Qwen2_5_VLForConditionalGeneration, AutoProcessor, set_
 from qwen_vl_utils import process_vision_info
 
 
-class eval_QInsight:
+class eval_Q_Insight:
     def __init__(
         self,
         model_path: str = "ByteDance/Q-Insight",
@@ -34,11 +34,8 @@ class eval_QInsight:
             "The reasoning process and answer are enclosed within <think> </think> and <answer> </answer> tags, respectively, "
             "i.e., <think> reasoning process here </think><answer> answer here </answer>"
         )
-        self.score_prompt = (
-            "What is your overall rating on the quality of this picture? The rating should be a float between 1 and 5, "
-            "rounded to two decimal places, with 1 representing very poor quality and 5 representing excellent quality. "
-            "Return the final answer in JSON format with the following keys: \"rating\": The score."
-        )
+        self.score_format = "The rating should be a float between 1 and 5, rounded to two decimal places, with 1 representing very poor and 5 representing excellent. Return the final answer in JSON format with the following keys: \"rating\": The score."
+        
         self.gen_config = GenerationConfig(
             do_sample=True,
             temperature=1.0,
@@ -47,7 +44,7 @@ class eval_QInsight:
             max_new_tokens=1024,
         )
 
-    def _evaluate_image(self, image: Image.Image) -> float:
+    def _evaluate_image(self, image: Image.Image, query_prompt: str) -> float:
         with tempfile.TemporaryDirectory() as tmp_dir:
             img_path = os.path.join(tmp_dir, "frame.jpg")
             image.save(img_path)
@@ -56,7 +53,7 @@ class eval_QInsight:
                 {
                     "role": "user",
                     "content": [
-                        {"type": "text", "text": self.score_prompt},
+                        {"type": "text", "text": query_prompt},
                         {"type": "image", "image": f"{img_path}"},
                     ],
                 },
@@ -94,7 +91,7 @@ class eval_QInsight:
             else:
                 score = None
 
-        return score, score, score, output_text
+        return score, output_text
 
     def _extract_video_frames(self, video_path: str, fps: float = 2.0, max_frames: int = 16) -> List[Image.Image]:
         if not os.path.exists(video_path):
@@ -125,17 +122,30 @@ class eval_QInsight:
         return frames
 
     def evaluate_video(self, prompt: str, video_path: str, kwargs: dict):
+        self.score_prompt_dim1 = "The dimension 'visual quality' cares about the image's visual and optical propertities, including resolution, overall clarity, local blurriness, correctness of brightness/contrast, and any other factors the affect the watching experience. What is your overall rating on the visual quality of this picture?"+self.score_format
+        self.score_prompt_dim2 = f"The caption for this images is {prompt}. What is your overall rating on the text-to-image alignment of this picture?"+self.score_format
+        self.score_prompt_dim3 = "The dimension 'physical/common-sense consistency' mainly examines whether there are any violations of common sense, physical laws, or any other aspects in the image that appear strange or unnatural. What is your overall rating on the physical consistency of this picture?"+self.score_format
+        
         fps = kwargs.get("infer_fps", 2.0)
         max_frames = kwargs.get("max_frames", 16)
         frames = self._extract_video_frames(video_path, fps=fps, max_frames=max_frames)
 
-        scores = []
-        for frame in frames:
-            score, _, _, _ = self._evaluate_image(frame)
-            if score is not None:
-                scores.append(score)
-
-        if not scores:
-            return 0.0, 0.0, 0.0, None
-        avg_score = sum(scores) / len(scores)
-        return avg_score, avg_score, avg_score, f"Q-Insight video avg score: {avg_score:.4f}"
+        dim_scores = []
+        dim_output_text = []
+        for query in [self.score_prompt_dim1,self.score_prompt_dim2,self.score_prompt_dim3]:
+            frame_scores = []
+            for frame in frames:
+                score, output_text = self._evaluate_image(frame,query)
+                if score is not None:
+                    frame_scores.append(score)
+            if not frame_scores:
+                dim_scores.append(0.0)
+            else:
+                dim_scores.append(sum(frame_scores) / len(frame_scores))
+            # only save the output text of the last frame for simplicity
+            dim_output_text.append(output_text)
+        
+        
+        all_dim_output=f"(1) Visual: {dim_output_text[0]}; (2) Text alignment: {dim_output_text[2]}; (3) Physical/Common-sense Consistency: {dim_output_text[2]}."
+        
+        return dim_scores[0], dim_scores[1], dim_scores[2], all_dim_output

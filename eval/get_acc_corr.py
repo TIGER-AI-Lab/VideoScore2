@@ -183,14 +183,15 @@ def get_acc(method_name,bench_name,score_res_path,metric_report_p):
         None
     
     if method_name in ["unified_reward"]:
-        # UnifiedReward (the version for video generation point score) 
-        # has 1 dim (broadcast to 3), raw score (float) from 1.0 to 4.0. Rescale to [1,2,3,4,5]      
+        # UnifiedReward (the version for video generation point score) has 1 dim (broadcast to 3).
+        # Raw score (float) in [1,4]. Rescale to [1,2,3,4,5].      
         v_scores_model = t_scores_model = p_scores_model =[
             int(round(x*1.25)) for x in v_scores_model
         ]
         
     if method_name in ["vision_reward"]:
-        # VisionReward has 1 dim (broadcast to 3), raw score is in [-0.25, 0.25]. Assume Gaussian Dist(0, 0.2). Rescale to [1,2,3,4,5]  
+        # VisionReward has 1 dim (final score), broadcast to 3 dim. 
+        # Raw score (float) in [-0.25, 0.25]. Assume Gaussian Dist(0, 0.2). Rescale to [1,2,3,4,5]  
         from scipy.stats import norm  
         v_scores_model = t_scores_model = p_scores_model =\
         [
@@ -202,7 +203,8 @@ def get_acc(method_name,bench_name,score_res_path,metric_report_p):
         ]
         
     if method_name in ["video_reward"]:
-        # VideoReward has 2 dim (v t), v [-2,2], t [-3,3]. Assume Gaussian Dist. Rescale to [1,2,3,4,5]  
+        # VideoReward has 2 dim (v t), v [-2,2], t [-3,3]. 
+        # Raw score (float). Assume Gaussian Dist. Rescale to [1,2,3,4,5]  
         from scipy.stats import norm 
         v_scores_model = [
             1 if z < norm.ppf(0.2) else 
@@ -221,33 +223,43 @@ def get_acc(method_name,bench_name,score_res_path,metric_report_p):
         p_scores_model = [-1 for x in p_scores_model]        
     
     if method_name in ["image_reward"]:
-        # ImageReward is normalized to have mean=1 and std=1. Assume Gaussian Dist. Rescale to [1,2,3,4,5]  
+        # ImageReward has 1 dim (final score), broadcast to 3 dim. 
+        # Raw score (float). Normalized to have mean=1 and std=1. Assume Gaussian Dist. Rescale to [1,2,3,4,5]  
         from scipy.stats import norm 
-        v_scores_model = [
+        v_scores_model = t_scores_model = p_scores_model = [
             1 if z < norm.ppf(0.2) else 2 if z < norm.ppf(0.4) else 3 if z < norm.ppf(0.6) else 4 if z < norm.ppf(0.8) else 5
             for z in v_scores_model
-        ]
-        t_scores_model = [
-            1 if z < norm.ppf(0.2) else 2 if z < norm.ppf(0.4) else 3 if z < norm.ppf(0.6) else 4 if z < norm.ppf(0.8) else 5
-            for z in t_scores_model
-        ]
-        p_scores_model = [
-            1 if z < norm.ppf(0.2) else 2 if z < norm.ppf(0.4) else 3 if z < norm.ppf(0.6) else 4 if z < norm.ppf(0.8) else 5
-            for z in p_scores_model
         ]
     
     if method_name in ["aigve_macs"]:
         None
     
     if method_name in ["video_phy2_auto_eval"]:
-        # VideoPhy2-AutoEval has 2 dim (t p), score in [1,2,3,4,5]  
+        # VideoPhy2-AutoEval has 2 dim (t p). Raw score (int) in [1,2,3,4,5]  
         v_scores_model = [-1 for x in v_scores_model]    
         
     if method_name in ["dover"]:
-        # DOVER is used for VQ, broadcast to 3 dim, float [0,1]
-        v_scores_model = t_scores_model = p_scores_model =  [int(x*5) for x in v_scores_model]  
-          
+        # DOVER is used for VQ, broadcast to 3 dim. 
+        # Raw score (float) in [0,1]. Rescale to [1,2,3,4,5] 
+        v_scores_model = t_scores_model = p_scores_model =  [min(5, max(1, round(5*x))) for x in v_scores_model]  
     
+    if method_name in ["q_insight"]:
+        # Q-Insight can predict 3 dims, v t p.
+        # Raw score (float) in [0,5]. Rescale to [1,2,3,4,5]
+        v_scores_model = [min(5, max(1, round(x))) for x in v_scores_model]
+        t_scores_model = [min(5, max(1, round(x))) for x in t_scores_model]
+        p_scores_model = [min(5, max(1, round(x))) for x in p_scores_model]
+    
+    if method_name in ["q_align"]:
+        # Q-Align has 1 dim (final score), broadcast to 3 dim. 
+        # Raw score (float) in [0,1]. Rescale to [1,2,3,4,5].
+        v_scores_model = t_scores_model = p_scores_model = [min(5, max(1, round(5*x))) for x in v_scores_model]
+    
+    if method_name in ["deqa"]:
+        # DeQA has 1 dim (final score), broadcast to 3 dim. 
+        # Raw score (float) in [0,5]. Rescale to [1,2,3,4,5].
+        v_scores_model = t_scores_model = p_scores_model = [min(5, max(1, round(x))) for x in v_scores_model]
+
     
     
     # To calculate Accuracy, rescale for different benchmarks

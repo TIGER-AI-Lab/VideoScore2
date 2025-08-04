@@ -7,7 +7,7 @@ import os
 import re
 import random
 
-import sys, os
+import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "utils_unified_reward")))
 from llava.model.builder import load_pretrained_model
 from llava.mm_utils import opencv_extract_frames
@@ -53,30 +53,15 @@ class eval_UnifiedReward:
         frame_count = kwargs.get("frame_count", None)
         max_tokens = kwargs.get("max_tokens", 4096)
 
-        images, frames_loaded = self._load_video(video_path, num_video_frames, loader_fps, fps, frame_count)
+        images, frames_loaded = self._load_video(video_path, num_video_frames, loader_fps, infer_fps, frame_count)
         image_sizes = []
         for i in range(len(images)):
             images[i] = images[i].resize((512, 512))
             image_sizes.append(images[i].size)
 
         image_tensor = self.image_processor.preprocess(images, return_tensors="pt")["pixel_values"].to(self.device).bfloat16()
-  
-        question = (
-            "<image>\n" * len(images) +
-            "Suppose you are an expert in judging and evaluating the quality of AI-generated videos, please watch the frames of a given video and see the text prompt for generating the video.\n"
-            "Then give scores from 5 different dimensions:\n"
-            "(1) visual quality: the quality of the video in terms of clearness, resolution, brightness, and color\n"
-            "(2) temporal consistency, the consistency of objects or humans in video\n"
-            "(3) dynamic degree, the degree of dynamic changes\n"
-            "(4) text-to-video alignment, the alignment between the text prompt and the video content\n"
-            "(5) factual consistency, the consistency of the video content with the common-sense and factual knowledge\n\n"
-            "For each dimension, output a number from [1,2,3,4], \nin which '1' means 'Bad', '2' means 'Average', '3' means 'Good', \n'4' means 'Real' or 'Perfect' (the video is like a real video)\n"
-            "Finally, based on above 5 dimensions, assign a score from 1.0 to 4.0 after 'Final Score:'\n"
-            "Here is an output example:\n"
-            "visual quality: 4\ntemporal consistency: 4\ndynamic degree: 3\ntext-to-video alignment: 1\nfactual consistency: 2\nFinal Score: 6\n\n"
-            "**Note: In the example above, scores are placeholders meant only to demonstrate the format. Your actual evaluation should be based on the quality of the given video.**\n"
-            f"Your task is provided as follows: Text Prompt: [{user_prompt}]"
-        )
+          
+        question = "<image>\n" * len(images) + user_prompt
 
         conv = copy.deepcopy(conv_templates[self.conv_template])
         conv.append_message(conv.roles[0], question)
@@ -84,7 +69,6 @@ class eval_UnifiedReward:
         prompt = conv.get_prompt()
 
         input_ids = tokenizer_image_token(prompt, self.tokenizer, IMAGE_TOKEN_INDEX, return_tensors="pt").unsqueeze(0).to(self.device)
-        print(input_ids.shape)
         
         with torch.cuda.amp.autocast():
             output_ids = self.model.generate(
@@ -96,13 +80,14 @@ class eval_UnifiedReward:
                 max_new_tokens=max_tokens
             )
             output_text = self.tokenizer.batch_decode(output_ids, skip_special_tokens=True)[0]
-
-        pattern = r"Final Score:\s*([\d.]+)"
-        match = re.search(pattern, output_text, re.IGNORECASE)
-
+        print(output_text)
+        
+        pattern = r"visual quality:\s*(\d+).*?text-to-video alignment:\s*(\d+).*?physical/common-sense consistency:\s*(\d+)"
+        match = re.search(pattern, output_text, re.DOTALL | re.IGNORECASE)
         if match:
-            final_score = float(match.group(1))
+            v_score_model = float(match.group(1))
+            t_score_model = float(match.group(2))
+            p_score_model = float(match.group(3))
         else:
-            final_score = None
-
-        return final_score, final_score, final_score, output_text
+            v_score_model = t_score_model = p_score_model = None
+        return v_score_model, t_score_model, p_score_model, output_text

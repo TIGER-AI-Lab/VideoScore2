@@ -106,15 +106,15 @@ class eval_VideoScore2:
             generated_ids_trimmed, 
             skip_special_tokens=True, 
             clean_up_tokenization_spaces=False
-        )
-        res=output_text[0]
+        )[0]
+
         pattern = r"visual quality:\s*(\d+).*?text-to-video alignment:\s*(\d+).*?physical/common-sense consistency:\s*(\d+)"
-        match = re.search(pattern, res, re.DOTALL | re.IGNORECASE)
+        match = re.search(pattern, output_text, re.DOTALL | re.IGNORECASE)
         if match:
             v_score_model = int(match.group(1))
             t_score_model = int(match.group(2))
             p_score_model = int(match.group(3))
         else:
             v_score_model = t_score_model = p_score_model = None
-        return v_score_model, t_score_model, p_score_model, res
+        return v_score_model, t_score_model, p_score_model, output_text
     

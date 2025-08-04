@@ -8,9 +8,6 @@ import tempfile
 
 class eval_ImageReward:
     def __init__(self, model_name_or_path: str = "ImageReward-v1.0"):
-        """
-        初始化 ImageReward 模型
-        """
         self.model = load_image_reward(model_name_or_path)
 
     def _extract_frames_from_video(
