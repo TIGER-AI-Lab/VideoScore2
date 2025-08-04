@@ -27,7 +27,7 @@ if __name__ == "__main__":
     # res_p="res_data/res_vs2_test_sft_17k/videophy_2_auto.json"
     # res_p="res_data/res_vs2_test_sft_17k/AIGVE-MACS.json"
     # res_p="res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_grpo_17k_try_1e-6_800_infer_4fps.json"
-    res_p="res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_1200_infer_2fps.json"
+    res_p="res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_1800_infer_2fps.json"
     # res_p="res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_grpo_17k_1e-6_reward_3_3200_infer_2fps.json"
     # res_p="res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_sft_17k_5e-5_2fps_960_720_8192_infer_2fps.json"
     
@@ -63,9 +63,9 @@ if __name__ == "__main__":
     # bench_name="vs2_test_sft_17k"
     
     metrics_p=f'metrics_report/report_{method_name}.json'
-    # from get_acc_corr import get_acc, get_corr
-    # get_acc(method_name,bench_name,res_p,metrics_p)
-    # get_corr(method_name,bench_name,res_p,metrics_p)
+    from get_acc_corr import get_acc, get_corr
+    get_acc(method_name,bench_name,res_p,metrics_p)
+    get_corr(method_name,bench_name,res_p,metrics_p)
     
 
     # from transformers import AutoModel, AutoTokenizer, AutoProcessor

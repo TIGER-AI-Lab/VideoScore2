@@ -195,3 +195,5 @@ eval/eval_methods/utils_dover/pretrained_weights/*
 !eval/eval_methods/utils_dover/pretrained_weights/download.txt
 
 diff/*
+
+*.slurm
