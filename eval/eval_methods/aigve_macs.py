@@ -87,14 +87,19 @@ class eval_AIGVE_MACS:
         generated_ids_trimmed = [
             out_ids[len(in_ids):] for in_ids, out_ids in zip(inputs["input_ids"], generated_ids)
         ]
-        output_text = self.processor.batch_decode(
-            generated_ids_trimmed,
-            skip_special_tokens=True,
-            clean_up_tokenization_spaces=False
-        )[0]
-        out_dict=ast.literal_eval(output_text)
+        try:
+            output_text = self.processor.batch_decode(
+                generated_ids_trimmed,
+                skip_special_tokens=True,
+                clean_up_tokenization_spaces=False
+            )[0]
+            out_dict=ast.literal_eval(output_text)
+            tq=int(round((out_dict['technical_quality']['score']+out_dict['element_quality']['score']+out_dict['action_quality']['score'])/3))
+            align_score=int(round((out_dict['element_presentence']["score"]+out_dict['action_presentence']["score"])/2))
+            phy=out_dict["physics"]["score"]
+            return tq, align_score, phy, output_text
+
+        except Exception as e:
+            print(e)
+            return None, None, None, output_text
         
-        tq=int(round((out_dict['technical_quality']['score']+out_dict['element_quality']['score']+out_dict['action_quality']['score'])/3))
-        align_score=int(round((out_dict['element_presentence']["score"]+out_dict['action_presentence']["score"])/2))
-        phy=out_dict["physics"]["score"]
-        return tq, align_score, phy, output_text

@@ -148,8 +148,9 @@ def compute_spcc(pred, ground_truth):
         coefficient, _ = spearmanr(new_pred, new_gt)
         coefficient=float(coefficient)
         return round(coefficient *100 ,ROUND_DIGIT)
-    except:
-        None
+    except Exception as e:
+        print(e)
+        return None
 
 
 def compute_plcc(pred, ground_truth):
@@ -166,7 +167,8 @@ def compute_plcc(pred, ground_truth):
         coefficient, _ = pearsonr(new_pred, new_gt)
         coefficient=float(coefficient)
         return round(coefficient*100, ROUND_DIGIT)
-    except:
+    except Exception as e:
+        print(e)
         return None
 
     
@@ -343,8 +345,7 @@ def get_corr(method_name,bench_name,score_res_path,metric_report_p):
     if method_name in ["image_reward"]:
         # use raw ImageReward score to calculate SPCC/PLCC
         None
-    
-    
+
     
     # rescale for different **benchmarks**
     None

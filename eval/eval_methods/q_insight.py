@@ -94,9 +94,6 @@ class eval_Q_Insight:
         return score, output_text
 
     def _extract_video_frames(self, video_path: str, fps: float = 2.0, max_frames: int = 16) -> List[Image.Image]:
-        if not os.path.exists(video_path):
-            raise FileNotFoundError(f"Video not found: {video_path}")
-
         cap = cv2.VideoCapture(video_path)
         if not cap.isOpened():
             raise ValueError(f"Cannot open video: {video_path}")
@@ -122,6 +119,9 @@ class eval_Q_Insight:
         return frames
 
     def evaluate_video(self, prompt: str, video_path: str, kwargs: dict):
+        if not os.path.exists(video_path):
+            raise FileNotFoundError(f"Video not found: {video_path}")
+        
         self.score_prompt_dim1 = "The dimension 'visual quality' cares about the image's visual and optical propertities, including resolution, overall clarity, local blurriness, correctness of brightness/contrast, and any other factors the affect the watching experience. What is your overall rating on the visual quality of this picture?"+self.score_format
         self.score_prompt_dim2 = f"The caption for this images is {prompt}. What is your overall rating on the text-to-image alignment of this picture?"+self.score_format
         self.score_prompt_dim3 = "The dimension 'physical/common-sense consistency' mainly examines whether there are any violations of common sense, physical laws, or any other aspects in the image that appear strange or unnatural. What is your overall rating on the physical consistency of this picture?"+self.score_format

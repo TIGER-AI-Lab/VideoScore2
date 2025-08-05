@@ -123,8 +123,6 @@ class eval_LiFT:
                     use_cache=True,
                     stopping_criteria=[stopping_criteria],
                 )
-
-            print(output_ids.shape)
             
             output_text = self.tokenizer.batch_decode(output_ids, skip_special_tokens=True)[0].strip()
             if output_text.endswith(stop_str):

@@ -25,12 +25,14 @@ def main(args):
     print("benchmark data loaded.")
     
     if method.lower() == "vs2":
+        ## conda activate vs2_eval
         from eval_methods.vs2 import eval_VideoScore2
         model_name_or_path=kwargs.get("model_name_or_path")
         model=eval_VideoScore2(model_name_or_path)    
         q_template=VS2_QUERY_TEMPLATE
         
     elif method.lower() == "vs1":
+        ## conda activate vs1_eval
         from eval_methods.vs1 import eval_VideoScore1
         model_name_or_path=kwargs.get("model_name_or_path")
         model=eval_VideoScore1(model_name_or_path) 
@@ -65,6 +67,7 @@ def main(args):
         q_template=Template("""$t2v_prompt""")
     
     elif method.lower() == "aigve_macs":
+        ## conda activate vs2_eval
         from eval_methods.aigve_macs import eval_AIGVE_MACS
         model_name_or_path="xiaoliux/AIGVE-MACS"
         model=eval_AIGVE_MACS(model_name_or_path) 
@@ -151,16 +154,16 @@ def main(args):
         prompt=item['prompt']
         path_or_url=os.path.abspath(f"{bench_data_dir}/{bench}/videos/{video_name}.mp4")
         res_item=item
-        # try:
-        user_prompt=q_template.substitute(t2v_prompt=prompt)
-        s_t=time.time()
-        v_out, t_out, p_out, raw_output = model.evaluate_video(user_prompt, path_or_url, kwargs)
-        print("time cost: ",time.time()-s_t)
-        print("out:", v_out, t_out, p_out)
+        try:
+            user_prompt=q_template.substitute(t2v_prompt=prompt)
+            s_t=time.time()
+            v_out, t_out, p_out, raw_output = model.evaluate_video(user_prompt, path_or_url, kwargs)
+            print("time cost: ",time.time()-s_t)
+            print("out:", v_out, t_out, p_out)
         
-        # except Exception as e:
-        #     print(f"{e}\nerror in evaluation, skipped {video_name}")
-        #     continue
+        except Exception as e:
+            print(f"{e}\nerror in evaluation, skipped {video_name}")
+            continue
            
         if "vs2" in bench \
             or bench in ["aigve_bench","aigve-bench",
