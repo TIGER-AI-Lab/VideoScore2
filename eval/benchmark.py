@@ -3,7 +3,6 @@ import os
 import zipfile
 from string import Template
 from tqdm import tqdm
-import pandas as pd 
 import tarfile
 import shutil
 from eval_methods.utils import _download_file
@@ -122,9 +121,9 @@ def load_benchmark(bench_data_dir,bench_name,num="all"):
         bench_name = "videogen_reward_bench"
         csv_url="https://huggingface.co/datasets/KwaiVGI/VideoGen-RewardBench/resolve/main/videogen-rewardbench.csv"
         csv_save_path=f"{bench_data_dir}/{bench_name}/videogen-rewardbench.csv"
-        json_save_path=f"{bench_data_dir}/{bench_name}/videogen-rewardbench.json"
+        json_save_path=f"{bench_data_dir}/{bench_name}/{bench_name}.json"
         zip_url="https://huggingface.co/datasets/KwaiVGI/VideoGen-RewardBench/resolve/main/videos.zip"
-        zip_save_path=f"{bench_data_dir}/{bench_name}/videogen_reward_bench_videos.zip"
+        zip_save_path=f"{bench_data_dir}/{bench_name}/{bench_name}_videos.zip"
         video_save_dir=f"{bench_data_dir}/{bench_name}/videos"
         
         _download_file(csv_url,csv_save_path)
@@ -145,7 +144,8 @@ def load_benchmark(bench_data_dir,bench_name,num="all"):
             os.remove(zip_save_path)
         else:
             print(f"video save dir already exists!")  
-                        
+            
+        import pandas as pd                 
         df = pd.read_csv(csv_save_path)
         df = df.iloc[1:]
         for index, row in df.iterrows():
@@ -184,7 +184,7 @@ def load_benchmark(bench_data_dir,bench_name,num="all"):
         from datasets import load_dataset
         ds = load_dataset("TIGER-Lab/GenAI-Bench", data_dir="video_generation",split="test")
         raw_data=[]
-        json_save_path=f"{bench_data_dir}/{bench_name}/genai_bench.json"
+        json_save_path=f"{bench_data_dir}/{bench_name}/{bench_name}.json"
         os.makedirs(os.path.dirname(os.path.abspath(json_save_path)),exist_ok=True)
         
         for x in ds:
@@ -229,11 +229,11 @@ def load_benchmark(bench_data_dir,bench_name,num="all"):
         bench_name = "vision_reward_db_video"
         from datasets import load_dataset
         ds = load_dataset("zai-org/VisionRewardDB-Video", "test")["test"]
-        json_save_path=f"{bench_data_dir}/{bench_name}/vision_reward_db_video.json"
+        json_save_path=f"{bench_data_dir}/{bench_name}/{bench_name}.json"
         os.makedirs(os.path.dirname(os.path.abspath(json_save_path)),exist_ok=True)
         
         zip_url="https://huggingface.co/datasets/zai-org/VisionRewardDB-Video/resolve/main/videos/test.tar.gz"
-        zip_save_path=f"{bench_data_dir}/{bench_name}/vision_reward_db_video.tar.gz"
+        zip_save_path=f"{bench_data_dir}/{bench_name}/{bench_name}_videos.tar.gz"
         video_save_dir=f"{bench_data_dir}/{bench_name}/videos"
         
         if not os.path.exists(video_save_dir):
@@ -277,7 +277,7 @@ def load_benchmark(bench_data_dir,bench_name,num="all"):
         bench_name = "mj_bench_video"
         test_url="https://huggingface.co/datasets/MJ-Bench/MJ-BENCH-VIDEO/resolve/main/test.json"
         json_save_path_raw=f"{bench_data_dir}/{bench_name}/mj_bench_video_raw.json"
-        json_save_path=f"{bench_data_dir}/{bench_name}/mj_bench_video.json"
+        json_save_path=f"{bench_data_dir}/{bench_name}/{bench_name}.json"
         os.makedirs(os.path.dirname(os.path.abspath(json_save_path)),exist_ok=True)
         _download_file(test_url,json_save_path_raw,overwrite=False)
         with open(json_save_path_raw,"r") as f:
@@ -407,7 +407,7 @@ def load_benchmark(bench_data_dir,bench_name,num="all"):
     
     # ========================= VideoPhy-test =========================
     elif bench_name in ["video_phy","video_phy_test"]:
-        bench_name = "video_phy"
+        bench_name = "video_phy_test"
         csv_url="https://huggingface.co/datasets/videophysics/videophy_test_public/resolve/main/videophy_test_public.csv"
         csv_save_path=f"{bench_data_dir}/{bench_name}/videophy_test_public.csv"
         json_save_path=f"{bench_data_dir}/{bench_name}/videophy_test_public.json"
@@ -450,10 +450,10 @@ def load_benchmark(bench_data_dir,bench_name,num="all"):
     
     # ========================= VideoPhy2-test =========================
     elif bench_name in ["video_phy2","video_phy2_test"]:
-        bench_name = "video_phy2"
+        bench_name = "video_phy2_test"
         csv_url="https://huggingface.co/datasets/videophysics/videophy2_test/resolve/main/videophy2_test.csv"
-        csv_save_path=f"{bench_data_dir}/{bench_name}/videophy2_test.csv"
-        json_save_path=f"{bench_data_dir}/{bench_name}/videophy2_test.json"
+        csv_save_path=f"{bench_data_dir}/{bench_name}/{bench_name}t.csv"
+        json_save_path=f"{bench_data_dir}/{bench_name}/{bench_name}.json"
         os.makedirs(os.path.dirname(os.path.abspath(json_save_path)),exist_ok=True)
         
         video_save_dir=f"{bench_data_dir}/{bench_name}/videos"
@@ -498,12 +498,12 @@ def load_benchmark(bench_data_dir,bench_name,num="all"):
     # ========================= TVGE / T2V GenEval =========================
     elif bench_name in ["tvge"]:
         csv_url="https://huggingface.co/datasets/jayw/t2v-gen-eval/resolve/main/labels.csv"
-        csv_save_path=f"{bench_data_dir}/{bench_name}/tvge.csv"
-        json_save_path=f"{bench_data_dir}/{bench_name}/tvge.json"
+        csv_save_path=f"{bench_data_dir}/{bench_name}/{bench_name}.csv"
+        json_save_path=f"{bench_data_dir}/{bench_name}/{bench_name}.json"
         os.makedirs(os.path.dirname(os.path.abspath(json_save_path)),exist_ok=True)
         
         zip_url="https://huggingface.co/datasets/jayw/t2v-gen-eval/resolve/main/videos.tar.gz"
-        zip_save_path=f"{bench_data_dir}/{bench_name}/tvge_videos.tar.gz"
+        zip_save_path=f"{bench_data_dir}/{bench_name}/{bench_name}_videos.tar.gz"
         video_save_dir=f"{bench_data_dir}/{bench_name}/videos"
         
         _download_file(csv_url,csv_save_path)
@@ -535,7 +535,7 @@ def load_benchmark(bench_data_dir,bench_name,num="all"):
         df = pd.read_csv(csv_save_path)
         df = df.iloc[1:]
         for index, row in df.iterrows():
-            video_name=str(row["model_name"])+"_"+f"{row['video_id']:4d}"
+            video_name=str(row["model_name"])+"_"+f"{row['video_id']:04d}"
             t2v_prompt=row["prompt"]
             visual_score=row["video_quality_score"]
             align_score=row["text_alignment_score"]
@@ -553,12 +553,12 @@ def load_benchmark(bench_data_dir,bench_name,num="all"):
     # ========================= T2VQA-DB =========================
     elif bench_name in ["t2vqa_db"]:
         import gdown
-        txt_save_path=f"{bench_data_dir}/{bench_name}/t2vqa_db.txt"
-        json_save_path=f"{bench_data_dir}/{bench_name}/t2vqa_db.json"
+        txt_save_path=f"{bench_data_dir}/{bench_name}/{bench_name}.txt"
+        json_save_path=f"{bench_data_dir}/{bench_name}/{bench_name}.json"
         os.makedirs(os.path.dirname(os.path.abspath(json_save_path)),exist_ok=True)
         
         zip_g_id="1aak5hgYsXock19d1rVufss3_X6eEA4Wx"
-        zip_save_path=f"{bench_data_dir}/{bench_name}/t2vqa_db_videos.zip"
+        zip_save_path=f"{bench_data_dir}/{bench_name}/{bench_name}_videos.zip"
         video_save_dir=f"{bench_data_dir}/{bench_name}/videos"
         
         if not os.path.exists(video_save_dir):
@@ -585,7 +585,8 @@ def load_benchmark(bench_data_dir,bench_name,num="all"):
                 parts = line.split('|')
                 if len(parts) != 3:
                     continue 
-                video_name, prompt, quality_score = parts
+                video_file, prompt, quality_score = parts
+                video_name = video_file.split(".mp4")[0]
                 try:
                     quality_score = float(quality_score)
                 except ValueError:
@@ -616,13 +617,13 @@ if __name__ == "__main__":
     bench_data_dir="./bench_data"
     # bench_name="genai_bench"
     # bench_name="videogen_reward_bench"
-    bench_name="vision_reward_db_video"
+    # bench_name="vision_reward_db_video"
     # bench_name="mj_bench_video"
     # bench_name="aigve_bench"
-    # bench_name="video_phy"
-    # bench_name="video_phy2"
+    # bench_name="video_phy_test"
+    # bench_name="video_phy2_test"
     # bench_name="tvge"
-    # bench_name="t2vqa_db"
+    bench_name="t2vqa_db"
     data=load_benchmark(bench_data_dir,bench_name)
     print(len(data))
 

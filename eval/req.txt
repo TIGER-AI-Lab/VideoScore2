@@ -83,12 +83,11 @@ conda create -n dover python=3.10 -y --no-default-packages
 conda activate dover
 git clone https://github.com/QualityAssessment/DOVER.git 
 cd DOVER 
-pip install -e .  
-mkdir pretrained_weights 
-cd pretrained_weights 
+uv pip install -e .  
+cd eval_methods/utils_dover/pretrained_weights
 wget https://github.com/QualityAssessment/DOVER/releases/download/v0.1.0/DOVER.pth 
 wget https://github.com/QualityAssessment/DOVER/releases/download/v0.5.0/DOVER-Mobile.pth
-cd ..
+cd ../../..
 
 
 q_insight

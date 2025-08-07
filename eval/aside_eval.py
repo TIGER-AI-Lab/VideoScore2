@@ -3,71 +3,9 @@
 
 
 if __name__ == "__main__":
-    
-    # res_p="res_data/res_vs2_test_sft_17k/open-router-claude-sonnet-4.json"
-    # res_p="res_data/res_vs2_test_sft_17k/open-router-claude-sonnet-4_infer_4fps.json"
-    # res_p="res_data/res_vs2_test_sft_17k/open-router-gemini-2.5-flash.json"
-    # res_p="res_data/res_vs2_test_sft_17k/open-router-gemini-2.5-flash_infer_4fps.json"
-    # res_p="res_data/res_vs2_test_sft_17k/open-router-gemini-2.5-pro.json"
-    # res_p="res_data/res_vs2_test_sft_17k/open-router-gpt-4.1_infer_4fps.json"
-    # res_p="res_data/res_vs2_test_sft_17k/open-router-grok-4_infer_4fps.json"
-    # res_p="res_data/res_vs2_test_sft_17k/open-router-o4-mini_infer_4fps.json"
-    # res_p="res_data/res_vs2_test_sft_17k/open-router-gemma-3-27b-it_infer_4fps.json"
-    # res_p="res_data/res_vs2_test_sft_17k/open-router-llama-4-scout_infer_4fps.json"
-    # res_p="res_data/res_vs2_test_sft_17k/open-router-llama-4-maverick_infer_4fps.json"
-    # res_p="res_data/res_vs2_test_sft_17k/open-router-qwen2.5-vl-32b-instruct_infer_4fps.json"
-    # res_p="res_data/res_vs2_test_sft_17k/open-router-qwen2.5-vl-72b-instruct_infer_4fps.json"
-    # res_p="res_data/res_vs2_test_sft_17k/open-router-glm-4.1v-9b-thinking_infer_4fps.json"
-    # res_p="res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_sft_17k_2e-4_8fps_16384_infer_8fps.json"
-    # res_p="res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192_infer_8fps.json"
-    # res_p="res_data/res_vs2_test_sft_17k/VideoScore.json"
-    # res_p="res_data/res_vs2_test_sft_17k/feat_dino_sim.json"
-    # res_p="res_data/res_vs2_test_sft_17k/VisionReward-Video.json"
-    # res_p="res_data/res_vs2_test_sft_17k/VideoReward.json"
-    # res_p="res_data/res_vs2_test_sft_17k/videophy_2_auto.json"
-    # res_p="res_data/res_vs2_test_sft_17k/AIGVE-MACS.json"
-    # res_p="res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_grpo_17k_try_1e-6_800_infer_4fps.json"
-    # res_p="res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_grpo_17k_1e-6_reward_3_3200_infer_2fps.json"
-    # res_p="res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_2400_infer_2fps.json"
-    res_p="res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_sft_17k_2e-4_2fps_960_720_8192_1epoch_infer_2fps.json"
-    
-    method_name="vs2"
-    bench_name="vs2_test_sft_17k"
-    
-    # res_p="res_data/res_video_phy/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192_infer_4fps.json"
-    # method_name="vs2"
-    # bench_name="video_phy"
-    
-    # res_p="res_data/res_video_phy2/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192_infer_4fps.json"
-    # method_name="vs2"
-    # bench_name="video_phy2"
-    
-    # res_p="res_data/res_mj_bench_video/vs2_qwen2_5vl_sft_17k_2e-4_2fps_960_720_8192_infer_2fps_old.json"
-    # method_name="vs2"
-    # bench_name="mj_bench_video"
 
-    # res_p="res_data/res_aigve_bench/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192_infer_4fps.json"
-    # method_name="vs2"
-    # bench_name="aigve_bench"
-
-    # res_p="res_data/res_vs2_test_sft_17k/VisionReward-Video.json"
-    # method_name="vision_reward"
-    # bench_name="vs2_test_sft_17k"
     
-    # res_p="res_data/res_vs2_test_sft_17k/VideoReward.json"
-    # method_name="video_reward"
-    # bench_name="vs2_test_sft_17k"
-    
-    # res_p="res_data/res_vs2_test_sft_17k/ImageReward-v1.0.json"
-    # method_name="image_reward"
-    # bench_name="vs2_test_sft_17k"
-    
-    metrics_p=f'metrics_report/report_{method_name}.json'
-    from get_acc_corr import get_acc, get_corr
-    get_acc(method_name,bench_name,res_p,metrics_p)
-    get_corr(method_name,bench_name,res_p,metrics_p)
-    
-
+    None
     # from transformers import AutoModel, AutoTokenizer, AutoProcessor
     # from transformers import AutoProcessor, AutoModelForVision2Seq
     # from qwen_vl_utils import process_vision_info

@@ -157,6 +157,7 @@ class eval_VideoReward:
             )
             vq=round(float(rewards[0]["VQ"]),4)
             ta=round(float(rewards[0]["TA"]),4)
-            pc=None
+            # for VideoReward, fill the 3rd output with MQ score. It will be ignored when calculating pred acc.
+            pc=round(float(rewards[0]["MQ"]),4)
             raw_output=str(rewards[0])
             return vq, ta, pc, raw_output

@@ -137,4 +137,8 @@ class eval_LiFT:
                 scores.append(None)
             raw_outputs.append(output_text)
 
-        return scores[0], scores[1], scores[2], "\n\n".join(raw_outputs)
+        vq=scores[1]
+        t_align=scores[0]
+        # for LiFT, fill the 3rd output with Motion Quality score. It will be ignored when calculating pred acc.
+        pc=scores[2]
+        return vq, t_align, pc, "\n\n".join(raw_outputs)

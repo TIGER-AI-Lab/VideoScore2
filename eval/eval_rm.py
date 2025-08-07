@@ -177,25 +177,31 @@ def main(args):
                 v_gt=item['visual_score']
                 t_gt=item['t2v_score']
                 p_gt=item['phy_score']
+            
             elif bench in ["aigve_bench","aigve-bench"]:
                 v_gt=int(round((item['technical_quality']+item['element_quality']+item['action_quality'])/3))
                 t_gt=int(round((item['element_presence']+item['action_presence'])/2))
                 p_gt=item['physics']
+            
             elif bench in ["video_phy","video_phy_test_public",
                            "video_phy2","video_phy2_test",]:
                 v_gt=None
                 t_gt=item['semantic']
                 p_gt=item['physical']
+            
             elif bench in ["mj_video_bench","mj_bench_video","mj-video-bench","mj-bench-video"]:
                 v_gt=item['fineness']
                 t_gt=item['alignment']
                 p_gt=item['consistency']
+                
             elif bench in ["tvge"]:
                 v_gt=item['video_quality_score']
                 t_gt=item['text_alignment_score']
                 p_gt=None
+            
             elif bench in ["t2vqa_db"]:
                 v_gt=t_gt=p_gt=item['quality_score']
+            
             print(f"gt: {v_gt} {t_gt} {p_gt}")
             res_item.update({
                 "v_score_gt":v_gt, "t_score_gt":t_gt, "p_score_gt":p_gt,
