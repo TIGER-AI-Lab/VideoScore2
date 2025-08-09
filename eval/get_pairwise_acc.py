@@ -11,13 +11,15 @@ def judge_equal_for_diverse(method,score1,score2):
         return -1
     else:
         return 0
-    # if method in ["vs2","aigve_macs","lift"]:
+    # if method in ["vs2","aigve_macs",]:
     #     if score1>score2:
     #         return 1
     #     elif score1<score2:
     #         return -1
     #     else:
     #         return 0
+    # if method == "lift":
+    #     None
     # if method == "video_reward":
     #     None
     # if method == "unified_reward":
@@ -33,10 +35,11 @@ def judge_equal_for_diverse(method,score1,score2):
 
 
 def main(bench,kwargs,short_sampling=False):
-    json_path = kwargs["score_json"]
+    score_json = kwargs["score_json"]
+    print(score_json)
     with_ties = kwargs["with_ties"]
     method = kwargs["method"]
-    with open(json_path, 'r') as f:
+    with open(score_json, 'r') as f:
         score_data = json.load(f)  
     if short_sampling:
         score_data=random.sample(score_data,short_sample_num)
@@ -45,7 +48,7 @@ def main(bench,kwargs,short_sampling=False):
     score_dict = {}
     for item in score_data:
         v_name=item["video_name"]
-        if "videophy" in json_path:
+        if "videophy" in score_json:
             item["v_score_model"]=0
         if None in [item["v_score_model"],item["t_score_model"],item["p_score_model"]]:
             continue
@@ -66,15 +69,14 @@ def main(bench,kwargs,short_sampling=False):
             right_model = item["right_model"]
             right_video = right_model+"_"+item["right_video"].split("/")[-1].split('.mp4')[0]
             vote = item["vote_type"] 
-            if with_ties==False:
-                if vote == "bothbad_vote":
-                    continue
+            if with_ties==False and vote == "bothbad_vote":
+                continue
             total += 1 
+            
             if left_video not in score_dict or right_video not in score_dict:
                 continue
-            
-            score1 = (score_dict[left_video]["v_score_model"]+score_dict[left_video]["t_score_model"]+score_dict[left_video]["p_score_model"])/3
-            score2 = (score_dict[right_video]["v_score_model"]+score_dict[right_video]["t_score_model"]+score_dict[right_video]["p_score_model"])/3
+            score1 = (score_dict[left_video]["v_score_model"]+score_dict[left_video]["t_score_model"]+score_dict[left_video]["p_score_model"])
+            score2 = (score_dict[right_video]["v_score_model"]+score_dict[right_video]["t_score_model"]+score_dict[right_video]["p_score_model"])
             
             pred_vote = None
             if judge_equal_for_diverse(method,score1,score2) == 1:
@@ -98,7 +100,7 @@ def main(bench,kwargs,short_sampling=False):
         benchmark_data = load_dataset("zai-org/VisionRewardDB-Video", "test")["test"]
         print(f"pairs num: ",len(benchmark_data))
         correct = 0
-
+        total = 0
         for item in benchmark_data:
             video1 = item["video1_path"].split("/")[-1].split('.mp4')[0]
             video2 = item["video2_path"].split("/")[-1].split('.mp4')[0]
@@ -108,13 +110,14 @@ def main(bench,kwargs,short_sampling=False):
                     continue
             if video1 not in score_dict or video2 not in score_dict:
                 continue
+            total += 1 
             score1 = (score_dict[video1]['v_score_model']+score_dict[video1]['t_score_model']+score_dict[video1]['p_score_model'])/3
             score2 = (score_dict[video2]['v_score_model']+score_dict[video2]['t_score_model']+score_dict[video2]['p_score_model'])/3
             
             pred_ans = None
             if judge_equal_for_diverse(method,score1,score2) == 1:
                 pred_ans = "video1"
-            elif if judge_equal_for_diverse(method,score1,score2) == -1:
+            elif judge_equal_for_diverse(method,score1,score2) == -1:
                 pred_ans = "video2"
             else:
                 pred_ans = "tie"
@@ -122,7 +125,6 @@ def main(bench,kwargs,short_sampling=False):
             if pred_ans == ans:
                 correct += 1
 
-        total=len(score_dict)
         if total > 0:
             acc = correct / total
             print(f"method: {method}\nPairwise accuracy: {correct}/{total} = {acc*100:.3f}\n")
@@ -131,13 +133,13 @@ def main(bench,kwargs,short_sampling=False):
     
     # ========================= VideoGen-Reward-Bench =========================
     if bench in ["videogen_reward_bench","videogen-reward-bench"]:
-        csv_path = kwargs["src_csv"]
+        csv_path = kwargs["src_file"]
         df = pd.read_csv(csv_path)
         print(f"pairs num: ",len(df))
         vq_correct = 0
         ta_correct = 0
         overall_correct = 0
-
+        total=0
         for _, row in df.iterrows():
             video_A = row["path_A"].split("/")[-1].split('.mp4')[0]
             video_B = row["path_B"].split("/")[-1].split('.mp4')[0]
@@ -158,7 +160,7 @@ def main(bench,kwargs,short_sampling=False):
             
             if with_ties==False and "same" in [gt_vq, gt_ta, gt_all]:
                 continue
-            
+            total+=1
             v_A = score_dict[video_A]["v_score_model"]
             v_B = score_dict[video_B]["v_score_model"]
             t_A = score_dict[video_A]["t_score_model"]
@@ -197,14 +199,13 @@ def main(bench,kwargs,short_sampling=False):
             if overall_pref == gt_all:
                 overall_correct += 1
                 
-        total=len(score_dict)
-        print(f"method: {method}\nVQ Pairwise Accuracy: {vq_correct}/{total} = {vq_correct/total*100:.3f}\n")
-        print(f"method: {method}\nTA Pairwise Accuracy: {ta_correct}/{total} = {ta_correct/total*100:.3f}\n")
+        print(f"method: {method}\nVQ Pairwise Accuracy: {vq_correct}/{total} = {vq_correct/total*100:.3f}")
+        print(f"method: {method}\nTA Pairwise Accuracy: {ta_correct}/{total} = {ta_correct/total*100:.3f}")
         print(f"method: {method}\nOverall Pairwise Accuracy: {overall_correct}/{total} = {overall_correct/total*100:.3f}\n")
     
     # ========================= MJ-Bench-Video =========================
     if bench in ["mj_video_bench","mj_bench_video","mj-video-bench","mj-bench-video"]:
-        src_json_path = kwargs["src_json"]
+        src_json_path = kwargs["src_file"]
         with open(src_json_path, "r") as f:
             src_data = json.load(f)
         print(f"pairs num: ",len(src_data))
@@ -215,7 +216,7 @@ def main(bench,kwargs,short_sampling=False):
         }
         correct_counts = {cat: 0 for cat in category2score}
         correct_counts["Overall"] = 0
-        
+        total = 0
         def compare(score1, score2):
             if judge_equal_for_diverse(method,score1,score2) == 1:
                 return "Video 1 better"
@@ -234,7 +235,7 @@ def main(bench,kwargs,short_sampling=False):
             if with_ties == False:
                 if "Same" in list(item["category_preference"].values()) or item["overall_preference"] == "Same":
                     continue
-            
+            total+=1
             for category, score_key in category2score.items():
                 pred = compare(scores1[score_key], scores2[score_key])
                 gt = item["category_preference"].get(category)
@@ -246,33 +247,42 @@ def main(bench,kwargs,short_sampling=False):
             pred_overall = compare(avg1, avg2)
             if pred_overall == item["overall_preference"]:
                 correct_counts["Overall"] += 1
-        total = len(score_dict)
         for cat, correct in correct_counts.items():
             acc = correct / total if total > 0 else 0
             print(f"method: {method}\n{cat} Pairwise Accuracy: {correct}/{total} = {acc*100:.3f}")
         print("\n")
         
 if __name__ == "__main__":
-    bench="genai_bench"
+    # bench="genai_bench"
+    # src_file=None
+    
+    # bench="videogen_reward_bench"
+    # src_file="bench_data/videogen_reward_bench/videogen-rewardbench.csv"
+    
+    bench="mj_bench_video"
+    src_file="bench_data/mj_bench_video/mj_bench_video_raw.json"
     
     score_json_mapping={
-        "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192_infer_2fps.json",
+        # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_17k_2e-4_2fps_960_720_8192_infer_2fps.json",
+        # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_2400_infer_2fps.json",
+        # "aigve":f"res_data/res_{bench}/AIGVE-MACS.json",
         "deqa":f"res_data/res_{bench}/DeQA-Score-Mix3.json",
         "dover":f"res_data/res_{bench}/dover.json",
         "image_reward":f"res_data/res_{bench}/ImageReward-v1.0.json",
         "lift":f"res_data/res_{bench}/LiFT-Critic-13b-lora-v1.5.json",
         "q_align":f"res_data/res_{bench}/Q-Align.json",
-        "q_insight":f"res_data/res_{bench}/Q-Insight.json",
-        "unified_reward":f"res_data/res_{bench}/UnifiedReward-7b.json",
+        # "q_insight":f"res_data/res_{bench}/Q-Insight.json",
+        # "unified_reward":f"res_data/res_{bench}/UnifiedReward-7b.json",
         "videophy2_auto_eval":f"res_data/res_{bench}/videophy_2_auto.json",
         "video_reward":f"res_data/res_{bench}/VideoReward.json",
-        "vision_reward":f"res_data/res_{bench}/VisionReward-Video.json",
+        # "vision_reward":f"res_data/res_{bench}/VisionReward-Video.json",
     }
     short_sampling=False
     short_sample_num=1000
     for method,score_json in score_json_mapping.items():
         kwargs={
             "method": method,
+            "src_file":src_file,
             "score_json":score_json,
             "with_ties":False
         }

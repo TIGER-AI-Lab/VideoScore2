@@ -183,9 +183,15 @@ def load_benchmark(bench_data_dir,bench_name,num="all"):
         bench_name = "genai_bench"
         from datasets import load_dataset
         ds = load_dataset("TIGER-Lab/GenAI-Bench", data_dir="video_generation",split="test")
-        raw_data=[]
+        src_save_path=f"{bench_data_dir}/{bench_name}/original_data_{bench_name}.json"
+        original_data=[x for x in ds]
+        
+        with open(src_save_path,"w",encoding='utf-8') as f:
+            json.dump(original_data,f,indent=4,ensure_ascii='False')
+
         json_save_path=f"{bench_data_dir}/{bench_name}/{bench_name}.json"
         os.makedirs(os.path.dirname(os.path.abspath(json_save_path)),exist_ok=True)
+        raw_data=[]
         
         for x in ds:
             prompt=x['prompt']
@@ -232,6 +238,11 @@ def load_benchmark(bench_data_dir,bench_name,num="all"):
         json_save_path=f"{bench_data_dir}/{bench_name}/{bench_name}.json"
         os.makedirs(os.path.dirname(os.path.abspath(json_save_path)),exist_ok=True)
         
+        src_save_path=f"{bench_data_dir}/{bench_name}/original_data_{bench_name}.json"
+        original_data=[x for x in ds]
+        with open(src_save_path,"w",encoding='utf-8') as f:
+            json.dump(original_data,f,indent=4,ensure_ascii='False')
+            
         zip_url="https://huggingface.co/datasets/zai-org/VisionRewardDB-Video/resolve/main/videos/test.tar.gz"
         zip_save_path=f"{bench_data_dir}/{bench_name}/{bench_name}_videos.tar.gz"
         video_save_dir=f"{bench_data_dir}/{bench_name}/videos"
@@ -615,7 +626,7 @@ def load_benchmark(bench_data_dir,bench_name,num="all"):
 
 if __name__ == "__main__":
     bench_data_dir="./bench_data"
-    # bench_name="genai_bench"
+    bench_name="genai_bench"
     # bench_name="videogen_reward_bench"
     # bench_name="vision_reward_db_video"
     # bench_name="mj_bench_video"
@@ -623,7 +634,7 @@ if __name__ == "__main__":
     # bench_name="video_phy_test"
     # bench_name="video_phy2_test"
     # bench_name="tvge"
-    bench_name="t2vqa_db"
+    # bench_name="t2vqa_db"
     data=load_benchmark(bench_data_dir,bench_name)
     print(len(data))
 

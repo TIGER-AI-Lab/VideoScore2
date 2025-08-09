@@ -314,7 +314,7 @@ def get_acc(method_name,bench_name,score_res_path,metric_report_p):
         with open(score_res_path,"r") as f:
             tmp_data=json.load(f)
         overall_scores_gt=[x["total_score"] for x in tmp_data]
-        overall_scores_model=[int((x["v_score_out"]+x["t_score_out"]+x["p_score_out"])/3) for x in tmp_data]
+        overall_scores_model=[int((x["v_score_model"]+x["t_score_model"]+x["p_score_model"])/3) for x in tmp_data]
         overall_scores_model=[0 if x in [1] else 1 if x in [2, 3] else 2 for x in overall_scores_model]
         
     if bench_name in ["tvge","t2v_gen_eval"]:
@@ -424,7 +424,7 @@ def get_corr(method_name,bench_name,score_res_path,metric_report_p):
         with open(score_res_path,"r") as f:
             tmp_data=json.load(f)
         overall_scores_gt=[x["total_score"] for x in tmp_data]
-        overall_scores_model=[int((x["v_score_out"]+x["t_score_out"]+x["p_score_out"])/3) for x in tmp_data]
+        overall_scores_model=[x["v_score_model"]+x["t_score_model"]+x["p_score_model"] for x in tmp_data]
     
     metrics_dict={        
         "v_spcc":compute_spcc(v_scores_model,v_scores_gt),
@@ -454,56 +454,61 @@ def get_corr(method_name,bench_name,score_res_path,metric_report_p):
     #     },f,indent=4)
         
 if __name__ == "__main__":
-    # res_p="res_data/res_vs2_test_sft_17k/open-router-claude-sonnet-4.json"
-    # res_p="res_data/res_vs2_test_sft_17k/open-router-claude-sonnet-4_infer_4fps.json"
-    # res_p="res_data/res_vs2_test_sft_17k/open-router-gemini-2.5-flash.json"
-    # res_p="res_data/res_vs2_test_sft_17k/open-router-gemini-2.5-flash_infer_4fps.json"
-    # res_p="res_data/res_vs2_test_sft_17k/open-router-gemini-2.5-pro.json"
-    # res_p="res_data/res_vs2_test_sft_17k/open-router-gpt-4.1_infer_4fps.json"
-    # res_p="res_data/res_vs2_test_sft_17k/open-router-grok-4_infer_4fps.json"
-    # res_p="res_data/res_vs2_test_sft_17k/open-router-o4-mini_infer_4fps.json"
-    # res_p="res_data/res_vs2_test_sft_17k/open-router-gemma-3-27b-it_infer_4fps.json"
-    # res_p="res_data/res_vs2_test_sft_17k/open-router-llama-4-scout_infer_4fps.json"
-    # res_p="res_data/res_vs2_test_sft_17k/open-router-llama-4-maverick_infer_4fps.json"
-    # res_p="res_data/res_vs2_test_sft_17k/open-router-qwen2.5-vl-32b-instruct_infer_4fps.json"
-    # res_p="res_data/res_vs2_test_sft_17k/open-router-qwen2.5-vl-72b-instruct_infer_4fps.json"
-    # res_p="res_data/res_vs2_test_sft_17k/open-router-glm-4.1v-9b-thinking_infer_4fps.json"
-    # res_p="res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_sft_17k_2e-4_8fps_16384_infer_8fps.json"
-    # res_p="res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192_infer_8fps.json"
-    # res_p="res_data/res_vs2_test_sft_17k/VideoScore.json"
-    # res_p="res_data/res_vs2_test_sft_17k/feat_dino_sim.json"
-    # res_p="res_data/res_vs2_test_sft_17k/VisionReward-Video.json"
-    # res_p="res_data/res_vs2_test_sft_17k/VideoReward.json"
-    # res_p="res_data/res_vs2_test_sft_17k/videophy_2_auto.json"
-    # res_p="res_data/res_vs2_test_sft_17k/AIGVE-MACS.json"
-    # res_p="res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_grpo_17k_try_1e-6_800_infer_4fps.json"
-    # res_p="res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_grpo_17k_1e-6_reward_3_3200_infer_2fps.json"
-    # res_p="res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_3000_infer_2fps.json"
-    res_p="res_data/res_vs2_test_sft_17k/vs2_qwen2_5vl_sft_17k_2e-4_2fps_960_720_8192_infer_4fps.json"
+    # res_p=f"res_data/res_{bench_name}/open-router-claude-sonnet-4.json"
+    # res_p=f"res_data/res_{bench_name}/open-router-claude-sonnet-4_infer_4fps.json"
+    # res_p=f"res_data/res_{bench_name}/open-router-gemini-2.5-flash.json"
+    # res_p=f"res_data/res_{bench_name}/open-router-gemini-2.5-flash_infer_4fps.json"
+    # res_p=f"res_data/res_{bench_name}/open-router-gemini-2.5-pro.json"
+    # res_p=f"res_data/res_{bench_name}/open-router-gpt-4.1_infer_4fps.json"
+    # res_p=f"res_data/res_{bench_name}/open-router-grok-4_infer_4fps.json"
+    # res_p=f"res_data/res_{bench_name}/open-router-o4-mini_infer_4fps.json"
+    # res_p=f"res_data/res_{bench_name}/open-router-gemma-3-27b-it_infer_4fps.json"
+    # res_p=f"res_data/res_{bench_name}/open-router-llama-4-scout_infer_4fps.json"
+    # res_p=f"res_data/res_{bench_name}/open-router-llama-4-maverick_infer_4fps.json"
+    # res_p=f"res_data/res_{bench_name}/open-router-qwen2.5-vl-32b-instruct_infer_4fps.json"
+    # res_p=f"res_data/res_{bench_name}/open-router-qwen2.5-vl-72b-instruct_infer_4fps.json"
+    # res_p=f"res_data/res_{bench_name}/open-router-glm-4.1v-9b-thinking_infer_4fps.json"
+    # res_p=f"res_data/res_{bench_name}/vs2_qwen2_5vl_sft_17k_2e-4_8fps_16384_infer_8fps.json"
+    # res_p=f"res_data/res_{bench_name}/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192_infer_8fps.json"
+    # res_p=f"res_data/res_{bench_name}/VideoScore.json"
+    # res_p=f"res_data/res_{bench_name}/feat_dino_sim.json"
+    # res_p=f"res_data/res_{bench_name}/VisionReward-Video.json"
+    # res_p=f"res_data/res_{bench_name}/VideoReward.json"
+    # res_p=f"res_data/res_{bench_name}/videophy_2_auto.json"
+    # res_p=f"res_data/res_{bench_name}/AIGVE-MACS.json"
+    # res_p=f"res_data/res_{bench_name}/vs2_qwen2_5vl_grpo_17k_try_1e-6_800_infer_4fps.json"
+    # res_p=f"res_data/res_{bench_name}/vs2_qwen2_5vl_grpo_17k_1e-6_reward_3_3200_infer_2fps.json"
+    # res_p=f"res_data/res_{bench_name}/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_3000_infer_2fps.json"
     
-    method_name="vs2"
+    bench_name="mj_bench_video"
     bench_name="vs2_test_sft_17k"
-
-    # res_p="res_data/res_vs2_test_sft_17k/VisionReward-Video.json"
+    
+    res_p=f"res_data/res_{bench_name}/vs2_qwen2_5vl_sft_17k_2e-4_2fps_768_768_8192_infer_4fps.json"
+    method_name="vs2"
+    
+    # res_p=f"res_data/res_{bench_name}/VisionReward-Video.json"
     # method_name="vision_reward"
     
-    # res_p="res_data/res_vs2_test_sft_17k/VideoReward.json"
+    # res_p=f"res_data/res_{bench_name}/VideoReward.json"
     # method_name="video_reward"
     
-    # res_p="res_data/res_vs2_test_sft_17k/ImageReward-v1.0.json"
+    # res_p=f"res_data/res_{bench_name}/ImageReward-v1.0.json"
     # method_name="image_reward"
     
-    # res_p="res_data/res_vs2_test_sft_17k/LiFT-Critic-13b-lora-v1.5.json"
+    # res_p=f"res_data/res_{bench_name}/LiFT-Critic-13b-lora-v1.5.json"
     # method_name="lift"
     
-    # res_p="res_data/res_vs2_test_sft_17k/Q-Align.json"
+    # res_p=f"res_data/res_{bench_name}/Q-Align.json"
     # method_name="q_align"
     
-    # res_p="res_data/res_vs2_test_sft_17k/DeQA-Score-Mix3.json"
+    # res_p=f"res_data/res_{bench_name}/DeQA-Score-Mix3.json"
     # method_name="deqa"
     
-    res_p="res_data/res_vs2_test_sft_17k/dover.json"
-    method_name="dover"
+    # res_p=f"res_data/res_{bench_name}/dover.json"
+    # method_name="dover"
+    
+    # res_p=f"res_data/res_{bench_name}/videophy_2_auto.json"
+    # method_name="video_phy2_auto_eval"
     
     metrics_p=f'metrics_report/report_{method_name}.json'
     from get_acc_corr import get_acc, get_corr

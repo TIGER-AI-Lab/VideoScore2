@@ -6,6 +6,7 @@ pip install matplotlib
 pip install opencv-python-headless
 pip install requests
 pip install pandas
+pip install pyarrow
 
 vs2_eval (for vs2, mllm, feat, aigve_macs)
 pip install transformers==4.53.2
@@ -67,7 +68,7 @@ cd UnifiedReward
 pip install --upgrade pip  
 pip install -e ".[train]"
 pip install flash_attn==2.5.8 --no-build-isolation
-
+pip install typing_extensions
 
 videophy2
 git clone https://github.com/Hritikbansal/videophy.git

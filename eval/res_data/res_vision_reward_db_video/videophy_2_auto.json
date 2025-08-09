@@ -1,0 +1,119 @@
+[
+    {
+        "video_name": "VideoReward_20241104_test-1103_1",
+        "video_url": null,
+        "prompt": "A terrifying zombie danced in the street.",
+        "v_score_model": null,
+        "t_score_model": 4,
+        "p_score_model": 5,
+        "output": "sa_output: \n4\npc_output: \n5"
+    },
+    {
+        "video_name": "VideoReward_20241104_test-1103_2",
+        "video_url": null,
+        "prompt": "A terrifying zombie danced in the street.",
+        "v_score_model": null,
+        "t_score_model": 4,
+        "p_score_model": 4,
+        "output": "sa_output: \n4\npc_output: \n4"
+    },
+    {
+        "video_name": "VideoReward_20241104_test-1123_1",
+        "video_url": null,
+        "prompt": "Create a video of termites in a house.",
+        "v_score_model": null,
+        "t_score_model": 4,
+        "p_score_model": 5,
+        "output": "sa_output: \n4\npc_output: \n5"
+    },
+    {
+        "video_name": "VideoReward_20241104_test-1123_2",
+        "video_url": null,
+        "prompt": "Create a video of termites in a house.",
+        "v_score_model": null,
+        "t_score_model": 4,
+        "p_score_model": 4,
+        "output": "sa_output: \n4\npc_output: \n4"
+    },
+    {
+        "video_name": "VideoReward_20241104_test-1124_1",
+        "video_url": null,
+        "prompt": "1980s game show contestant attempting to fend off an obviously infuriated Bigfoot.",
+        "v_score_model": null,
+        "t_score_model": 3,
+        "p_score_model": 3,
+        "output": "sa_output: \n3\npc_output: \n3"
+    },
+    {
+        "video_name": "VideoReward_20241104_test-1124_2",
+        "video_url": null,
+        "prompt": "1980s game show contestant attempting to fend off an obviously infuriated Bigfoot.",
+        "v_score_model": null,
+        "t_score_model": 3,
+        "p_score_model": 4,
+        "output": "sa_output: \n3\npc_output: \n4"
+    },
+    {
+        "video_name": "VideoReward_20241104_test-1125_1",
+        "video_url": null,
+        "prompt": "The handsome and muscular man in the suit walked with purpose down the city street.",
+        "v_score_model": null,
+        "t_score_model": 5,
+        "p_score_model": 4,
+        "output": "sa_output: \n5\npc_output: \n4"
+    },
+    {
+        "video_name": "VideoReward_20241104_test-1125_2",
+        "video_url": null,
+        "prompt": "The handsome and muscular man in the suit walked with purpose down the city street.",
+        "v_score_model": null,
+        "t_score_model": 5,
+        "p_score_model": 5,
+        "output": "sa_output: \n5\npc_output: \n5"
+    },
+    {
+        "video_name": "VideoReward_20241104_test-1126_1",
+        "video_url": null,
+        "prompt": "The shadow of a girl walking in a village pans to her feet.",
+        "v_score_model": null,
+        "t_score_model": 4,
+        "p_score_model": 4,
+        "output": "sa_output: \n4\npc_output: \n4"
+    },
+    {
+        "video_name": "VideoReward_20241104_test-1126_2",
+        "video_url": null,
+        "prompt": "The shadow of a girl walking in a village pans to her feet.",
+        "v_score_model": null,
+        "t_score_model": 4,
+        "p_score_model": 5,
+        "output": "sa_output: \n4\npc_output: \n5"
+    },
+    {
+        "video_name": "VideoReward_20241104_test-1127_1",
+        "video_url": null,
+        "prompt": "A fox is eating pizza.",
+        "v_score_model": null,
+        "t_score_model": 5,
+        "p_score_model": 4,
+        "output": "sa_output: \n5\npc_output: \n4"
+    },
+    {
+        "video_name": "VideoReward_20241104_test-1127_2",
+        "video_url": null,
+        "prompt": "A fox is eating pizza.",
+        "v_score_model": null,
+        "t_score_model": 5,
+        "p_score_model": 5,
+        "output": "sa_output: \n5\npc_output: \n5"
+    },
+    {
+        "video_name": "VideoReward_20241104_test-1130_1",
+        "video_url": null,
+        "prompt": "Martin Cooper made the first mobile phone call.",
+        "v_score_model": null,
+        "t_score_model": 3,
+        "p_score_model": 4,
+        "output": "sa_output: \n3\npc_output: \n4"
+    }
+]
