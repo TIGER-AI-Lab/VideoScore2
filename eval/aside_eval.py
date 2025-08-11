@@ -108,19 +108,20 @@ def plot_hist(data,path,interval=50):
 
 if __name__ == "__main__":
 
-    import re
-    import random
-    file_path="/data/xuan/workdir/Video-R1/src/r1-v/debug_log_grpo_17k_base960-720_reward_3.txt"
-    with open(file_path, 'r', encoding='utf-8') as f:
-        text = f.read()
+    # import re
+    # import random
+    # file_path="/data/xuan/workdir/Video-R1/src/r1-v/debug_log_grpo_17k_base960-720_reward_3.txt"
+    # with open(file_path, 'r', encoding='utf-8') as f:
+    #     text = f.read()
     
-    matches = re.findall(r"<think>(.*?)</think>", text, re.DOTALL)
-    matches = random.sample(matches,10000)
+    # matches = re.findall(r"<think>(.*?)</think>", text, re.DOTALL)
+    # matches = random.sample(matches,10000)
     
-    thinking_list = [m.strip() for m in matches]
-    thinking_len_list = [len(re.findall(r'\b\w+\b', thinking)) for thinking in thinking_list]
-    plot_path="1.png"
-    interval=20
-    plot_hist(thinking_len_list,plot_path,interval)
+    # thinking_list = [m.strip() for m in matches]
+    # thinking_len_list = [len(re.findall(r'\b\w+\b', thinking)) for thinking in thinking_list]
+    # plot_path="1.png"
+    # interval=20
+    # plot_hist(thinking_len_list,plot_path,interval)
+    None
     
     
