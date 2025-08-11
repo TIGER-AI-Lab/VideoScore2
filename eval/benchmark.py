@@ -610,6 +610,8 @@ def load_benchmark(bench_data_dir,bench_name,num="all"):
                     "quality_score": quality_score
                 })
 
+        # In T2VQA-DB, 2000/10000 are used as test set
+        data=data[:2000]
         with open(json_save_path, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=4, ensure_ascii=False)
             
