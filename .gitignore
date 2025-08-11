@@ -181,6 +181,13 @@ prepare_video/t2v_model/api*
 data/*
 !data/**/*.py
 !data/_prev/
+!data/anno_raw/
+!data/anno_parquet/
+!data/plots/
+!data/thinking_cmt/
+!data/thinking_cmt_original/
+!data/thinking_final/
+!data/thinking_rejected/
 
 eval/*
 !eval/**/*.py

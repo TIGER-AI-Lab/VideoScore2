@@ -481,34 +481,34 @@ if __name__ == "__main__":
     # res_p=f"res_data/res_{bench_name}/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_3000_infer_2fps.json"
     
     bench_name="mj_bench_video"
-    bench_name="vs2_test_sft_17k"
+    # bench_name="vs2_test_sft_17k"
     
-    res_p=f"res_data/res_{bench_name}/vs2_qwen2_5vl_sft_17k_2e-4_2fps_768_768_8192_infer_4fps.json"
-    method_name="vs2"
+    # res_p=f"res_data/res_{bench_name}/vs2_qwen2_5vl_sft_17k_2e-4_2fps_768_768_8192_infer_4fps.json"
+    # method_name="vs2"
     
-    # res_p=f"res_data/res_{bench_name}/VisionReward-Video.json"
-    # method_name="vision_reward"
+    res_p=f"res_data/res_{bench_name}/VisionReward-Video.json"
+    method_name="vision_reward"
     
-    # res_p=f"res_data/res_{bench_name}/VideoReward.json"
-    # method_name="video_reward"
+    res_p=f"res_data/res_{bench_name}/VideoReward.json"
+    method_name="video_reward"
     
-    # res_p=f"res_data/res_{bench_name}/ImageReward-v1.0.json"
-    # method_name="image_reward"
+    res_p=f"res_data/res_{bench_name}/ImageReward-v1.0.json"
+    method_name="image_reward"
     
-    # res_p=f"res_data/res_{bench_name}/LiFT-Critic-13b-lora-v1.5.json"
-    # method_name="lift"
+    res_p=f"res_data/res_{bench_name}/LiFT-Critic-13b-lora-v1.5.json"
+    method_name="lift"
     
-    # res_p=f"res_data/res_{bench_name}/Q-Align.json"
-    # method_name="q_align"
+    res_p=f"res_data/res_{bench_name}/Q-Align.json"
+    method_name="q_align"
     
-    # res_p=f"res_data/res_{bench_name}/DeQA-Score-Mix3.json"
-    # method_name="deqa"
+    res_p=f"res_data/res_{bench_name}/DeQA-Score-Mix3.json"
+    method_name="deqa"
     
-    # res_p=f"res_data/res_{bench_name}/dover.json"
-    # method_name="dover"
+    res_p=f"res_data/res_{bench_name}/dover.json"
+    method_name="dover"
     
-    # res_p=f"res_data/res_{bench_name}/videophy_2_auto.json"
-    # method_name="video_phy2_auto_eval"
+    res_p=f"res_data/res_{bench_name}/videophy_2_auto.json"
+    method_name="video_phy2_auto_eval"
     
     metrics_p=f'metrics_report/report_{method_name}.json'
     from get_acc_corr import get_acc, get_corr

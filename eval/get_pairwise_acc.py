@@ -11,27 +11,61 @@ def judge_equal_for_diverse(method,score1,score2):
         return -1
     else:
         return 0
-    # if method in ["vs2","aigve_macs",]:
-    #     if score1>score2:
-    #         return 1
-    #     elif score1<score2:
-    #         return -1
-    #     else:
-    #         return 0
-    # if method == "lift":
-    #     None
-    # if method == "video_reward":
-    #     None
-    # if method == "unified_reward":
-    #     None
-    # if method == "images_reward":
-    #     None
-    # if method == "q_align":
-    #     None
-    # if method == "q_insight":
-    #     None
-    # if method == "deqa":
-    #     None
+    
+    if method in ["vs2","aigve_macs","lift"]:
+        if score1>score2:
+            return 1
+        elif score1<score2:
+            return -1
+        else:
+            return 0
+    if method == "video_reward":
+        if score1-score2>0.1:
+            return 1
+        elif score1-score2<-0.1:
+            return -1
+        else:
+            return 0
+    
+    if method == "unified_reward":
+        if score1-score2>0.5:
+            return 1
+        elif score1-score2<-0.5:
+            return -1
+        else:
+            return 0
+        
+    if method == "images_reward":
+        if score1-score2>0.1:
+            return 1
+        elif score1-score2<-0.1:
+            return -1
+        else:
+            return 0
+        
+    if method == "q_align":
+        if score1-score2>0.05:
+            return 1
+        elif score1-score2<-0.05:
+            return -1
+        else:
+            return 0
+        
+    if method == "q_insight":
+        if score1-score2>0.3:
+            return 1
+        elif score1-score2<-0.3:
+            return -1
+        else:
+            return 0
+        
+    if method == "deqa":
+        if score1-score2>0.3:
+            return 1
+        elif score1-score2<-0.3:
+            return -1
+        else:
+            return 0
 
 
 def main(bench,kwargs,short_sampling=False):
@@ -253,28 +287,31 @@ def main(bench,kwargs,short_sampling=False):
         print("\n")
         
 if __name__ == "__main__":
-    # bench="genai_bench"
-    # src_file=None
+    bench="genai_bench"
+    src_file=None
     
     # bench="videogen_reward_bench"
     # src_file="bench_data/videogen_reward_bench/videogen-rewardbench.csv"
     
-    bench="mj_bench_video"
-    src_file="bench_data/mj_bench_video/mj_bench_video_raw.json"
+    # bench="mj_bench_video"
+    # src_file="bench_data/mj_bench_video/mj_bench_video_raw.json"
+    
+    # bench="vision_reward_db_video"
+    # src_file="bench_data/vision_reward_db_video/original_data_vision_reward_db_video.json"
     
     score_json_mapping={
         # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_17k_2e-4_2fps_960_720_8192_infer_2fps.json",
         # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_2400_infer_2fps.json",
         # "aigve":f"res_data/res_{bench}/AIGVE-MACS.json",
-        "deqa":f"res_data/res_{bench}/DeQA-Score-Mix3.json",
-        "dover":f"res_data/res_{bench}/dover.json",
-        "image_reward":f"res_data/res_{bench}/ImageReward-v1.0.json",
-        "lift":f"res_data/res_{bench}/LiFT-Critic-13b-lora-v1.5.json",
-        "q_align":f"res_data/res_{bench}/Q-Align.json",
+        # "deqa":f"res_data/res_{bench}/DeQA-Score-Mix3.json",
+        # "dover":f"res_data/res_{bench}/dover.json",
+        # "image_reward":f"res_data/res_{bench}/ImageReward-v1.0.json",
+        # "lift":f"res_data/res_{bench}/LiFT-Critic-13b-lora-v1.5.json",
+        # "q_align":f"res_data/res_{bench}/Q-Align.json",
         # "q_insight":f"res_data/res_{bench}/Q-Insight.json",
         # "unified_reward":f"res_data/res_{bench}/UnifiedReward-7b.json",
-        "videophy2_auto_eval":f"res_data/res_{bench}/videophy_2_auto.json",
-        "video_reward":f"res_data/res_{bench}/VideoReward.json",
+        # "videophy2_auto_eval":f"res_data/res_{bench}/videophy_2_auto.json",
+        # "video_reward":f"res_data/res_{bench}/VideoReward.json",
         # "vision_reward":f"res_data/res_{bench}/VisionReward-Video.json",
     }
     short_sampling=False

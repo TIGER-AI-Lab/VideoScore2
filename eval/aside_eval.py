@@ -4,6 +4,20 @@ def cal_mix_tokens():
     from transformers import AutoProcessor, AutoModelForVision2Seq
     from qwen_vl_utils import process_vision_info
     import torch
+    import cv2
+
+    def _get_video_fps(video_path):
+        cap = cv2.VideoCapture(video_path)
+        if not cap.isOpened():
+            raise ValueError(f"Cannot open video: {video_path}")
+
+        fps = cap.get(cv2.CAP_PROP_FPS)
+        cap.release()
+
+        if fps and fps > 1e-3:
+            return fps
+        else:
+            return None
 
     
     # video_path="/data/xuan/data/videoscore2/videos/vchitect2/001000_p.mp4"
@@ -88,7 +102,7 @@ def plot_hist(data,path,interval=50):
     plt.hist(data, bins=bins, edgecolor='black')
     plt.xlabel("Value")
     plt.ylabel("Count")
-    plt.title("Histogram (interval = 50)")
+    plt.title("Histogram")
     plt.grid(axis='y', linestyle='--', alpha=0.7)
     plt.savefig(path)
 
