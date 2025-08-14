@@ -1,12 +1,6 @@
 shared:
-pip install datasets==2.19.2
-pip install gdown
-pip install tqdm
-pip install matplotlib
-pip install opencv-python-headless
-pip install requests
-pip install pandas
-pip install pyarrow
+pip install datasets==2.19.2 gdown opencv-python-headless requests pandas pyarrow
+
 
 vs2_eval (for vs2, mllm, feat, aigve_macs)
 pip install transformers==4.53.2
@@ -42,7 +36,6 @@ git lfs install
 git clone https://huggingface.co/KwaiVGI/VideoReward
 ### Other
 pip install numpy
-pip install pandas
 
 
 vision_reward
@@ -67,8 +60,9 @@ git clone https://github.com/CodeGoat24/UnifiedReward.git
 cd UnifiedReward
 pip install --upgrade pip  
 pip install -e ".[train]"
+pip install setuptools
 pip install flash_attn==2.5.8 --no-build-isolation
-pip install typing_extensions
+
 
 videophy2
 git clone https://github.com/Hritikbansal/videophy.git
@@ -77,6 +71,15 @@ conda create -n videophy python=3.10 -y
 conda activate videophy
 pip install -r requirements.txt
 pip install transformers==4.46.1
+cd ..
+# download ckpt to ./eval_methods/utils_video_phy2/checkpoints
+cd eval_methods/utils_video_phy2
+mkdir -p checkpoints
+cd checkpoints
+conda install -c conda-forge git-lfs
+git lfs install
+git clone https://huggingface.co/videophysics/videophy_2_auto
+cd ../../..
 
 
 dover
@@ -129,6 +132,3 @@ pip install accelerate==0.27.2
 pip install typing_extensions
 pip install opencv-python-headless==4.11.0.86
 pip install numpy==1.26.0
-pip install py-cpuinfo
-pip install hjson
-pip install pyarrow

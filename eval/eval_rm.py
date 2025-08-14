@@ -10,14 +10,12 @@ from benchmark import VS2_QUERY_TEMPLATE,VS1_REG_QUERY_TEMPLATE,AIGVE_MACS_QUERY
 from string import Template
 
 def main(args):
-    # method=args.method
-    # bench=args.bench
-    # method_kwargs = json.loads(args.method_kwargs)
-
-    method=args.get("method","vs2")
-    bench=args.get("bench","vs2_testsft_17k")
-    bench_data_num=args.get("bench_data_num")
-    kwargs = args["kwargs"]
+    method=args.method
+    bench=args.bench
+    bench_data_num=args.bench_data_num
+    model_name_or_path=args.model_name_or_path
+    kwargs = json.loads(args.kwargs)
+        
     if isinstance(eval(bench_data_num),int):
         bench_data_num=eval(bench_data_num)
 
@@ -27,14 +25,18 @@ def main(args):
     if method.lower() == "vs2":
         ## conda activate vs2_eval
         from eval_methods.vs2 import eval_VideoScore2
-        model_name_or_path=kwargs.get("model_name_or_path")
         model=eval_VideoScore2(model_name_or_path)    
+        q_template=VS2_QUERY_TEMPLATE
+    
+    elif method.lower() == "vs2_float":
+        ## conda activate vs2_eval
+        from eval_methods.vs2_float import eval_VideoScore2_float
+        model=eval_VideoScore2_float(model_name_or_path)    
         q_template=VS2_QUERY_TEMPLATE
         
     elif method.lower() == "vs1":
         ## conda activate vs1_eval
         from eval_methods.vs1 import eval_VideoScore1
-        model_name_or_path=kwargs.get("model_name_or_path")
         model=eval_VideoScore1(model_name_or_path) 
         q_template=VS1_REG_QUERY_TEMPLATE
     
@@ -135,11 +137,22 @@ def main(args):
     if '/' in model_name_or_path:
         model_name_or_path=model_name_or_path.split('/')[-1]
     eval_res_path=f"res_data/res_{bench}/{model_name_or_path}.json"
-    if "vs2" in method:
+    if method in ["vs2","vs2_float"]:
         infer_fps=kwargs.get("infer_fps",2.0)
-        if isinstance(infer_fps,float):
+        if isinstance(infer_fps,str):
+            if infer_fps != "raw" :
+                raise Exception("[error] Arg 'infer fps' has invalid type!")                
+        elif isinstance(infer_fps,int) or isinstance(infer_fps,float):
             infer_fps=int(infer_fps)
+        else:
+            raise Exception("[error] Arg 'infer fps' has invalid type!") 
         eval_res_path=f"res_data/res_{bench}/{model_name_or_path}_infer_{infer_fps}fps.json"
+    
+    if method == "vs2_float":
+        temperature=kwargs.get("temperature",0.7)
+        eval_res_path=eval_res_path.replace("_infer",f"_float_infer")
+        eval_res_path=eval_res_path.replace(".json",f"_tempe={temperature}.json")
+    
     
     metrics_report_path=f"metrics_report/met_{bench}/{model_name_or_path}.json"
     os.makedirs(os.path.dirname(eval_res_path),exist_ok=True)
@@ -154,16 +167,16 @@ def main(args):
         prompt=item['prompt']
         path_or_url=os.path.abspath(f"{bench_data_dir}/{bench}/videos/{video_name}.mp4")
         res_item=item
-        try:
-            user_prompt=q_template.substitute(t2v_prompt=prompt)
-            s_t=time.time()
-            v_out, t_out, p_out, raw_output = model.evaluate_video(user_prompt, path_or_url, kwargs)
-            print("time cost: ",time.time()-s_t)
-            print("out:", v_out, t_out, p_out)
+        # try:
+        user_prompt=q_template.substitute(t2v_prompt=prompt)
+        s_t=time.time()
+        v_out, t_out, p_out, raw_output = model.evaluate_video(user_prompt, path_or_url, kwargs)
+        print("time cost: ",time.time()-s_t)
+        print("out:", v_out, t_out, p_out)
         
-        except Exception as e:
-            print(f"{e}\nerror in evaluation, skipped {video_name}")
-            continue
+        # except Exception as e:
+        #     print(f"{e}\nerror in evaluation, skipped {video_name}")
+        #     continue
            
         if "vs2" in bench \
             or bench in ["aigve_bench","aigve-bench",
@@ -229,35 +242,15 @@ def main(args):
 
 if __name__ == "__main__":    
 
-    
-    bench_data_dir="bench_data"
+    bench_data_dir="./bench_data"
     
     ap = argparse.ArgumentParser()
     ap.add_argument("--bench",required=True,default="vs2_test_sft_17k")
     ap.add_argument("--method",required=True,default="vs2")
-    ap.add_argument("--model_name_or_path",required=False)
+    ap.add_argument("--model_name_or_path",required=False,default=None)
     ap.add_argument("--bench_data_num",required=False,default='all')
-    ap.add_argument("--infer_fps",required=False,default=2.0)
     ap.add_argument("--kwargs", type=str,required=False,default="{}") 
     t_args = ap.parse_args()
-    bench=t_args.bench
-    method=t_args.method
-    model_name_or_path=t_args.model_name_or_path
-    bench_data_num=t_args.bench_data_num
-    infer_fps=t_args.infer_fps
     
-    if infer_fps != "raw":
-        infer_fps=float(infer_fps)
-        
-    args={
-        "method":method,
-        "bench":bench,
-        "bench_data_num":bench_data_num,
-        "kwargs":{
-            "model_name_or_path":model_name_or_path,
-            "infer_fps":infer_fps
-        }
-    }
-    
-    main(args)
+    main(t_args)
     

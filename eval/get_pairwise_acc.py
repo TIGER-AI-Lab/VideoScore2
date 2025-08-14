@@ -4,13 +4,13 @@ from datasets import load_dataset
 import random
 
 def judge_equal_for_diverse(method,score1,score2):
-    # trival implt
-    if score1>score2:
-        return 1
-    elif score1<score2:
-        return -1
-    else:
-        return 0
+    # # trival implt
+    # if score1>score2:
+    #     return 1
+    # elif score1<score2:
+    #     return -1
+    # else:
+    #     return 0
     
     if method in ["vs2","aigve_macs","lift"]:
         if score1>score2:
@@ -19,6 +19,15 @@ def judge_equal_for_diverse(method,score1,score2):
             return -1
         else:
             return 0
+    
+    if method == "vs2_float":
+        if score1-score2>0.1:
+            return 1
+        elif score1-score2<-0.1:
+            return -1
+        else:
+            return 0
+    
     if method == "video_reward":
         if score1-score2>0.1:
             return 1
