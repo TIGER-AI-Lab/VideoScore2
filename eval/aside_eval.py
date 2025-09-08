@@ -122,6 +122,14 @@ if __name__ == "__main__":
     # plot_path="1.png"
     # interval=20
     # plot_hist(thinking_len_list,plot_path,interval)
+    import json
+    p="/data/xuan/workdir/VideoScore2/eval/res_data/res_vision_reward_db_video/VideoReward.json"
+    with open(p,'r') as f:
+        data=json.load(f)
+    
+    scores=[x['v_score_model'] for x in data]
+    print(min(scores),max(scores),sum(scores)/len(scores))
+    
     None
     
     

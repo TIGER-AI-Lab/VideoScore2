@@ -182,7 +182,7 @@ def load_benchmark(bench_data_dir,bench_name,num="all"):
     elif bench_name in ["genai_bench","genai-bench"]:
         bench_name = "genai_bench"
         from datasets import load_dataset
-        ds = load_dataset("TIGER-Lab/GenAI-Bench", data_dir="video_generation",split="test")
+        ds = load_dataset("TIGER-Lab/GenAI-Bench", "video_generation",split="test")
         src_save_path=f"{bench_data_dir}/{bench_name}/original_data_{bench_name}.json"
         original_data=[x for x in ds]
         
@@ -617,11 +617,12 @@ def load_benchmark(bench_data_dir,bench_name,num="all"):
             
     else:
         print(f"{bench_name} not supported. Exited.")
+        exit(0)
     
     print(bench_name)
     print("total len:", len(data))
     if isinstance(num,int):
-        data=data[:num]    
+        data=data[:num]  
     print("loaded:", len(data))
     return data
 

@@ -44,7 +44,6 @@ async def koala_prompts():
     print("num of raw prompts: ",len(raw_prompt_items))
     
     # (1) filter by video_length, clarity_score, etc
-    
     temp_list=[]
     # caption_lens=[]
     for item in tqdm(raw_prompt_items):

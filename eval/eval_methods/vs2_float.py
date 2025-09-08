@@ -128,7 +128,8 @@ class eval_VideoScore2_float:
         idx_t = find_score_token_index_by_prompt("(2) text-to-video alignment:")
         idx_p = find_score_token_index_by_prompt("(3) physical/common-sense consistency:")
 
-        def compute_ll_based_soft_score(hard_val, token_idx):
+
+        def ll_based_soft_score(hard_val, token_idx):
             if hard_val is None or token_idx < 0:
                 return None
             logits = scores[token_idx][0]  # [vocab]
@@ -139,9 +140,89 @@ class eval_VideoScore2_float:
             print(f"hard score={hard_val}, token_id={token_id}, logp={logp:.4f}, prob={prob:.4f}, soft score={soft:.4f}")
             return soft
         
-        v_soft = compute_ll_based_soft_score(v_score_model, idx_v)
-        t_soft = compute_ll_based_soft_score(t_score_model, idx_t)
-        p_soft = compute_ll_based_soft_score(p_score_model, idx_p)
+        
+        def ll_based_soft_score_weighted(hard_val, token_idx) -> float:
+            if hard_val is None or token_idx < 0:
+                return None
+
+
+            logits = scores[token_idx][0]  
+
+            score_range = list(range(1, 6)) 
+            valid_token_ids = []
+            for s in score_range:
+                ids = self.tokenizer.encode(str(s), add_special_tokens=False)
+                if len(ids) == 1:
+                    valid_token_ids.append((s, ids[0]))
+                else:
+                    print(f"[warn] score {s} maps to multi-token: {ids}")
+
+            if not valid_token_ids:
+                print("[warn] No valid score tokens found (1–5 all multi-token?)")
+                return None
+
+            values, token_ids = zip(*valid_token_ids)
+            logits_subset = torch.tensor([logits[tid].item() for tid in token_ids], dtype=torch.float32)
+            probs = torch.softmax(logits_subset, dim=-1).numpy()
+
+            soft = float(sum(s * p for s, p in zip(values, probs)))
+
+            print(f"hard score={hard_val}, token_idx={token_idx}, softmax probs:")
+            for s, p in zip(values, probs):
+                print(f"  score {s}: P={p:.4f}")
+            print(f"soft score = {soft:.4f}")
+
+            return soft
+        
+        def ll_based_soft_score_normed(hard_val, token_idx) -> float:
+            if hard_val is None or token_idx < 0:
+                return None
+
+            logits = scores[token_idx][0]  # [vocab]
+
+            # 1~5分的候选 token
+            score_range = list(range(1, 6))
+            score_probs = []  # [(score, prob)]
+
+            for s in score_range:
+                ids = self.tokenizer.encode(str(s), add_special_tokens=False)
+                if len(ids) == 1:
+                    tid = ids[0]
+                    logp = torch.log_softmax(logits, dim=-1)[tid].item()
+                    prob = float(np.exp(logp))
+                    score_probs.append((s, prob))
+                else:
+                    print(f"[warn] score {s} maps to multi-token: {ids}, skipping.")
+
+            if not score_probs:
+                print("[warn] No valid score token found (1–5 all multi-token?)")
+                return None
+
+            scores_list, probs_list = zip(*score_probs)
+            total_prob = sum(probs_list)
+            max_prob = max(probs_list)
+            max_idx = probs_list.index(max_prob)
+            best_score = scores_list[max_idx]
+
+            normalized_prob = max_prob / total_prob if total_prob > 0 else 0
+            soft_score = best_score * normalized_prob
+
+            print(f"hard score={hard_val}, token_idx={token_idx}")
+            for s, p in score_probs:
+                print(f"  score {s}: prob={p:.4f}")
+            print(f"  max prob={max_prob:.4f} at score={best_score}, total prob={total_prob:.4f}")
+            print(f"  normalized prob={normalized_prob:.4f}, soft score={soft_score:.4f}")
+
+            return soft_score
+        
+        
+        v_soft = ll_based_soft_score_normed(v_score_model, idx_v)
+        t_soft = ll_based_soft_score_normed(t_score_model, idx_t)
+        p_soft = ll_based_soft_score_normed(p_score_model, idx_p)
+        
+        # v_soft = ll_based_soft_score(v_score_model, idx_v)
+        # t_soft = ll_based_soft_score(t_score_model, idx_t)
+        # p_soft = ll_based_soft_score(p_score_model, idx_p)
 
         return v_soft, t_soft, p_soft, output_text
         

@@ -7,13 +7,13 @@ import random
 
 EXCL_MODELS=['stepvideo_t2v','stepvideo_t2v_low_vram','kling','sora','wanx21_14b','ruyi',]
 
-V_GOOD_MODELS=['lavie_base','magictime','cogvideox_5b','wanx21_1_3b','videocrafter2','opensora_plan_v1_3','pika_v2_2','cogvideox15_5b',]
-V_MEDIUM_MODELS=['anidiff','cogvideox_2b','ltx_video_095','hotshot_xl','mochi1_preview','opensora_v1_2','latte',]
-V_BAD_MODELS=['ltx_video_091','vchitect2','text2video_zero','modelscope','zeroscope']
+V_GOOD_MODELS=['lavie_base','magictime','cogvideox_5b','wanx21_1_3b','videocrafter2','opensora_plan_v1_3','ltx_video_095','pika_v2_2','cogvideox15_5b','latte',]
+V_MEDIUM_MODELS=['anidiff','cogvideox_2b','hotshot_xl','mochi1_preview','opensora_v1_2',]
+V_BAD_MODELS=['ltx_video_091','text2video_zero','modelscope','zeroscope','vchitect2',]
 
-P_GOOD_MODELS=['magictime','wanx21_1_3b','mochi1_preview','opensora_plan_v1_3','pika_v2_2','cogvideox15_5b',]
-P_MEDIUM_MODELS=['ltx_video_095','cogvideox_5b','lavie_base','hotshot_xl','videocrafter2','latte',]
-P_BAD_MODELS=['opensora_v1_2','cogvideox_2b','anidiff','ltx_video_091','vchitect2','text2video_zero','modelscope','zeroscope']
+P_GOOD_MODELS=['magictime','wanx21_1_3b','opensora_plan_v1_3','pika_v2_2','cogvideox15_5b',]
+P_MEDIUM_MODELS=['anidiff','cogvideox_2b','hotshot_xl','mochi1_preview','ltx_video_095','cogvideox_5b','lavie_base','videocrafter2','latte',]
+P_BAD_MODELS=['ltx_video_091','text2video_zero','modelscope','zeroscope','vchitect2','opensora_v1_2',]
 
 
 def modify_score(t2v_model,v_score,t_score,p_score):
