@@ -22,7 +22,6 @@ def _thinking_cmt_claude_few_shot(
     shot_num)->dict:
 
     s_t=time.time()
-    os.environ["ANTHROPIC_API_KEY"]=model_access["api_key"]
     model_name=model_access["model_name"]
     def claude_img_input(path_url_pil)->str:
         if isinstance(path_url_pil,str) and "http" in path_url_pil:
@@ -38,6 +37,10 @@ def _thinking_cmt_claude_few_shot(
             img.save(buffered, format="JPEG")  
             base64_str = base64.standard_b64encode(buffered.getvalue()).decode("utf-8")
             return base64_str
+        elif isinstance(path_url_pil, (bytes, bytearray)):
+            base64_str = base64.b64encode(path_url_pil).decode("utf-8")
+            return base64_str
+        
         else:
             warnings.warn("image input is not url, path or PIL Image!")
             return ""
@@ -165,6 +168,8 @@ def _thinking_cmt_claude_few_shot_OR(
     frame_list,
     few_shot_examples,
     shot_num)->dict:
+    
+    from openai import OpenAI
     
     base_url=model_access["base_url"]
     api_key=model_access["api_key"]
@@ -298,6 +303,9 @@ def _thinking_cmt_claude_few_shot_OR(
         response = requests.post(url, headers=headers, data=json.dumps(payload))
         thinking = str(response.json()['choices'][0]['message']['reasoning'])
         output = str(response.json()['choices'][0]['message']['content'])
+        print(response.json()['choices'][0]['message'])
+        print(len(thinking))
+        exit()
         return {
             "thinking": thinking,
             "output": output
@@ -309,6 +317,3 @@ def _thinking_cmt_claude_few_shot_OR(
             "thinking": None,
             "output": None
         }
-        
-        
-

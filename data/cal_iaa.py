@@ -3,6 +3,9 @@ import json
 import re
 from scipy.stats import spearmanr, pearsonr
 import numpy as np
+from statsmodels.stats.inter_rater import fleiss_kappa
+import krippendorff
+
 
 
 score_map={
@@ -29,13 +32,35 @@ def three_way_agreement_ratio(a, b, c):
     agree_count = sum(1 for x, y, z in zip(a, b, c) if x == y == z)
     return agree_count / len(a)
 
+def three_way_agreement_ratio_relaxed(a, b, c):
+    assert len(a) == len(b) == len(c)
+    agree_count = sum(1 for x, y, z in zip(a, b, c) if abs(max(x,y,z)-min(x,y,z))<=1)
+    return agree_count / len(a)
+
 def three_way_spcc(a, b, c):
     data = np.array([a, b, c])
     corr_matrix, _ = spearmanr(data, axis=1)
-    # 只取非对角的三个相关值，求平均
     spcc_avg = (corr_matrix[0,1] + corr_matrix[0,2] + corr_matrix[1,2]) / 3
     return spcc_avg
 
+
+def cal_kappa(_2d_list):
+    ratings=np.array(_2d_list).T
+    ratings=ratings.tolist()
+    num_categories = 5
+    table = np.zeros((len(ratings), num_categories), dtype=int)
+
+    for i, r in enumerate(ratings):
+        for score in r:
+            table[i, score-1] += 1
+    kappa = fleiss_kappa(table)
+    return kappa
+
+
+def cal_alpha(_2d_list):    
+    data = np.array(_2d_list)
+    alpha = krippendorff.alpha(reliability_data=data, level_of_measurement='ordinal')
+    return alpha
 
 def import_anno(p):
     # for p in ["try1.json","try2.json","try3.json"]:
@@ -89,6 +114,7 @@ def cal_iaa(data1,data2,data3):
     video_names_3=[x['video_name'] for x in data3]
     
     shared=list(set(video_names_1)&set(video_names_2)&set(video_names_3))
+    print(len(shared))
     
     data1=[x for x in data1 if x['video_name'] in shared]
     data2=[x for x in data2 if x['video_name'] in shared]
@@ -111,21 +137,29 @@ def cal_iaa(data1,data2,data3):
         [x['phy_score'] for x in data2],
         [x['phy_score'] for x in data3],
     ]
+        
     
-    for _2dlist in [v_scores_2dlist,t_scores_2dlist,p_scores_2dlist]:
-        print(f"  Agreement Ratio: {three_way_agreement_ratio(_2dlist[0],_2dlist[1],_2dlist[2],):.4f}")
-        print(f"  SPCC: {three_way_spcc(_2dlist[0],_2dlist[1],_2dlist[2],):.4f}")
-        print()
+    for _2dlist in [v_scores_2dlist,
+                    t_scores_2dlist,
+                    p_scores_2dlist,
+                    ]:
+        print(f"Agreement Ratio: {three_way_agreement_ratio(_2dlist[0],_2dlist[1],_2dlist[2],):.4f}")
+        print(f"Agreement Ratio Relaxed: {three_way_agreement_ratio_relaxed(_2dlist[0],_2dlist[1],_2dlist[2],):.4f}")
+        print(f"SPCC: {three_way_spcc(_2dlist[0],_2dlist[1],_2dlist[2],):.4f}")
+        print(f"Fleiss' Kappa: {cal_kappa(_2dlist):.4f}")
+        print(f"Krippendorff's Alpha: {cal_alpha(_2dlist):.4f}")
+        print("\n")
 
     
 if __name__ == "__main__":
-    path="try1.json"
+    path="iaa/iaa_4.json"
     data1=import_anno(path)
-    path="try2.json"
+    path="iaa/iaa_5.json"
     data2=import_anno(path)
-    path="try3.json"
+    path="iaa/iaa_6.json"
     data3=import_anno(path)
     
     cal_iaa(data1,data2,data3)
+    # cal_iaa([],[],[])
     
     

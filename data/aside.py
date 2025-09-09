@@ -121,10 +121,6 @@ def split_batchs():
 
 
 
-
-
-
-
 def split_json_file(input_path, output_dir, chunk_size=1000):
     import json
     import os
@@ -314,7 +310,34 @@ def collect_video():
     with open(f"temp/{batch_name}.txt","w") as f:
         for item in txt_list:
             f.write(f"{item}\n\n")
-    
+
+
+def eg_kappa():
+    import numpy as np
+    from statsmodels.stats.inter_rater import fleiss_kappa
+
+    # 假设有 3 个样本，每个样本由 3 个标注人打分
+    ratings = [
+        [3, 3, 3],  # 样本1
+        [3, 3, 4],  # 样本2
+        [5, 4, 5],  # 样本3
+    ]
+
+    # 转换成类别频数矩阵 (N × k)
+    num_categories = 5
+    table = np.zeros((len(ratings), num_categories), dtype=int)
+
+    for i, r in enumerate(ratings):
+        for score in r:
+            table[i, score-1] += 1
+
+    print("频数矩阵：\n", table)
+
+    # 计算 Fleiss' kappa
+    kappa = fleiss_kappa(table)
+    print("Fleiss' kappa =", kappa)
+
+
 if __name__ == "__main__":
     # input_file = "thinking_cmt/sft_17k_modified.json"     
     # output_folder = "thinking_split" 
@@ -329,11 +352,6 @@ if __name__ == "__main__":
     # data = load_dataset("hexuan21/vs2_raw_comment", data_files=f"no_comment_5_trial.parquet",split="train")
     
     # print(data[0]["visual_comment_raw"])
-    None
-    # collect_video()
     
-    # train_data=[]
-    # for i in range(18):
-    #     p1=f"/home/brantley/workdir/VideoScore2/data/thinking_final/final_sft_17k_{i}.json"
-    #     train_data.extend(json.load(open(p1,"r")))
+    eg_kappa()
     

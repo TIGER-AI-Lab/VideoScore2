@@ -34,8 +34,8 @@ def _fetch_eg_frames_single(video_name,video_url,f_v_save_dir):
                 extracted_frames.append(frame)
         cap.release()
         
-        for i, frame in enumerate(extracted_frames):
-            frame_dir = os.path.join(f_v_save_dir,"frames_eg",video_name)
+        frame_dir = os.path.join(f_v_save_dir,"frames_eg",video_name)
+        for i, frame in enumerate(extracted_frames):    
             frame_abs_path = os.path.join(frame_dir,f"{video_name}_{i}.jpg")
             if os.path.exists(frame_abs_path):
                 continue

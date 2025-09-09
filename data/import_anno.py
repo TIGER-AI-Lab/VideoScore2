@@ -1,9 +1,6 @@
 import os
 from time import sleep
-import cv2
 import re
-import numpy as np
-import urllib.request
 import json
 from tqdm import tqdm
 from huggingface_hub import upload_file,upload_folder
@@ -81,7 +78,7 @@ FEATURES = Features({
     "t2v_align_comment_raw":Value("string"),
     "phy_score":Value("int32"),
     "phy_comment_raw":Value("string"),
-    "eg_frames": Sequence(feature=Image(decode=True)),
+    "eg_frames": Sequence(Value("binary")),
 })
 
 SHARED_CMTS={
@@ -176,13 +173,7 @@ def _build_raw_cmt_single(anno,batch_name,f_v_save_dir):
             "t2v_align_comment_raw": t2v_cmt,
             "phy_score": phy_score,
             "phy_comment_raw": phy_cmt,
-            # "visual_score": visual_score,
-            # "visual_comment_raw": "",
-            # "t2v_align_score": t2v_score,
-            # "t2v_align_comment_raw": "",
-            # "phy_score": phy_score,
-            # "phy_comment_raw": "",
-            "eg_frames": [{"bytes": open(p, "rb").read()} for p in eg_frame_abs_paths],
+            "eg_frames": [open(p, "rb").read() for p in eg_frame_abs_paths],
         }
     except Exception as e:
         print(f"[ERROR] build item failed for {video_name}: {e}")
@@ -218,7 +209,6 @@ def build_raw_cmt_data(
                 item = fut.result()
                 if item is not None:
                     data.append(item)
-        exit()
         
         ds = Dataset.from_list(data, features=FEATURES,info=DatasetInfo(features=FEATURES))
         out_dir= f"anno_parquet"
@@ -284,106 +274,81 @@ def rebuild_rej_data(rej_data_path,batch_name,f_v_save_dir):
 
 if __name__ == "__main__":
     
-    f_v_save_dir="/data/xuan/videoscore2/f_v_all"
+    f_v_save_dir="/data/xuan/data/videoscore2/f_v_all"
     
     anno_paths=[
-        # f"anno_raw/com_5k_0.json",
-        # f"anno_raw/com_5k_1.json",
-        # f"anno_raw/com_5k_2.json",
-        # f"anno_raw/com_5k_3.json",
-        # f"anno_raw/com_5k_4.json",
-        # f"anno_raw/1.json",
-        # f"anno_raw/2.json",
-        # f"anno_raw/3.json",
-        # f"anno_raw/4.json",
-        # f"anno_raw/5.json",
-        # f"anno_raw/13.json",
-        # f"anno_raw/14.json",
-        # f"anno_raw/15.json",
-        # f"anno_raw/17.json",
-        # f"anno_raw/18.json",
-        # f"anno_raw/19.json",
-        # f"anno_raw/20.json",
-        # f"anno_raw/21.json",
-        # f"anno_raw/22.json",
-        # f"anno_raw/23.json",
-        # f"anno_raw/24.json",
-        # f"anno_raw/29.json",
-        # f"anno_raw/30.json",
-        # f"anno_raw/31.json",
-        # f"anno_raw/32.json",
-        # f"anno_raw/53.json",
-        # f"anno_raw/54.json",
-        # f"anno_raw/55.json",
-        # f"anno_raw/61.json",
-        # f"anno_raw/69.json",
-        # f"anno_raw/70.json"
+        f"anno_raw/9.json",
+        f"anno_raw/16.json",
+        f"anno_raw/33.json",
+        f"anno_raw/34.json",
+        f"anno_raw/38.json",
+        f"anno_raw/45.json",
+        f"anno_raw/46.json",
+        f"anno_raw/47.json",
+        f"anno_raw/48.json",
+        f"anno_raw/56.json",
+        f"anno_raw/62.json",
+        f"anno_raw/71.json",
+        f"anno_raw/74.json",
+        f"anno_raw/75.json",
+        f"anno_raw/78.json",
+        f"anno_raw/79.json",
+        f"anno_raw/81.json",
+        f"anno_raw/82.json",
+        f"anno_raw/83.json",
+        f"anno_raw/85.json",
+        f"anno_raw/86.json",
     ]
     
-    # batch_names=["5"]
-    # build_raw_cmt_data(anno_paths,batch_names,f_v_save_dir)
+    # download_eg_frames_from_anno(anno_paths,f_v_save_dir,max_workers=8)
     
-    anno_paths=[
-        "temp/8.json",
-        "temp/12.json",
-        "temp/51.json",
-        "temp/52.json",
-        "temp/50.json",
-        "temp/63.json",
-        "temp/64.json",
-        "temp/65.json",
-        "temp/66.json",
-        "temp/67.json",
-        "temp/68.json",
-    ]
-    download_eg_frames_from_anno(anno_paths,f_v_save_dir,max_workers=8)
     
-    # batch_names=[x.split('/')[1].split('.')[0] for x in anno_paths]
-    # build_raw_cmt_data(anno_paths,batch_names,f_v_save_dir)
+    batch_names=[x.split('/')[1].split('.')[0] for x in anno_paths]
+    build_raw_cmt_data(anno_paths,batch_names,f_v_save_dir)
+    
+
+    
     
     # rej_path="thinking_rejected/xxxx.json"
     # rej_batch_name="rej_xxxx"
     # rebuild_rej_data(rej_path,rej_batch_name,frame_temp_dir)
     
     
+    # anno_paths=[
+    #     f"anno_raw/com_5k_0.json",
+    #     f"anno_raw/com_5k_1.json",
+    #     f"anno_raw/com_5k_2.json",
+    #     f"anno_raw/com_5k_3.json",
+    #     f"anno_raw/com_5k_4.json",
+    #     f"anno_raw/1.json",
+    #     f"anno_raw/2.json",
+    #     f"anno_raw/3.json",
+    #     f"anno_raw/4.json",
+    #     f"anno_raw/5.json",
+    #     f"anno_raw/13.json",
+    #     f"anno_raw/14.json",
+    #     f"anno_raw/15.json",
+    #     f"anno_raw/17.json",
+    #     f"anno_raw/18.json",
+    #     f"anno_raw/19.json",
+    #     f"anno_raw/20.json",
+    #     f"anno_raw/21.json",
+    #     f"anno_raw/22.json",
+    #     f"anno_raw/23.json",
+    #     f"anno_raw/24.json",
+    #     f"anno_raw/29.json",
+    #     f"anno_raw/30.json",
+    #     f"anno_raw/31.json",
+    #     f"anno_raw/32.json",
+    #     f"anno_raw/53.json",
+    #     f"anno_raw/54.json",
+    #     f"anno_raw/55.json",
+    #     f"anno_raw/61.json",
+    #     f"anno_raw/69.json",
+    #     f"anno_raw/70.json"
+    # ]
     
     
     
-    
-    
-    
-    [
-        # "anno_raw/batch_91_100_com.json",
         
-        # f"anno_raw/13.json",
-        # f"anno_raw/14.json",
-        # f"anno_raw/15.json",
-        # f"anno_raw/17.json",
-        # f"anno_raw/18.json",
-        # f"anno_raw/19.json",
-        # f"anno_raw/20.json",
-        # f"anno_raw/21.json",
-        # f"anno_raw/22.json",
-        # f"anno_raw/23.json",
-        # f"anno_raw/24.json",
-        # f"anno_raw/29.json",
-        # f"anno_raw/30.json",
-        # f"anno_raw/31.json",
-        # f"anno_raw/32.json"
-        
-        # f"anno_raw/37.json",
-        # f"anno_raw/38.json",
-        # f"anno_raw/39.json",
-        # f"anno_raw/40.json",
-        # f"anno_raw/45.json",
-        # f"anno_raw/46.json",
-        # f"anno_raw/47.json",
-        # f"anno_raw/48.json",
-        # f"anno_raw/53.json",
-        # f"anno_raw/54.json",
-        # f"anno_raw/55.json",
-        # f"anno_raw/56.json",
-        # f"anno_raw/61.json",
-        # f"anno_raw/69.json",
-        # f"anno_raw/70.json"
-    ]
+    

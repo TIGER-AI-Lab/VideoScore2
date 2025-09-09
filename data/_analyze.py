@@ -127,26 +127,25 @@ def think_len_dist(paths,data_name):
 
 if __name__ == "__main__":
 
-    # anno_local_paths=[
-    #     # 'anno_raw/37.json',
-    #     # 'anno_raw/38.json',
-    #     # 'anno_raw/39.json',
-    #     # 'anno_raw/40.json',
-    #     'anno_raw/54.json'
-    # ]
-    # batch_name="54_keming"
-    # analyze_raw(anno_local_paths,batch_name)
-    
+    anno_local_paths=[
+        # 'anno_raw/37.json',
+        # 'anno_raw/38.json',
+        # 'anno_raw/39.json',
+        # 'anno_raw/40.json',
+        'anno_raw/10.json'
+    ]
+    batch_name="10_raw"
+    analyze_raw(anno_local_paths,batch_name)
     
     # thinking_paths=[
-    #     "temp/sft_17k_modidifed.json",
+    #     "thinking_new_score/tk_new_score_30.json",
     # ]
-    # batch_name="17k_modified"
+    # batch_name="30_modified"
     # analyze_thinking(thinking_paths,batch_name)
     
-    paths=[
-        f"thinking_final/final_sft_17k_{i}.json"
-                for i in range(1)
-    ]
-    data_name="sft_17k_0"
-    think_len_dist(paths,data_name)
+    # paths=[
+    #     f"thinking_final/final_sft_17k_{i}.json"
+    #             for i in range(1)
+    # ]
+    # data_name="sft_17k_0"
+    # think_len_dist(paths,data_name)
