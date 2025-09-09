@@ -560,7 +560,66 @@ def load_benchmark(bench_data_dir,bench_name,num="all"):
             data.append(item)
         with open(json_save_path,"w",encoding='utf-8') as f:
             json.dump(data,f,indent=4,ensure_ascii='False')
-    
+
+        # build preference benchmark for tvge
+        from collections import defaultdict
+        from itertools import combinations
+        groups = defaultdict(list)
+        tvge_pref_json=f"{bench_data_dir}/{bench_name}/{bench_name}_pref.json"
+        df = pd.read_csv(csv_save_path)
+        df = df.iloc[1:]
+        for index, row in df.iterrows():
+            model_name = row["model_name"].strip()
+            video_id = int(row["video_id"])
+            prompt = row["prompt"].strip()
+            align_score = float(row["text_alignment_score"])
+            quality_score = float(row["video_quality_score"])
+
+            groups[prompt].append({
+                "name": f"{model_name}_{video_id:04d}",
+                "align": align_score,
+                "quality": quality_score,
+                "prompt": prompt
+            })
+
+        pref_data = []
+
+        for key, videos in groups.items():
+            for v1, v2 in combinations(videos, 2):
+                diff_align = v1["align"] - v2["align"]
+                if abs(diff_align) <= 0.3:
+                    align_pref = "same"
+                elif diff_align > 0:
+                    align_pref = "1"
+                else:
+                    align_pref = "2"
+
+                diff_quality = v1["quality"] - v2["quality"]
+                if abs(diff_quality) <= 0.3:
+                    quality_pref = "same"
+                elif diff_quality > 0:
+                    quality_pref = "1"
+                else:
+                    quality_pref = "2"
+
+                pair = {
+                    "prompt": v1["prompt"],
+                    "video1": v1["name"],
+                    "video2": v2["name"],
+                    "v1_align_score": v1["align"],
+                    "v2_align_score": v2["align"],
+                    "text_alignment_pref": align_pref,
+                    "v1_quality_score": v1["quality"],
+                    "v2_quality_score": v2["quality"],
+                    "video_quality_pref": quality_pref,
+                }
+                pref_data.append(pair)
+
+        with open(tvge_pref_json, "w", encoding="utf-8") as f:
+            json.dump(pref_data, f, indent=2, ensure_ascii=False)
+
+        # print(f"✅ saved {len(pref_data)} pairs to {tvge_pref_json}")
+        
     # ========================= T2VQA-DB =========================
     elif bench_name in ["t2vqa_db"]:
         import gdown
@@ -611,10 +670,58 @@ def load_benchmark(bench_data_dir,bench_name,num="all"):
                 })
 
         # In T2VQA-DB, 2000/10000 are used as test set
-        data=data[:2000]
+        test_data_len=2000
+        data=data[:test_data_len]
         with open(json_save_path, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=4, ensure_ascii=False)
-            
+        
+        # build preference benchmark for t2vqa_db
+        from collections import defaultdict
+        t2vqa_pref_json=f"{bench_data_dir}/{bench_name}/{bench_name}_pref.json"
+        groups = defaultdict(list)
+        with open(txt_save_path, "r", encoding="utf-8") as f:
+            for idx,line in enumerate(f):
+                if idx>test_data_len:
+                    break
+                if not line.strip():
+                    continue
+                video_id, prompt, score = line.split("|")
+                groups[prompt.strip()].append({
+                    "video_id": video_id.strip().split(".mp4")[0],
+                    "score": float(score.strip())
+                })
+
+        pref_data = []
+
+        for prompt, videos in groups.items():
+            n = len(videos)
+            for i in range(n):
+                for j in range(i + 1, n):
+                    v1, v2 = videos[i], videos[j]
+                    diff = v1["score"] - v2["score"]
+
+                    if abs(diff) <= 1:
+                        pref = "same"
+                    elif diff > 0:
+                        pref = "1"
+                    else:
+                        pref = "2"
+
+                    pair = {
+                        "prompt": prompt,
+                        "video1": v1["video_id"],
+                        "video2": v2["video_id"],
+                        "video1_quality_score": v1["score"],
+                        "video2_quality_score": v2["score"],
+                        "preference": pref
+                    }
+                    pref_data.append(pair)
+
+        with open(t2vqa_pref_json, "w", encoding="utf-8") as f:
+            json.dump(pref_data, f, indent=2, ensure_ascii=False)
+        # print(len(pref_data), "preference pairs saved to", t2vqa_pref_json)
+        
+        
     else:
         print(f"{bench_name} not supported. Exited.")
         exit(0)
@@ -629,14 +736,14 @@ def load_benchmark(bench_data_dir,bench_name,num="all"):
 
 if __name__ == "__main__":
     bench_data_dir="./bench_data"
-    bench_name="genai_bench"
+    # bench_name="genai_bench"
     # bench_name="videogen_reward_bench"
     # bench_name="vision_reward_db_video"
     # bench_name="mj_bench_video"
     # bench_name="aigve_bench"
     # bench_name="video_phy_test"
     # bench_name="video_phy2_test"
-    # bench_name="tvge"
+    bench_name="tvge"
     # bench_name="t2vqa_db"
     data=load_benchmark(bench_data_dir,bench_name)
     print(len(data))

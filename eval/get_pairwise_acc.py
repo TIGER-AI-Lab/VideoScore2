@@ -14,7 +14,7 @@ def judge_equal_for_diverse(method,score1,score2,with_ties):
             return 0
     
     else: 
-        if method in ["vs2","aigve_macs","lift","video_phy2_auto_eval"]:
+        if method in ["aigve_macs","lift","video_phy2_auto_eval"]:
             if score1-score2>0:
                 return 1
             elif score1-score2<0:
@@ -22,7 +22,15 @@ def judge_equal_for_diverse(method,score1,score2,with_ties):
             else:
                 return 0
         
-        if method in "vs2_float":
+        if method in ["vs2"]:
+            if score1-score2>0.5:
+                return 1
+            elif score1-score2<-0.5:
+                return -1
+            else:
+                return 0
+        
+        if method in ["vs2_float"]:
             if score1-score2>0.001:
                 return 1
             elif score1-score2<-0.001:
@@ -413,14 +421,135 @@ def main(bench,kwargs,short_sampling=False):
         #     acc = correct / total if total > 0 else 0
         #     print(f"method: {method}\n{cat} Pairwise Accuracy: {correct}/{total} = {acc*100:.3f}")
         # print("\n")
+    
+    # ========================= T2VQA-DB =========================
+    if bench in ["t2vqa_db","t2vqa-db"]:
+        src_json_path = kwargs["src_file"]
+        with open(src_json_path, "r") as f:
+            src_data = json.load(f)
+        print(f"pairs num: ",len(src_data))
+        total=0
+        correct=0
+        for item in src_data:
+            video1 = item["video1"]
+            video2 = item["video2"]
+            if video1 not in score_dict:
+                print(f"video {video1} missing")
+                continue
+            if video2 not in score_dict:
+                # print(f"video {video2} missing")
+                continue
+            
+            if with_ties == False and item["preference"] == "same":
+                continue
+            total+=1
+            
+            scores1 = score_dict[video1]
+            scores2 = score_dict[video2]
+            avg1 = (scores1["v_score_model"] + scores1["t_score_model"] + scores1["p_score_model"]) / 3
+            avg2 = (scores2["v_score_model"] + scores2["t_score_model"] + scores2["p_score_model"]) / 3
+            predict_pref=None
+            if judge_equal_for_diverse(method,avg1,avg2,with_ties) == 1:
+                predict_pref="1"
+            elif judge_equal_for_diverse(method,avg1,avg2,with_ties) == -1:
+                predict_pref="2"
+            else:
+                predict_pref="same"
+            if predict_pref == item["preference"]:
+                correct += 1
         
+        print(f"current pairs num: ",total)
+        print(f"method: {method}")
+        acc = correct / total if total > 0 else 0
+        print(f"T2VQA-DB Pref Pairwise Accuracy: {correct}/{total} = {acc*100:.3f}")
+    
+    # ========================= TVGE =========================
+    if bench in ["tvge"]:
+        src_json_path = kwargs["src_file"]
+        with open(src_json_path, "r") as f:
+            src_data = json.load(f)
+        print(f"pairs num: ",len(src_data))
+        total=0
+        v_correct=0
+        
+        for item in src_data:
+            video1 = item["video1"]
+            video2 = item["video2"]
+            if video1 not in score_dict:
+                print(f"video {video1} missing")
+                continue
+            if video2 not in score_dict:
+                # print(f"video {video2} missing")
+                continue
+
+            if with_ties == False and item["video_quality_pref"] == "same":
+                continue
+            total+=1
+            
+            scores1 = score_dict[video1]
+            scores2 = score_dict[video2]
+            v_score_1 = scores1["v_score_model"]
+            v_score_2 = scores2["v_score_model"]
+            v_pref=None
+            if judge_equal_for_diverse(method,v_score_1,v_score_2,with_ties) == 1:
+                v_pref="1"
+            elif judge_equal_for_diverse(method,v_score_1,v_score_2,with_ties) == -1:
+                v_pref="2"
+            else:
+                v_pref="same"
+            if v_pref == item["video_quality_pref"]:
+                v_correct += 1
+        
+        print(f"method: {method}")
+        print(f"current pairs num: ",total)
+        acc = v_correct / total if total > 0 else 0
+        print(f"TVGE V Pref Pairwise Accuracy: {v_correct}/{total} = {acc*100:.3f}\n")
+        
+        total=0       
+        t_correct=0        
+        for item in src_data:
+            video1 = item["video1"]
+            video2 = item["video2"]
+            if video1 not in score_dict:
+                print(f"video {video1} missing")
+                continue
+            if video2 not in score_dict:
+                # print(f"video {video2} missing")
+                continue
+            if with_ties == False and item["text_alignment_pref"] == "same":
+                continue
+            total+=1
+            
+            scores1 = score_dict[video1]
+            scores2 = score_dict[video2]
+            t_score_1 = scores1["t_score_model"]
+            t_score_2 = scores2["t_score_model"]
+            t_pref=None
+            if judge_equal_for_diverse(method,t_score_1,t_score_2,with_ties) == 1:
+                t_pref="1"
+            elif judge_equal_for_diverse(method,t_score_1,t_score_2,with_ties) == -1:
+                t_pref="2"
+            else:
+                t_pref="same"
+                
+            if t_pref == item["text_alignment_pref"]:
+                t_correct += 1
+        
+        print(f"current pairs num: ",total)
+        acc = t_correct / total if total > 0 else 0
+        print(f"TVGE T Pref Pairwise Accuracy: {t_correct}/{total} = {acc*100:.3f}\n")
+    
 if __name__ == "__main__":
     bench_src_file_mapping={
         "videogen_reward_bench":"bench_data/videogen_reward_bench/videogen-rewardbench.csv",
         
-        "vision_reward_db_video":"bench_data/vision_reward_db_video/original_data_vision_reward_db_video.json",
+        # "vision_reward_db_video":"bench_data/vision_reward_db_video/original_data_vision_reward_db_video.json",
         
-        "genai_bench":None,
+        # "genai_bench":None,
+        
+        # "t2vqa_db":"bench_data/t2vqa_db/t2vqa_db_pref.json",
+        
+        # "tvge":"bench_data/tvge/tvge_pref.json"
         
         # "mj_bench_video":"bench_data/mj_bench_video/mj_bench_video_raw.json"
     }
@@ -430,8 +559,8 @@ if __name__ == "__main__":
         score_json_mapping={
             
             # "aigve_macs":f"res_data/res_{bench}/AIGVE-MACS.json",
-            "deqa":f"res_data/res_{bench}/DeQA-Score-Mix3.json",
-            # "dover":f"res_data/res_{bench}/dover.json",
+            # "deqa":f"res_data/res_{bench}/DeQA-Score-Mix3.json",
+            "dover":f"res_data/res_{bench}/dover.json",
             # "image_reward":f"res_data/res_{bench}/ImageReward-v1.0.json",
             # "lift":f"res_data/res_{bench}/LiFT-Critic-13b-lora-v1.5.json",
             # "q_align":f"res_data/res_{bench}/Q-Align.json",
@@ -442,7 +571,7 @@ if __name__ == "__main__":
             # "video_reward":f"res_data/res_{bench}/VideoReward.json",
             # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192_infer_2fps.json",
             # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_2400_infer_2fps.json",
-            # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_2400_float_infer_2fps_tempe=0.7.json",
+            "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_2400_float_infer_2fps_tempe=0.7.json",
             # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_2400_float_infer_2fps_tempe=1.5.json",
         }
         short_sampling=False
