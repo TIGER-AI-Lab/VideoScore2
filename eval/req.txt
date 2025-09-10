@@ -8,7 +8,6 @@ pip install qwen-vl-utils
 pip install accelerate
 pip install scipy
 pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0
-
 pip install pypiqe
 pip install brisque
 pip install timm
@@ -19,9 +18,14 @@ pip install google-generativeai
 pip install anthropic
 
 
-vs1_eval (copied from vs2_eval):
-pip install mantis-vl
+vs1_eval:
 pip install transformers==4.45.0
+pip install qwen-vl-utils
+pip install accelerate
+pip install scipy
+pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0
+pip install mantis-vl
+
 
 
 video_reward
