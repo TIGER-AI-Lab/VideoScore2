@@ -220,10 +220,10 @@ async def align_thinking_and_score(src_path,save_path,rej_path,log_path):
                     new_data[idx]=m_x
         modify_needed_items=[x for x in modified_items if (x['thinking'] is None)]
     
-    logger.info("Remained error items: ", len(modify_needed_items))
+    logger.info(f"Remained error items: {len(modify_needed_items)}")
     
     new_data=[x for x in new_data if x['thinking'] is not None]
-    logger.info("Saved items: ",len(new_data))
+    logger.info(f"Saved items: {len(new_data)}")
     
     with open(save_path,"w") as f:
         json.dump(new_data,f,indent=4,ensure_ascii=False)
@@ -268,14 +268,14 @@ if __name__ == "__main__":
         # 19,20,21,22,23,   #1
         # 24,29,30,31,32,   #1
         # 53,54,55,61,69,70,   #2
-        "com_5k_0",   #3
-        "com_5k_1",   #3
+        # "com_5k_0",   #3
+        # "com_5k_1",   #3
         
-        # 9,16,33,34,   #0
-        # 38,45,46,47,48,    #4
-        # 56,62,71,74,    #5
-        # 75,78,79,81,    
-        # 82,83,85,86, 
+        # 9,16,33,34,   
+        # 38,45,46,47,48,    
+        # 56,62,71,74,      
+        # 75,78,79,81,       
+        # 82,83,85,86,      
     ]
     src_dir="thinking_new_score"
     save_dir="thinking_final"

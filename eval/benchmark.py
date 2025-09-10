@@ -362,15 +362,15 @@ def load_benchmark(bench_data_dir,bench_name,num="all"):
         csv_save_path=f"{bench_data_dir}/{bench_name}/aigve_bench.csv"
         json_save_path=f"{bench_data_dir}/{bench_name}/aigve_bench.json"
         os.makedirs(os.path.dirname(os.path.abspath(json_save_path)),exist_ok=True)
-        
-        zip_url="https://huggingface.co/datasets/jayw/t2v-gen-eval/resolve/main/videos.tar.gz"
+       
+        zip_url="https://huggingface.co/datasets/xiaoliux/AIGVE-Bench/resolve/main/AIGVE-Bench%20Videos.zip"
         zip_save_path=f"{bench_data_dir}/{bench_name}/aigve_bench_videos.zip"
         video_save_dir=f"{bench_data_dir}/{bench_name}/videos"
         
         _download_file(csv_url,csv_save_path)
         if not os.path.exists(video_save_dir):
-            os.makedirs(video_save_dir,exist_ok=True)
             _download_file(zip_url,zip_save_path)
+            os.makedirs(video_save_dir,exist_ok=True)
             with zipfile.ZipFile(zip_save_path, 'r') as zip_ref:
                 for zip_info in zip_ref.infolist():
                     if zip_info.filename.startswith("videos/") and zip_info.filename.endswith(".mp4") and not zip_info.is_dir():
@@ -386,6 +386,7 @@ def load_benchmark(bench_data_dir,bench_name,num="all"):
 
                         with zip_ref.open(zip_info) as src, open(target_path, "wb") as dst:
                             dst.write(src.read())
+            
             os.remove(zip_save_path)
         else:
             print(f"video save dir already exists!")  
@@ -737,11 +738,11 @@ def load_benchmark(bench_data_dir,bench_name,num="all"):
 
 if __name__ == "__main__":
     bench_data_dir="./bench_data"
-    bench_name="genai_bench"
+    # bench_name="genai_bench"
     # bench_name="videogen_reward_bench"
     # bench_name="vision_reward_db_video"
     # bench_name="mj_bench_video"
-    # bench_name="aigve_bench"
+    bench_name="aigve_bench"
     # bench_name="video_phy_test"
     # bench_name="video_phy2_test"
     # bench_name="tvge"

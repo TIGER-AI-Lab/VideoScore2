@@ -103,7 +103,15 @@ q_insight
 conda create -n q_insight python=3.10 -y --no-default-packages
 conda activate q_insight
 git clone https://github.com/bytedance/Q-Insight.git
-bash setup.sh
+cd Q-Insight
+cd src/open-r1-multimodal 
+pip install -e ".[dev]"
+pip install wandb==0.18.3
+pip install tensorboardx
+pip install qwen_vl_utils torchvision
+pip install flash-attn --no-build-isolation
+pip install transformers==4.51.3
+cd ../../..
 
 
 q_align
