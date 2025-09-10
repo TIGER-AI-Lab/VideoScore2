@@ -184,6 +184,7 @@ def load_benchmark(bench_data_dir,bench_name,num="all"):
         from datasets import load_dataset
         ds = load_dataset("TIGER-Lab/GenAI-Bench", "video_generation",split="test")
         src_save_path=f"{bench_data_dir}/{bench_name}/original_data_{bench_name}.json"
+        os.makedirs(os.path.dirname(os.path.abspath(src_save_path)),exist_ok=True)
         original_data=[x for x in ds]
         
         with open(src_save_path,"w",encoding='utf-8') as f:
