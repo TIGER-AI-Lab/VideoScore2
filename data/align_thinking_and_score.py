@@ -211,7 +211,7 @@ async def align_thinking_and_score(src_path,save_path,rej_path,log_path):
     for round_idx in range(MODIFY_ROUND_NUM):
         if len(modify_needed_items)==0:
             break
-        logger.info(f"modify round {round_idx}, items: ", len(modify_needed_items))
+        logger.info(f"modify round {round_idx}, items: {len(modify_needed_items)}")
         modified_items=await _bot_edit_thinking(modify_needed_items,MODEL_CONFIG,logger)
         for m_x in modified_items:
             for idx,_ in enumerate(new_data):
@@ -261,21 +261,14 @@ if __name__ == "__main__":
     # args = ap.parse_args()
     # run_idx=args.run_idx
     
-    api_key_idx=3
+    api_key_idx=4
     batch_names=[
-        # 1,2,3,4,5,  #0
-        # 13,14,15,17,18,   #0
-        # 19,20,21,22,23,   #1
-        # 24,29,30,31,32,   #1
-        # 53,54,55,61,69,70,   #2
-        # "com_5k_0",   #3
-        # "com_5k_1",   #3
+        # 1,2,3,4,5,   #2
+        # 13,14,15,17,18,   #2
         
-        # 9,16,33,34,   
-        # 38,45,46,47,48,    
-        # 56,62,71,74,      
-        # 75,78,79,81,       
-        # 82,83,85,86,      
+        38,45,46,47,48,   #4
+        # 75,78,79,81,      #6
+        # 82,83,85,86,      #7
     ]
     src_dir="thinking_new_score"
     save_dir="thinking_final"
@@ -291,7 +284,7 @@ if __name__ == "__main__":
     os.environ["OPENAI_BASE_URL"]=os.environ["DEEPBRICKS_URL"]
     MODEL_CONFIG= lm_config.LMConfig(provider="openai_chat", model=model_name)
     MAX_SCORE=5
-    MODIFY_ROUND_NUM=5
+    MODIFY_ROUND_NUM=8
     
     for batch_name in batch_names:
         src_path=os.path.join(src_dir,f"tk_new_score_{batch_name}.json")
@@ -309,13 +302,13 @@ if __name__ == "__main__":
         # 75,78,79,81,
         # 82,83,85,86,
         
-        # 1,2,3,4,5,  #0
-        # 13,14,15,17,18,   #0
-        # 19,20,21,22,23,   #1
-        # 24,29,30,31,32,   #1
-        # 53,54,55,61,69,70,   #2
-        # "com_5k_0",   #3
-        # "com_5k_1",   #3
-        # "com_5k_2",   #4
-        # "com_5k_3",   #4
-        # "com_5k_4",   #5
+        # 1,2,3,4,5, 
+        # 13,14,15,17,18, 
+        # 19,20,21,22,23,  
+        # 24,29,30,31,32,  
+        # 53,54,55,61,69,70,  
+        # "com_5k_0",   
+        # "com_5k_1", 
+        # "com_5k_2", 
+        # "com_5k_3",  
+        # "com_5k_4",  

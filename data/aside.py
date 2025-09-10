@@ -353,5 +353,16 @@ if __name__ == "__main__":
     
     # print(data[0]["visual_comment_raw"])
     
-    eg_kappa()
+    # eg_kappa()
+    
+    dir="/data/xuan/workdir/VideoScore2/data/thinking_final"
+    data=[]
+    for f in os.listdir(dir):
+        if f.endswith(".json"):
+            p=os.path.join(dir,f)
+            with open(p,"r") as f:
+                ds=json.load(f)
+            data.extend(ds)
+            
+    print(len(data))
     
