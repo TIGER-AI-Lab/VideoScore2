@@ -190,7 +190,7 @@ if __name__ == "__main__":
 
     original_dir="thinking_original"
     new_score_dir="thinking_new_score"
-    batch_names=[fname.split("thinking_")[-1].split(".")[0] for fname in sorted(os.listdir(original_dir))]
+    batch_names=["9","16","33","34","38","45","46","47","48","56","62","71","74","75","78","79","81","82","83","85","86"]
     for batch_name in batch_names:
         path=f"{original_dir}/thinking_{batch_name}.json"
         new_path=f"{new_score_dir}/tk_new_score_{batch_name}.json"

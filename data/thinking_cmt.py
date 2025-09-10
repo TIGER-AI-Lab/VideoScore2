@@ -172,7 +172,6 @@ def process_single_sample(sample, model_access, save_path):
 
 def thinking_cmt(repo_id, batch_name, save_path, num, model_access):
     data = load_dataset(repo_id, data_files=f"{batch_name}.parquet",split="train")
-    
     if not isinstance(num, int):
         num = len(data)
     if isinstance(num, int) and num>=len(data):
@@ -208,7 +207,7 @@ if __name__ =="__main__":
     
     REPO_ID="hexuan21/vs2_raw_comment"
     SHOT_NUM=2
-    MAX_WORKERS=1
+    MAX_WORKERS=20
     
     model_access={
         "model_name": args.model_name,
@@ -219,7 +218,7 @@ if __name__ =="__main__":
     
     few_shot_eg_path="few_shot_examples.json"
     few_shot_examples=json.load(open(few_shot_eg_path,"r",encoding="utf-8")) if few_shot_eg_path else []
-    
+
     for batch_name in batch_names:
         save_path=os.path.join("thinking_cmt",f"thinking_{batch_name}.json")
         os.makedirs(os.path.dirname(save_path),exist_ok=True)

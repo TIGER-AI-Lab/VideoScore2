@@ -37,6 +37,7 @@ def main(args):
     elif method.lower() == "vs1":
         ## conda activate vs1_eval
         from eval_methods.vs1 import eval_VideoScore1
+        model_name_or_path="TIGER-Lab/VideoScore-v1.1"
         model=eval_VideoScore1(model_name_or_path) 
         q_template=VS1_REG_QUERY_TEMPLATE
     
@@ -247,7 +248,7 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--bench",required=True,default="vs2_test_sft_17k")
     ap.add_argument("--method",required=True,default="vs2")
-    ap.add_argument("--model_name_or_path",required=False,default=None)
+    ap.add_argument("--model_name_or_path",required=False)
     ap.add_argument("--bench_data_num",required=False,default='all')
     ap.add_argument("--kwargs", type=str,required=False,default="{}") 
     t_args = ap.parse_args()
