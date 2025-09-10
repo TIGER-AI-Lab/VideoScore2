@@ -3,11 +3,12 @@ pip install datasets==2.19.2 gdown opencv-python-headless pandas pyarrow
 
 
 vs2_eval (for vs2, mllm, feat, aigve_macs)
+pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0
 pip install transformers==4.53.2
 pip install qwen-vl-utils
 pip install accelerate
 pip install scipy
-pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0
+
 pip install pypiqe
 pip install brisque
 pip install timm

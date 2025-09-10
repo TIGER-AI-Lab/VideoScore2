@@ -228,7 +228,7 @@ def build_sft_data(paths,sft_data_name,f_v_save_dir,visual_format):
 
 
 if __name__ == "__main__":
-    REPO_ID="hexuan21/vs2_sft"
+    REPO_ID="hexuan21/vs2_sft_data"
     VIDEO_REPO_ID="hexuan21/vs2_sft_video"
     HF_TOKEN=os.environ["HF_TOKEN"]
     create_repo(
@@ -249,18 +249,18 @@ if __name__ == "__main__":
             exist_ok=True
         )
     
-    TEST_NUM=50
-    sft_data_name="try_debug"
+    TEST_NUM=500
+    sft_data_name="sft_25k"
     visual_format="v"
     data_paths=[
-        # f"thinking_final/{fname}" for fname in os.listdir("thinking_final") if sft_data_name in fname 
-        f"thinking_final/try_debug.json"
+        f"thinking_final/{fname}" for fname in os.listdir("thinking_final") if fname.endswith('.json')
+        # f"thinking_final/try_debug.json"
     ]
     f_v_save_dir=f"/data/xuan/videoscore2/f_v_all"
 
-    # download_video_from_data(data_paths,f_v_save_dir,max_workers=8)
+    download_video_from_data(data_paths,f_v_save_dir,max_workers=12)
     
-    build_sft_data(data_paths,sft_data_name,f_v_save_dir,visual_format)
+    # build_sft_data(data_paths,sft_data_name,f_v_save_dir,visual_format)
     
     
     

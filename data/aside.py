@@ -355,7 +355,7 @@ if __name__ == "__main__":
     
     # eg_kappa()
     
-    dir="/data/xuan/workdir/VideoScore2/data/thinking_final"
+    dir="/data/xuan/workdir/VideoScore2/data/thinking_rej"
     data=[]
     for f in os.listdir(dir):
         if f.endswith(".json"):
