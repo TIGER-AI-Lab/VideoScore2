@@ -61,11 +61,17 @@ The quality score must be integars in the range of 1 - 5.
 
 """)
 
-OUT_TEMPLATE=Template("""
+COT_TEMPLATE=Template("""
 <think>
 $thinking
 </think>
 
+(1) visual quality: $v_score
+(2) text-to-video alignment: $t_score
+(3) physical/common-sense consistency: $p_score
+""")
+
+NO_COT_TEMPLATE=Template("""
 (1) visual quality: $v_score
 (2) text-to-video alignment: $t_score
 (3) physical/common-sense consistency: $p_score
@@ -84,10 +90,13 @@ $thinking
 '''    
 
 
-def build_sft_data(paths,sft_data_name,f_v_save_dir,visual_format):
+def build_sft_data(paths,sft_data_name,f_v_save_dir,visual_format,with_cot=True):
     data=[]
     for path in paths:
         data.extend(json.load(open(path,"r",encoding='utf-8')))
+    
+    if not with_cot:
+        sft_data_name=f"{sft_data_name}_no_cot"
     
     random.seed(SEED)
     random.shuffle(data)
@@ -106,7 +115,10 @@ def build_sft_data(paths,sft_data_name,f_v_save_dir,visual_format):
         p_score=x["phy_score"]
         thinking=x["thinking"]
         human_input="<video>"+INPUT_TEMPLATE.substitute(t2v_prompt=t2v_prompt)
-        model_output=OUT_TEMPLATE.substitute(thinking=thinking,v_score=v_score,t_score=t_score,p_score=p_score)
+        if with_cot:
+            model_output=COT_TEMPLATE.substitute(thinking=thinking,v_score=v_score,t_score=t_score,p_score=p_score)
+        else:
+            model_output=NO_COT_TEMPLATE.substitute(v_score=v_score,t_score=t_score,p_score=p_score)
         
         if visual_format in ["videos","video","v"]:
             video_path=_fetch_video_single(video_name,video_url,f_v_save_dir)
@@ -226,7 +238,6 @@ def build_sft_data(paths,sft_data_name,f_v_save_dir,visual_format):
     
     
 
-
 if __name__ == "__main__":
     REPO_ID="hexuan21/vs2_sft_data"
     VIDEO_REPO_ID="hexuan21/vs2_sft_video"
@@ -252,15 +263,16 @@ if __name__ == "__main__":
     TEST_NUM=500
     sft_data_name="sft_25k"
     visual_format="v"
+    with_cot=False
     data_paths=[
         f"thinking_final/{fname}" for fname in os.listdir("thinking_final") if fname.endswith('.json')
         # f"thinking_final/try_debug.json"
     ]
-    f_v_save_dir=f"/data/xuan/videoscore2/f_v_all"
+    f_v_save_dir=f"/data/xuan/data/videoscore2/f_v_all"
 
-    download_video_from_data(data_paths,f_v_save_dir,max_workers=12)
+    # download_video_from_data(data_paths,f_v_save_dir,max_workers=12)
     
-    # build_sft_data(data_paths,sft_data_name,f_v_save_dir,visual_format)
+    build_sft_data(data_paths,sft_data_name,f_v_save_dir,visual_format,with_cot)
     
     
     

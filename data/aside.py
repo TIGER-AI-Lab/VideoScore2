@@ -338,6 +338,81 @@ def eg_kappa():
     print("Fleiss' kappa =", kappa)
 
 
+def select_rej_45_48():
+    for b_idx in [45,46,47,48]:
+        p=f"thinking_original/thinking_{b_idx}.json"
+        new_p=f"thinking_original/thinking_{b_idx}.json"
+        rej_p=f"thinking_rej_2/rej_{b_idx}.json"
+        os.makedirs("thinking_rej_2",exist_ok=True)
+        with open(p,"r",encoding='utf-8') as f:
+            data=json.load(f)
+        new_data=[]
+        rej_data=[]
+        for idx,item in enumerate(data):
+            if all(len(x)>3 for x in [item["visual_cmt_raw"],item["t2v_cmt_raw"],item["phy_cmt_raw"],]):
+                new_data.append(item)
+                continue
+            
+            if item["visual_score"]==4:
+                if item["visual_cmt_raw"]==" " or len(item["visual_cmt_raw"])<=3:
+                    item["visual_cmt_raw"]="分辨率和清晰度尚可，但不够高，而且视频流畅度也不高"
+                    rej_data.append(item)
+                    continue
+            
+            if item["phy_score"]==4:
+                if item["phy_cmt_raw"]==" " or len(item["phy_cmt_raw"])<=3:
+                    item["phy_cmt_raw"]="整体没有很大的异常或畸形或者明显不符逻辑现实的地方，但是还是可以看出跟真实视频有区别"
+                    rej_data.append(item)
+                    continue
+
+        print(len(new_data))
+        print(len(rej_data))
+        
+        with open(new_p,'w') as f:
+            json.dump(new_data,f,indent=4,ensure_ascii=False)
+
+        with open(rej_p,'w') as f:
+            json.dump(rej_data,f,indent=4,ensure_ascii=False)
+
+def merge_rej_to_final():
+    batch_names=[
+        1,2,3,4, 
+        5,9,
+        13,14,15,16,
+        17,18,19,20,74, 
+        21,22,23,24,  
+        29,30,31,32,75,
+        33,34,85,86,
+        38,
+        81,82,83,  
+        45,46,47,48,
+        53,54,55,56,
+        
+        61,62,78,79,
+        69,70,71,80,
+    
+        "com_5k_0",
+        "com_5k_1",    
+        "com_5k_2",    
+        "com_5k_3",   
+        "com_5k_4", 
+    ]
+    
+    for batch_name in batch_names:
+        p1=f"thinking_final/final_resample_rej/rej_{batch_name}.json"
+        p2=f"thinking_final/final_{batch_name}.json"
+        with open(p1,"r") as f:
+            data1=json.load(f)
+        with open(p2,"r") as f:
+            data2=json.load(f)
+        data2.extend(data1)
+    
+        with open(p2,"w",encoding='utf-8') as f:
+            json.dump(data2,f,indent=4,ensure_ascii=False)
+
+    
+    
+
 if __name__ == "__main__":
     # input_file = "thinking_cmt/sft_17k_modified.json"     
     # output_folder = "thinking_split" 
@@ -353,16 +428,23 @@ if __name__ == "__main__":
     
     # print(data[0]["visual_comment_raw"])
     
-    # eg_kappa()
-    
-    dir="/data/xuan/workdir/VideoScore2/data/thinking_rej"
+
+    # dir="/data/xuan/workdir/VideoScore2/data/thinking_final/final_resample_rej"
+    dir="/data/xuan/workdir/VideoScore2/data/thinking_final"
     data=[]
+    f_num=0
     for f in os.listdir(dir):
         if f.endswith(".json"):
+            f_num+=1
             p=os.path.join(dir,f)
             with open(p,"r") as f:
                 ds=json.load(f)
             data.extend(ds)
-            
+    print(f_num)   
     print(len(data))
     
+    
+    
+
+
+            

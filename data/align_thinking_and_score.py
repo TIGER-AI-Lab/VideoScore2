@@ -11,9 +11,11 @@ import argparse
 
 
 MODIFY_TEMPLATE=Template("""
-I'm conducting a multi-dimensional quality assessment of AI-generated videos, focusing on the dimensions of (1) Visual Quality, (2) Text-to-Video Consistency, and (3) Physical/Common-sense Consistency.
+I'm conducting a multi-dimensional quality assessment of AI-generated videos, focusing on the dimensions of (1) Visual Quality, (2) Text-to-Video Alignment, and (3) Physical/Common-sense Consistency.
 
-In the following I will provide a multi-dimensional analysis of a specific video. However, the scores assigned in the analysis may not be entirely accurate. I will provide the ground-truth scores for each dimension, and your task is to adjust the analysis text accordingly to ensure it aligns with the actual scores. The scale of score is [1, 2, 3, 4, 5].
+I will provide a multi-dimensional quality analysis for a video. However, the scores assigned in the analysis may not be entirely accurate. And the ground truth scores for each dimension will also be provided. Your task is to adjust the analysis text accordingly to ensure it aligns with the actual scores. In many cases, this means revising the severity of issues for certain dimension based on the ground truth scores.
+
+The scale of score is [1, 2, 3, 4, 5].
 
 **Important Notes:**
 
@@ -21,7 +23,9 @@ In the following I will provide a multi-dimensional analysis of a specific video
 
 (2) **DO NOT** alter the overall structure or core meaning of the analysis. Only revise specific expressions or phrases as needed so that the content reasonably reflects the provided scores. 
 
-(3) **DO NOT** change the length of analysis, your output analysis should be no shorter than the input analysis. If you think the input analysis is not very specific, you can also extend it approximately. 
+(3) The input original analysis is constructed from the sampled frames of the video, if the input analysis includes evaluations of individual frames or frame-by-frame assessments, you should appropriately transform them into an overall evaluation of the entire video, since the final output is expected to be based on the video as a whole. 
+
+(4) Your output analysis should be approximately the same length as the input analysis. If the input analysis is not very detailed and specific, you may extend your output accordingly.
 
 Your response must follow the format below strictly:
 {
@@ -36,7 +40,7 @@ $thinking
 ground-truth of Dim-1: 'Visual Quality':
 $v_score
 
-ground-truth of Dim-2: 'Text-to-Video Consistency':
+ground-truth of Dim-2: 'Text-to-Video Alignment':
 $t_score
 
 ground-truth of Dim-3: 'Physical Consistency' (also referred to as Common-sense Consistency):
@@ -70,7 +74,7 @@ async def _bot_edit_thinking(items,model_config,logger):
     
     for idx,res in enumerate(res_list):
         video_name=items[idx]["video_name"]
-        logger.info(f"\n----------------- {video_name} raw output -----------------\n {res}")
+        # logger.info(f"\n----------------- {video_name} raw output -----------------\n {res}")
         res = "{" + res.split("{")[-1].split("}")[0].strip() + "}"
         try:
             eval_res = ast.literal_eval(str(res))
@@ -261,27 +265,47 @@ if __name__ == "__main__":
     # args = ap.parse_args()
     # run_idx=args.run_idx
     
-    api_key_idx=4
+    api_key_idx=1
     batch_names=[
-        # 1,2,3,4,5,   #2
-        # 13,14,15,17,18,   #2
+        # 1,2,3,4, 
+        # 13,14,15,16,
         
-        38,45,46,47,48,   #4
-        # 75,78,79,81,      #6
-        # 82,83,85,86,      #7
+        # 17,18,19,20,74, 
+        # 21,22,23,24,  
+        
+        # 29,30,31,32,75,
+        # 53,54,55,56,
+        
+        # 61,62,78,79,
+        # 81,82,83,  
+        
+        # "com_5k_0",   
+        # "com_5k_2", 
+        
+        # 5,9,38,"com_5k_1",   
+         
+        # "com_5k_3",   
+        # "com_5k_4", 
+        
+        # 9,37,39,40,80,         
     ]
+    
+    batch_names=[
+        f"resample_rej/rej_{x}" for x in [
+
+         ]
+    ]
+    
     src_dir="thinking_new_score"
     save_dir="thinking_final"
     rej_dir="thinking_rej"
-    os.makedirs(save_dir,exist_ok=True)
-    os.makedirs(rej_dir,exist_ok=True)
     
-    model_name='gpt-4.1-mini'
-    if int(api_key_idx)>=9:
-        os.environ["OPENAI_API_KEY"]=os.environ[f"DEEPBRICKS_KEY1"]
-    else:
-        os.environ["OPENAI_API_KEY"]=os.environ[f"DEEPBRICKS_KEY{api_key_idx}"]
-    os.environ["OPENAI_BASE_URL"]=os.environ["DEEPBRICKS_URL"]
+    
+    model_name="openai/gpt-5-nano"
+    model_name_in_file=model_name.split("/")[-1]
+    os.environ["OPENAI_BASE_URL"]=os.environ["OPEN_ROUTER_URL"]
+    os.environ["OPENAI_API_KEY"]=os.environ[f"OPEN_ROUTER_KEY{api_key_idx}"]
+    
     MODEL_CONFIG= lm_config.LMConfig(provider="openai_chat", model=model_name)
     MAX_SCORE=5
     MODIFY_ROUND_NUM=8
@@ -290,25 +314,44 @@ if __name__ == "__main__":
         src_path=os.path.join(src_dir,f"tk_new_score_{batch_name}.json")
         save_path=os.path.join(save_dir,f"final_{batch_name}.json")
         rej_path=os.path.join(rej_dir,f"rej_{batch_name}.json")
-        log_path=f"modify_logs/align_thinking_{model_name}_{batch_name}.log"
+        os.makedirs(os.path.dirname(save_path),exist_ok=True)
+        os.makedirs(os.path.dirname(rej_path),exist_ok=True)
+        
+        log_path=f"modify_logs/align_thinking_{model_name_in_file}_{batch_name}.log"
         
         asyncio.run(align_thinking_and_score(src_path,save_path,rej_path,log_path))
+    
+    
+    
+    
+    
+    [
+        
+        
+    ]
         
         
         
-        # 9,16,33,34,
-        # 38,45,46,47,48,
-        # 56,62,71,74,
-        # 75,78,79,81,
-        # 82,83,85,86,
         
-        # 1,2,3,4,5, 
-        # 13,14,15,17,18, 
-        # 19,20,21,22,23,  
-        # 24,29,30,31,32,  
-        # 53,54,55,61,69,70,  
+        
+        # 1,2,3,4,
+        # 5, 
+        # 9,
+        # 13,14,15,16,
+        # 17,18,19,20,74,
+        # 21,22,23,24,
+        # 29,30,31,32,75,
+        # 33,34,85,86,
+        # 38,
+        # 81,82,83,
+        # 45,46,47,48,
+        # 53,54,55,56,
+        # 61,62,78,79,
+        # 69,70,71, 
         # "com_5k_0",   
         # "com_5k_1", 
         # "com_5k_2", 
         # "com_5k_3",  
         # "com_5k_4",  
+        
+        # 9,37,39,40,73,80

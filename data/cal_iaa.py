@@ -1,12 +1,9 @@
-import os
 import json
-import re
 from scipy.stats import spearmanr, pearsonr
 import numpy as np
 from statsmodels.stats.inter_rater import fleiss_kappa
 import krippendorff
-
-
+import itertools
 
 score_map={
     "5-Very Good":5,
@@ -139,27 +136,46 @@ def cal_iaa(data1,data2,data3):
     ]
         
     
-    for _2dlist in [v_scores_2dlist,
-                    t_scores_2dlist,
-                    p_scores_2dlist,
-                    ]:
+    for _2dlist,dim_name in zip([v_scores_2dlist,t_scores_2dlist,p_scores_2dlist,],["Visual Quality","Text-to-Video Alignment","Physical Consistency"]):
+        print("Dim Name: ",dim_name)
         print(f"Agreement Ratio: {three_way_agreement_ratio(_2dlist[0],_2dlist[1],_2dlist[2],):.4f}")
         print(f"Agreement Ratio Relaxed: {three_way_agreement_ratio_relaxed(_2dlist[0],_2dlist[1],_2dlist[2],):.4f}")
         print(f"SPCC: {three_way_spcc(_2dlist[0],_2dlist[1],_2dlist[2],):.4f}")
         print(f"Fleiss' Kappa: {cal_kappa(_2dlist):.4f}")
         print(f"Krippendorff's Alpha: {cal_alpha(_2dlist):.4f}")
+
         print("\n")
 
     
 if __name__ == "__main__":
-    path="iaa/iaa_4.json"
-    data1=import_anno(path)
-    path="iaa/iaa_5.json"
-    data2=import_anno(path)
-    path="iaa/iaa_6.json"
-    data3=import_anno(path)
+    paths=[
+        "iaa/iaa10.json",
+        "iaa/iaa11.json",
+        "iaa/iaa12.json",
+        "iaa/iaa13.json",
+        "iaa/iaa14.json",
+    ]
     
-    cal_iaa(data1,data2,data3)
+    sub_lists = [list(c) for c in itertools.combinations(paths, 3)]
+    for sub_list in sub_lists:
+        print("Processing files:", sub_list)
+        data1=import_anno(sub_list[0])
+        data2=import_anno(sub_list[1])
+        data3=import_anno(sub_list[2])
+        cal_iaa(data1,data2,data3)
+        print("========================================")
+        
+        
+        
+    # path="iaa/iaa2.json"
+    # data1=import_anno(path)
+    # path="iaa/iaa4.json"
+    # data2=import_anno(path)
+    # path="iaa/iaa5.json"
+    # data3=import_anno(path)
+    # cal_iaa(data1,data2,data3)
+    
+    
     # cal_iaa([],[],[])
     
     

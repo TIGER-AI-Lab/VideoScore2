@@ -6,7 +6,7 @@ from tqdm import tqdm
 from huggingface_hub import upload_file,upload_folder
 from datasets import Dataset, DatasetInfo, Features, Value, Sequence, Image
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from utils_fetch_f_v import _fetch_eg_frames_single, download_eg_frames_from_anno
+from utils_fetch_f_v import _fetch_eg_frames_single, download_eg_frames_from_anno, download_all_frames_from_data
 
 
 
@@ -62,6 +62,24 @@ from utils_fetch_f_v import _fetch_eg_frames_single, download_eg_frames_from_ann
 },
 """
 
+score_map={
+    "5-Very Good":5,
+    "4-Relatively Good":4,
+    "3-Medium":3,
+    "2-Relatively Poor":2,
+    "1-Very Poor":1,
+    "Very Good":5,
+    "Relatively Good":4,
+    "Medium":3,
+    "Relatively Poor":2,
+    "Very Poor":1,
+    "5":5,
+    "4":4,
+    "3":3,
+    "2":2,
+    "1":1,
+}
+
 
 MIN_SCORE=1
 MAX_SCORE=5
@@ -112,11 +130,20 @@ def _build_raw_cmt_single(anno,batch_name,f_v_save_dir):
             label = label_dict["data"]["label"]
             value = str(label_dict["data"]["value"])
             if "视觉质量评分" in label:
-                visual_score = int(re.search(r"\d+", value).group())
+                if any(f"{x}" in value for x in range(1,6)):
+                    visual_score = int(re.search(r"\d+", value).group())
+                else:
+                    visual_score=score_map.get(value)
             elif "文本符合度评分" in label:
-                t2v_score = int(re.search(r"\d+", value).group())
+                if any(f"{x}" in value for x in range(1,6)):
+                    t2v_score = int(re.search(r"\d+", value).group())
+                else:
+                    t2v_score=score_map.get(value)
             elif "物理符合度评分" in label:
-                phy_score = int(re.search(r"\d+", value).group())
+                if any(f"{x}" in value for x in range(1,6)):
+                    phy_score = int(re.search(r"\d+", value).group())
+                else:
+                    phy_score=score_map.get(value)
             elif "视觉质量描述" in label:
                 visual_cmt = value
             elif "文本符合度描述" in label:
@@ -234,8 +261,12 @@ def rebuild_rej_data(rej_data_path,batch_name,f_v_save_dir):
     for rej_item in rej_data:
         video_name=rej_item["video_name"]
         video_url=rej_item["video_url"]
-        frame_names=os.listdir(os.path.join(f_v_save_dir,"frames_eg",video_name))
-        eg_frame_abs_paths=[os.path.join(f_v_save_dir,"frames_eg",video_name,frame_name) for frame_name in frame_names]
+        frame_dir=os.path.join(f_v_save_dir,"frames_eg",video_name)
+        if not os.path.exists(frame_dir):
+            _fetch_eg_frames_single(video_name,video_url,f_v_save_dir)
+        
+        frame_names=os.listdir(frame_dir)
+        eg_frame_abs_paths=[os.path.join(frame_dir,frame_name) for frame_name in frame_names]
         if not all(os.path.exists(p) for p in eg_frame_abs_paths):
             print(f"Some frames are missing for video {video_name}")
             _fetch_eg_frames_single(video_name,video_url,f_v_save_dir)
@@ -251,14 +282,15 @@ def rebuild_rej_data(rej_data_path,batch_name,f_v_save_dir):
             "t2v_align_comment_raw":rej_item["t2v_cmt_raw"],
             "phy_score":rej_item["phy_score"],
             "phy_comment_raw":rej_item["phy_cmt_raw"],
-            "eg_frames":[{"bytes": open(p, "rb").read()} for p in eg_frame_abs_paths]
+            "eg_frames":[open(p, "rb").read() for p in eg_frame_abs_paths]
         }
         data.append(data_item)
-    
+
     ds = Dataset.from_list(data, features=FEATURES)
     local_parquet_dir= f"anno_parquet"
     os.makedirs(local_parquet_dir, exist_ok=True)
-    parquet_name = f"{batch_name}.parquet"
+    parquet_name = f"rej/{batch_name}.parquet"
+    
     parquet_local_path = os.path.join(local_parquet_dir, parquet_name)
     ds.to_parquet(parquet_local_path)
     
@@ -277,78 +309,55 @@ if __name__ == "__main__":
     f_v_save_dir="/data/xuan/data/videoscore2/f_v_all"
     
     anno_paths=[
-        f"anno_raw/9.json",
-        f"anno_raw/16.json",
-        f"anno_raw/33.json",
-        f"anno_raw/34.json",
-        f"anno_raw/38.json",
-        f"anno_raw/45.json",
-        f"anno_raw/46.json",
-        f"anno_raw/47.json",
-        f"anno_raw/48.json",
-        f"anno_raw/56.json",
-        f"anno_raw/62.json",
-        f"anno_raw/71.json",
-        f"anno_raw/74.json",
-        f"anno_raw/75.json",
-        f"anno_raw/78.json",
-        f"anno_raw/79.json",
-        f"anno_raw/81.json",
-        f"anno_raw/82.json",
-        f"anno_raw/83.json",
-        f"anno_raw/85.json",
-        f"anno_raw/86.json",
+        f"anno_raw/{batch_idx}.json" for batch_idx in []
     ]
-    
     # download_eg_frames_from_anno(anno_paths,f_v_save_dir,max_workers=8)
     
-    
-    batch_names=[x.split('/')[1].split('.')[0] for x in anno_paths]
-    build_raw_cmt_data(anno_paths,batch_names,f_v_save_dir)
-    
-
+    # batch_names=[x.split('/')[1].split('.')[0] for x in anno_paths]
+    # build_raw_cmt_data(anno_paths,batch_names,f_v_save_dir)
     
     
-    # rej_path="thinking_rejected/xxxx.json"
-    # rej_batch_name="rej_xxxx"
-    # rebuild_rej_data(rej_path,rej_batch_name,frame_temp_dir)
+    
+    rej_batch_names=[f"rej_{idx}" for idx in 
+            [
+                1,2,3,4,
+                5, 
+                9,
+                13,14,15,16,
+                17,18,19,20,74,
+                21,22,23,24,
+                29,30,31,32,75,
+                33,34,85,86,
+                38,
+                81,82,83,
+                45,46,47,48,
+                53,54,55,56,
+                61,62,78,79,
+                69,70,71, 
+                "com_5k_0",   
+                "com_5k_1", 
+                "com_5k_2", 
+                "com_5k_3",  
+                "com_5k_4",
+            ]
+        ]    
+    
+    for batch_name in rej_batch_names:
+        rej_path=f"thinking_rej/{batch_name}.json" 
+        rebuild_rej_data(rej_path,batch_name,f_v_save_dir)
     
     
-    # anno_paths=[
-    #     f"anno_raw/com_5k_0.json",
-    #     f"anno_raw/com_5k_1.json",
-    #     f"anno_raw/com_5k_2.json",
-    #     f"anno_raw/com_5k_3.json",
-    #     f"anno_raw/com_5k_4.json",
-    #     f"anno_raw/1.json",
-    #     f"anno_raw/2.json",
-    #     f"anno_raw/3.json",
-    #     f"anno_raw/4.json",
-    #     f"anno_raw/5.json",
-    #     f"anno_raw/13.json",
-    #     f"anno_raw/14.json",
-    #     f"anno_raw/15.json",
-    #     f"anno_raw/17.json",
-    #     f"anno_raw/18.json",
-    #     f"anno_raw/19.json",
-    #     f"anno_raw/20.json",
-    #     f"anno_raw/21.json",
-    #     f"anno_raw/22.json",
-    #     f"anno_raw/23.json",
-    #     f"anno_raw/24.json",
-    #     f"anno_raw/29.json",
-    #     f"anno_raw/30.json",
-    #     f"anno_raw/31.json",
-    #     f"anno_raw/32.json",
-    #     f"anno_raw/53.json",
-    #     f"anno_raw/54.json",
-    #     f"anno_raw/55.json",
-    #     f"anno_raw/61.json",
-    #     f"anno_raw/69.json",
-    #     f"anno_raw/70.json"
+    
+    # [16,33,34,38,45,46,47,48,56,62,71,74,75,78,79,81,82,83,85,86]
+    
+    # ["com_5k_0","com_5k_1","com_5k_2","com_5k_3","com_5k_4",
+    #  "1","2","3","4","5",
+    #  "13","14","15",
+    #  "17","18","19","20",
+    #  "21","22","23","24",
+    #  "29","30","31","32",
+    #  "53","54","55",
+    #  "61","69","70"
     # ]
     
-    
-    
-        
     

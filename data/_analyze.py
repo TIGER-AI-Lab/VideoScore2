@@ -6,6 +6,9 @@ import matplotlib.pyplot as plt
 
 
 def plot(data,batch_name,dim_idx):
+    if len(data)==0:
+        return
+    
     dim={
         1:"Visual Quality",
         2:"T2V Alignment",
@@ -16,7 +19,9 @@ def plot(data,batch_name,dim_idx):
     plt.xlabel('Score')
     plt.ylabel('Frequency')
     plt.title(f'Batch {batch_name} {dim[dim_idx]} Score Distribution')
-    plt.savefig(f"plots/{batch_name}_dim{dim_idx}.png")
+    save_path=f"plots/{batch_name}_dim{dim_idx}.png"
+    os.makedirs(os.path.dirname(save_path),exist_ok=True)
+    plt.savefig(save_path)
     plt.clf()
     
     
@@ -81,7 +86,7 @@ def analyze_thinking(thinking_paths,batch_name):
     plot(p_scores,batch_name,3)
 
 
-def think_len_dist(paths,data_name):
+def think_len_dist(paths,batch_name):
     think_len_list=[]
     for p in paths:
         with open(p,'r',encoding='utf-8') as f:
@@ -101,51 +106,58 @@ def think_len_dist(paths,data_name):
     plt.hist(think_len_list, bins=bin_range, edgecolor='black', rwidth=0.8)
     plt.xlabel('Thinking Length')
     plt.ylabel('Frequency')
-    plt.title(f'Batch {data_name} Thinking Len Distribution')
+    plt.title(f'Batch {batch_name} Thinking Len Distribution')
     os.makedirs('plots_think_len',exist_ok=True)
-    plt.savefig(f"plots_think_len/{data_name}_think_len.png")
+    plt.savefig(f"plots_think_len/{batch_name}_think_len.png")
     plt.clf()
     
-    from transformers import AutoTokenizer
-    tokenizer = AutoTokenizer.from_pretrained("gpt2")
-    token_num_list=[]
-    for p in paths:
-        with open(p,'r',encoding='utf-8') as f:
-            data=json.load(f)
-            for x in tqdm(data):
-                token_num_list.append(len(tokenizer.encode(x['thinking'])))
-    bin_range=list(range(min(token_num_list)-20,max(token_num_list)+20,20))
-    plt.hist(token_num_list, bins=bin_range, edgecolor='black', rwidth=0.8)
-    plt.xlabel('Thinking Tokens Num')
-    plt.ylabel('Frequency')
-    plt.title(f'Batch {data_name} Thinking Tokens Num Distribution')
-    os.makedirs('plots_think_len',exist_ok=True)
-    plt.savefig(f"plots_think_len/{data_name}_think_tk_num.png")
-    plt.clf()
+    # from transformers import AutoTokenizer
+    # tokenizer = AutoTokenizer.from_pretrained("gpt2")
+    # token_num_list=[]
+    # for p in paths:
+    #     with open(p,'r',encoding='utf-8') as f:
+    #         data=json.load(f)
+    #         for x in tqdm(data):
+    #             token_num_list.append(len(tokenizer.encode(x['thinking'])))
+    # bin_range=list(range(min(token_num_list)-20,max(token_num_list)+20,20))
+    # plt.hist(token_num_list, bins=bin_range, edgecolor='black', rwidth=0.8)
+    # plt.xlabel('Thinking Tokens Num')
+    # plt.ylabel('Frequency')
+    # plt.title(f'Batch {batch_name} Thinking Tokens Num Distribution')
+    # os.makedirs('plots_think_len',exist_ok=True)
+    # plt.savefig(f"plots_think_len/{batch_name}_think_token_num.png")
+    # plt.clf()
     
 
 
 if __name__ == "__main__":
 
-    anno_local_paths=[
-        # 'anno_raw/37.json',
-        # 'anno_raw/38.json',
-        # 'anno_raw/39.json',
-        # 'anno_raw/40.json',
-        'anno_raw/10.json'
+    # anno_local_paths=[
+    #     # 'anno_raw/37.json',
+    #     # 'anno_raw/38.json',
+    #     # 'anno_raw/39.json',
+    #     # 'anno_raw/40.json',
+    #     'anno_raw/10.json'
+    # ]
+    # batch_name="10_raw"
+    # analyze_raw(anno_local_paths,batch_name)
+    
+    
+    thinking_paths=[
+        "thinking_new_score/tk_new_score_45.json",
     ]
-    batch_name="10_raw"
-    analyze_raw(anno_local_paths,batch_name)
+    batch_name="45_modified"
+    analyze_thinking(thinking_paths,batch_name)
     
-    # thinking_paths=[
-    #     "thinking_new_score/tk_new_score_30.json",
-    # ]
-    # batch_name="30_modified"
-    # analyze_thinking(thinking_paths,batch_name)
     
+    # batch_name="final_1_gpt-5-nano"
     # paths=[
-    #     f"thinking_final/final_sft_17k_{i}.json"
-    #             for i in range(1)
+    #     f"thinking_final/{batch_name}.json"
     # ]
-    # data_name="sft_17k_0"
-    # think_len_dist(paths,data_name)
+    # think_len_dist(paths,batch_name)
+    
+    # batch_name="tk_new_score_1"
+    # paths=[
+    #     f"thinking_new_score/{batch_name}.json"
+    # ]
+    # think_len_dist(paths,batch_name)

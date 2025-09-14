@@ -560,7 +560,7 @@ if __name__ == "__main__":
             
             # "aigve_macs":f"res_data/res_{bench}/AIGVE-MACS.json",
             # "deqa":f"res_data/res_{bench}/DeQA-Score-Mix3.json",
-            "dover":f"res_data/res_{bench}/dover.json",
+            # "dover":f"res_data/res_{bench}/dover.json",
             # "image_reward":f"res_data/res_{bench}/ImageReward-v1.0.json",
             # "lift":f"res_data/res_{bench}/LiFT-Critic-13b-lora-v1.5.json",
             # "q_align":f"res_data/res_{bench}/Q-Align.json",
@@ -570,8 +570,9 @@ if __name__ == "__main__":
             # "vision_reward":f"res_data/res_{bench}/VisionReward-Video.json",
             # "video_reward":f"res_data/res_{bench}/VideoReward.json",
             # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192_infer_2fps.json",
+            "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_17k_5e-5_2fps_960_720_8192_infer_2fps.json",
             # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_2400_infer_2fps.json",
-            "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_2400_float_infer_2fps_tempe=0.7.json",
+            # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_2400_float_infer_2fps_tempe=0.7.json",
             # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_2400_float_infer_2fps_tempe=1.5.json",
         }
         short_sampling=False

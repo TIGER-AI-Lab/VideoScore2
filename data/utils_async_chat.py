@@ -147,10 +147,17 @@ async def generate_from_openai_chat_completion(
         for full_context in full_contexts
     ]
     if tqdm:
-        responses = await tqdm_asyncio.gather(*async_responses)
+        try:
+            responses = await tqdm_asyncio.gather(*async_responses)
+        except Exception as e:
+            print(f"[error] {e}")
+            
     else:
-        responses = await asyncio.gather(*async_responses)
-    
+        try:
+            responses = await asyncio.gather(*async_responses)
+        except Exception as e:
+            print(f"[error] {e}")
+            
     if num_samples!=1:
         samples_2dlist=[]
         for response in responses:

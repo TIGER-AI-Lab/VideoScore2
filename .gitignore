@@ -179,12 +179,13 @@ prepare_video/prompts/*
 prepare_video/t2v_model/api*
 
 data/*
+data/plots
 !data/**/*.py
 !data/_prev/
-!data/thinking_original/
-!data/thinking_new_score/
-!data/thinking_final/
-!data/thinking_rej/
+!data/thinking_original*/
+!data/thinking_new_score*/
+!data/thinking_final*/
+!data/thinking_rej*/
 
 eval/*
 !eval/**/*.py

@@ -110,7 +110,7 @@ class eval_VideoPhy2:
             do_sample=False,
             top_k=1,
             temperature=0.001,
-            max_length=256
+            max_length=1024,
         )
         output = self.tokenizer.decode(res.tolist()[0], skip_special_tokens=True).lower().strip()
 

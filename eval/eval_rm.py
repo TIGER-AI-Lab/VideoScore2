@@ -20,6 +20,7 @@ def main(args):
         bench_data_num=eval(bench_data_num)
 
     bench_data=load_benchmark(bench_data_dir,bench,bench_data_num)
+    
     print("benchmark data loaded.")
     
     if method.lower() == "vs2":
@@ -154,14 +155,31 @@ def main(args):
         eval_res_path=eval_res_path.replace("_infer",f"_float_infer")
         eval_res_path=eval_res_path.replace(".json",f"_tempe={temperature}.json")
     
-    
-    metrics_report_path=f"metrics_report/met_{bench}/{model_name_or_path}.json"
-    os.makedirs(os.path.dirname(eval_res_path),exist_ok=True)
-    os.makedirs(os.path.dirname(metrics_report_path),exist_ok=True)
     res_data=[]
     if not os.path.exists(eval_res_path):
         with open(eval_res_path,"w",encoding='utf-8') as f:
             json.dump(res_data,f,indent=4,ensure_ascii=False)
+    else:
+        with open(eval_res_path,"r") as f:
+            res_data=json.load(f)
+        dedup_video_names=set()
+        dedup_res_data=[]
+        for item in res_data:
+            if item['video_name'] not in dedup_video_names:
+                dedup_res_data.append(item)
+                dedup_video_names.add(item['video_name'])
+        res_data=dedup_res_data
+        with open(eval_res_path,"w",encoding='utf-8') as f:
+            json.dump(res_data,f,indent=4,ensure_ascii=False)
+        
+        print(f"Loaded existing {len(res_data)} res items for bench:{bench}, method:{method}")
+        bench_data=[item for item in bench_data if item['video_name'] not in set([x['video_name'] for x in res_data])]
+        
+        
+    metrics_report_path=f"metrics_report/met_{bench}/{model_name_or_path}.json"
+    os.makedirs(os.path.dirname(eval_res_path),exist_ok=True)
+    os.makedirs(os.path.dirname(metrics_report_path),exist_ok=True)
+        
         
     for item in tqdm(bench_data):
         video_name=item['video_name']

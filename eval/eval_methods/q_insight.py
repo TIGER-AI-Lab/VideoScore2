@@ -122,17 +122,21 @@ class eval_Q_Insight:
         if not os.path.exists(video_path):
             raise FileNotFoundError(f"Video not found: {video_path}")
         
+        self.score_prompt="What is your overall rating on the quality of this picture?"+self.score_format
+        
         self.score_prompt_dim1 = "The dimension 'visual quality' cares about the image's visual and optical propertities, including resolution, overall clarity, local blurriness, correctness of brightness/contrast, and any other factors the affect the watching experience. What is your overall rating on the visual quality of this picture?"+self.score_format
         self.score_prompt_dim2 = f"The caption for this images is {prompt}. What is your overall rating on the text-to-image alignment of this picture?"+self.score_format
         self.score_prompt_dim3 = "The dimension 'physical/common-sense consistency' mainly examines whether there are any violations of common sense, physical laws, or any other aspects in the image that appear strange or unnatural. What is your overall rating on the physical consistency of this picture?"+self.score_format
         
+                
         fps = kwargs.get("infer_fps", 2.0)
         max_frames = kwargs.get("max_frames", 16)
         frames = self._extract_video_frames(video_path, fps=fps, max_frames=max_frames)
 
         dim_scores = []
         dim_output_text = []
-        for query in [self.score_prompt_dim1,self.score_prompt_dim2,self.score_prompt_dim3]:
+        for query in [self.score_prompt]:
+        # for query in [self.score_prompt_dim1,self.score_prompt_dim2,self.score_prompt_dim3]:
             frame_scores = []
             for frame in frames:
                 score, output_text = self._evaluate_image(frame,query)
@@ -146,6 +150,8 @@ class eval_Q_Insight:
             dim_output_text.append(output_text)
         
         
-        all_dim_output=f"(1) Visual: {dim_output_text[0]}; (2) Text alignment: {dim_output_text[2]}; (3) Physical/Common-sense Consistency: {dim_output_text[2]}."
-        
-        return dim_scores[0], dim_scores[1], dim_scores[2], all_dim_output
+        # all_dim_output=f"(1) Visual: {dim_output_text[0]}; (2) Text alignment: {dim_output_text[2]}; (3) Physical/Common-sense Consistency: {dim_output_text[2]}."
+        # return dim_scores[0], dim_scores[1], dim_scores[2], all_dim_output
+    
+        all_dim_output=f"{dim_output_text[0]}"
+        return dim_scores[0], dim_scores[0], dim_scores[0], all_dim_output

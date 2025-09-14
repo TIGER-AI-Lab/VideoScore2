@@ -27,7 +27,7 @@ You are an expert for evaluating and thinking about the quality of AI videos fro
 '''
 
 template=Template("""
-We are collecting and processing human annotations for the quality evaluation of AI-generated videos in text-to-video generation. 
+We are collecting and processing human annotations for the quality evaluation of AI-generated videos. 
 
 Dimension definitions:
 (1) Visual Quality: 
@@ -59,10 +59,10 @@ annotator comments:
 comment for 'visual quality':
 $comment_visual (null)
 
-comment for 'text-to-video alignment' (mainly the elements not expressed or not aligned in the video):
+comment for 'text-to-video alignment' (the elements or events not expressed or not aligned in the video):
 $comment_t2v (null)
 
-comment for 'physical/common-sense consistency' (mainly the elements or events that look weird, abnormal or unnatural):
+comment for 'physical/common-sense consistency' (the elements or events that look weird, abnormal or unnatural):
 $comment_phy (null)
                   
 """)
@@ -172,6 +172,7 @@ def process_single_sample(sample, model_access, save_path):
 
 def thinking_cmt(repo_id, batch_name, save_path, num, model_access):
     data = load_dataset(repo_id, data_files=f"{batch_name}.parquet",split="train")
+
     if not isinstance(num, int):
         num = len(data)
     if isinstance(num, int) and num>=len(data):
@@ -219,6 +220,15 @@ if __name__ =="__main__":
     few_shot_eg_path="few_shot_examples.json"
     few_shot_examples=json.load(open(few_shot_eg_path,"r",encoding="utf-8")) if few_shot_eg_path else []
 
+    for batch_name in batch_names:
+        if "*" in batch_name:
+            from huggingface_hub import list_repo_files
+            subfolder = batch_name.split("/*")[0]
+            files = list_repo_files(REPO_ID,repo_type="dataset")
+            new_batch_names = [f.split(".")[0] for f in files if f.startswith(subfolder) and f.endswith(".parquet")]
+            batch_names.remove(batch_name)
+            batch_names.extend(new_batch_names)
+    
     for batch_name in batch_names:
         save_path=os.path.join("thinking_cmt",f"thinking_{batch_name}.json")
         os.makedirs(os.path.dirname(save_path),exist_ok=True)
