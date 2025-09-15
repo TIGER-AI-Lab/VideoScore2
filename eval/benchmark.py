@@ -84,10 +84,10 @@ DIM_NAMES=[
 def load_benchmark(bench_data_dir,bench_name,num="all"):
     data=[]
     # ========================= VideoScore2-Bench =========================
-    if bench_name == "vs2_test_sft_17k_v0":
+    if bench_name == "vs2_test_sft_17k":
         repo_id="hexuan21/vs2_sft"
-        url=f"https://huggingface.co/datasets/{repo_id}/resolve/main/sft_17k_test_v0.json"
-        json_save_path=f"{bench_data_dir}/{bench_name}/sft_17k_test_v0.json"
+        url=f"https://huggingface.co/datasets/{repo_id}/resolve/main/sft_17k_test.json"
+        json_save_path=f"{bench_data_dir}/{bench_name}/sft_17k_test.json"
         _download_file(url,json_save_path,overwrite=False)
         with open(json_save_path,"r") as f:
             all_data=json.load(f)
@@ -100,10 +100,10 @@ def load_benchmark(bench_data_dir,bench_name,num="all"):
                 continue
             data.append(x)
             
-    elif bench_name == "vs2_test_sft_17k":
+    elif bench_name == "vs2_test_sft_27k":
         repo_id="hexuan21/vs2_sft"
-        url=f"https://huggingface.co/datasets/{repo_id}/resolve/main/sft_17k_test.json"
-        json_save_path=f"{bench_data_dir}/{bench_name}/sft_17k_test.json"
+        url=f"https://huggingface.co/datasets/{repo_id}/resolve/main/sft_27k_test.json"
+        json_save_path=f"{bench_data_dir}/{bench_name}/sft_27k_test.json"
         _download_file(url,json_save_path,overwrite=False)
         with open(json_save_path,"r") as f:
             all_data=json.load(f)

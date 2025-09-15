@@ -10,6 +10,26 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 
+def _download_file(url: str, save_path: str, overwrite: bool = False, timeout: int = 15):
+    import requests
+    CHUNK=1 << 14  # 16 KB
+    if os.path.exists(save_path) and not overwrite:
+        print(f"[skip] {save_path} already exists")
+        return
+
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+    with requests.get(url, stream=True, timeout=timeout) as r:
+        r.raise_for_status()
+        total = int(r.headers.get("content-length", 0))
+        bar = tqdm(total=total, unit="B", unit_scale=True, desc=os.path.basename(save_path))
+        with open(save_path, "wb") as f:
+            for chunk in r.iter_content(CHUNK):
+                if chunk:
+                    f.write(chunk)
+                    bar.update(len(chunk))
+        bar.close()
+    print(f"[ok] Downloaded → {save_path}")
+
 
 def _fetch_eg_frames_single(video_name,video_url,f_v_save_dir):
     try:

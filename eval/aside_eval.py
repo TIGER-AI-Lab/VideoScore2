@@ -122,13 +122,54 @@ if __name__ == "__main__":
     # plot_path="1.png"
     # interval=20
     # plot_hist(thinking_len_list,plot_path,interval)
+    
+    
+    
+    # import json
+    # p="/data/xuan/workdir/VideoScore2/eval/res_data/res_vision_reward_db_video/VideoReward.json"
+    # with open(p,'r') as f:
+    #     data=json.load(f)
+    # scores=[x['v_score_model'] for x in data]
+    # print(min(scores),max(scores),sum(scores)/len(scores))
+    
+    import gdown
+    import tarfile
+    import os
     import json
-    p="/data/xuan/workdir/VideoScore2/eval/res_data/res_vision_reward_db_video/VideoReward.json"
-    with open(p,'r') as f:
+    # zip_g_id="1zJgtYRFhOh5zDQzzatiddfjYhFSnyQ80"
+    # zip_save_path="new.tar.gz"
+    # gdown.download(id=zip_g_id, output=zip_save_path, quiet=False)
+    
+    # dest = "./output_new"
+    # os.makedirs(dest,exist_ok=True)
+    # with tarfile.open(zip_save_path, "r:gz") as tar:
+    #     tar.extractall(path=dest)
+    
+    with open("output_new/data.json","r") as f:
+        data=json.load(f)
+    print(len(data))
+    print(data[0].keys())
+    print(data[0]['question'])
+    print(data[0]['choice_A'])
+    
+    exit()
+    with open("output_new/longmemeval_s.json","r") as f:
         data=json.load(f)
     
-    scores=[x['v_score_model'] for x in data]
-    print(min(scores),max(scores),sum(scores)/len(scores))
+    print(data[0].keys())
+    print(len(data[0]['haystack_sessions']))
+    for i in range(10):
+        # print(data[0]['haystack_session_ids'][i])
+        print(data[0]['haystack_dates'][i])
+        print(data[0]['haystack_sessions'][i])
+        print("\n\n\n")
+    # print(data[0]['haystack_sessions'][1])
+    # for k,v in data[0].items():
+    #     if len(v)<=50:
+    #         print(k)
+    #         print(v)
+    #     else:
+    #         print(f"{k} is too long !!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     
     None
     

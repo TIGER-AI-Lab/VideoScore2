@@ -506,11 +506,11 @@ def get_corr(method_name,bench_name,score_res_path,metric_report_p):
     #     },f,indent=4)
         
 if __name__ == "__main__":
-    # bench="vs2_test_sft_17k"
+    bench="vs2_test_sft_27k"
     # bench="mj_bench_video"
     # bench="aigve_bench"
     # bench="video_phy2_test"
-    bench="tvge"
+    # bench="tvge"
     # bench="t2vqa_db"
     
     res_path_mapping={
@@ -531,6 +531,7 @@ if __name__ == "__main__":
         # "vision_reward":f"res_data/res_{bench}/VisionReward-Video.json",
         # "q_align":f"res_data/res_{bench}/Q-Align.json",
         "q_insight":f"res_data/res_{bench}/Q-Insight.json",
+        "q_insight":f"res_data/res_{bench}/open-router-claude-sonnet-4_infer_2fps.json",
     }
     
     for method_name, res_p in res_path_mapping.items():

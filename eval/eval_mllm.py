@@ -32,7 +32,7 @@ def main(args):
     os.makedirs(os.path.dirname(eval_res_path),exist_ok=True)
     os.makedirs(os.path.dirname(metrics_report_path),exist_ok=True)
     
-    max_workers=4
+    
     
     if method=="claude":
         from eval_methods.claude import claude_run_one_video
@@ -62,12 +62,27 @@ def main(args):
     if not os.path.exists(eval_res_path):
         with open(eval_res_path,"w",encoding='utf-8') as f:
             json.dump(res_data,f,indent=4,ensure_ascii=False)
+    else:
+        with open(eval_res_path,"r") as f:
+            res_data=json.load(f)
+        dedup_video_names=set()
+        dedup_res_data=[]
+        for item in res_data:
+            if item['video_name'] not in dedup_video_names:
+                dedup_res_data.append(item)
+                dedup_video_names.add(item['video_name'])
+        res_data=dedup_res_data
+        with open(eval_res_path,"w",encoding='utf-8') as f:
+            json.dump(res_data,f,indent=4,ensure_ascii=False)
+        
+        print(f"Loaded existing {len(res_data)} res items for bench:{bench}, method:{method}")
+        bench_data=[item for item in bench_data if item['video_name'] not in set([x['video_name'] for x in res_data])]
     
     video_paths=[os.path.abspath(f"{bench_data_dir}/{bench}/videos/{x['video_name']}.mp4") for x in bench_data]
     user_prompts=[VS2_QUERY_TEMPLATE.substitute(t2v_prompt=x['prompt']) for x in bench_data]
 
     eval_outputs=[]
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:     
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:     
         futures = [executor.submit(eval_one_video_func, user_prompt, video_path, method_kwargs) for user_prompt, video_path in zip(user_prompts, video_paths)]
         for future in tqdm(as_completed(futures), total=len(futures)):
             res_tuple = future.result()
@@ -81,8 +96,8 @@ def main(args):
         if res_tuple is None:
             print(f"output for {video_name} is None")
             v_out = t_out = p_out = raw_output = None
-            
-        v_out, t_out, p_out, raw_output = res_tuple[0], res_tuple[1], res_tuple[2], res_tuple[3]
+        else:
+            v_out, t_out, p_out, raw_output = res_tuple[0], res_tuple[1], res_tuple[2], res_tuple[3]
         
         if "vs2" in bench \
             or bench in ["aigve_bench","aigve-bench",
@@ -134,43 +149,53 @@ def main(args):
     
 
 if __name__ == "__main__":
-
-    bench_data_dir="bench_data"
-
-    args={
-        "method":"OR",  # "claude", "gpt", "gemini", "open_router"
-        "bench":"vs2_test_sft_17k",
-        "bench_data_num":150,
-        "method_kwargs":{
-            # "model_name":"claude-sonnet-4-20250514",
-            # "model_name":"anthropic/claude-sonnet-4",
-            # "model_name":"google/gemini-2.5-flash",
-            # "model_name":"google/gemini-2.5-pro",
-            # "model_name":"google/gemma-3-27b-it",
-            # "model_name":"x-ai/grok-4",
-            # "model_name":"openai/gpt-4.1",
-            # "model_name":"openai/o4-mini",
-            # "model_name":"openai/o3",
-            # "model_name":"meta-llama/llama-4-maverick",
-            "model_name":"meta-llama/llama-4-scout",
-            # "model_name":"thudm/glm-4.1v-9b-thinking",
-            # "model_name":"qwen/qwen2.5-vl-32b-instruct",
-            # "model_name":"qwen/qwen2.5-vl-72b-instruct",
-            # "api_key":os.environ["OPEN_ROUTER_KEY1"],
-            "api_key":"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",
-            "thinking_enabled": True,
-            "thinking_budget": 2048,
-            "max_tokens":1024,
-            "temperature":0.7,
-            "infer_fps":4.0
-        },
-    }
-    
     # ap = argparse.ArgumentParser()
     # ap.add_argument("--method")
     # ap.add_argument("--bench")
     # ap.add_argument("--method_kwargs", type=str, default="{}") 
     # args = ap.parse_args()
-
-    main(args)
+    # main(args)
     
+    
+    bench_data_dir="bench_data"
+    MAX_WORKERS=4
+    
+    for model_name in [
+        "anthropic/claude-sonnet-4",
+        "google/gemini-2.5-pro",
+        "openai/o4-mini",
+        "openai/gpt-5",
+        "x-ai/grok-4",
+        "google/gemma-3-27b-it",
+    ]:
+        
+        args={
+            "method":"OR",  # options: "claude", "gpt", "gemini", "open_router"
+            "bench":"vs2_test_sft_27k",
+            "bench_data_num":"all",
+            "method_kwargs":{
+                # "model_name":"anthropic/claude-sonnet-4",
+                # "model_name":"google/gemini-2.5-pro",
+                # "model_name":"google/gemini-2.5-flash",
+                # "model_name":"openai/gpt-5",
+                # "model_name":"openai/gpt-5-mini",
+                # "model_name":"openai/o4-mini",
+                # "model_name":"openai/o3",
+                # "model_name":"x-ai/grok-4",
+                # "model_name":"google/gemma-3-27b-it",
+                # "model_name":"meta-llama/llama-4-maverick",
+                # "model_name":"meta-llama/llama-4-scout",
+                # "model_name":"thudm/glm-4.1v-9b-thinking",
+                # "model_name":"qwen/qwen2.5-vl-32b-instruct",
+                # "model_name":"qwen/qwen2.5-vl-72b-instruct",
+                "model_name":model_name,
+                "api_key":os.environ["OPEN_ROUTER_KEY0"],
+                "thinking_enabled": True,
+                "thinking_budget": 2048,
+                "max_tokens":1024,
+                "temperature":0.7,
+                "infer_fps":2.0
+            },
+        }
+
+        main(args)

@@ -89,14 +89,67 @@ $thinking
 }
 '''    
 
+def zip_upload_videos(video_abs_paths, sft_data_name, batch_size):
+    total = len(video_abs_paths)
+    zip_files=[]
+    
+    if batch_size is None:
+        num_batches=1
+        batch_videos=video_abs_paths
+        video_zip = f"{sft_data_name}_videos.zip"
+        print(f"Zipping videos...")
+
+        with zipfile.ZipFile(video_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
+            for v_p in tqdm(batch_videos):
+                f_name = os.path.basename(v_p)
+                if v_p.endswith('.mp4'):
+                    zipf.write(v_p, arcname=f_name)
+
+        zip_files.append(video_zip)
+        upload_file(
+            path_or_fileobj=video_zip,
+            path_in_repo=video_zip,
+            repo_id=VIDEO_REPO_ID,
+            repo_type="dataset",
+            token=HF_TOKEN
+        )
+        os.remove(video_zip)
+        
+        
+    else:
+        num_batches = (total + batch_size - 1) // batch_size 
+        for batch_idx in range(num_batches):
+            start = batch_idx * batch_size
+            end = min((batch_idx + 1) * batch_size, total)
+            batch_videos = video_abs_paths[start:end]
+
+            video_zip = f"{sft_data_name}_videos_{batch_idx+1}.zip"
+            print(f"Zipping videos {start}–{end} into {video_zip} ...")
+
+            with zipfile.ZipFile(video_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
+                for v_p in tqdm(batch_videos, desc=f"Batch {batch_idx+1}/{num_batches}"):
+                    f_name = os.path.basename(v_p)
+                    if v_p.endswith('.mp4'):
+                        zipf.write(v_p, arcname=f_name)
+
+            zip_files.append(video_zip)
+            upload_file(
+                path_or_fileobj=video_zip,
+                path_in_repo=video_zip,
+                repo_id=VIDEO_REPO_ID,
+                repo_type="dataset",
+                token=HF_TOKEN
+            )
+            os.remove(video_zip)
+
+
 
 def build_sft_data(paths,sft_data_name,f_v_save_dir,visual_format,with_cot=True):
     data=[]
     for path in paths:
         data.extend(json.load(open(path,"r",encoding='utf-8')))
     
-    if not with_cot:
-        sft_data_name=f"{sft_data_name}_no_cot"
+    
     
     random.seed(SEED)
     random.shuffle(data)
@@ -169,9 +222,12 @@ def build_sft_data(paths,sft_data_name,f_v_save_dir,visual_format,with_cot=True)
     dataset = Dataset.from_list(convs)
     # dataset.push_to_hub(repo_id=REPO_ID,token=HF_TOKEN,private=False)
     
+    
     train_save_path=f"{sft_data_name}.json"
+    if not with_cot:
+        train_save_path=f"{sft_data_name}_no_cot.json"
     if visual_format in ["frames","frame","f"]:
-        train_save_path=f"{sft_data_name}_f.json"
+        train_save_path=train_save_path.replace(".json","_f.json")
     with open(train_save_path, "w") as f:
         json.dump(convs, f, indent=4)
     upload_file(
@@ -220,21 +276,14 @@ def build_sft_data(paths,sft_data_name,f_v_save_dir,visual_format,with_cot=True)
         os.remove(frame_zip)
         
     if visual_format in ["videos","video","v"]:
-        video_zip=f"{sft_data_name}_videos.zip"
         print("zipping videos...")
-        with zipfile.ZipFile(video_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
-            for v_p in tqdm(video_abs_paths):
-                f_name=v_p.split('/')[-1]
-                if v_p.endswith('.mp4'):
-                    zipf.write(v_p, arcname=f_name)     
-        upload_file(
-            path_or_fileobj=video_zip,
-            path_in_repo=video_zip,
-            repo_id=VIDEO_REPO_ID,
-            repo_type="dataset",
-            token=HF_TOKEN
-        )
-        os.remove(video_zip)
+        # with zipfile.ZipFile(video_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        #     for v_p in tqdm(video_abs_paths):
+        #         f_name=v_p.split('/')[-1]
+        #         if v_p.endswith('.mp4'):
+        #             zipf.write(v_p, arcname=f_name)  
+        zip_upload_videos(video_abs_paths,sft_data_name,batch_size=None)
+            
     
     
 
@@ -261,19 +310,17 @@ if __name__ == "__main__":
         )
     
     TEST_NUM=500
-    sft_data_name="sft_25k"
+    sft_data_name="sft_27k"
     visual_format="v"
-    with_cot=False
+    with_cot=True
     data_paths=[
         f"thinking_final/{fname}" for fname in os.listdir("thinking_final") if fname.endswith('.json')
-        # f"thinking_final/try_debug.json"
     ]
     f_v_save_dir=f"/data/xuan/data/videoscore2/f_v_all"
 
     # download_video_from_data(data_paths,f_v_save_dir,max_workers=12)
     
     build_sft_data(data_paths,sft_data_name,f_v_save_dir,visual_format,with_cot)
-    
     
     
     # parquet_names=[
@@ -283,3 +330,32 @@ if __name__ == "__main__":
     # repo_id="hexuan21/vs2_raw_comment"
     # f_v_save_dir=f"/data/xuan/videoscore2/f_v_all"
     # download_video_from_parquet(repo_id,parquet_names,f_v_save_dir,max_workers=8)
+
+    
+    
+    
+    
+    # =================== Upload Large Zip
+    # export GIT_LFS_SKIP_SMUDGE=1
+    # git clone --depth 1 https://huggingface.co/datasets/hexuan21/vs2_sft_video
+    # cd vs2_sft_video
+
+    # git lfs install
+    # hf lfs-enable-largefiles .
+    # git lfs track "*.zip"
+    # git lfs track "*.mp4"
+
+    # git add .gitattributes
+    # git commit -m "Enable LFS for zip/mp4 files"
+
+    # cp /data/xuan/workdir/VideoScore2/data/sft_27k_videos_1.zip sft_27k_videos_1.zip
+    # cp /data/xuan/workdir/VideoScore2/data/sft_27k_videos_2.zip sft_27k_videos_2.zip
+    # cp /data/xuan/workdir/VideoScore2/data/sft_27k_videos_3.zip sft_27k_videos_3.zip
+    # cp /data/xuan/workdir/VideoScore2/data/sft_27k_videos_4.zip sft_27k_videos_4.zip
+    # cp /data/xuan/workdir/VideoScore2/data/sft_27k_videos_5.zip sft_27k_videos_5.zip
+    # cp /data/xuan/workdir/VideoScore2/data/sft_27k_videos_6.zip sft_27k_videos_6.zip
+    
+    # git add sft_27k_videos_2.zip
+    # git commit -m "update"
+    
+    # git push

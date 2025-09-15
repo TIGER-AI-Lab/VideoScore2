@@ -3,7 +3,7 @@ import os
 import json
 from data_sft import INPUT_TEMPLATE
 from huggingface_hub import upload_file,create_repo
-
+from utils_fetch_f_v import _download_file
 
 """
 {
@@ -98,6 +98,9 @@ if __name__ == "__main__":
         private=False,
         exist_ok=True
         )
-    sft_data_path="sft_25k.json"
-    rl_data_path="temp/grpo_25k.json"
-    main(sft_data_path,rl_data_path)
+    data_file="sft_27k.json"
+    sft_data_temp_path=f"temp/{data_file}"
+    rl_data_temp_path="temp/grpo_27k.json"
+    url=f"https://huggingface.co/datasets/hexuan21/vs2_sft_data/resolve/main/{data_file}"
+    _download_file(url, sft_data_temp_path, overwrite=True)
+    main(sft_data_temp_path,rl_data_temp_path)
