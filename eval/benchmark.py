@@ -5,6 +5,8 @@ from string import Template
 from tqdm import tqdm
 import tarfile
 import shutil
+import time
+import requests
 
 def _download_file(url: str, save_path: str, overwrite: bool = False, timeout: int = 15, log_enabled: bool = True):
     chunk_size=1<<14
