@@ -430,19 +430,22 @@ if __name__ == "__main__":
     
 
     # dir="/data/xuan/workdir/VideoScore2/data/thinking_final/final_resample_rej"
-    dir="/data/xuan/workdir/VideoScore2/data/thinking_final"
-    data=[]
-    f_num=0
-    for f in os.listdir(dir):
-        if f.endswith(".json"):
-            f_num+=1
-            p=os.path.join(dir,f)
-            with open(p,"r") as f:
-                ds=json.load(f)
-            data.extend(ds)
-    print(f_num)   
-    print(len(data))
+    # dir="/data/xuan/workdir/VideoScore2/data/thinking_final"
+    # data=[]
+    # f_num=0
+    # for f in os.listdir(dir):
+    #     if f.endswith(".json"):
+    #         f_num+=1
+    #         p=os.path.join(dir,f)
+    #         with open(p,"r") as f:
+    #             ds=json.load(f)
+    #         data.extend(ds)
+    # print(f_num)   
+    # print(len(data))
     
+    None
+            
+
     
     
 

@@ -163,10 +163,7 @@ if __name__ == "__main__":
     for model_name in [
         "anthropic/claude-sonnet-4",
         "google/gemini-2.5-pro",
-        "openai/o4-mini",
         "openai/gpt-5",
-        "x-ai/grok-4",
-        "google/gemma-3-27b-it",
     ]:
         
         args={
@@ -194,7 +191,7 @@ if __name__ == "__main__":
                 "thinking_budget": 2048,
                 "max_tokens":1024,
                 "temperature":0.7,
-                "infer_fps":2.0
+                "infer_fps":4.0
             },
         }
 

@@ -387,8 +387,13 @@ def get_acc(method_name,bench_name,score_res_path,metric_report_p):
         # Skip acc calculation for this benchmark.
         print("[skip] skipping acc calculation for benchmark T2VQA-DB.")    
         return None
-        
-        
+    
+    # import random
+    # random.seed(42)
+    # v_scores_model=[random.choice([1,2,3,4,5]) for _ in v_scores_gt]
+    # t_scores_model=[random.choice([1,2,3,4,5]) for _ in t_scores_gt]
+    # p_scores_model=[random.choice([1,2,3,4,5]) for _ in p_scores_gt]
+    
     metrics_dict={
         "v_acc":_compute_accuracy(v_scores_model,v_scores_gt),
         "t_acc":_compute_accuracy(t_scores_model,t_scores_gt),
@@ -477,7 +482,12 @@ def get_corr(method_name,bench_name,score_res_path,metric_report_p):
         else:
             overall_scores_model=[v+t+p for v,t,p in zip(v_scores_model,t_scores_model,p_scores_model)]
         
-        
+    import random
+    random.seed(44)
+    v_scores_model=[random.choice([1,2,3,4,5]) for _ in v_scores_gt]
+    t_scores_model=[random.choice([1,2,3,4,5]) for _ in t_scores_gt]
+    p_scores_model=[random.choice([1,2,3,4,5]) for _ in p_scores_gt]
+    
     metrics_dict={        
         "v_spcc":_compute_spcc(v_scores_model,v_scores_gt),
         "t_spcc":_compute_spcc(t_scores_model,t_scores_gt),
@@ -527,11 +537,22 @@ if __name__ == "__main__":
         # "lift":f"res_data/res_{bench}/LiFT-Critic-13b-lora-v1.5.json",
         # "video_phy2_auto_eval":f"res_data/res_{bench}/videophy_2_auto.json",
         # "unified_reward":f"res_data/res_{bench}/UnifiedReward-7b.json",
-        # "video_reward":f"res_data/res_{bench}/VideoReward.json",
+        "video_reward":f"res_data/res_{bench}/VideoReward.json",
         # "vision_reward":f"res_data/res_{bench}/VisionReward-Video.json",
         # "q_align":f"res_data/res_{bench}/Q-Align.json",
-        "q_insight":f"res_data/res_{bench}/Q-Insight.json",
-        "q_insight":f"res_data/res_{bench}/open-router-claude-sonnet-4_infer_2fps.json",
+        # "q_insight":f"res_data/res_{bench}/Q-Insight.json",
+        
+        # "claude-sonnet-4":f"res_data/res_{bench}/open-router-claude-sonnet-4_infer_2fps.json",
+        # "gemini-2.5-flash":f"res_data/res_{bench}/open-router-gemini-2.5-flash_infer_2fps.json",
+        # "gemini-2.5-pro":f"res_data/res_{bench}/open-router-gemini-2.5-pro_infer_2fps.json",
+        # "gpt-5":f"res_data/res_{bench}/open-router-gpt-5_infer_2fps.json",
+        # "gpt-5-mini":f"res_data/res_{bench}/open-router-gpt-5-mini_infer_2fps.json",
+        # "o4-mini":f"res_data/res_{bench}/open-router-o4-mini_infer_2fps.json",
+        # "grok-4":f"res_data/res_{bench}/open-router-grok-4_infer_2fps.json",
+        # "gemma-3-27b-it":f"res_data/res_{bench}/open-router-gemma-3-27b-it_infer_2fps.json",
+        # "qwen2.5-vl-72b-instruct":f"res_data/res_{bench}/open-router-qwen2.5-vl-72b-instruct_infer_2fps.json",
+        # "llama-4-scout":f"res_data/res_{bench}/open-router-llama-4-scout_infer_2fps.json",
+        # "glm-4.1v-9b-thinking":f"res_data/res_{bench}/open-router-glm-4.1v-9b-thinking_infer_2fps.json",
     }
     
     for method_name, res_p in res_path_mapping.items():
@@ -541,3 +562,5 @@ if __name__ == "__main__":
         get_acc(method_name,bench,res_p,metrics_p)
         get_corr(method_name,bench,res_p,metrics_p)
         print("\n")
+        
+    

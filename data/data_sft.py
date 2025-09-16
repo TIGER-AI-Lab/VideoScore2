@@ -118,6 +118,7 @@ def zip_upload_videos(video_abs_paths, sft_data_name, batch_size):
         
     else:
         num_batches = (total + batch_size - 1) // batch_size 
+        print(num_batches)
         for batch_idx in range(num_batches):
             start = batch_idx * batch_size
             end = min((batch_idx + 1) * batch_size, total)
@@ -254,6 +255,15 @@ def build_sft_data(paths,sft_data_name,f_v_save_dir,visual_format,with_cot=True)
     )
     os.remove(test_path)
     
+    if visual_format in ["videos","video","v"]:
+        print("zipping videos...")
+        # with zipfile.ZipFile(video_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        #     for v_p in tqdm(video_abs_paths):
+        #         f_name=v_p.split('/')[-1]
+        #         if v_p.endswith('.mp4'):
+        #             zipf.write(v_p, arcname=f_name)  
+        zip_upload_videos(video_abs_paths,sft_data_name,batch_size=None)
+    
     if visual_format in ["frames","frame","f"]:
         frame_zip=f"{sft_data_name}_frames.zip"
         with zipfile.ZipFile(frame_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
@@ -275,14 +285,7 @@ def build_sft_data(paths,sft_data_name,f_v_save_dir,visual_format,with_cot=True)
         )
         os.remove(frame_zip)
         
-    if visual_format in ["videos","video","v"]:
-        print("zipping videos...")
-        # with zipfile.ZipFile(video_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
-        #     for v_p in tqdm(video_abs_paths):
-        #         f_name=v_p.split('/')[-1]
-        #         if v_p.endswith('.mp4'):
-        #             zipf.write(v_p, arcname=f_name)  
-        zip_upload_videos(video_abs_paths,sft_data_name,batch_size=None)
+    
             
     
     
@@ -312,7 +315,7 @@ if __name__ == "__main__":
     TEST_NUM=500
     sft_data_name="sft_27k"
     visual_format="v"
-    with_cot=True
+    with_cot=0
     data_paths=[
         f"thinking_final/{fname}" for fname in os.listdir("thinking_final") if fname.endswith('.json')
     ]
