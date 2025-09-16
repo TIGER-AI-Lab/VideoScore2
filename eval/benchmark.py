@@ -5,7 +5,47 @@ from string import Template
 from tqdm import tqdm
 import tarfile
 import shutil
-from eval_methods.utils import _download_file
+
+def _download_file(url: str, save_path: str, overwrite: bool = False, timeout: int = 15, log_enabled: bool = True):
+    chunk_size=1<<14
+    if os.path.exists(save_path) and not overwrite:
+        # if log_enabled==True:
+        #     print(f"[skip] {save_path} already exists")
+        return save_path
+
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+    max_retries=3
+    wait_time=60
+    for attempt in range(1, max_retries + 1):
+        try:
+            with requests.get(url, stream=True, timeout=timeout) as r:
+                r.raise_for_status()
+                total = int(r.headers.get("content-length", 0))
+                bar = tqdm(total=total, unit="B", unit_scale=True, desc=os.path.basename(save_path))
+                with open(save_path, "wb") as f:
+                    for chunk in r.iter_content(chunk_size):
+                        if chunk:
+                            f.write(chunk)
+                            bar.update(len(chunk))
+                bar.close()
+            if log_enabled:
+                print(f"[ok] Downloaded → {save_path}")
+            return save_path
+
+        except requests.exceptions.HTTPError as e:
+            if e.response.status_code == 404:
+                print(f"[404] File not found: {url} — skipping without retry.")
+                return None
+            
+        except Exception as e:
+            print(f"[warn] Attempt {attempt}/{max_retries} failed: {e}")
+
+        if attempt < max_retries:
+            print(f"[warn] Retrying in {wait_time} seconds...")
+            time.sleep(wait_time)
+        else:
+            print(f"[fail] All {max_retries} attempts failed.")
+            return None
 
 VS2_QUERY_TEMPLATE=Template("""
 You are an expert for evaluating and thinking about the quality of AI videos from diverse dimensions.

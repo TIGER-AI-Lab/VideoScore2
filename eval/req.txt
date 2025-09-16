@@ -68,6 +68,7 @@ pip install --upgrade pip
 pip install -e ".[train]"
 pip install setuptools
 pip install flash_attn==2.5.8 --no-build-isolation
+pip install certifi
 
 
 videophy2

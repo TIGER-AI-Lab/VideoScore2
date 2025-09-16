@@ -309,42 +309,42 @@ if __name__ == "__main__":
     f_v_save_dir="/data/xuan/data/videoscore2/f_v_all"
     
     anno_paths=[
-        f"anno_raw/{batch_idx}.json" for batch_idx in []
+        f"anno_raw/{batch_idx}.json" for batch_idx in [73]
     ]
-    # download_eg_frames_from_anno(anno_paths,f_v_save_dir,max_workers=8)
+    download_eg_frames_from_anno(anno_paths,f_v_save_dir,max_workers=8)
     
-    # batch_names=[x.split('/')[1].split('.')[0] for x in anno_paths]
-    # build_raw_cmt_data(anno_paths,batch_names,f_v_save_dir)
+    batch_names=[x.split('/')[1].split('.')[0] for x in anno_paths]
+    build_raw_cmt_data(anno_paths,batch_names,f_v_save_dir)
     
     
     
-    rej_batch_names=[f"rej_{idx}" for idx in 
-            [
-                1,2,3,4,
-                5, 
-                9,
-                13,14,15,16,
-                17,18,19,20,74,
-                21,22,23,24,
-                29,30,31,32,75,
-                33,34,85,86,
-                38,
-                81,82,83,
-                45,46,47,48,
-                53,54,55,56,
-                61,62,78,79,
-                69,70,71, 
-                "com_5k_0",   
-                "com_5k_1", 
-                "com_5k_2", 
-                "com_5k_3",  
-                "com_5k_4",
-            ]
-        ]    
+    # rej_batch_names=[f"rej_{idx}" for idx in 
+    #         [
+    #             1,2,3,4,
+    #             5, 
+    #             9,
+    #             13,14,15,16,
+    #             17,18,19,20,74,
+    #             21,22,23,24,
+    #             29,30,31,32,75,
+    #             33,34,85,86,
+    #             38,
+    #             81,82,83,
+    #             45,46,47,48,
+    #             53,54,55,56,
+    #             61,62,78,79,
+    #             69,70,71, 
+    #             "com_5k_0",   
+    #             "com_5k_1", 
+    #             "com_5k_2", 
+    #             "com_5k_3",  
+    #             "com_5k_4",
+    #         ]
+    #     ]    
     
-    for batch_name in rej_batch_names:
-        rej_path=f"thinking_rej/{batch_name}.json" 
-        rebuild_rej_data(rej_path,batch_name,f_v_save_dir)
+    # for batch_name in rej_batch_names:
+    #     rej_path=f"thinking_rej/{batch_name}.json" 
+    #     rebuild_rej_data(rej_path,batch_name,f_v_save_dir)
     
     
     

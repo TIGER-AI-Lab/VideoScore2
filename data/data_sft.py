@@ -160,6 +160,11 @@ def build_sft_data(paths,sft_data_name,f_v_save_dir,visual_format,with_cot=True)
     video_abs_paths=[]
     frames_dir_abs_paths=[]
     convs=[]
+    
+    ## deduplicate
+    data_dict={x["video_name"]:x for x in data}
+    data=list(data_dict.values())
+    
     for x in tqdm(data):
         video_name=x["video_name"]
         video_url=x["video_url"]
@@ -222,8 +227,7 @@ def build_sft_data(paths,sft_data_name,f_v_save_dir,visual_format,with_cot=True)
             
     dataset = Dataset.from_list(convs)
     # dataset.push_to_hub(repo_id=REPO_ID,token=HF_TOKEN,private=False)
-    
-    
+        
     train_save_path=f"{sft_data_name}.json"
     if not with_cot:
         train_save_path=f"{sft_data_name}_no_cot.json"
@@ -262,7 +266,7 @@ def build_sft_data(paths,sft_data_name,f_v_save_dir,visual_format,with_cot=True)
         #         f_name=v_p.split('/')[-1]
         #         if v_p.endswith('.mp4'):
         #             zipf.write(v_p, arcname=f_name)  
-        zip_upload_videos(video_abs_paths,sft_data_name,batch_size=None)
+        # zip_upload_videos(video_abs_paths,sft_data_name,batch_size=None)
     
     if visual_format in ["frames","frame","f"]:
         frame_zip=f"{sft_data_name}_frames.zip"
@@ -285,8 +289,6 @@ def build_sft_data(paths,sft_data_name,f_v_save_dir,visual_format,with_cot=True)
         )
         os.remove(frame_zip)
         
-    
-            
     
     
 
@@ -315,15 +317,37 @@ if __name__ == "__main__":
     TEST_NUM=500
     sft_data_name="sft_27k"
     visual_format="v"
-    with_cot=0
+    with_cot=1
+    f_v_save_dir=f"/data/xuan/data/videoscore2/f_v_all"
     data_paths=[
         f"thinking_final/{fname}" for fname in os.listdir("thinking_final") if fname.endswith('.json')
     ]
-    f_v_save_dir=f"/data/xuan/data/videoscore2/f_v_all"
+    
+    build_sft_data(data_paths,sft_data_name,f_v_save_dir,visual_format,with_cot)
 
     # download_video_from_data(data_paths,f_v_save_dir,max_workers=12)
     
-    build_sft_data(data_paths,sft_data_name,f_v_save_dir,visual_format,with_cot)
+
+    # TEST_NUM=500
+    # sft_data_name="sft_hq_20k"
+    # visual_format="v"
+    # with_cot=1
+    # data_paths=[
+    #     f"thinking_final/final_{idx}.json" for idx in 
+    #     [
+    #         1,2,3,4,
+    #         13,14,15,16,
+    #         17,18,19,20,74,
+    #         29,30,31,32,75,
+    #         33,34,85,86,
+    #         81,82,83,
+    #         53,54,55,56,
+    #         61,62,
+    #         69,70,71,80,
+    #         "com_5k_0","com_5k_1","com_5k_2","com_5k_3","com_5k_4",
+    #     ]
+    # ]
+    # build_sft_data(data_paths,sft_data_name,f_v_save_dir,visual_format,with_cot)
     
     
     # parquet_names=[

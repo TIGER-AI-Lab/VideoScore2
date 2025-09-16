@@ -38,7 +38,7 @@ def main(args):
     elif method.lower() == "vs1":
         ## conda activate vs1_eval
         from eval_methods.vs1 import eval_VideoScore1
-        model_name_or_path="TIGER-Lab/VideoScore-v1.1"
+        model_name_or_path="TIGER-Lab/VideoScore"
         model=eval_VideoScore1(model_name_or_path) 
         q_template=VS1_REG_QUERY_TEMPLATE
     

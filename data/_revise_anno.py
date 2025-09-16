@@ -231,7 +231,7 @@ def critical_modify_tk(path_or_plist,new_p,batch_name):
     
     
 if __name__ == "__main__":
-    batch_idx_list=[]
+    batch_idx_list=[73]
     for batch_idx in batch_idx_list:
         paths=[
             f"anno_raw/{batch_idx}.json"
@@ -247,9 +247,7 @@ if __name__ == "__main__":
     os.makedirs(new_score_dir,exist_ok=True)
     batch_names=[f"resample_rej/rej_{rej_name}" for rej_name in 
                  [
-                     1,2,3,4,
-                    
-                    
+
                   ]]
     for batch_name in batch_names:
         path=f"{original_dir}/thinking_{batch_name}.json"

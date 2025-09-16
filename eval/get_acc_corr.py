@@ -482,11 +482,11 @@ def get_corr(method_name,bench_name,score_res_path,metric_report_p):
         else:
             overall_scores_model=[v+t+p for v,t,p in zip(v_scores_model,t_scores_model,p_scores_model)]
         
-    import random
-    random.seed(44)
-    v_scores_model=[random.choice([1,2,3,4,5]) for _ in v_scores_gt]
-    t_scores_model=[random.choice([1,2,3,4,5]) for _ in t_scores_gt]
-    p_scores_model=[random.choice([1,2,3,4,5]) for _ in p_scores_gt]
+    # import random
+    # random.seed(44)
+    # v_scores_model=[random.choice([1,2,3,4,5]) for _ in v_scores_gt]
+    # t_scores_model=[random.choice([1,2,3,4,5]) for _ in t_scores_gt]
+    # p_scores_model=[random.choice([1,2,3,4,5]) for _ in p_scores_gt]
     
     metrics_dict={        
         "v_spcc":_compute_spcc(v_scores_model,v_scores_gt),
@@ -529,18 +529,25 @@ if __name__ == "__main__":
         # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_2400_infer_2fps.json",
         # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_5e-7_base960_720_reward4_temporal_2400_infer_2fps.json",
         # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_1e-6_base960_720_reward4_temporal_2400_infer_2fps.json",
-        # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_2400_float_infer_2fps_tempe=0.9.json",
-        # "aigve_macs":f"res_data/res_{bench}/AIGVE-MACS.json",
-        # "deqa":f"res_data/res_{bench}/DeQA-Score-Mix3.json",
+        
+        # "vs2":f"res_data/res_{bench}/vs2_grpo_27k_1e-6_base_qwen2_5_vl_300_infer_2fps.json",
+        # "vs2":f"res_data/res_{bench}/vs2_grpo_27k_5e-7_base_qwen2_5_vl_200_infer_2fps.json",
+        # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_1e-4_2fps_960_720_8192_infer_2fps.json",
+        
+        # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_1e-4_2fps_960_720_8192_float_infer_2fps_tempe=0.7.json",
+        
+        "aigve_macs":f"res_data/res_{bench}/AIGVE-MACS.json",
         # "dover":f"res_data/res_{bench}/dover.json",
-        # "image_reward":f"res_data/res_{bench}/ImageReward-v1.0.json",
-        # "lift":f"res_data/res_{bench}/LiFT-Critic-13b-lora-v1.5.json",
+        "lift":f"res_data/res_{bench}/LiFT-Critic-13b-lora-v1.5.json",
         # "video_phy2_auto_eval":f"res_data/res_{bench}/videophy_2_auto.json",
-        # "unified_reward":f"res_data/res_{bench}/UnifiedReward-7b.json",
+        "unified_reward":f"res_data/res_{bench}/UnifiedReward-7b.json",
         "video_reward":f"res_data/res_{bench}/VideoReward.json",
-        # "vision_reward":f"res_data/res_{bench}/VisionReward-Video.json",
-        # "q_align":f"res_data/res_{bench}/Q-Align.json",
+        "vision_reward":f"res_data/res_{bench}/VisionReward-Video.json",
+        "q_align":f"res_data/res_{bench}/Q-Align.json",
+        # "deqa":f"res_data/res_{bench}/DeQA-Score-Mix3.json",
+        # "image_reward":f"res_data/res_{bench}/ImageReward-v1.0.json",
         # "q_insight":f"res_data/res_{bench}/Q-Insight.json",
+        # "vs1":f"res_data/res_{bench}/VideoScore.json",
         
         # "claude-sonnet-4":f"res_data/res_{bench}/open-router-claude-sonnet-4_infer_2fps.json",
         # "gemini-2.5-flash":f"res_data/res_{bench}/open-router-gemini-2.5-flash_infer_2fps.json",
