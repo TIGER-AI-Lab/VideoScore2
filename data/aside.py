@@ -312,68 +312,6 @@ def collect_video():
             f.write(f"{item}\n\n")
 
 
-def eg_kappa():
-    import numpy as np
-    from statsmodels.stats.inter_rater import fleiss_kappa
-
-    # 假设有 3 个样本，每个样本由 3 个标注人打分
-    ratings = [
-        [3, 3, 3],  # 样本1
-        [3, 3, 4],  # 样本2
-        [5, 4, 5],  # 样本3
-    ]
-
-    # 转换成类别频数矩阵 (N × k)
-    num_categories = 5
-    table = np.zeros((len(ratings), num_categories), dtype=int)
-
-    for i, r in enumerate(ratings):
-        for score in r:
-            table[i, score-1] += 1
-
-    print("频数矩阵：\n", table)
-
-    # 计算 Fleiss' kappa
-    kappa = fleiss_kappa(table)
-    print("Fleiss' kappa =", kappa)
-
-
-def select_rej_45_48():
-    for b_idx in [45,46,47,48]:
-        p=f"thinking_original/thinking_{b_idx}.json"
-        new_p=f"thinking_original/thinking_{b_idx}.json"
-        rej_p=f"thinking_rej_2/rej_{b_idx}.json"
-        os.makedirs("thinking_rej_2",exist_ok=True)
-        with open(p,"r",encoding='utf-8') as f:
-            data=json.load(f)
-        new_data=[]
-        rej_data=[]
-        for idx,item in enumerate(data):
-            if all(len(x)>3 for x in [item["visual_cmt_raw"],item["t2v_cmt_raw"],item["phy_cmt_raw"],]):
-                new_data.append(item)
-                continue
-            
-            if item["visual_score"]==4:
-                if item["visual_cmt_raw"]==" " or len(item["visual_cmt_raw"])<=3:
-                    item["visual_cmt_raw"]="分辨率和清晰度尚可，但不够高，而且视频流畅度也不高"
-                    rej_data.append(item)
-                    continue
-            
-            if item["phy_score"]==4:
-                if item["phy_cmt_raw"]==" " or len(item["phy_cmt_raw"])<=3:
-                    item["phy_cmt_raw"]="整体没有很大的异常或畸形或者明显不符逻辑现实的地方，但是还是可以看出跟真实视频有区别"
-                    rej_data.append(item)
-                    continue
-
-        print(len(new_data))
-        print(len(rej_data))
-        
-        with open(new_p,'w') as f:
-            json.dump(new_data,f,indent=4,ensure_ascii=False)
-
-        with open(rej_p,'w') as f:
-            json.dump(rej_data,f,indent=4,ensure_ascii=False)
-
 def merge_rej_to_final():
     batch_names=[
         1,2,3,4, 
@@ -411,6 +349,30 @@ def merge_rej_to_final():
             json.dump(data2,f,indent=4,ensure_ascii=False)
 
     
+
+def aside_prompts():
+    p="/data/xuan/data/videoscore2/text_prompts/all_prompts.jsonl"
+    with open(p, "r", encoding="utf-8") as f:
+        prompt_items = [json.loads(line) for line in f]
+    
+    paths=[
+        f"thinking_final/{fname}" for fname in os.listdir("thinking_final") if fname.endswith('.json')
+    ]
+    used_annos=[]
+    for path in paths:
+        used_annos.extend(json.load(open(path,"r",encoding='utf-8')))
+    used_video_names=[x['video_name'].split("_")[0] for x in used_annos]
+    used_video_names=list(set(used_video_names))
+    
+    aside_prompts_items=[x for x in prompt_items if x['video_id'] not in used_video_names]
+    aside_prompts=[x['text'] for x in aside_prompts_items]
+    
+    with open("vs2_aside_propmts.json","w") as f:
+        json.dump(aside_prompts_items,f,indent=4)
+    
+    with open("vs2_aside_prompts.txt", "w", encoding="utf-8") as f:
+        for item in aside_prompts:
+            f.write(item + "\n")
     
 
 if __name__ == "__main__":
@@ -430,19 +392,21 @@ if __name__ == "__main__":
     
 
     # dir="/data/xuan/workdir/VideoScore2/data/thinking_final/final_resample_rej"
-    dir="/data/xuan/workdir/VideoScore2/data/thinking_final"
-    data=[]
-    f_num=0
-    for f in os.listdir(dir):
-        if f.endswith(".json"):
-            f_num+=1
-            p=os.path.join(dir,f)
-            with open(p,"r") as f:
-                ds=json.load(f)
-            data.extend(ds)
-    print(f_num)   
-    print(len(data))
+    # dir="/data/xuan/workdir/VideoScore2/data/thinking_final"
+    # data=[]
+    # f_num=0
+    # for f in os.listdir(dir):
+    #     if f.endswith(".json"):
+    #         f_num+=1
+    #         p=os.path.join(dir,f)
+    #         with open(p,"r") as f:
+    #             ds=json.load(f)
+    #         data.extend(ds)
+    # print(f_num)   
+    # print(len(data))
     
+    
+    aside_prompts()
     None
 
             
