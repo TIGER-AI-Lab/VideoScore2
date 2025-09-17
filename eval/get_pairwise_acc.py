@@ -546,9 +546,9 @@ if __name__ == "__main__":
         
         # "vision_reward_db_video":"bench_data/vision_reward_db_video/original_data_vision_reward_db_video.json",
         
-        "genai_bench":None,
+        # "genai_bench":None,
         
-        "t2vqa_db":"bench_data/t2vqa_db/t2vqa_db_pref.json",
+        # "t2vqa_db":"bench_data/t2vqa_db/t2vqa_db_pref.json",
         
         # "tvge":"bench_data/tvge/tvge_pref.json"
         
@@ -565,12 +565,12 @@ if __name__ == "__main__":
             # "image_reward":f"res_data/res_{bench}/ImageReward-v1.0.json",
             # "lift":f"res_data/res_{bench}/LiFT-Critic-13b-lora-v1.5.json",
             # "q_align":f"res_data/res_{bench}/Q-Align.json",
-            # "q_insight":f"res_data/res_{bench}/Q-Insight.json",
+            "q_insight":f"res_data/res_{bench}/Q-Insight.json",
             # "video_phy2_auto_eval":f"res_data/res_{bench}/videophy_2_auto.json",
             # "unified_reward":f"res_data/res_{bench}/UnifiedReward-7b.json",
             # "vision_reward":f"res_data/res_{bench}/VisionReward-Video.json",
             # "video_reward":f"res_data/res_{bench}/VideoReward.json",
-            "vs1":f"res_data/res_{bench}/VideoScore-v1.1.json",
+            # "vs1":f"res_data/res_{bench}/VideoScore-v1.1.json",
             # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192_infer_2fps.json",
             # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_17k_5e-5_2fps_960_720_8192_infer_2fps.json",
             # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_2400_infer_2fps.json",
@@ -585,8 +585,8 @@ if __name__ == "__main__":
                 "method": method,
                 "src_file":src_file,
                 "score_json":score_json,
-                "with_ties":False,
-                # "with_ties":True,
+                # "with_ties":False,
+                "with_ties":True,
             }
             
             main(bench,kwargs,short_sampling)

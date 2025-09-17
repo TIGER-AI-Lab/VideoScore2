@@ -251,7 +251,7 @@ def main(args):
                 "output":raw_output
             })
         
-        with open(eval_res_path,"r") as f:
+        with open(eval_res_path,"r",encoding='utf-8') as f:
             res_data=json.load(f)
         res_data.append(res_item)
         with open(eval_res_path,"w",encoding='utf-8') as f:
