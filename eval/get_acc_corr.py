@@ -516,10 +516,10 @@ def get_corr(method_name,bench_name,score_res_path,metric_report_p):
     #     },f,indent=4)
         
 if __name__ == "__main__":
-    # bench="vs2_test_sft_27k"
+    bench="vs2_test_sft_27k"
     # bench="mj_bench_video"
     # bench="aigve_bench"
-    bench="video_phy2_test"
+    # bench="video_phy2_test"
     # bench="tvge"
     # bench="t2vqa_db"
     
@@ -532,12 +532,13 @@ if __name__ == "__main__":
         # "vs2":f"res_data/res_{bench}/vs2_grpo_27k_1e-6_base_qwen2_5_vl_300_infer_2fps.json",
         # "vs2":f"res_data/res_{bench}/vs2_grpo_27k_5e-7_base_qwen2_5_vl_200_infer_2fps.json",
         # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_1e-4_2fps_960_720_8192_infer_2fps.json",
+        # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_2e-4_2fps_960_720_8192_infer_2fps.json",
         
         # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_17k_1e-4_2fps_960_720_8192_float_infer_2fps_tempe=0.7.json",
         # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_2400_float_infer_2fps_tempe=0.7.json",
         
         # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_1e-4_2fps_960_720_8192_float_infer_2fps_tempe=0.7.json",
-        # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_1e-6_base_qwen2_5_vl_300_float_infer_2fps_tempe=0.7.json",
+        "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_1e-6_base_qwen2_5_vl_300_float_infer_2fps_tempe=0.7.json",
         
         # "vs1":f"res_data/res_{bench}/VideoScore.json",
         # "aigve_macs":f"res_data/res_{bench}/AIGVE-MACS.json",
@@ -550,7 +551,7 @@ if __name__ == "__main__":
         # "q_align":f"res_data/res_{bench}/Q-Align.json",
         # "deqa":f"res_data/res_{bench}/DeQA-Score-Mix3.json",
         # "image_reward":f"res_data/res_{bench}/ImageReward-v1.0.json",
-        "q_insight":f"res_data/res_{bench}/Q-Insight.json",
+        # "q_insight":f"res_data/res_{bench}/Q-Insight.json",
         
         # "claude-sonnet-4":f"res_data/res_{bench}/open-router-claude-sonnet-4_infer_2fps.json",
         # "gemini-2.5-flash":f"res_data/res_{bench}/open-router-gemini-2.5-flash_infer_2fps.json",
