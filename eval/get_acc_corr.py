@@ -525,20 +525,18 @@ if __name__ == "__main__":
     
     res_path_mapping={
         # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192_infer_2fps.json",
-        # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_17k_2e-4_2fps_960_720_8192_infer_2fps.json",
         # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_2400_infer_2fps.json",
         # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_1e-6_base960_720_reward4_temporal_2400_infer_2fps.json",
-        
-        # "vs2":f"res_data/res_{bench}/vs2_grpo_27k_1e-6_base_qwen2_5_vl_300_infer_2fps.json",
-        # "vs2":f"res_data/res_{bench}/vs2_grpo_27k_5e-7_base_qwen2_5_vl_200_infer_2fps.json",
-        # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_1e-4_2fps_960_720_8192_infer_2fps.json",
-        # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_2e-4_2fps_960_720_8192_infer_2fps.json",
-        
         # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_17k_1e-4_2fps_960_720_8192_float_infer_2fps_tempe=0.7.json",
         # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_2400_float_infer_2fps_tempe=0.7.json",
         
-        # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_1e-4_2fps_960_720_8192_float_infer_2fps_tempe=0.7.json",
-        "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_1e-6_base_qwen2_5_vl_300_float_infer_2fps_tempe=0.7.json",
+        "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_2e-5_2fps_960_720_8192_infer_2fps.json",
+        # "vs2":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_qwen2_5_vl_300_infer_2fps.json",
+
+        # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_5e-5_2fps_960_720_8192_float_infer_2fps_tempe=0.7.json",
+        # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_1e-6_base_qwen2_5_vl_300_float_infer_2fps_tempe=0.7.json",
+        
+        
         
         # "vs1":f"res_data/res_{bench}/VideoScore.json",
         # "aigve_macs":f"res_data/res_{bench}/AIGVE-MACS.json",

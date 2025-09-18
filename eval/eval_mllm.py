@@ -161,9 +161,11 @@ if __name__ == "__main__":
     MAX_WORKERS=4
     
     for model_name in [
-        "anthropic/claude-sonnet-4",
-        "google/gemini-2.5-pro",
-        "openai/gpt-5",
+        # "anthropic/claude-sonnet-4",
+        # "google/gemini-2.5-pro",
+        # "openai/gpt-5",
+        "qwen/qwen2.5-vl-32b-instruct",
+        "qwen/qwen2.5-vl-7b-instruct",
     ]:
         
         args={
@@ -183,6 +185,7 @@ if __name__ == "__main__":
                 # "model_name":"meta-llama/llama-4-maverick",
                 # "model_name":"meta-llama/llama-4-scout",
                 # "model_name":"thudm/glm-4.1v-9b-thinking",
+                # "model_name":"qwen/qwen2.5-vl-7b-instruct",
                 # "model_name":"qwen/qwen2.5-vl-32b-instruct",
                 # "model_name":"qwen/qwen2.5-vl-72b-instruct",
                 "model_name":model_name,
@@ -191,7 +194,7 @@ if __name__ == "__main__":
                 "thinking_budget": 2048,
                 "max_tokens":1024,
                 "temperature":0.7,
-                "infer_fps":4.0
+                "infer_fps":2.0,
             },
         }
 
