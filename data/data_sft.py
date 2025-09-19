@@ -45,7 +45,7 @@ from utils_fetch_f_v import _fetch_all_frames_single,_fetch_video_single, \
 
 INPUT_TEMPLATE=Template("""You are an expert for evaluating and thinking about the quality of AI videos from diverse dimensions.
 
-We would like to evaluate its quality from three dimensions: 'visual quality', 'text-to-video alignment' and 'physical consistency'. Below is the definition of each dimension: 
+We would like to evaluate its quality from three dimensions: 'visual quality', 'text-to-video alignment' and 'physical/common-sense consistency'. Below is the definition of each dimension: 
 (1) visual quality: 
 The dimension 'visual quality' cares about the video's visual and optical propertities, including 'resolution, overall clarity, local blurriness, smoothness, stability of brightness/contrast, distortion/misalignment, abrupt changes, and any other factors the affect the watching experience'. The keywords written by the annotators are also mostly derived from the above factors.
 (2) text-to-video alignment:

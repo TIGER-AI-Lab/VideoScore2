@@ -1,6 +1,12 @@
+vbench
+additional:
+gdown scenedetect timm==0.6.13 yacs 
+
+vbench2/third_party/ViTDetector/detect.py line24
+from timm.data.transforms_factory import _pil_interp
+
 shared:
 pip install datasets==2.19.2 gdown opencv-python-headless pandas pyarrow
-
 
 vs2_eval (for vs2, mllm, feat, aigve_macs)
 pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0

@@ -527,15 +527,15 @@ if __name__ == "__main__":
         # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192_infer_2fps.json",
         # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_2400_infer_2fps.json",
         # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_1e-6_base960_720_reward4_temporal_2400_infer_2fps.json",
-        # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_17k_1e-4_2fps_960_720_8192_float_infer_2fps_tempe=0.7.json",
+        # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_17k_5e-5_2fps_960_720_8192_float_infer_2fps_tempe=0.7.json",
         # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_2400_float_infer_2fps_tempe=0.7.json",
         
-        "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_2e-5_2fps_960_720_8192_infer_2fps.json",
+        # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_5e-5_2fps_960_720_8192_infer_2fps.json",
         # "vs2":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_qwen2_5_vl_300_infer_2fps.json",
 
         # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_5e-5_2fps_960_720_8192_float_infer_2fps_tempe=0.7.json",
-        # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_1e-6_base_qwen2_5_vl_300_float_infer_2fps_tempe=0.7.json",
-        
+        # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_qwen2_5_vl_300_float_infer_2fps_tempe=0.7.json",
+        # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_5e-5_960_720_300_float_infer_2fps_tempe=0.7.json",
         
         
         # "vs1":f"res_data/res_{bench}/VideoScore.json",
@@ -559,9 +559,13 @@ if __name__ == "__main__":
         # "o4-mini":f"res_data/res_{bench}/open-router-o4-mini_infer_2fps.json",
         # "grok-4":f"res_data/res_{bench}/open-router-grok-4_infer_2fps.json",
         # "gemma-3-27b-it":f"res_data/res_{bench}/open-router-gemma-3-27b-it_infer_2fps.json",
+        # "qwen2.5-vl-7b-instruct":f"res_data/res_{bench}/open-router-qwen2.5-vl-7b-instruct_infer_2fps.json",
+        # "qwen2.5-vl-32b-instruct":f"res_data/res_{bench}/open-router-qwen2.5-vl-32b-instruct_infer_2fps.json",
         # "qwen2.5-vl-72b-instruct":f"res_data/res_{bench}/open-router-qwen2.5-vl-72b-instruct_infer_2fps.json",
         # "llama-4-scout":f"res_data/res_{bench}/open-router-llama-4-scout_infer_2fps.json",
+        # "llama-4-maverick":f"res_data/res_{bench}/open-router-llama-4-maverick_infer_2fps.json",
         # "glm-4.1v-9b-thinking":f"res_data/res_{bench}/open-router-glm-4.1v-9b-thinking_infer_2fps.json",
+        # "glm-4.5v":f"res_data/res_{bench}/open-router-glm-4.5v_infer_2fps.json",
     }
     
     for method_name, res_p in res_path_mapping.items():

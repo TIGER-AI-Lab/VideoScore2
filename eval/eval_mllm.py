@@ -164,8 +164,8 @@ if __name__ == "__main__":
         # "anthropic/claude-sonnet-4",
         # "google/gemini-2.5-pro",
         # "openai/gpt-5",
-        "qwen/qwen2.5-vl-32b-instruct",
-        "qwen/qwen2.5-vl-7b-instruct",
+        # "meta-llama/llama-4-maverick",
+        # "z-ai/glm-4.5v",
     ]:
         
         args={
@@ -185,9 +185,11 @@ if __name__ == "__main__":
                 # "model_name":"meta-llama/llama-4-maverick",
                 # "model_name":"meta-llama/llama-4-scout",
                 # "model_name":"thudm/glm-4.1v-9b-thinking",
+                # "model_name":"z-ai/glm-4.5v",
                 # "model_name":"qwen/qwen2.5-vl-7b-instruct",
                 # "model_name":"qwen/qwen2.5-vl-32b-instruct",
                 # "model_name":"qwen/qwen2.5-vl-72b-instruct",
+                
                 "model_name":model_name,
                 "api_key":os.environ["OPEN_ROUTER_KEY0"],
                 "thinking_enabled": True,
