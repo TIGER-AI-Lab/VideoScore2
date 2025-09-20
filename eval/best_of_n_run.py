@@ -10,7 +10,8 @@ from tqdm import tqdm
 from eval_methods.vs2 import eval_VideoScore2
 from benchmark import VS2_QUERY_TEMPLATE
 
-NUM_VIDEOS = 500         
+NUM_VIDEOS_ALL = 700    
+NUM_VIDEOS_QUAL = 500        
 GROUP_SIZE = 5         
 ROUND_DIGIT = 4
 
@@ -30,35 +31,51 @@ def set_logger(t2v_model,log_name):
 
 def main(t2v_model, eval_model):
     data_root_dir = "best_of_n"
-    
-    logger = set_logger(t2v_model,f"{data_root_dir}/best_of_n_vs2_logs/{t2v_model}.log")
-
-    device = torch.device(f"cuda:0" if torch.cuda.is_available() else "cpu")
-    vs2 = eval_VideoScore2(eval_model, device=device)
 
     prompt_file = f"{data_root_dir}/best_of_n_prompts_500.jsonl"
     prompt_item_list = [json.loads(line) for line in open(prompt_file, "r")]
-
-    video_dir = os.path.join(data_root_dir, "videos", t2v_model)
-    res_dir="res_vs2_on_five_videos"
+    
+    raw_video_dir = os.path.join(data_root_dir, "videos", t2v_model)
+    all_qual_videos=[]
+    for seed_idx in range(GROUP_SIZE):
+        all_qual_videos.extend(os.listdir(f"{data_root_dir}/videos/{t2v_model}_seed{seed_idx}"))
+        
+    res_dir = "res_vs2_on_five_videos"
     res_file = os.path.join(data_root_dir, res_dir, f"{t2v_model}.json")
     os.makedirs(os.path.dirname(res_file), exist_ok=True)
     
-    grouped_video_list = [[] for _ in range(NUM_VIDEOS)]
-    for video_name in sorted(os.listdir(video_dir)):
+    grouped_video_list = [[] for _ in range(NUM_VIDEOS_ALL)]
+    for video_name in sorted(all_qual_videos):
         group_idx = int(video_name.split("_")[1])
-        if group_idx < NUM_VIDEOS:
-            grouped_video_list[group_idx].append(video_name)
+        grouped_video_list[group_idx].append(video_name)
 
-    for group_idx, video_group in enumerate(grouped_video_list):
-        if len(video_group) != GROUP_SIZE:
-            logger.error(f"Group {group_idx} size mismatch: {len(video_group)} != {GROUP_SIZE}")
-            return
-
+    unzero_count = sum(1 for group in grouped_video_list if group)
+    print(f"Number of groups: {unzero_count}")
+    
+    # ============ resume 部分 ============
+    logger = set_logger(t2v_model, f"{data_root_dir}/best_of_n_vs2_logs/{t2v_model}.log")
+    vs2_model = eval_VideoScore2(eval_model)
+    
+    finished_groups = set()
     res_list = []
+    if os.path.exists(res_file):
+        with open(res_file, "r") as f:
+            res_list = json.load(f)
+        finished_groups = {item["group_idx"] for item in res_list}
+        logger.info(f"Resuming from existing results, already finished {len(finished_groups)} groups.")
+
     method_kwargs = {"max_tokens": 1024, "infer_fps": 2.0}
 
-    for group_idx, video_group in tqdm(enumerate(grouped_video_list), total=NUM_VIDEOS):
+    for group_idx, video_group in tqdm(enumerate(grouped_video_list), total=NUM_VIDEOS_ALL):
+        if video_group == []:
+            continue
+        if group_idx in finished_groups:
+            continue
+
+        if len(video_group) != GROUP_SIZE:
+            logger.error(f"Group {group_idx} size mismatch: {len(video_group)} != {GROUP_SIZE}")
+            continue
+
         s_time_each_group = time.time()
         group_res_dict = {
             "group_idx": group_idx,
@@ -69,18 +86,12 @@ def main(t2v_model, eval_model):
         scores_mean = []
 
         for video in sorted(video_group):
-            video_path = os.path.join(video_dir, video)
-            for item in prompt_item_list:
-                if item['idx'] == group_idx:
-                    prompt = item['text']
-                    break
-                else:
-                    prompt=""
-            t2v_prompt = prompt
-            user_prompt = VS2_QUERY_TEMPLATE.substitute(t2v_prompt=t2v_prompt)
+            video_path = os.path.join(raw_video_dir, video)
+            prompt = next((item['text'] for item in prompt_item_list if item['idx'] == group_idx), "")
+            user_prompt = VS2_QUERY_TEMPLATE.substitute(t2v_prompt=prompt)
 
             with torch.no_grad():
-                v_score, t_score, p_score, _ = vs2.evaluate_video(
+                v_score, t_score, p_score, _ = vs2_model.evaluate_video(
                     user_prompt=user_prompt,
                     video_path=video_path,
                     kwargs=method_kwargs
@@ -99,19 +110,17 @@ def main(t2v_model, eval_model):
                 "mean": round(mean_score, ROUND_DIGIT)
             })
 
-        # 选出 best
         index_best = int(np.argmax(scores_mean))
         group_res_dict["best"] = group_res_dict["scores"][index_best]["video"]
+
         res_list.append(group_res_dict)
+        with open(res_file, "w") as f:
+            json.dump(res_list, f, indent=4)
 
         logger.info(f"[Group {group_idx}] means: {scores_mean}, best index: {index_best}")
         logger.info(f"Time: {time.time() - s_time_each_group:.2f}s")
 
-    # 保存结果
-    with open(res_file, "w") as f:
-        json.dump(res_list, f, indent=4)
-
-    logger.info(f"Total run time for {t2v_model}: {time.time() - s_time_each_group:.2f}s")
+    logger.info(f"Finished all groups. Results saved in {res_file}")
 
 
 if __name__ == "__main__":
@@ -120,6 +129,7 @@ if __name__ == "__main__":
     parser.add_argument("--eval_model", type=str, required=True,)
     args = parser.parse_args()
 
-    main(args.t2v_model, args.eval_modeld)
+    main(args.t2v_model, args.eval_model)
 
+    
     
