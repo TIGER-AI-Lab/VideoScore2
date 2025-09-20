@@ -124,9 +124,9 @@ class eval_VideoScore2_float:
                         j += 1
             return -1
 
-        idx_v = find_score_token_index_by_prompt("(1) visual quality:")
-        idx_t = find_score_token_index_by_prompt("(2) text-to-video alignment:")
-        idx_p = find_score_token_index_by_prompt("(3) physical/common-sense consistency:")
+        idx_v = find_score_token_index_by_prompt("visual quality:")
+        idx_t = find_score_token_index_by_prompt("text-to-video alignment:")
+        idx_p = find_score_token_index_by_prompt("physical/common-sense consistency:")
 
 
         def ll_based_soft_score(hard_val, token_idx):
