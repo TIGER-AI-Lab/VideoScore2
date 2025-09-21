@@ -327,7 +327,6 @@ if __name__ == "__main__":
 
     # download_video_from_data(data_paths,f_v_save_dir,max_workers=12)
     
-
     # TEST_NUM=500
     # sft_data_name="sft_hq_20k"
     # visual_format="v"

@@ -24,6 +24,13 @@ pip install openai
 pip install google-generativeai
 pip install anthropic
 
+vader_vc
+Name: transformers
+Version: 4.25.1
+Name: accelerate
+Version: 0.31.0
+
+
 
 vs1_eval:
 pip install transformers==4.45.0

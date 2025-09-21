@@ -110,7 +110,22 @@ class eval_VideoScore2_float:
         else:
             v_score_model = t_score_model = p_score_model = None 
         
-        def find_score_token_index_by_prompt(prompt_text: str) -> int:
+        # def find_score_token_index_by_prompt(prompt_text: str) -> int:
+        #     prompt_tokens = self.tokenizer.encode(prompt_text, add_special_tokens=False)
+        #     gen_ids = gen_token_ids  
+        #     print("Prompt tokens:", prompt_tokens, self.tokenizer.decode(prompt_tokens))
+        #     print("Generated tokens snippet:", gen_ids[:50], self.tokenizer.decode(gen_ids[:50]))
+        #     for i in range(len(gen_ids) - len(prompt_tokens)):
+        #         if gen_ids[i:i+len(prompt_tokens)] == prompt_tokens:
+        #             j = i + len(prompt_tokens)
+        #             while j < len(gen_ids):
+        #                 token_str = self.tokenizer.decode([gen_ids[j]]).strip()
+        #                 if token_str.isdigit():
+        #                     return j
+        #                 j += 1
+        #     return -1
+        
+        def find_score_token_index_by_prompt_v0(prompt_text: str) -> int:
             prompt_tokens = self.tokenizer.encode(prompt_text, add_special_tokens=False)
             gen_ids = gen_token_ids  
 
@@ -123,12 +138,34 @@ class eval_VideoScore2_float:
                             return j
                         j += 1
             return -1
+        
+        def find_score_token_index_by_prompt(prompt_text: str):
+            import re
+            gen_ids = gen_token_ids
+            gen_str = self.tokenizer.decode(gen_ids, skip_special_tokens=False)
 
+            pattern = r"(?:\(\d+\)\s*|\n\s*)?" + re.escape(prompt_text)
+            match = re.search(pattern, gen_str, flags=re.IGNORECASE)
+            if not match:
+                return -1
+            after_text = gen_str[match.end():]
+            num_match = re.search(r"\d", after_text)
+            if not num_match:
+                return -1
+
+            target_substr = gen_str[:match.end() + num_match.start() + 1]
+
+            for i in range(len(gen_ids)):
+                partial = self.tokenizer.decode(gen_ids[:i+1], skip_special_tokens=False)
+                if partial == target_substr:
+                    return i
+            return -1
+
+        
         idx_v = find_score_token_index_by_prompt("visual quality:")
         idx_t = find_score_token_index_by_prompt("text-to-video alignment:")
         idx_p = find_score_token_index_by_prompt("physical/common-sense consistency:")
-
-
+        
         def ll_based_soft_score(hard_val, token_idx):
             if hard_val is None or token_idx < 0:
                 return None
@@ -144,10 +181,7 @@ class eval_VideoScore2_float:
         def ll_based_soft_score_weighted(hard_val, token_idx) -> float:
             if hard_val is None or token_idx < 0:
                 return None
-
-
             logits = scores[token_idx][0]  
-
             score_range = list(range(1, 6)) 
             valid_token_ids = []
             for s in score_range:
@@ -164,7 +198,6 @@ class eval_VideoScore2_float:
             values, token_ids = zip(*valid_token_ids)
             logits_subset = torch.tensor([logits[tid].item() for tid in token_ids], dtype=torch.float32)
             probs = torch.softmax(logits_subset, dim=-1).numpy()
-
             soft = float(sum(s * p for s, p in zip(values, probs)))
 
             print(f"hard score={hard_val}, token_idx={token_idx}, softmax probs:")
@@ -177,10 +210,7 @@ class eval_VideoScore2_float:
         def ll_based_soft_score_normed(hard_val, token_idx) -> float:
             if hard_val is None or token_idx < 0:
                 return None
-
             logits = scores[token_idx][0]  # [vocab]
-
-            # 1~5分的候选 token
             score_range = list(range(1, 6))
             score_probs = []  # [(score, prob)]
 

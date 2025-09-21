@@ -575,12 +575,13 @@ if __name__ == "__main__":
             # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_17k_5e-5_2fps_960_720_8192_infer_2fps.json",
             # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_2400_infer_2fps.json",
             # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_2400_float_infer_2fps_tempe=0.7.json",
-            "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_5e-5_2fps_960_720_8192_float_infer_2fps_tempe=0.7.json",
-            # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_qwen2_5_vl_300_float_infer_2fps_tempe=0.7.json",
-        # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_5e-5_960_720_300_float_infer_2fps_tempe=0.7.json",
-        # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_part17k_5e-5_960_720_200_float_infer_2fps_tempe=0.7.json",
+            
+            # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_5e-5_2fps_960_720_8192_float_infer_2fps_tempe=0.7.json",
+            "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_qwen2_5_vl_300_float_infer_2fps_tempe=0.7.json",
+            # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_5e-5_960_720_300_float_infer_2fps_tempe=0.7.json",
+            # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_part17k_5e-5_960_720_200_float_infer_2fps_tempe=0.7.json",
         }
-        short_sampling=1
+        short_sampling=0
         short_sample_num=3000
         
         for method,score_json in score_json_mapping.items():
@@ -588,8 +589,8 @@ if __name__ == "__main__":
                 "method": method,
                 "src_file":src_file,
                 "score_json":score_json,
-                # "with_ties":False,
-                "with_ties":True,
+                "with_ties":False,
+                # "with_ties":True,
             }
             
             main(bench,kwargs,short_sampling)

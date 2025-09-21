@@ -106,6 +106,31 @@ def plot_hist(data,path,interval=50):
     plt.grid(axis='y', linestyle='--', alpha=0.7)
     plt.savefig(path)
 
+
+def resume_int_from_float(p,new_p):
+    import re
+    data=json.load(open(p,'r',encoding='utf-8'))
+    new_data=[]
+    for item in data:
+        new_item=item
+        output_text=item['output']
+
+        pattern = r"visual quality:\s*(\d+).*?text-to-video alignment:\s*(\d+).*?physical/common-sense consistency:\s*(\d+)"
+        match = re.search(pattern, output_text, re.DOTALL | re.IGNORECASE)
+        if match:
+            v_score_model = int(match.group(1))
+            t_score_model = int(match.group(2))
+            p_score_model = int(match.group(3))
+        else:
+            v_score_model = t_score_model = p_score_model = None 
+        new_item['v_score_model']=v_score_model
+        new_item['t_score_model']=t_score_model
+        new_item['p_score_model']=p_score_model
+        new_data.append(new_item)
+    with open(new_p,'w',encoding='utf-8') as f:
+        json.dump(new_data,f,ensure_ascii=False,indent=4)
+
+
 if __name__ == "__main__":
 
     # import re
@@ -145,24 +170,25 @@ if __name__ == "__main__":
     # with tarfile.open(zip_save_path, "r:gz") as tar:
     #     tar.extractall(path=dest)
     
-    with open("output_new/data.json","r") as f:
-        data=json.load(f)
-    print(len(data))
-    print(data[0].keys())
-    print(data[0]['question'])
-    print(data[0]['choice_A'])
+    # with open("output_new/data.json","r") as f:
+    #     data=json.load(f)
+    # print(len(data))
+    # print(data[0].keys())
+    # print(data[0]['question'])
+    # print(data[0]['choice_A'])
     
-    exit()
-    with open("output_new/longmemeval_s.json","r") as f:
-        data=json.load(f)
+    # exit()
+    # with open("output_new/longmemeval_s.json","r") as f:
+    #     data=json.load(f)
     
-    print(data[0].keys())
-    print(len(data[0]['haystack_sessions']))
-    for i in range(10):
-        # print(data[0]['haystack_session_ids'][i])
-        print(data[0]['haystack_dates'][i])
-        print(data[0]['haystack_sessions'][i])
-        print("\n\n\n")
+    # print(data[0].keys())
+    # print(len(data[0]['haystack_sessions']))
+    # for i in range(10):
+    #     # print(data[0]['haystack_session_ids'][i])
+    #     print(data[0]['haystack_dates'][i])
+    #     print(data[0]['haystack_sessions'][i])
+    #     print("\n\n\n")
+    
     # print(data[0]['haystack_sessions'][1])
     # for k,v in data[0].items():
     #     if len(v)<=50:
@@ -173,5 +199,10 @@ if __name__ == "__main__":
     
     # print(len(os.listdir("data/videos")))
     None
+    p="res_data/res_vs2_test_sft_27k/dis_vs2_grpo_27k_2e-6_base_sft_part17k_5e-5_960_720_400_float_infer_2fps_tempe=0.7.json"
+    new_p="res_data/res_vs2_test_sft_27k/vs2_grpo_27k_2e-6_base_sft_part17k_5e-5_960_720_400_infer_2fps.json"
+
+    resume_int_from_float(p,new_p)
+    
     
     

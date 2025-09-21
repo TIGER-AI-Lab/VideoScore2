@@ -6,9 +6,8 @@ import logging
 import time
 import numpy as np
 from tqdm import tqdm
+import subprocess
 
-from eval_methods.vs2 import eval_VideoScore2
-from benchmark import VS2_QUERY_TEMPLATE
 
 NUM_VIDEOS_ALL = 700    
 NUM_VIDEOS_QUAL = 500        
@@ -30,30 +29,28 @@ def set_logger(t2v_model,log_name):
 
 
 def main(t2v_model, eval_model):
-    data_root_dir = "best_of_n"
-
-    prompt_file = f"{data_root_dir}/best_of_n_prompts_500.jsonl"
+    prompt_file = f"{BoN_dir}/best_of_n_prompts_500.jsonl"
     prompt_item_list = [json.loads(line) for line in open(prompt_file, "r")]
+    qual_group_idx_list = [x['idx'] for x in prompt_item_list]
     
-    raw_video_dir = os.path.join(data_root_dir, "videos", t2v_model)
-    all_qual_videos=[]
-    for seed_idx in range(GROUP_SIZE):
-        all_qual_videos.extend(os.listdir(f"{data_root_dir}/videos/{t2v_model}_seed{seed_idx}"))
-        
-    res_dir = "res_vs2_on_five_videos"
-    res_file = os.path.join(data_root_dir, res_dir, f"{t2v_model}.json")
-    os.makedirs(os.path.dirname(res_file), exist_ok=True)
-    
+    raw_video_dir = os.path.join(BoN_dir, "videos", t2v_model)
     grouped_video_list = [[] for _ in range(NUM_VIDEOS_ALL)]
-    for video_name in sorted(all_qual_videos):
-        group_idx = int(video_name.split("_")[1])
-        grouped_video_list[group_idx].append(video_name)
+    for video in os.listdir(raw_video_dir):
+        group_idx=int(video.split("_")[1])
+        if group_idx in qual_group_idx_list:
+            grouped_video_list[group_idx].append(video)                 
 
     unzero_count = sum(1 for group in grouped_video_list if group)
     print(f"Number of groups: {unzero_count}")
+    print(f"Number of videos: {sum(len(group) for group in grouped_video_list)}")
     
-    # ============ resume 部分 ============
-    logger = set_logger(t2v_model, f"{data_root_dir}/best_of_n_vs2_logs/{t2v_model}.log")
+    res_dir = "res_vs2_on_five_videos"
+    res_file = os.path.join(BoN_dir, res_dir, f"{t2v_model}.json")
+    os.makedirs(os.path.dirname(res_file), exist_ok=True)
+    
+    logger = set_logger(t2v_model, f"{BoN_dir}/best_of_n_vs2_logs/{t2v_model}.log")
+    from eval_methods.vs2 import eval_VideoScore2
+    from benchmark import VS2_QUERY_TEMPLATE
     vs2_model = eval_VideoScore2(eval_model)
     
     finished_groups = set()
@@ -127,9 +124,29 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--t2v_model", type=str, required=True,)
     parser.add_argument("--eval_model", type=str, required=True,)
+    parser.add_argument("--bon_dir", type=str, required=False,default="best_of_n")
     args = parser.parse_args()
 
-    main(args.t2v_model, args.eval_model)
+    t2v_model = args.t2v_model
+    eval_model = args.eval_model
+    BoN_dir = args.bon_dir
+    
+    cwd = os.getcwd()
+    os.makedirs(BoN_dir, exist_ok=True)
+    os.chdir(BoN_dir)
+    os.makedirs("videos", exist_ok=True)
+    zip_name = f"{t2v_model}.zip"
+    url = f"https://huggingface.co/datasets/hexuan21/vs2_sft_video/resolve/main/best_of_n/{zip_name}"
+    subprocess.run(["wget", url], check=True)
+    print("Download completed.")
+    target_dir = os.path.join("videos", t2v_model)
+    os.makedirs(target_dir, exist_ok=True)
+    subprocess.run(["unzip",  "-o", zip_name, "-d", target_dir], check=True)
+    os.remove(zip_name)
+    print("Unzip completed.")
+    os.chdir(cwd)
+    
+    main(t2v_model, eval_model)
 
     
     
