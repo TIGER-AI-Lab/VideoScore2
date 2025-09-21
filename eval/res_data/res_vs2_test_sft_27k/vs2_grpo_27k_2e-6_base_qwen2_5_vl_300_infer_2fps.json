@@ -9479,5 +9479,24 @@
         "t_score_model": 3,
         "p_score_model": 3,
         "output": "visual quality: 3;  \ntext-to-video alignment: 3;\nphysical/common-sense consistency: 3;\n\nExplanation:\n- Visual quality: The video appears to have moderate resolution and clarity, but the lighting seems slightly uneven, which affects the overall brightness and contrast. There are no significant issues with blurriness or misalignment, but the scene could benefit from better lighting to enhance the visual appeal.\n- Text-to-video alignment: The video accurately depicts the main characters (a young man and woman), their clothing (gray t-shirt with a cartoon design, purple shirt, black cap), and the setting (kitchen with a white brick wall, stainless steel sink). However, the blue polka-dot tablecloth and pink bowl are not visible in the provided image, suggesting a discrepancy between the prompt and the actual video content.\n- Physical/common-sense consistency: The scene is logical and coherent, with no apparent violations of common sense or physical laws. The interaction between the characters aligns with the described scenario, and there are no elements that seem out of place or unrealistic."
+    },
+    {
+        "video_name": "000846_i",
+        "video_url": "https://molar-public.oss-cn-hangzhou.aliyuncs.com/VideoScore/0500_0999/ltx_video_091/000846_i.mp4",
+        "prompt": "A person carefully pours white gelatin powder from a brown paper bag into a measuring cup filled with water. The scene is set against a spooky Halloween-themed background featuring a black-and-white web pattern, enhancing the eerie atmosphere. The camera focuses closely on the action, highlighting the steady hand and precise pouring into the cup, with the dark, festive backdrop adding to the Halloween vibe",
+        "visual_score": 2,
+        "visual_cmt_raw": "画面模糊扭曲变形",
+        "t2v_score": 3,
+        "t2v_cmt_raw": "没有小心翼翼，没有阴森的万圣节主题背景，没有手",
+        "phy_score": 2,
+        "phy_cmt_raw": "量杯里的粉末和水不自然，从棕色纸袋里倒出来的粉末像水流，不合理",
+        "thinking": "multi-dimensional analysis based on the text prompt and frames. The prompt describes a person carefully pouring white gelatin powder from a brown paper bag into a measuring cup filled with water, with a spooky Halloween backdrop featuring a black-and-white web pattern and a close focus on the pouring action. The frames show a brown bag, a black web-pattern background, a clear measuring cup, and a white substance pouring toward the cup, with the backdrop matching the theme.\n\nVisual Quality: The overall visual quality is below average (2). While some elements—the web-pattern backdrop and the measuring cup—are recognizable, there is pervasive motion blur during the pouring, and the streaming of the white substance looks soft and distorted. The scene is generally dim and lacks crisp detail in the key action, though lighting remains consistent. In sum, Visual Quality is not up to par and should be rated 2.\n\nText-to-Video Alignment: Alignment is mixed but closer to moderate (3). The backdrop and the presence of a measuring cup are consistent with the prompt, and a pouring action is depicted. However, there is no clearly visible human hand actively guiding the pour, and the material appears more like a liquid stream rather than the powdered gelatin described. These discrepancies reduce perfect alignment, yielding a moderate score.\n\nPhysical/Common-sense Consistency: The material behaves like a liquid stream rather than a powder, contradicting the described gelatin powder. The pouring motion lacks clear granular dynamics, and the absence of obvious hand interaction reduces realism. Overall, physical consistency is low (2).\n\nGround-truth scores: Visual Quality 2; Text-to-Video Alignment 3; Physical Consistency 2.",
+        "v_score_gt": 2,
+        "t_score_gt": 3,
+        "p_score_gt": 2,
+        "v_score_model": 2,
+        "t_score_model": 3,
+        "p_score_model": 2,
+        "output": "visual quality: 2;  \ntext-to-video alignment: 3;\nphysical/common-sense consistency: 2;\n\nExplanation:\n- Visual Quality: The video appears to have low resolution and lacks detail, which affects the overall clarity and smoothness. There is also some motion blur, especially around the pouring action, which detracts from the visual quality.\n- Text-to-Video Alignment: The video generally aligns with the description, showing a person pouring white gelatin powder into a measuring cup. However, the background does not fully capture the spooky Halloween theme, as it seems more abstract and less specific than described.\n- Physical/Common-Sense Consistency: The action of pouring gelatin powder into water is physically consistent. However, the background does not fully match the spooky Halloween theme, which slightly violates common sense. Additionally, the camera angle and focus could be improved to better highlight the pouring action."
     }
 ]
