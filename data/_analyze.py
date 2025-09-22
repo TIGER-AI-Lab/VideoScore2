@@ -103,7 +103,7 @@ def think_len_dist(paths,batch_name):
                 print(x['video_name'])
     
     bin_range=list(range(min(think_len_list)-100,max(think_len_list)+100,100))
-    plt.hist(think_len_list, bins=bin_range, edgecolor='black', rwidth=0.8)
+    plt.hist(think_len_list, bins=bin_range, rwidth=0.8)
     plt.xlabel('Thinking Length')
     plt.ylabel('Frequency')
     plt.title(f'Batch {batch_name} Thinking Len Distribution')
@@ -143,16 +143,16 @@ if __name__ == "__main__":
     # analyze_raw(anno_local_paths,batch_name)
     
     
-    thinking_paths=[
-        "thinking_new_score/tk_new_score_45.json",
-    ]
-    batch_name="45_modified"
-    analyze_thinking(thinking_paths,batch_name)
+    # thinking_paths=[
+    #     "thinking_new_score/tk_new_score_45.json",
+    # ]
+    # batch_name="45_modified"
+    # analyze_thinking(thinking_paths,batch_name)
     
     
-    # batch_name="final_1_gpt-5-nano"
+    # batch_name="final_think_len"
     # paths=[
-    #     f"thinking_final/{batch_name}.json"
+    #     f"thinking_final/{fname}" for fname in os.listdir("thinking_final") if fname.endswith('.json')
     # ]
     # think_len_dist(paths,batch_name)
     

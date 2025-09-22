@@ -28,6 +28,11 @@ def main(args):
         infer_fps=int(infer_fps)
         
     eval_res_path=f"res_data/res_{bench}/{model_name}_infer_{infer_fps}fps.json"
+    if "few_shot_config" in method_kwargs and \
+        method_kwargs["few_shot_config"]["enabled"] and method_kwargs["few_shot_config"]["few_shot_egs_path"] is not None:
+        num_egs=method_kwargs["few_shot_config"]["num_egs"]
+        eval_res_path=f"res_data/res_{bench}/{model_name}_infer_{infer_fps}fps_{num_egs}-shot.json"
+        
     metrics_report_path=f"res_metrics/met_{bench}/{model_name}.json"
     os.makedirs(os.path.dirname(eval_res_path),exist_ok=True)
     os.makedirs(os.path.dirname(metrics_report_path),exist_ok=True)
@@ -89,7 +94,7 @@ def main(args):
             eval_outputs.append(res_tuple)
     
     assert len(bench_data)==len(eval_outputs),"len(bench_data)==len(eval_outputs)"
-    
+
     for item,res_tuple in zip(bench_data,eval_outputs):
         video_name=item['video_name']
         prompt=item['prompt']
@@ -158,20 +163,25 @@ if __name__ == "__main__":
     
     
     bench_data_dir="bench_data"
-    MAX_WORKERS=4
+    MAX_WORKERS=2
+    bench_data_num="all"
+    few_shot_egs_path="eval_methods/utils_mllm/mllm_few_shot_egs.json"
     
     for model_name in [
         # "anthropic/claude-sonnet-4",
         # "google/gemini-2.5-pro",
         # "openai/gpt-5",
+        # "openai/gpt-5-mini",
         # "meta-llama/llama-4-maverick",
         # "z-ai/glm-4.5v",
+        # "qwen/qwen2.5-vl-32b-instruct",
+        "qwen/qwen2.5-vl-72b-instruct",
     ]:
         
         args={
             "method":"OR",  # options: "claude", "gpt", "gemini", "open_router"
             "bench":"vs2_test_sft_27k",
-            "bench_data_num":"all",
+            "bench_data_num":bench_data_num,
             "method_kwargs":{
                 # "model_name":"anthropic/claude-sonnet-4",
                 # "model_name":"google/gemini-2.5-pro",
@@ -197,6 +207,12 @@ if __name__ == "__main__":
                 "max_tokens":1024,
                 "temperature":0.7,
                 "infer_fps":2.0,
+                "few_shot_config":
+                    {
+                        "enabled": True,
+                        "num_egs": 3,
+                        "few_shot_egs_path":few_shot_egs_path,
+                    }          
             },
         }
 

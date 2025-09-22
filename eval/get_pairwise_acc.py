@@ -542,16 +542,13 @@ def main(bench,kwargs,short_sampling=False):
     
 if __name__ == "__main__":
     bench_src_file_mapping={
-        "videogen_reward_bench":"bench_data/videogen_reward_bench/videogen-rewardbench.csv",
+        # "videogen_reward_bench":"bench_data/videogen_reward_bench/videogen-rewardbench.csv",
+        
+        "t2vqa_db":"bench_data/t2vqa_db/t2vqa_db_pref.json",
         
         # "vision_reward_db_video":"bench_data/vision_reward_db_video/original_data_vision_reward_db_video.json",
-        
         # "genai_bench":None,
-        
-        # "t2vqa_db":"bench_data/t2vqa_db/t2vqa_db_pref.json",
-        
         # "tvge":"bench_data/tvge/tvge_pref.json"
-        
         # "mj_bench_video":"bench_data/mj_bench_video/mj_bench_video_raw.json"
     }
     
@@ -577,9 +574,16 @@ if __name__ == "__main__":
             # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_2400_float_infer_2fps_tempe=0.7.json",
             
             # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_5e-5_2fps_960_720_8192_float_infer_2fps_tempe=0.7.json",
-            "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_qwen2_5_vl_300_float_infer_2fps_tempe=0.7.json",
+            # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_5e-5_2fps_960_720_8192_infer_2fps.json",
+            
+            # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_qwen2_5_vl_300_float_infer_2fps_tempe=0.7.json",
+            # "vs2":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_qwen2_5_vl_300_infer_2fps.json",
+            
             # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_5e-5_960_720_300_float_infer_2fps_tempe=0.7.json",
-            # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_part17k_5e-5_960_720_200_float_infer_2fps_tempe=0.7.json",
+            "vs2":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_5e-5_960_720_300_infer_2fps.json",
+            
+            # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_part17k_5e-5_960_720_500_float_infer_2fps_tempe=0.7.json",
+            # "vs2":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_part17k_5e-5_960_720_500_infer_2fps.json",
         }
         short_sampling=0
         short_sample_num=3000
@@ -589,8 +593,8 @@ if __name__ == "__main__":
                 "method": method,
                 "src_file":src_file,
                 "score_json":score_json,
-                "with_ties":False,
-                # "with_ties":True,
+                # "with_ties":False,
+                "with_ties":True,
             }
             
             main(bench,kwargs,short_sampling)

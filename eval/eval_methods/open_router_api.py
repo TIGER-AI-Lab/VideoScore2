@@ -23,7 +23,8 @@ def open_router_run_one_video(
         "max_tokens":1024
         "temperature":0.7
         "thinking_enabled":False
-        "thinking_budget":2048
+        "thinking_budget":2048,
+        "few_shot_config":{}  # optional
         
     }
     """
@@ -62,9 +63,48 @@ def open_router_run_one_video(
                     ]
                 }
             ]
-        
+        if chat_config["few_shot_config"]["enabled"] is True and chat_config["few_shot_config"]["few_shot_egs_path"] is not None:
+            import random
+            num_egs=chat_config["few_shot_config"].get("num_egs",2)
+            few_shot_egs = random.sample(json.load(open(chat_config["few_shot_config"]["few_shot_egs_path"], "r", encoding="utf-8")), num_egs)
+            few_shot_msg=[]
+            few_shot_fps=1
+            for eg in few_shot_egs:
+                video_path=eg["video_path"]
+                few_shot_msg.extend([
+                    {
+                        "role": "user",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": eg["user_prompt"]
+                            },
+                            *[
+                                {
+                                    "type": "image_url",
+                                    "image_url": {
+                                        "url": f"data:image/jpeg;base64,{b64}"
+                                    }
+                                }
+                                for b64 in extract_video_frames_base64(video_path,few_shot_fps)
+                            ]
+                        ]
+                    },
+                    {
+                        "role": "assistant",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": eg["response"]
+                            }
+                        ]
+                    }
+                ])
+            
+            messages = few_shot_msg + messages
+            
         payload = {
-            "model": chat_config.get("model_name", "anthropic/claude-sonnet-4"),
+            "model": chat_config.get("model_name"),
             "messages": messages, 
             "max_tokens": chat_config.get("max_tokens", 1024),
             "temperature": chat_config.get("temperature", 0.7)
@@ -78,7 +118,10 @@ def open_router_run_one_video(
             payload["max_tokens"] = chat_config.get("max_tokens", 1024) + chat_config.get("thinking_budget", 2048)
 
         response = requests.post(url, headers=headers, data=json.dumps(payload))
-
+        print(f"[INFO] Open Router response status code: {response.status_code}")
+        if response.status_code != 200:
+            raise ValueError(f"Open Router API error: {response.text}")
+        
         thinking = str(response.json()['choices'][0]['message'].get('reasoning', ''))
         output = str(response.json()['choices'][0]['message'].get('content', ''))
         

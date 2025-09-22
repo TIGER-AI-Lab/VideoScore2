@@ -281,7 +281,7 @@ def get_acc(method_name,bench_name,score_res_path,metric_report_p):
     
     if method_name in ["image_reward"]:
         # ImageReward has 1 dim (final score), broadcast to 3 dim. 
-        # Raw score (float). Normalized to have mean=1 and std=1. Assume Gaussian Dist. Rescale to [1,2,3,4,5]  
+        # Raw score (float). Normalized to have mean=0 and std=1. Assume Gaussian Dist. Rescale to [1,2,3,4,5]  
         from scipy.stats import norm 
         v_scores_model = t_scores_model = p_scores_model = [
             1 if z < norm.ppf(0.2) else 2 if z < norm.ppf(0.4) else 3 if z < norm.ppf(0.6) else 4 if z < norm.ppf(0.8) else 5
@@ -489,15 +489,15 @@ def get_corr(method_name,bench_name,score_res_path,metric_report_p):
     # p_scores_model=[random.choice([1,2,3,4,5]) for _ in p_scores_gt]
     
     metrics_dict={        
-        "v_spcc":_compute_spcc(v_scores_model,v_scores_gt),
-        "t_spcc":_compute_spcc(t_scores_model,t_scores_gt),
-        "p_spcc":_compute_spcc(p_scores_model,p_scores_gt),
-        "overall_spcc":_compute_spcc(overall_scores_model,overall_scores_gt),
-            
         "v_plcc":_compute_plcc(v_scores_model,v_scores_gt),
         "t_plcc":_compute_plcc(t_scores_model,t_scores_gt),
         "p_plcc":_compute_plcc(p_scores_model,p_scores_gt),
         "overall_plcc":_compute_plcc(overall_scores_model,overall_scores_gt),
+                  
+        "v_spcc":_compute_spcc(v_scores_model,v_scores_gt),
+        "t_spcc":_compute_spcc(t_scores_model,t_scores_gt),
+        "p_spcc":_compute_spcc(p_scores_model,p_scores_gt),
+        "overall_spcc":_compute_spcc(overall_scores_model,overall_scores_gt),
          }
     print(list(metrics_dict.items())[:3])
     print(list(metrics_dict.items())[3:4])
@@ -516,8 +516,8 @@ def get_corr(method_name,bench_name,score_res_path,metric_report_p):
     #     },f,indent=4)
         
 if __name__ == "__main__":
-    bench="vs2_test_sft_27k"
-    # bench="mj_bench_video"
+    # bench="vs2_test_sft_27k"
+    bench="mj_bench_video"
     # bench="aigve_bench"
     # bench="video_phy2_test"
     # bench="tvge"
@@ -529,17 +529,19 @@ if __name__ == "__main__":
         # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_1e-6_base960_720_reward4_temporal_2400_infer_2fps.json",
         # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_17k_5e-5_2fps_960_720_8192_float_infer_2fps_tempe=0.7.json",
         # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_2400_float_infer_2fps_tempe=0.7.json",
-        
-        # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_5e-5_2fps_960_720_8192_infer_2fps.json",
-        # "vs2":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_qwen2_5_vl_300_infer_2fps.json",
 
-        # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_no_cot_5e-5_2fps_960_720_8192_float_infer_2fps_tempe=0.7.json",
-        # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_qwen2_5_vl_300_float_infer_2fps_tempe=0.7.json",
-        # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_5e-5_960_720_300_float_infer_2fps_tempe=0.7.json",
-        "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_part17k_5e-5_960_720_400_float_infer_2fps_tempe=0.7.json",
+
+        # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_5e-5_2fps_960_720_8192_float_infer_2fps_tempe=0.7.json",
+        # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_5e-5_2fps_960_720_8192_infer_2fps.json",
         
-        # res_data/res_vs2_test_sft_27k/vs2_grpo_27k_1e-6_base_qwen2_5_vl_300_float_infer_2fps_tempe=0.7.json
-        # res_data/res_vs2_test_sft_27k/vs2_grpo_27k_2e-6_base_qwen2_5_vl_300_float_infer_2fps_tempe=0.7.json
+        # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_qwen2_5_vl_300_float_infer_2fps_tempe=0.7.json",
+        # "vs2":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_qwen2_5_vl_300_infer_2fps.json",
+        
+        # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_5e-5_960_720_300_float_infer_2fps_tempe=0.7.json",
+        "vs2":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_5e-5_960_720_300_infer_2fps.json",
+        
+        # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_part17k_5e-5_960_720_500_float_infer_2fps_tempe=0.7.json",
+        # "vs2":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_part17k_5e-5_960_720_500_infer_2fps.json",
         
         # "vs1":f"res_data/res_{bench}/VideoScore.json",
         # "aigve_macs":f"res_data/res_{bench}/AIGVE-MACS.json",
@@ -563,8 +565,8 @@ if __name__ == "__main__":
         # "grok-4":f"res_data/res_{bench}/open-router-grok-4_infer_2fps.json",
         # "gemma-3-27b-it":f"res_data/res_{bench}/open-router-gemma-3-27b-it_infer_2fps.json",
         # "qwen2.5-vl-7b-instruct":f"res_data/res_{bench}/open-router-qwen2.5-vl-7b-instruct_infer_2fps.json",
-        # "qwen2.5-vl-32b-instruct":f"res_data/res_{bench}/open-router-qwen2.5-vl-32b-instruct_infer_2fps.json",
-        # "qwen2.5-vl-72b-instruct":f"res_data/res_{bench}/open-router-qwen2.5-vl-72b-instruct_infer_2fps.json",
+        # "qwen2.5-vl-32b-instruct":f"res_data/res_{bench}/open-router-qwen2.5-vl-32b-instruct_infer_2fps_3-shot.json",
+        # "qwen2.5-vl-72b-instruct":f"res_data/res_{bench}/open-router-qwen2.5-vl-72b-instruct_infer_2fps_3-shot.json",
         # "llama-4-scout":f"res_data/res_{bench}/open-router-llama-4-scout_infer_2fps.json",
         # "llama-4-maverick":f"res_data/res_{bench}/open-router-llama-4-maverick_infer_2fps.json",
         # "glm-4.1v-9b-thinking":f"res_data/res_{bench}/open-router-glm-4.1v-9b-thinking_infer_2fps.json",
