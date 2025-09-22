@@ -1,0 +1,1662 @@
+[
+    {
+        "video_name": "OpenSora_86aa85eec53c4b1293ef632e6183fe93",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/86aa85eec53c4b1293ef632e6183fe93.mp4",
+        "prompt": "A polar bear is playing guitar",
+        "t2v_model": "OpenSora",
+        "v_score_model": 1.3584094641852478,
+        "t_score_model": 0.7604419077070075,
+        "p_score_model": 0.9145010288461694,
+        "output": "visual quality: 1;  \ntext-to-video alignment: 2;  \nphysical/common-sense consistency: 1;  "
+    },
+    {
+        "video_name": "T2VTurbo_aadd660eca2b4d4788195c729920121f",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/aadd660eca2b4d4788195c729920121f.mp4",
+        "prompt": "A polar bear is playing guitar",
+        "t2v_model": "T2VTurbo",
+        "v_score_model": 2.7931537844067083,
+        "t_score_model": 3.404183822035066,
+        "p_score_model": 2.5197811412108244,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;\nphysical/common-sense consistency: 3;\n\nThe quality score is based on the following observations:\n\n1. **Visual Quality (4):**\n   - The resolution seems adequate for a small video, but it could be higher to enhance detail.\n   - The image appears clear, though the background is slightly blurred, which is common in AI-generated videos.\n   - There are no visible distortions or misalignments during playback.\n   - The lighting appears consistent, although the contrast and brightness might not be perfectly balanced.\n\n2. **Text-to-Video Alignment (4):**\n   - The video accurately shows a polar bear holding and seemingly playing a guitar.\n   - The presence of snow in the background aligns with the polar bear theme.\n   - All elements from the prompt (polar bear, guitar, snowy setting) are present and matched.\n\n3. **Physical/Common-Sense Consistency (3):**\n   - While the idea of a polar bear playing a guitar is imaginative, it is an unlikely scenario in the real world, thus violating common sense.\n   - No other apparent inconsistencies within the video itself are noted.\n\nOverall, the video achieves a balance between realistic elements (polar bear, guitar) and an imaginative setting, but the violation of common sense detracts slightly from the evaluation."
+    },
+    {
+        "video_name": "LaVie_af1c04dd0f9d401caceb65e95bd96624",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/af1c04dd0f9d401caceb65e95bd96624.mp4",
+        "prompt": "a ball bouncing on the floor",
+        "t2v_model": "LaVie",
+        "v_score_model": 1.6025182239351952,
+        "t_score_model": 2.8062301981670115,
+        "p_score_model": 2.880936064550494,
+        "output": "visual quality: 3;  \ntext-to-video alignment: 4;\nphysical/common-sense consistency: 3"
+    },
+    {
+        "video_name": "AnimateDiff_8d8dc5639665493095b9f7595e2ace22",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/8d8dc5639665493095b9f7595e2ace22.mp4",
+        "prompt": "a ball bouncing on the floor",
+        "t2v_model": "AnimateDiff",
+        "v_score_model": 2.1365183730409703,
+        "t_score_model": 1.7026374291975759,
+        "p_score_model": 1.8196405511080476,
+        "output": "visual quality: 2; \ntext-to-video alignment: 3,\nphysical/common-sense consistency: 2\n\nExplanation:\n- Visual Quality: The image appears to be somewhat blurry, which affects the clarity and detail, reducing the overall quality. The lighting seems uneven, which might be due to limitations in generating realistic lighting effects for a video.\n\n- Text-to-Video Alignment: The video aligns with the prompt \"a ball bouncing on the floor\" as it shows a ball in motion on a surface resembling a floor. However, the second ball appears to be stationary and does not contribute to the bouncing action, slightly detracting from the alignment with the prompt.\n\n- Physical/Common-Sense Consistency: The video does not violate common sense or physical laws. However, the second ball being stationary while the first one bounces may seem somewhat unusual, as both balls should ideally be in motion if the initial action was meant to be a continuous bouncing sequence. This minor inconsistency affects the score in this dimension."
+    },
+    {
+        "video_name": "T2VTurbo_d2f5ade7f1c74951b1108cc0e89cf9ee",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/d2f5ade7f1c74951b1108cc0e89cf9ee.mp4",
+        "prompt": "A person is bending back",
+        "t2v_model": "T2VTurbo",
+        "v_score_model": 1.737054644759612,
+        "t_score_model": 1.1985793307623283,
+        "p_score_model": 1.7724598745754034,
+        "output": "visual quality: 2;\ntext-to-video alignment: 2,\nphysical/common-sense consistency: 2"
+    },
+    {
+        "video_name": "AnimateDiffTurbo_0f4eb5304ee547dcb5edd60fe5b7db0e",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/0f4eb5304ee547dcb5edd60fe5b7db0e.mp4",
+        "prompt": "A person is bending back",
+        "t2v_model": "AnimateDiffTurbo",
+        "v_score_model": 2.4128907144581215,
+        "t_score_model": 1.630774444674008,
+        "p_score_model": 1.181648438613538,
+        "output": "visual quality: 3;  \ntext-to-video alignment: 2;\nphysical/common-sense consistency: 3;\n\nThe visual quality seems moderate with some local blurriness and possible misalignment. The text-to-video alignment is low because the character is not bending back as described in the prompt. However, the physical/common-sense consistency is good since there are no obvious violations of common sense or physical laws. Therefore, the quality score is 3."
+    },
+    {
+        "video_name": "AnimateDiff_7b2c417e776b4c4b8d137518de3ac499",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/7b2c417e776b4c4b8d137518de3ac499.mp4",
+        "prompt": "windmill",
+        "t2v_model": "AnimateDiff",
+        "v_score_model": 3.5410744672797185,
+        "t_score_model": 3.7287470170392996,
+        "p_score_model": 3.7623626875295364,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;  \nphysical/common-sense consistency: 3;\n\nExplanation:\n- Visual quality: The image appears clear with good detail, appropriate resolution, balanced brightness and contrast, no visible distortions, and a stable frame.\n- Text-to-video alignment: The video captures a windmill correctly, aligning with the text prompt. The elements such as the structure, colors, and position meet expectations.\n- Physical/common-sense consistency: The presence of modern wind turbines in the background alongside the traditional windmill is somewhat unusual but does not violate common sense directly. The scene presented adheres to real-world logic without apparent contradictions. However, it could be seen as slightly unusual due to the juxtaposition of old and new technology in one scene. \n\nGiven these observations, the score reflects a generally high-quality video aligned with the prompt, though there is a minor inconsistency in the inclusion of modern turbines within what seems to be a rural setting."
+    },
+    {
+        "video_name": "AnimateDiffTurbo_3e85c2e5a0794984a6ef22ef75ffa93f",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/3e85c2e5a0794984a6ef22ef75ffa93f.mp4",
+        "prompt": "windmill",
+        "t2v_model": "AnimateDiffTurbo",
+        "v_score_model": 1.778986784308786,
+        "t_score_model": 1.2232516189942193,
+        "p_score_model": 1.9208651331757673,
+        "output": "visual quality: 3; text-to-video alignment: 2; physical/common-sense consistency: 3"
+    },
+    {
+        "video_name": "LaVie_4f2b9289e25044aca8f8aeddd0c4790f",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/4f2b9289e25044aca8f8aeddd0c4790f.mp4",
+        "prompt": "a tie",
+        "t2v_model": "LaVie",
+        "v_score_model": 2.502443937476095,
+        "t_score_model": 3.796110356796088,
+        "p_score_model": 2.99176575691178,
+        "output": "The video content appears to be focused on a single object, which is a tie. Here’s the evaluation based on the dimensions provided:\n\n1. **Visual Quality**: The image quality seems sufficient to identify the object (tie), but without a full video and more details, it's hard to judge the overall visual quality comprehensively. The colors are distinct, and there is no visible blur or distortion. The lighting appears even, which suggests good visual quality.\n\n2. **Text-to-Video Alignment**: The video aligns with the text prompt as it clearly shows a tie. There is no indication that the video fails to capture the object mentioned in the text prompt.\n\n3. **Physical/Common-Sense Consistency**: The depiction of a tie in the image is consistent with what one would expect. There are no apparent inconsistencies or violations of common sense.\n\nGiven these observations, the quality score can be evaluated as follows:\nvisual quality: 3;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 3\n\nFinal Score: 3.67 (rounded to 3 if needed for a whole number system)."
+    },
+    {
+        "video_name": "OpenSora_3d3f79a6e6144fac8713acb29f7516cc",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/3d3f79a6e6144fac8713acb29f7516cc.mp4",
+        "prompt": "a tie",
+        "t2v_model": "OpenSora",
+        "v_score_model": 0.5136112171186541,
+        "t_score_model": 0.5400601555233445,
+        "p_score_model": 1.749353700553,
+        "output": "visual quality: 2;  \ntext-to-video alignment: 2;\nphysical/common-sense consistency: 1;\n\n**Explanation**: \n- **Visual Quality**: The image appears somewhat blurry, and the details are not very sharp, which suggests issues with resolution or focus. Moreover, there are no discernible dynamic elements, implying low smoothness. The image seems to suffer from slight misalignment, possibly due to the nature of the object being tied, leading to a sense of instability in the frame. The lighting appears even but lacks vibrancy, suggesting potential issues with contrast.\n\n- **Text-to-Video Alignment**: The content displayed aligns with the request for a tie, though it might be ambiguous since a tie is not clearly defined here. The red and white colors could be associated with a tie, but without more context, the alignment is uncertain.\n\n- **Physical/Common-Sense Consistency**: The object seems to be in motion, but the lack of clear context makes it difficult to assess if this motion is consistent with a typical tie being worn or manipulated. Given the partial nature of the image, there are no clear violations of common sense or physical laws; however, the lack of clear information makes it hard to judge fully."
+    },
+    {
+        "video_name": "OpenSora_9d5699d1b524493d92887b749e4eea67",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/9d5699d1b524493d92887b749e4eea67.mp4",
+        "prompt": "mansion",
+        "t2v_model": "OpenSora",
+        "v_score_model": 3.892578007725799,
+        "t_score_model": 3.7219730019585873,
+        "p_score_model": 3.7455536699725056,
+        "output": "visual quality: 4;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 4"
+    },
+    {
+        "video_name": "T2VTurbo_1a9eb873e6374714b5e5eb2e605120a6",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/1a9eb873e6374714b5e5eb2e605120a6.mp4",
+        "prompt": "mansion",
+        "t2v_model": "T2VTurbo",
+        "v_score_model": 3.999083003240077,
+        "t_score_model": 3.896723212557992,
+        "p_score_model": 3.9190468033599335,
+        "output": "visual quality: 4;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 4"
+    },
+    {
+        "video_name": "OpenSora_7a2e620619fb49d1aa1a5e802dcc7521",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/7a2e620619fb49d1aa1a5e802dcc7521.mp4",
+        "prompt": "A future where humans have achieved teleportation technology",
+        "t2v_model": "OpenSora",
+        "v_score_model": 1.8484556352157813,
+        "t_score_model": 1.0051126580708247,
+        "p_score_model": 2.5187060667416676,
+        "output": "visual quality: 3;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 2"
+    },
+    {
+        "video_name": "AnimateDiffTurbo_4265a018ed484c7c8f9b6f1980109173",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/4265a018ed484c7c8f9b6f1980109173.mp4",
+        "prompt": "A future where humans have achieved teleportation technology",
+        "t2v_model": "AnimateDiffTurbo",
+        "v_score_model": 3.8862294300852556,
+        "t_score_model": 2.14539744832216,
+        "p_score_model": 1.4800715909661566,
+        "output": "visual quality: 4  \ntext-to-video alignment: 3  \nphysical/common-sense consistency: 3  \n\nExplanation:\n- Visual Quality: The image has vibrant colors and a futuristic design, which aligns with the concept of a high-tech world in the future. However, there is some potential for improvement in terms of clarity and detail, particularly around the edges of objects, which could be slightly sharper. This justifies a score of 4 out of 5.\n- Text-to-Video Alignment: The image contains a futuristic character in a suit with a glowing interface, reflecting the concept of advanced technology. However, it lacks additional context (like a teleportation device or other elements) which could better align with the full prompt. This justifies a score of 3 out of 5.\n- Physical/Common-Sense Consistency: The image does not violate any laws of physics or display any inconsistencies. However, the teleportation concept in the prompt might expect a more detailed depiction, like a teleportation portal, which this image does not provide. This justifies a score of 3 out of 5. \n\nFinal Quality Score: 3.67 (rounded to 3)"
+    },
+    {
+        "video_name": "VideoCrafter2_fc8edc0e87cd4108881e6fd5c1554a1d",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/fc8edc0e87cd4108881e6fd5c1554a1d.mp4",
+        "prompt": "an umbrella and a handbag",
+        "t2v_model": "VideoCrafter2",
+        "v_score_model": 2.5734649748137723,
+        "t_score_model": 2.406139861756592,
+        "p_score_model": 1.5163462165508808,
+        "output": "visual quality: 3  \ntext-to-video alignment: 4  \nphysical/common-sense consistency: 3   \n"
+    },
+    {
+        "video_name": "OpenSora_da45a9cd1ec14e65a57eaae6abbbbf0f",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/da45a9cd1ec14e65a57eaae6abbbbf0f.mp4",
+        "prompt": "an umbrella and a handbag",
+        "t2v_model": "OpenSora",
+        "v_score_model": 1.7562142157174865,
+        "t_score_model": 1.392213630478681,
+        "p_score_model": 0.8186735136595893,
+        "output": "visual quality: 1  \ntext-to-video alignment: 2  \nphysical/common-sense consistency: 1  \n\nExplanation:  \n- Visual quality: The video appears to have low resolution, and it seems to be taken at night with poor lighting conditions, leading to a lack of clarity and detail. There is noticeable graininess which further decreases the image quality. Additionally, the motion blur due to the movement of objects suggests instability, which is not ideal for a clear visual presentation.\n\n- Text-to-video alignment: The video successfully shows both the umbrella and the handbag under the umbrella, which aligns with the text prompt. However, the context (night scene) and the limited information provided do not allow for full alignment with the textual details regarding the conditions (not explicitly mentioned but implied).\n\n- Physical/common-sense consistency: The video does not violate any common sense or physical laws. The scene depicted is plausible given the provided context; however, the lack of detail and clarity make it difficult to fully verify the consistency with reality. The umbrella is not open, which might seem unusual without more context, but this could be a result of the video capturing a momentary snapshot rather than the entire sequence of events."
+    },
+    {
+        "video_name": "ModelScope_dbe79b99bd0b4911a33a85fe3bef63e2",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/dbe79b99bd0b4911a33a85fe3bef63e2.mp4",
+        "prompt": "palace",
+        "t2v_model": "ModelScope",
+        "v_score_model": 0.8183790611910955,
+        "t_score_model": 0.6928224343670998,
+        "p_score_model": 1.775344524416527,
+        "output": "visual quality: 2;  \ntext-to-video alignment: 3;\nphysical/common-sense consistency: 3"
+    },
+    {
+        "video_name": "OpenSora_7de66f5fc8e845569874ba1d79e314aa",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/7de66f5fc8e845569874ba1d79e314aa.mp4",
+        "prompt": "palace",
+        "t2v_model": "OpenSora",
+        "v_score_model": 1.016050793093338,
+        "t_score_model": 2.384766469006125,
+        "p_score_model": 1.6615474286339178,
+        "output": "visual quality: 2;  \ntext-to-video alignment: 3;\nphysical/common-sense consistency: 2;"
+    },
+    {
+        "video_name": "ModelScope_5c090d5641984723ad7a83e62e8b6541",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/5c090d5641984723ad7a83e62e8b6541.mp4",
+        "prompt": "a bird soaring gracefully in the sky",
+        "t2v_model": "ModelScope",
+        "v_score_model": 1.7451063976091434,
+        "t_score_model": 0.9905007322433085,
+        "p_score_model": 2.0399751395131585,
+        "output": "visual quality: 3;  \ntext-to-video alignment: 2;\nphysical/common-sense consistency: 3;"
+    },
+    {
+        "video_name": "LaVie_f51881bb49854626bdecb06ea8e780db",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/f51881bb49854626bdecb06ea8e780db.mp4",
+        "prompt": "a bird soaring gracefully in the sky",
+        "t2v_model": "LaVie",
+        "v_score_model": 2.0785091879410875,
+        "t_score_model": 3.605219988446014,
+        "p_score_model": 2.9604604477913297,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;\nphysical/common-sense consistency: 3;\n\nExplanation:\n- Visual quality: The video appears to have a decent resolution and clarity, although it seems to lack some detail, possibly due to a lower frame rate or less sophisticated rendering quality. There are no visible distortions or misalignments, but the lighting is somewhat flat, which limits the dynamic range and detail visibility.\n- Text-to-video alignment: The video generally aligns with the description of a bird soaring in the sky. It captures the essence of movement and the presence of a bird without any significant discrepancies or deviations from the prompt.\n- Physical/common-sense consistency: While the scene of a bird flying is plausible and does not violate any physical laws, the image lacks the complexity and detail typically expected in a real-world depiction. The simplicity might be intentional to match the minimalistic prompt, but it slightly restricts the realism compared to a more detailed representation.\n\nOverall, the quality is good, with room for improvement in detail and realism. Therefore, the score is adjusted accordingly."
+    },
+    {
+        "video_name": "AnimateDiffTurbo_b8976fedd18b425d9077ebff72aca233",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/b8976fedd18b425d9077ebff72aca233.mp4",
+        "prompt": "indoor library",
+        "t2v_model": "AnimateDiffTurbo",
+        "v_score_model": 3.8579459231233177,
+        "t_score_model": 3.8801681306183644,
+        "p_score_model": 3.768528428544927,
+        "output": "visual quality: 4;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 4\n\nThe AI-generated video appears high-quality with a clear focus on the interior of a library. The visual properties, including the resolution and smoothness, seem satisfactory. The lighting and shadows are consistent with what you'd expect in a library setting, and there are no abrupt changes or distortions. For text-to-video alignment, the video accurately represents the main elements of a library—bookshelves filled with books and a reading area. There are no apparent inconsistencies with the concept of a real library. Overall, this video aligns well with the given prompt and displays a good balance of physical consistency and quality. Therefore, I assign a score of 4 across all dimensions."
+    },
+    {
+        "video_name": "StableVideoDiffusion_081c1d0a3cc84eaf9bfe0460193a7c02",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/081c1d0a3cc84eaf9bfe0460193a7c02.mp4",
+        "prompt": "indoor library",
+        "t2v_model": "StableVideoDiffusion",
+        "v_score_model": 3.9981459593164477,
+        "t_score_model": 3.9152561836088298,
+        "p_score_model": 3.817656939841924,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;\nphysical/common-sense consistency: 4;\n\nThe video clearly captures the essence of an indoor library with its shelves filled with books, warm lighting, and a classical design. The resolution appears high, with no visible blur or distortion. The lighting and shading are consistent, suggesting a well-lit environment without abrupt changes. However, the video lacks movement or activity, which might be seen as somewhat limited in terms of dynamic visual properties. The alignment between the prompt \"indoor library\" and the video content is perfect, as all elements described are present. There are no violations of common sense or physical inconsistencies apparent in the scene. Thus, the quality is assessed as high in all dimensions."
+    },
+    {
+        "video_name": "VideoCrafter2_b20e012f0e8f40d7a90b2f87c402b340",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/b20e012f0e8f40d7a90b2f87c402b340.mp4",
+        "prompt": "An astronaut flying in space, in super slow motion",
+        "t2v_model": "VideoCrafter2",
+        "v_score_model": 3.9587063155323743,
+        "t_score_model": 3.7788096132053246,
+        "p_score_model": 2.8813957485252577,
+        "output": "visual quality: 4; \ntext-to-video alignment: 4,\nphysical/common-sense consistency: 4\n\nThe video shows a high-resolution image with clear details of the astronaut's suit and the Earth in the background, indicating good visual quality. The slow-motion effect adds a dynamic element to the scene, which aligns with the text prompt. However, there are minor issues: the astronaut appears to float without visible thrusters, which might not fully represent the physics of space travel, potentially affecting the perception of physical consistency slightly. Despite this, the overall quality is high and the alignment with the prompt is strong."
+    },
+    {
+        "video_name": "T2VTurbo_d655070939a540bc9c4485ff4d1cedfa",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/d655070939a540bc9c4485ff4d1cedfa.mp4",
+        "prompt": "An astronaut flying in space, in super slow motion",
+        "t2v_model": "T2VTurbo",
+        "v_score_model": 3.8503161635487837,
+        "t_score_model": 3.6282037070265503,
+        "p_score_model": 2.4598734325255855,
+        "output": "visual quality: 4  \ntext-to-video alignment: 4  \nphysical/common-sense consistency: 4  \n\nExplanation:  \n- **Visual Quality**: The video appears to have good resolution and clarity, with smooth transitions between frames and appropriate brightness and contrast levels. There are no noticeable blurriness or distortions. However, it seems to lack super slow motion, which could be more evident if the video were played at a slower frame rate for a better assessment.\n- **Text-to-Video Alignment**: The scene depicted matches the text prompt accurately. It shows an astronaut in space, which aligns with the \"an astronaut flying in space\" part. However, the slow motion aspect is not reflected, making this a partial match.\n- **Physical/Common-Sense Consistency**: The video follows the expected behavior for an astronaut floating in space without any obvious violations or inconsistencies. All elements seem logically consistent with a real-life space scenario.\n\nOverall, the video demonstrates high quality in terms of visual properties but falls short in the slow-motion aspect, thus affecting the alignment with the prompt. The consistency with physical laws is strong. Thus, a score of 4 is given."
+    },
+    {
+        "video_name": "T2VTurbo_8e62bb6a3ea6492fa6975a1fabc0dd9b",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/8e62bb6a3ea6492fa6975a1fabc0dd9b.mp4",
+        "prompt": "bakery shop",
+        "t2v_model": "T2VTurbo",
+        "v_score_model": 3.989452164335423,
+        "t_score_model": 3.919914749675672,
+        "p_score_model": 3.8186232332220627,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;\nphysical/common-sense consistency: 4;\n\nExplanation:\n- The visual quality is high with clear visibility of breads and displays, good lighting, and no noticeable blurriness or distortion.\n- The text-to-video alignment is accurate as the video shows a bakery shop with bread on display, which aligns with the prompt.\n- The physical consistency is good, as the video does not violate any physical laws or appear unnatural; it accurately reflects the environment of a bakery with no anomalies. \n\nThus, a score of 4 in all three dimensions seems appropriate."
+    },
+    {
+        "video_name": "AnimateDiff_313d4b02c21e410d85a2ed677f1bba20",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/313d4b02c21e410d85a2ed677f1bba20.mp4",
+        "prompt": "bakery shop",
+        "t2v_model": "AnimateDiff",
+        "v_score_model": 3.9656495405021577,
+        "t_score_model": 3.8580581022502365,
+        "p_score_model": 3.8208780537521423,
+        "output": "visual quality: 4;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 3"
+    },
+    {
+        "video_name": "OpenSora_088944b5c550488ba1ae11d1f486baa8",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/088944b5c550488ba1ae11d1f486baa8.mp4",
+        "prompt": "a toilet",
+        "t2v_model": "OpenSora",
+        "v_score_model": 1.7876365765607405,
+        "t_score_model": 3.8643528238615543,
+        "p_score_model": 2.784669843578434,
+        "output": "visual quality: 3;  \ntext-to-video alignment: 4;\nphysical/common-sense consistency: 3;\n\nExplanation:\n\n- Visual Quality: The video appears to have moderate resolution and clarity. However, it lacks dynamic elements or movement, which might make it seem less engaging. There is no evident local blurriness or distortion, but the scene could benefit from some additional context or better lighting to enhance the overall quality.\n\n- Text-to-Video Alignment: The content of the video aligns well with the text prompt \"a toilet.\" The image clearly shows a toilet, fulfilling the basic requirement of the text prompt.\n\n- Physical/Common-Sense Consistency: The video depicts a toilet in a bathroom setting, which is consistent with expectations and does not violate any common sense. However, the lack of context might leave some viewers with questions about the scene’s purpose or the setting.\n\nFinal Score: 3"
+    },
+    {
+        "video_name": "VideoCrafter2_1327cbdcc91c478a82a5ee6f100e9986",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/1327cbdcc91c478a82a5ee6f100e9986.mp4",
+        "prompt": "a toilet",
+        "t2v_model": "VideoCrafter2",
+        "v_score_model": 2.0714667577671335,
+        "t_score_model": 2.981392121564219,
+        "p_score_model": 3.4456124944162334,
+        "output": "visual quality: 4; \ntext-to-video alignment: 4,\nphysical/common-sense consistency: 4"
+    },
+    {
+        "video_name": "LaVie_01b00309fd4e47b09495ff1939fc3cfa",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/01b00309fd4e47b09495ff1939fc3cfa.mp4",
+        "prompt": "a boat slowing down to stop",
+        "t2v_model": "LaVie",
+        "v_score_model": 1.6634580861780752,
+        "t_score_model": 1.641111299264972,
+        "p_score_model": 2.8612532331400504,
+        "output": "visual quality: 3;  \ntext-to-video alignment: 4;  \nphysical/common-sense consistency: 3"
+    },
+    {
+        "video_name": "StableVideoDiffusion_13f587352ed9454b82ab347ec85c2503",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/13f587352ed9454b82ab347ec85c2503.mp4",
+        "prompt": "a boat slowing down to stop",
+        "t2v_model": "StableVideoDiffusion",
+        "v_score_model": 3.7094830874811904,
+        "t_score_model": 2.701870485414868,
+        "p_score_model": 2.276889101777904,
+        "output": "visual quality: 4;\ntext-to-video alignment: 3,\nphysical/common-sense consistency: 4"
+    },
+    {
+        "video_name": "T2VTurbo_9a82de30358f4a4788de639d825cf1e6",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/9a82de30358f4a4788de639d825cf1e6.mp4",
+        "prompt": "A cat wearing sunglasses at a pool",
+        "t2v_model": "T2VTurbo",
+        "v_score_model": 3.965435369439774,
+        "t_score_model": 3.9402025858584935,
+        "p_score_model": 2.942452180772296,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;\nphysical/common-sense consistency: 4;"
+    },
+    {
+        "video_name": "OpenSora_ad7464e2c93f42889a614cc8a0dd31d8",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/ad7464e2c93f42889a614cc8a0dd31d8.mp4",
+        "prompt": "A cat wearing sunglasses at a pool",
+        "t2v_model": "OpenSora",
+        "v_score_model": 3.4415423863535697,
+        "t_score_model": 3.918943985034441,
+        "p_score_model": 2.5646837643568645,
+        "output": "visual quality: 4;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 3"
+    },
+    {
+        "video_name": "AnimateDiff_e400f8e07d4945fb905dbeb3ce2b9b54",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/e400f8e07d4945fb905dbeb3ce2b9b54.mp4",
+        "prompt": "an airplane landing smoothly on a runway",
+        "t2v_model": "AnimateDiff",
+        "v_score_model": 2.7027384939260846,
+        "t_score_model": 3.1019549385662386,
+        "p_score_model": 2.9216659096352933,
+        "output": "visual quality: 3;  \ntext-to-video alignment: 4;\nphysical/common-sense consistency: 3"
+    },
+    {
+        "video_name": "ModelScope_c3403d48dc334f8596d62289bc5a1e60",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/c3403d48dc334f8596d62289bc5a1e60.mp4",
+        "prompt": "an airplane landing smoothly on a runway",
+        "t2v_model": "ModelScope",
+        "v_score_model": 1.2471166507291696,
+        "t_score_model": 0.6518115211949769,
+        "p_score_model": 0.9817252608906757,
+        "output": "visual quality: 1;\ntext-to-video alignment: 1;\nphysical/common-sense consistency: 1;"
+    },
+    {
+        "video_name": "OpenSora_af80dd517af844c4be025ee51e688d61",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/af80dd517af844c4be025ee51e688d61.mp4",
+        "prompt": "A fat rabbit wearing a purple robe walking through a fantasy landscape.",
+        "t2v_model": "OpenSora",
+        "v_score_model": 2.6889599323034816,
+        "t_score_model": 3.8966176070413048,
+        "p_score_model": 2.915388098470994,
+        "output": "visual quality: 3;   \ntext-to-video alignment: 4;\nphysical/common-sense consistency: 3;"
+    },
+    {
+        "video_name": "VideoCrafter2_c99a7670fa484a25a4da338b65d7274f",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/c99a7670fa484a25a4da338b65d7274f.mp4",
+        "prompt": "A fat rabbit wearing a purple robe walking through a fantasy landscape.",
+        "t2v_model": "VideoCrafter2",
+        "v_score_model": 3.6722848356619524,
+        "t_score_model": 3.9687414644929633,
+        "p_score_model": 2.960116526918552,
+        "output": "visual quality: 4; \ntext-to-video alignment: 4;\nphysical/common-sense consistency: 4;\n\nThis video appears to have good visual quality with adequate resolution and smoothness. However, there might be minor local blurriness and slight inconsistencies in the lighting, which could slightly reduce the score. The text-to-video alignment seems satisfactory as it correctly portrays a fat rabbit in a purple robe walking through a fantasy landscape, matching the prompt. The video maintains coherence and does not violate any known physical laws or common sense, therefore, the physical/common-sense consistency is also high. Given these observations, a score of 4 is assigned across all dimensions."
+    },
+    {
+        "video_name": "VideoCrafter2_9729747d4c464ddebc1c34736eb53b01",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/9729747d4c464ddebc1c34736eb53b01.mp4",
+        "prompt": "A tranquil tableau of in the serene courtyard, a centuries-old stone well stood as a symbol of a bygone era, its mossy stones bearing witness to the passage of time",
+        "t2v_model": "VideoCrafter2",
+        "v_score_model": 3.9932851334758936,
+        "t_score_model": 3.9696424706621545,
+        "p_score_model": 3.861792873759828,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;\nphysical/common-sense consistency: 4;"
+    },
+    {
+        "video_name": "ModelScope_002011af36374471a1224d3088bdd5dd",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/002011af36374471a1224d3088bdd5dd.mp4",
+        "prompt": "A tranquil tableau of in the serene courtyard, a centuries-old stone well stood as a symbol of a bygone era, its mossy stones bearing witness to the passage of time",
+        "t2v_model": "ModelScope",
+        "v_score_model": 2.2117212288634125,
+        "t_score_model": 3.7486640845498345,
+        "p_score_model": 2.8246496981178106,
+        "output": "visual quality: 3;  \ntext-to-video alignment: 4;  \nphysical/common-sense consistency: 4;"
+    },
+    {
+        "video_name": "OpenSora_f11a269d14f3438180a43ce19d978e57",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/f11a269d14f3438180a43ce19d978e57.mp4",
+        "prompt": "a truck slowing down to stop",
+        "t2v_model": "OpenSora",
+        "v_score_model": 1.8204094987801909,
+        "t_score_model": 1.5400645871458638,
+        "p_score_model": 1.885092353378667,
+        "output": "visual quality: 3;\ntext-to-video alignment: 2,\nphysical/common-sense consistency: 3"
+    },
+    {
+        "video_name": "AnimateDiffTurbo_1e8c05f54739423b80307bf934bcace0",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/1e8c05f54739423b80307bf934bcace0.mp4",
+        "prompt": "a truck slowing down to stop",
+        "t2v_model": "AnimateDiffTurbo",
+        "v_score_model": 2.0133743229138155,
+        "t_score_model": 2.499690843564921,
+        "p_score_model": 2.3407739010771413,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 3;  \nphysical/common-sense consistency: 3;  \n\nExplanation:\n\n- **Visual Quality**: The image appears relatively clear with good resolution and vibrant colors, but the overall scene lacks depth and detail, which is typical for stylized animations rather than realistic photography. There is no evident blurriness or misalignment, but it feels somewhat oversaturated and less natural compared to real-world images.\n\n- **Text-to-Video Alignment**: Despite the somewhat stylized nature, the vehicle depicted does resemble a truck. However, the scene lacks context (e.g., no road, no surrounding environment), which affects the accuracy in depicting the \"slowing down to stop\" action. Additionally, the perspective is unusual, making it harder to align with a realistic scenario where a truck would slow down.\n\n- **Physical/Common-Sense Consistency**: The image does not violate any physical laws or common sense regarding trucks and their behavior. It is logical that a truck could slow down to stop. However, the artistic style and lack of environmental context make the scene feel somewhat surreal and not entirely aligned with everyday experiences. The vehicle appears stationary, which contradicts the implied motion of slowing down to stop. \n\nThe score reflects these observations. While the animation is visually appealing and somewhat consistent with the prompt, it lacks the realism expected in a high-quality video."
+    },
+    {
+        "video_name": "VideoCrafter2_8989e163b3b141fba3732f8da959df96",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/8989e163b3b141fba3732f8da959df96.mp4",
+        "prompt": "a teddy bear and a frisbee",
+        "t2v_model": "VideoCrafter2",
+        "v_score_model": 3.9286300039377657,
+        "t_score_model": 3.924799954119077,
+        "p_score_model": 3.4060498696606096,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;  \nphysical/common-sense consistency: 4;"
+    },
+    {
+        "video_name": "StableVideoDiffusion_dc59f6daace6489cacd1ec8c2c16820b",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/dc59f6daace6489cacd1ec8c2c16820b.mp4",
+        "prompt": "a teddy bear and a frisbee",
+        "t2v_model": "StableVideoDiffusion",
+        "v_score_model": 3.9678779918685496,
+        "t_score_model": 3.7581604804906497,
+        "p_score_model": 2.884129329951602,
+        "output": "visual quality: 3;  \ntext-to-video alignment: 4;  \nphysical/common-sense consistency: 3;"
+    },
+    {
+        "video_name": "AnimateDiff_583f35f7a43242298bed08a1137b0388",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/583f35f7a43242298bed08a1137b0388.mp4",
+        "prompt": "a train speeding down the tracks",
+        "t2v_model": "AnimateDiff",
+        "v_score_model": 3.715337974229794,
+        "t_score_model": 3.6265529301452,
+        "p_score_model": 3.2041894254113874,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;  \nphysical/common-sense consistency: 4;\n\nThe video appears to have good visual quality with clear resolution, overall clarity, and smoothness. The train is visible and positioned appropriately on the tracks, indicating good alignment with the text prompt. The physical consistency is high, as there are no apparent violations of common sense or physical laws within the frame. A few minor issues could be addressed, but overall, the video meets the requirements well. Therefore, a score of 4 seems appropriate."
+    },
+    {
+        "video_name": "ModelScope_84094998b4574c0482b8ef1e85bc1011",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/84094998b4574c0482b8ef1e85bc1011.mp4",
+        "prompt": "a train speeding down the tracks",
+        "t2v_model": "ModelScope",
+        "v_score_model": 1.084358800286456,
+        "t_score_model": 2.3378423859561566,
+        "p_score_model": 1.8458695702031074,
+        "output": "visual quality: 2; \ntext-to-video alignment: 2,\nphysical/common-sense consistency: 2"
+    },
+    {
+        "video_name": "OpenSora_28f35acada764066827206a555ff18a0",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/28f35acada764066827206a555ff18a0.mp4",
+        "prompt": "A cute happy Corgi playing in park, sunset by Hokusai, in the style of Ukiyo",
+        "t2v_model": "OpenSora",
+        "v_score_model": 1.0966335163194079,
+        "t_score_model": 2.3212749613932098,
+        "p_score_model": 2.8695603214124077,
+        "output": "visual quality: 3;  \ntext-to-video alignment: 4;\nphysical/common-sense consistency: 3"
+    },
+    {
+        "video_name": "ModelScope_d1fcb5e2d6ed4f5ab85770f4e02e4d06",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/d1fcb5e2d6ed4f5ab85770f4e02e4d06.mp4",
+        "prompt": "A cute happy Corgi playing in park, sunset by Hokusai, in the style of Ukiyo",
+        "t2v_model": "ModelScope",
+        "v_score_model": 1.6440841576959047,
+        "t_score_model": 1.1670670969491472,
+        "p_score_model": 1.8389608743790478,
+        "output": "visual quality: 2;\ntext-to-video alignment: 2;\nphysical/common-sense consistency: 2;\n\nExplanation:\n- Visual Quality: The video suffers from low resolution and appears somewhat pixelated, which affects the overall clarity and smoothness. The background lacks detail, and there are no significant issues with local blurriness or abrupt changes. The lighting seems consistent, but the image quality is not high enough to judge the stability of brightness and contrast accurately.\n\n- Text-to-Video Alignment: The video contains a Corgi, which aligns with the text prompt mentioning a dog. However, the setting described (park, sunset by Hokusai, Ukiyo-style) is not fully reflected. While there might be a hint of a park-like setting with grass, the sunset by Hokusai or Ukiyo-style elements are not clearly depicted. The style also seems inconsistent with a modern park scene.\n\n- Physical/Common-Sense Consistency: The elements in the video seem somewhat disjointed. A Corgi playing in a park-like setting might be plausible, but the background does not logically connect to a sunset by Hokusai or the Ukiyo style, which suggests an inconsistency with common sense. The colors and shapes also do not align with traditional Japanese art styles.\n\nConsidering these points, the score reflects the moderate quality of the video given the limitations in detail and consistency with the prompt."
+    },
+    {
+        "video_name": "ModelScope_27a6c4e5beb14f9583ad8860529f5f3d",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/27a6c4e5beb14f9583ad8860529f5f3d.mp4",
+        "prompt": "an oven and scissors",
+        "t2v_model": "ModelScope",
+        "v_score_model": 2.4761765981329655,
+        "t_score_model": 3.4044771129134204,
+        "p_score_model": 2.860549586967732,
+        "output": "visual quality: 3;  \ntext-to-video alignment: 4;  \nphysical/common-sense consistency: 3;  "
+    },
+    {
+        "video_name": "LaVie_0efc235faf88496e9270b1fc88337024",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/0efc235faf88496e9270b1fc88337024.mp4",
+        "prompt": "an oven and scissors",
+        "t2v_model": "LaVie",
+        "v_score_model": 3.0100989912557017,
+        "t_score_model": 1.1881204361446656,
+        "p_score_model": 1.8235508119615855,
+        "output": "visual quality: 3;  \ntext-to-video alignment: 2;\nphysical/common-sense consistency: 3;\n\nExplanation:\n- **Visual Quality**: The video appears to have good resolution and clarity, with no significant issues related to blurriness, distortion, or abrupt changes. However, it seems somewhat basic in terms of detail and does not exhibit advanced features like high dynamic range or enhanced color grading.\n\n- **Text-to-Video Alignment**: The video does show an oven, which aligns with the prompt. However, it lacks the expected element of scissors, even though they are mentioned explicitly. This misalignment with the full text prompt could be due to an oversight in the generation process or the limitations of the model used to create the video.\n\n- **Physical/Common-Sense Consistency**: The scene depicted is realistic and follows the laws of physics (e.g., the bread inside the oven baking). There are no apparent anomalies or violations of common sense within this limited scope. However, the absence of scissors introduces a slight inconsistency with the expected elements."
+    },
+    {
+        "video_name": "AnimateDiff_7fabdb13b3534a98852c49ebbcddca0e",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/7fabdb13b3534a98852c49ebbcddca0e.mp4",
+        "prompt": "A cute happy Corgi playing in park, sunset, tilt down",
+        "t2v_model": "AnimateDiff",
+        "v_score_model": 3.9177271990930307,
+        "t_score_model": 3.7042235826567564,
+        "p_score_model": 2.6132186577317276,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 3;  \nphysical/common-sense consistency: 4;\n\nExplanation:  \n- Visual quality: The video appears clear with good resolution and lighting, but there might be slight motion blur due to the movement of the dog. The colors are vibrant and the overall scene looks natural.  \n- Text-to-video alignment: The video aligns well with the prompt as it features a Corgi, which is cute and happy, playing in a park during sunset. However, the tilt down isn't explicitly visible in the still image provided, so this could be considered a minor mismatch.  \n- Physical/common-sense consistency: There are no obvious inconsistencies or violations of common sense. The scene looks logical and follows natural behavior for a dog in a park setting during sunset. \n\nThe score considers that the video meets a high standard in visual quality and physical consistency but slightly misses the precise execution of the textual prompt regarding the tilt down. Therefore, the final score is given as 4."
+    },
+    {
+        "video_name": "VideoCrafter2_519ef92377f74a5aa55db31bc495c4cd",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/519ef92377f74a5aa55db31bc495c4cd.mp4",
+        "prompt": "A cute happy Corgi playing in park, sunset, tilt down",
+        "t2v_model": "VideoCrafter2",
+        "v_score_model": 3.9786275650695755,
+        "t_score_model": 3.8852868849693927,
+        "p_score_model": 3.36026779045697,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;\nphysical/common-sense consistency: 4"
+    },
+    {
+        "video_name": "VideoCrafter2_1cd82817b2794ddd9df0d4846ecbf958",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/1cd82817b2794ddd9df0d4846ecbf958.mp4",
+        "prompt": "a frisbee",
+        "t2v_model": "VideoCrafter2",
+        "v_score_model": 0.5544011035373914,
+        "t_score_model": 0.9583538397070559,
+        "p_score_model": 1.439965563371163,
+        "output": "visual quality: 3;  \ntext-to-video alignment: 2;\nphysical/common-sense consistency: 2;\n\nExplanation:\n- Visual Quality: The video is somewhat clear, but the objects are not distinctly shaped or colored to clearly identify them. The motion blur and lack of detail suggest it may not be high-resolution or high-quality footage, which affects the overall visual presentation.\n\n- Text-to-Video Alignment: The video does contain what appears to be a frisbee-like object, aligning with the text prompt of \"a frisbee.\" However, the lack of additional context or details makes it hard to fully evaluate if all aspects (like size, shape, movement, color) match the prompt accurately.\n\n- Physical/Common-Sense Consistency: The video shows objects that resemble a frisbee, but the unusual shape and the lack of a typical frisbee's context (like being thrown or in flight) violate common expectations. Additionally, the objects are not behaving according to expected physical laws, such as gravity or aerodynamics, making it difficult to assess this dimension effectively based on the provided information.\n\nThus, the quality score is low due to issues in all three dimensions, though the most significant concern seems to be related to the adherence to common sense and physical consistency."
+    },
+    {
+        "video_name": "OpenSora_2b751fedf63a4c11b67c121ff3d648f5",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/2b751fedf63a4c11b67c121ff3d648f5.mp4",
+        "prompt": "a frisbee",
+        "t2v_model": "OpenSora",
+        "v_score_model": 0.6469319478822136,
+        "t_score_model": 0.901039735916057,
+        "p_score_model": 0.8785618154156947,
+        "output": "visual quality: 1;  \ntext-to-video alignment: 2;  \nphysical/common-sense consistency: 1;"
+    },
+    {
+        "video_name": "AnimateDiff_12cdca735d4d4e6386b4ff2c076cca76",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/12cdca735d4d4e6386b4ff2c076cca76.mp4",
+        "prompt": "a sink",
+        "t2v_model": "AnimateDiff",
+        "v_score_model": 3.700344081832681,
+        "t_score_model": 3.759897667411114,
+        "p_score_model": 3.6649672108108624,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;\nphysical/common-sense consistency: 4;\n\nThe video appears to have good visual quality with clear colors and details, but it lacks dynamic movement which could improve the overall watchability. In terms of text-to-video alignment, the video accurately depicts a sink as requested in the prompt, though it does not show any action or interaction. For physical/common-sense consistency, there are no apparent violations or unnatural elements in the provided image, indicating a consistent representation of a real-world scene. Therefore, a moderate score of 4 seems appropriate considering these observations."
+    },
+    {
+        "video_name": "LaVie_fd9b6f7e50f14088bc78e0a722dda942",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/fd9b6f7e50f14088bc78e0a722dda942.mp4",
+        "prompt": "a sink",
+        "t2v_model": "LaVie",
+        "v_score_model": 3.9900447747459395,
+        "t_score_model": 3.8136858412387076,
+        "p_score_model": 3.9132955574591204,
+        "output": "visual quality: 4;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 4"
+    },
+    {
+        "video_name": "AnimateDiffTurbo_e78de55b257245aebca89f4a336bf6ad",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/e78de55b257245aebca89f4a336bf6ad.mp4",
+        "prompt": "a bus on the right of a traffic light, front view",
+        "t2v_model": "AnimateDiffTurbo",
+        "v_score_model": 2.5814956768049138,
+        "t_score_model": 2.3962919808010006,
+        "p_score_model": 1.871283458474219,
+        "output": "visual quality: 4  \ntext-to-video alignment: 3  \nphysical/common-sense consistency: 3  \n\nExplanation: The video has a decent visual quality with clear colors and good resolution, but it lacks the detail and nuance typically expected in high-quality visuals. The alignment is reasonable since the bus is present and correctly positioned next to the traffic light, though the traffic light itself isn't visible in the frame, which might be considered a slight discrepancy. The common-sense consistency is good, with no apparent violations, but the scene seems a bit unrealistic given the unusual lighting and shadow patterns, suggesting possible limitations in generating realistic outdoor scenes. Hence, the score is lowered slightly due to these considerations."
+    },
+    {
+        "video_name": "AnimateDiff_5d304682c265421cb88abaca5a9e8e45",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/5d304682c265421cb88abaca5a9e8e45.mp4",
+        "prompt": "a bus on the right of a traffic light, front view",
+        "t2v_model": "AnimateDiff",
+        "v_score_model": 3.680788099846338,
+        "t_score_model": 2.9199067657172093,
+        "p_score_model": 2.7545328419893447,
+        "output": "visual quality: 4;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 3\n\nExplanation:\n- Visual Quality: The video appears to have good resolution, clarity, and smoothness. There are no obvious blurriness or distortions, but the lighting seems slightly uneven, which might be a result of the night setting.\n- Text-to-Video Alignment: The video accurately depicts a bus on the right side of a traffic light, showing a frontal view as described in the prompt. All elements align with the given text prompt.\n- Physical/Common-Sense Consistency: The video does not violate common sense or physical laws, but the lighting seems slightly inconsistent, which might be due to the dynamic lighting conditions at night. The traffic light and bus placement also seem logical, so this aspect is relatively consistent."
+    },
+    {
+        "video_name": "OpenSora_ba612c97c76a4d02a92c71029f7d42f3",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/ba612c97c76a4d02a92c71029f7d42f3.mp4",
+        "prompt": "an airplane landing smoothly on a runway",
+        "t2v_model": "OpenSora",
+        "v_score_model": 2.1640244570537353,
+        "t_score_model": 1.4595555744869229,
+        "p_score_model": 2.698651509552341,
+        "output": "visual quality: 3  \ntext-to-video alignment: 3  \nphysical/common-sense consistency: 3 \n\nExplanation:\n- Visual quality: The video appears to have moderate visual quality with some motion blur due to the fast movement of the airplane and the runway. The lighting seems balanced without overly bright or dark areas, but the overall image could be sharper.\n- Text-to-video alignment: The video accurately depicts an airplane landing on a runway, matching the prompt. However, it lacks detail about specific features like the airline or type of aircraft, which could be considered a minor oversight.\n- Physical/common-sense consistency: The video logically shows the airplane approaching the runway, touching down, and stabilizing, all consistent with the expected behavior of an airplane landing. There are no apparent inconsistencies or violations of common sense. \n\nGiven these observations, the score reflects a satisfactory result with room for improvement in visual clarity and detail."
+    },
+    {
+        "video_name": "StableVideoDiffusion_96d05f404025484fb4d938ffb8c57973",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/96d05f404025484fb4d938ffb8c57973.mp4",
+        "prompt": "an airplane landing smoothly on a runway",
+        "t2v_model": "StableVideoDiffusion",
+        "v_score_model": 3.9930089911084137,
+        "t_score_model": 3.954238680541259,
+        "p_score_model": 3.8071094034172126,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;\nphysical/common-sense consistency: 4;\n\nExplanation:\n- Visual quality: The video appears to have high resolution and good clarity, with smooth transitions and stable lighting. However, there might be slight motion blur due to the fast movement of the aircraft, which could slightly reduce the score. Overall, it is rated at 4.\n- Text-to-video alignment: The video accurately depicts an airplane landing, showing smooth movement, correct timing, and appropriate elements such as the runway and clear sky. The alignment seems to be accurate based on the text prompt.\n- Physical/common-sense consistency: The video does not violate any physical laws or common sense. The aircraft's landing sequence looks realistic and follows expected behavior without any anomalies. Therefore, this dimension is also rated at 4.\n\nFinal quality score: 4"
+    },
+    {
+        "video_name": "AnimateDiffTurbo_b97247ff514b4ad39629ceb86b2e1013",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/b97247ff514b4ad39629ceb86b2e1013.mp4",
+        "prompt": "A tranquil tableau of in the quaint village square, a traditional wrought-iron streetlamp featured delicate filigree patterns and amber-hued glass panels",
+        "t2v_model": "AnimateDiffTurbo",
+        "v_score_model": 2.334676717622708,
+        "t_score_model": 1.336353361770395,
+        "p_score_model": 1.5376701318059431,
+        "output": "visual quality: 3;  \ntext-to-video alignment: 1;\nphysical/common-sense consistency: 3"
+    },
+    {
+        "video_name": "OpenSora_c73a3816a783461a9788d75be77d2f0c",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/c73a3816a783461a9788d75be77d2f0c.mp4",
+        "prompt": "A tranquil tableau of in the quaint village square, a traditional wrought-iron streetlamp featured delicate filigree patterns and amber-hued glass panels",
+        "t2v_model": "OpenSora",
+        "v_score_model": 3.507428897727683,
+        "t_score_model": 3.8226129255495107,
+        "p_score_model": 3.498640288025594,
+        "output": "visual quality: 4;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 4"
+    },
+    {
+        "video_name": "LaVie_8f71e5004a6c453e80ab1786125225dc",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/8f71e5004a6c453e80ab1786125225dc.mp4",
+        "prompt": "a dog",
+        "t2v_model": "LaVie",
+        "v_score_model": 3.9836533406851555,
+        "t_score_model": 3.897379780312502,
+        "p_score_model": 3.8664863676057433,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;  \nphysical/common-sense consistency: 4;\n\nThe video shows a clear, detailed image of a dog with good resolution and stability. The dog appears natural and does not exhibit any abnormalities or inconsistencies. There is a consistent alignment between the video content and the text prompt \"a dog.\" Overall, it aligns well with the expectation and does not violate physical or common-sense laws. Therefore, this video demonstrates high quality across all three dimensions."
+    },
+    {
+        "video_name": "AnimateDiffTurbo_b38abeee87ab4f7cbda68c62bc7b5682",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/b38abeee87ab4f7cbda68c62bc7b5682.mp4",
+        "prompt": "a dog",
+        "t2v_model": "AnimateDiffTurbo",
+        "v_score_model": 2.2819762917546935,
+        "t_score_model": 2.0569296012573313,
+        "p_score_model": 1.738300129832866,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;\nphysical/common-sense consistency: 4;\n\nThe video appears to have good visual quality with clear details and smooth transitions. However, it lacks a complete scene context which affects the full realization of text-to-video alignment. Additionally, the character depicted does not strictly adhere to natural physical characteristics of a dog, potentially resulting in a slight inconsistency. Nonetheless, the overall quality remains high given the context of the question."
+    },
+    {
+        "video_name": "AnimateDiff_874f047349694bb3a69fa46381710f92",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/874f047349694bb3a69fa46381710f92.mp4",
+        "prompt": "a train crossing over a tall bridge",
+        "t2v_model": "AnimateDiff",
+        "v_score_model": 1.6619207101714026,
+        "t_score_model": 3.540459737857647,
+        "p_score_model": 2.9119071472689955,
+        "output": "visual quality: 3; \ntext-to-video alignment: 4,\nphysical/common-sense consistency: 3"
+    },
+    {
+        "video_name": "VideoCrafter2_1683ac307ec14aefa03cbc0b436610d9",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/1683ac307ec14aefa03cbc0b436610d9.mp4",
+        "prompt": "a train crossing over a tall bridge",
+        "t2v_model": "VideoCrafter2",
+        "v_score_model": 3.986491661079576,
+        "t_score_model": 3.9587095749327883,
+        "p_score_model": 3.741116469542413,
+        "output": "visual quality: 4; \ntext-to-video alignment: 4,\nphysical/common-sense consistency: 4"
+    },
+    {
+        "video_name": "AnimateDiff_16104b278c1c41ada8576cc594872fb6",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/16104b278c1c41ada8576cc594872fb6.mp4",
+        "prompt": "a laptop, frozen in time",
+        "t2v_model": "AnimateDiff",
+        "v_score_model": 2.310089497503739,
+        "t_score_model": 1.4946565957243854,
+        "p_score_model": 2.1618302034514008,
+        "output": "visual quality: 3;\ntext-to-video alignment: 3,\nphysical/common-sense consistency: 3"
+    },
+    {
+        "video_name": "OpenSora_8a0cfb44a4944ef1bacc281162f58f4d",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/8a0cfb44a4944ef1bacc281162f58f4d.mp4",
+        "prompt": "a laptop, frozen in time",
+        "t2v_model": "OpenSora",
+        "v_score_model": 1.2851155342360046,
+        "t_score_model": 1.8614922276063783,
+        "p_score_model": 2.784083129517997,
+        "output": "visual quality: 3;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 3"
+    },
+    {
+        "video_name": "ModelScope_7a739cbfa1624253b980d348c2f9c1e2",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/7a739cbfa1624253b980d348c2f9c1e2.mp4",
+        "prompt": "Flying through fantasy landscapes.",
+        "t2v_model": "ModelScope",
+        "v_score_model": 1.671600824832187,
+        "t_score_model": 2.1808617394223653,
+        "p_score_model": 1.803155636367778,
+        "output": "visual quality: 2  \ntext-to-video alignment: 3  \nphysical/common-sense consistency: 2  \n\nExplanation: The video appears to have a low resolution and lacks detail, which affects the visual quality significantly. However, it does show a fantastical landscape with movement, aligning somewhat with the prompt. There are no clear issues with physical consistency within the frame provided."
+    },
+    {
+        "video_name": "StableVideoDiffusion_c249a4e9623440249abab3b6ad8ba877",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/c249a4e9623440249abab3b6ad8ba877.mp4",
+        "prompt": "Flying through fantasy landscapes.",
+        "t2v_model": "StableVideoDiffusion",
+        "v_score_model": 3.9978661367294266,
+        "t_score_model": 3.850401304149531,
+        "p_score_model": 3.5392495020681842,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;  \nphysical/common-sense consistency: 4;  \n\nThe video showcases a detailed and visually appealing fantasy landscape with a castle perched atop a cliff, which aligns well with the prompt \"Flying through fantasy landscapes..\". However, the image appears slightly blurry, which slightly affects the visual quality score. The alignment with the prompt is strong as it successfully captures the essence of flying through such a fantastical environment. There are no apparent inconsistencies within the physical world; however, the slight blur detracts from the full appreciation of the physical consistency. Therefore, the quality score is 4 out of 5."
+    },
+    {
+        "video_name": "T2VTurbo_bb32d2360b834788ac46478d0cf9768b",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/bb32d2360b834788ac46478d0cf9768b.mp4",
+        "prompt": "gas station",
+        "t2v_model": "T2VTurbo",
+        "v_score_model": 3.815784633722981,
+        "t_score_model": 3.802665546784197,
+        "p_score_model": 3.550137327847794,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;  \nphysical/common-sense consistency: 4;"
+    },
+    {
+        "video_name": "VideoCrafter2_500822c6cf11434f90507eff758242a3",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/500822c6cf11434f90507eff758242a3.mp4",
+        "prompt": "gas station",
+        "t2v_model": "VideoCrafter2",
+        "v_score_model": 2.3911179618889884,
+        "t_score_model": 2.5838075749569165,
+        "p_score_model": 2.808761156692629,
+        "output": "visual quality: 3;  \ntext-to-video alignment: 4;\nphysical/common-sense consistency: 3;\n\nExplanation:\n\n- **Visual Quality**: The video appears to have a standard resolution and clear colors, but the overall image looks somewhat pixelated, which might be due to lower resolution or less sophisticated rendering techniques commonly used in generative AI models. There are no visible artifacts or distortions, but the scene lacks fine detail. The objects and cars seem stable without any abrupt movements or blurriness, indicating good stability in contrast and smoothness.\n\n- **Text-to-Video Alignment**: The video accurately depicts the main elements mentioned in the text prompt—there is a gas station with cars parked around it. These key features match the prompt accurately. However, the number of cars and their positions may not be precisely as described in the prompt, suggesting a slight mismatch in alignment within the provided context.\n\n- **Physical/Common-Sense Consistency**: The scene appears logical and plausible, depicting a typical gas station scenario with cars queuing up to refuel. There are no apparent anomalies or violations of common sense. However, the cars seem to be moving in an unusual pattern given the context of a gas station (e.g., cars are not typically moving forward in a queue). This suggests some inconsistency with real-world physics and behavior.\n\nCombining these points, a balanced quality score of 3 reflects the moderate visual quality, the accurate depiction of the scene in terms of alignment, and the reasonable adherence to physical consistency despite some minor inconsistencies."
+    },
+    {
+        "video_name": "StableVideoDiffusion_7a79e7a7bdc9441f9a485f286999c588",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/7a79e7a7bdc9441f9a485f286999c588.mp4",
+        "prompt": "A person is hugging",
+        "t2v_model": "StableVideoDiffusion",
+        "v_score_model": 2.3419243452012766,
+        "t_score_model": 3.3231025867725172,
+        "p_score_model": 2.0144052279177833,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 3;\nphysical/common-sense consistency: 3;"
+    },
+    {
+        "video_name": "VideoCrafter2_7f92d483cb2d407880f41292fd143cd5",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/7f92d483cb2d407880f41292fd143cd5.mp4",
+        "prompt": "A person is hugging",
+        "t2v_model": "VideoCrafter2",
+        "v_score_model": 3.5723760999757626,
+        "t_score_model": 3.9153558243502804,
+        "p_score_model": 3.326272496884384,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;\nphysical/common-sense consistency: 4;\n\nThis video depicts a person hugging, which aligns with the text prompt. The image resolution appears sharp with clear details visible in the person's clothing and facial features. There is no significant blurriness, distortion, or misalignment, suggesting a stable frame rate and consistent lighting, though the background seems slightly out of focus which is often a choice made to emphasize the foreground subject. However, it does not impact the primary action in the scene. Overall, the video maintains a high level of quality in both depicting the action and adhering to physical norms for human interaction without any violations."
+    },
+    {
+        "video_name": "LaVie_8dca0bcfebc443ea81acab6b1f428b60",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/8dca0bcfebc443ea81acab6b1f428b60.mp4",
+        "prompt": "a drone flying over a snowy forest.",
+        "t2v_model": "LaVie",
+        "v_score_model": 3.981924542596628,
+        "t_score_model": 3.8595552409985854,
+        "p_score_model": 3.5852951864468876,
+        "output": "visual quality: 4;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 4"
+    },
+    {
+        "video_name": "StableVideoDiffusion_b18135ce36b04dedaf9df28c94043f37",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/b18135ce36b04dedaf9df28c94043f37.mp4",
+        "prompt": "a drone flying over a snowy forest.",
+        "t2v_model": "StableVideoDiffusion",
+        "v_score_model": 3.999508981721317,
+        "t_score_model": 3.9585147803145855,
+        "p_score_model": 3.8925393270592266,
+        "output": "visual quality: 4;\ntext-to-video alignment: 4;\nphysical/common-sense consistency: 4;"
+    },
+    {
+        "video_name": "T2VTurbo_c7ce611a1a714fab8b8b33acc0d06df6",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/c7ce611a1a714fab8b8b33acc0d06df6.mp4",
+        "prompt": "A squirrel eating a burger.",
+        "t2v_model": "T2VTurbo",
+        "v_score_model": 3.94181712208328,
+        "t_score_model": 3.358569843017883,
+        "p_score_model": 2.5223431567359578,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;  \nphysical/common-sense consistency: 3;\n\nExplanation:\n- Visual quality: The image appears clear with good resolution, and the details are sharp. However, there are some minor artifacts, which slightly reduce the score.\n- Text-to-video alignment: The video aligns well with the description, featuring a squirrel eating a burger. The elements (squirrel, burger) and their actions (eating) correspond to the text prompt.\n- Physical/common-sense consistency: While the concept of a squirrel eating a burger is imaginative, it does not violate any known physical laws or common sense. The idea is plausible, but the combination of a natural animal with a human food item introduces a level of surrealism.\n\nOn a scale of 1 to 5, where 1 indicates poor quality and 5 indicates excellent quality, this video receives a quality score of 4 due to the minor visual artifacts and slight surrealism introduced by the scenario."
+    },
+    {
+        "video_name": "LaVie_81c41d4ab5214a6995c54c5b825947ac",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/81c41d4ab5214a6995c54c5b825947ac.mp4",
+        "prompt": "A squirrel eating a burger.",
+        "t2v_model": "LaVie",
+        "v_score_model": 3.975731131325475,
+        "t_score_model": 3.728914622914457,
+        "p_score_model": 2.232167682529223,
+        "output": "visual quality: 4;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 3\n\nExplanation:\n- Visual quality: The image is clear with vibrant colors and good resolution, though there might be slight motion blur due to the movement of the squirrel. The brightness and contrast levels are stable, but the resolution could be slightly higher for better detail.\n- Text-to-video alignment: The video accurately shows a squirrel eating a burger, aligning with the text prompt. All key elements (squirrel, burger) are present and consistent with the description in the prompt.\n- Physical/common-sense consistency: While it is possible for a squirrel to eat a burger in certain theoretical contexts, the action seems unusual in a real-world scenario. However, the video does not violate any physical laws or violate common sense in terms of the presented scenario."
+    },
+    {
+        "video_name": "LaVie_2139284fbb7244ad8d463eacf7b31a8a",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/2139284fbb7244ad8d463eacf7b31a8a.mp4",
+        "prompt": "construction site",
+        "t2v_model": "LaVie",
+        "v_score_model": 2.1811017408718136,
+        "t_score_model": 3.814289704192522,
+        "p_score_model": 2.94456446038254,
+        "output": "visual quality: 3;  \ntext-to-video alignment: 4;  \nphysical/common-sense consistency: 4;  "
+    },
+    {
+        "video_name": "AnimateDiffTurbo_0d24a5511ea541e982ecce475c31b81e",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/0d24a5511ea541e982ecce475c31b81e.mp4",
+        "prompt": "construction site",
+        "t2v_model": "AnimateDiffTurbo",
+        "v_score_model": 2.0569938502430585,
+        "t_score_model": 3.3466004569797243,
+        "p_score_model": 2.6251361587131963,
+        "output": "visual quality: 4;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 3"
+    },
+    {
+        "video_name": "OpenSora_4d2374b4dc76485c96a5e8142d4af9ff",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/4d2374b4dc76485c96a5e8142d4af9ff.mp4",
+        "prompt": "Gwen Stacy reading a book, animated style",
+        "t2v_model": "OpenSora",
+        "v_score_model": 2.1851590970866677,
+        "t_score_model": 3.8824364428844587,
+        "p_score_model": 2.931637067277755,
+        "output": "visual quality: 3;  \ntext-to-video alignment: 4;\nphysical/common-sense consistency: 3;\n\nExplanation:\n- **Visual Quality (3)**: The image shows some signs of pixelation and lacks detail, suggesting it might be of low resolution or compressed. There are no noticeable issues with sharpness, but the overall picture appears slightly grainy, which detracts from the visual quality.\n- **Text-to-Video Alignment (4)**: The image aligns well with the text prompt, depicting a character reading a book. The main elements (the character, the book) are present, and the animation style is consistent with the description. However, the background seems somewhat generic and doesn't add much context to the scene.\n- **Physical/Common-Sense Consistency (3)**: There are no apparent logical inconsistencies or violations of physics/sense within the frame. However, the image has a somewhat cartoonish quality that may not be entirely realistic, which can be considered a minor issue from a common-sense perspective."
+    },
+    {
+        "video_name": "ModelScope_3e026ac189a640e99b9cfca6f4e8689f",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/3e026ac189a640e99b9cfca6f4e8689f.mp4",
+        "prompt": "Gwen Stacy reading a book, animated style",
+        "t2v_model": "ModelScope",
+        "v_score_model": 1.7538328409845452,
+        "t_score_model": 3.8796481557202123,
+        "p_score_model": 2.908463627892485,
+        "output": "visual quality: 3; \ntext-to-video alignment: 4,\nphysical/common-sense consistency: 3"
+    },
+    {
+        "video_name": "LaVie_84c3db1abdfc463f829bd5f0382bb3d8",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/84c3db1abdfc463f829bd5f0382bb3d8.mp4",
+        "prompt": "a car slowing down to stop",
+        "t2v_model": "LaVie",
+        "v_score_model": 1.344451852575278,
+        "t_score_model": 0.7650829697460105,
+        "p_score_model": 0.9840450366672943,
+        "output": "visual quality: 1;\ntext-to-video alignment: 1,\nphysical/common-sense consistency: 1"
+    },
+    {
+        "video_name": "T2VTurbo_a327d7fbb45d4b738739b4c1825419eb",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/a327d7fbb45d4b738739b4c1825419eb.mp4",
+        "prompt": "a car slowing down to stop",
+        "t2v_model": "T2VTurbo",
+        "v_score_model": 1.0915090622663448,
+        "t_score_model": 1.3390835910317118,
+        "p_score_model": 1.8169711324948354,
+        "output": "visual quality: 2;  \ntext-to-video alignment: 3;\nphysical/common-sense consistency: 2;\n\nExplanation:\n- Visual quality: The video appears to have low resolution, which affects the overall clarity. There are no visible distortions or misalignments, but the image seems slightly grainy, suggesting it may not be high-quality footage. The lighting and contrast seem somewhat flat, lacking dynamic range.\n- Text-to-video alignment: The video correctly shows two cars on a road, but only one car appears to be slowing down. The other car continues at a consistent speed, which might be a discrepancy compared to the prompt. However, the primary action (slowing down) is present.\n- Physical/common-sense consistency: The scenario of two cars on a road with one slowing down is plausible. The video does not violate any clear physical laws or common sense, but the inconsistency in the second car's behavior slightly detracts from this aspect. Additionally, the lack of more details or context makes it harder to fully judge the consistency.\n\nGiven these observations, a score of 2 reflects the low visual quality and inconsistency in the video content relative to the prompt. The score of 3 in text-to-video alignment accounts for the presence of the primary action described in the prompt, while the physical consistency score of 2 acknowledges the slight mismatch between the prompt and the video content."
+    },
+    {
+        "video_name": "VideoCrafter2_90bc2f192cfa48ef80e13fad5559448a",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/90bc2f192cfa48ef80e13fad5559448a.mp4",
+        "prompt": "outdoor track",
+        "t2v_model": "VideoCrafter2",
+        "v_score_model": 3.5323690174753617,
+        "t_score_model": 3.798481483861119,
+        "p_score_model": 3.7674567379209347,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;\nphysical/common-sense consistency: 3;\n\nExplanation:\n- Visual Quality: The video appears to have a decent resolution and clarity, with no obvious issues with blurriness, distortion, or abrupt changes in brightness or contrast. However, it lacks fine detail that might enhance the visual appeal.\n- Text-to-Video Alignment: The video captures the outdoor track correctly, aligning with the text prompt. There are no discrepancies in terms of elements depicted in the video compared to those mentioned in the prompt.\n- Physical/Common-Sense Consistency: While the video clearly shows an outdoor track, it seems to lack dynamic action or movement, which might be considered somewhat limiting. It does not violate any physical laws, but it feels static and lacks engagement compared to what one might expect from a sports-related video."
+    },
+    {
+        "video_name": "LaVie_1fb218170b3e47418ebeeced33fc323a",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/1fb218170b3e47418ebeeced33fc323a.mp4",
+        "prompt": "outdoor track",
+        "t2v_model": "LaVie",
+        "v_score_model": 3.9622662684576917,
+        "t_score_model": 3.877634037595752,
+        "p_score_model": 3.877972632198309,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4,\nphysical/common-sense consistency: 4"
+    },
+    {
+        "video_name": "StableVideoDiffusion_316a319d9f95406e81ddf1b4a4c694c6",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/316a319d9f95406e81ddf1b4a4c694c6.mp4",
+        "prompt": "A boat sailing leisurely along the Seine River with the Eiffel Tower in background, animated style",
+        "t2v_model": "StableVideoDiffusion",
+        "v_score_model": 3.9743108121853385,
+        "t_score_model": 3.829434494496447,
+        "p_score_model": 3.3192750449269743,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;  \nphysical/common-sense consistency: 4;\n\nExplanation:\n- Visual quality is 4 because the image is clear but lacks high-resolution detail. The lighting and shadows are natural, suggesting a good balance between lighting and shadow effects.\n- Text-to-video alignment is 4 because it accurately captures the key elements mentioned in the prompt: a boat on the Seine River with the Eiffel Tower in the background. However, there is a slight lack of variety in the boat design compared to what one might expect, which could be improved for more authenticity.\n- Physical/common-sense consistency is 4, as the scene with a boat moving along the river near the Eiffel Tower is coherent and plausible. There are no obvious errors or anomalies that violate common sense or physical laws, though the animation style may not fully match the expected realism."
+    },
+    {
+        "video_name": "OpenSora_25de5620233a45a1bc76f892fc721dd8",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/25de5620233a45a1bc76f892fc721dd8.mp4",
+        "prompt": "A boat sailing leisurely along the Seine River with the Eiffel Tower in background, animated style",
+        "t2v_model": "OpenSora",
+        "v_score_model": 2.308936214002652,
+        "t_score_model": 3.4538695028108237,
+        "p_score_model": 2.232537661071088,
+        "output": "visual quality: 4;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 3"
+    },
+    {
+        "video_name": "T2VTurbo_5ba5d38b637c40b1a0794456e61c4a41",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/5ba5d38b637c40b1a0794456e61c4a41.mp4",
+        "prompt": "A cute fluffy panda eating Chinese food in a restaurant",
+        "t2v_model": "T2VTurbo",
+        "v_score_model": 3.374276127186917,
+        "t_score_model": 3.3723268839507146,
+        "p_score_model": 2.3221534213374344,
+        "output": "visual quality: 4;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 3"
+    },
+    {
+        "video_name": "ModelScope_7e5b888214f0477e8c686e6b28d20288",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/7e5b888214f0477e8c686e6b28d20288.mp4",
+        "prompt": "A cute fluffy panda eating Chinese food in a restaurant",
+        "t2v_model": "ModelScope",
+        "v_score_model": 1.5309750909290993,
+        "t_score_model": 0.6652050133687286,
+        "p_score_model": 0.9793481448042304,
+        "output": "visual quality: 1;  \ntext-to-video alignment: 1;\nphysical/common-sense consistency: 1;\n\nThe video has very low visual quality due to the lack of detail, the image appears blurry and lacks clarity, and it seems to show a scene that defies real-world physics with the panda's exaggerated actions (like eating something out of a plate which is not what pandas typically eat). The text-to-video alignment is also very poor as the video does not accurately depict a panda eating Chinese food in a restaurant. The physical consistency is also violated as the scene appears unrealistic. Hence, the quality score is 1 for all dimensions."
+    },
+    {
+        "video_name": "AnimateDiff_4904a7e8002346889049086d07ced52f",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/4904a7e8002346889049086d07ced52f.mp4",
+        "prompt": "a person and a hair drier",
+        "t2v_model": "AnimateDiff",
+        "v_score_model": 1.688212938273422,
+        "t_score_model": 3.6506491755962913,
+        "p_score_model": 2.4507577351153023,
+        "output": "visual quality: 4;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 4"
+    },
+    {
+        "video_name": "AnimateDiffTurbo_32b51912f3634df3a7f9499b85cf5cc8",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/32b51912f3634df3a7f9499b85cf5cc8.mp4",
+        "prompt": "a person and a hair drier",
+        "t2v_model": "AnimateDiffTurbo",
+        "v_score_model": 1.9482751896689354,
+        "t_score_model": 1.1494599408413146,
+        "p_score_model": 2.6577278139607685,
+        "output": "visual quality: 4;\ntext-to-video alignment: 2,\nphysical/common-sense consistency: 2"
+    },
+    {
+        "video_name": "VideoCrafter2_06e33cc07b344b68839a521665039ab9",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/06e33cc07b344b68839a521665039ab9.mp4",
+        "prompt": "A person is squat",
+        "t2v_model": "VideoCrafter2",
+        "v_score_model": 3.9020869608239868,
+        "t_score_model": 3.8959746110461486,
+        "p_score_model": 3.4596936518628767,
+        "output": "visual quality: 4;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 4"
+    },
+    {
+        "video_name": "T2VTurbo_0c7e15e969ac43e4849f08ce87dc2a87",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/0c7e15e969ac43e4849f08ce87dc2a87.mp4",
+        "prompt": "A person is squat",
+        "t2v_model": "T2VTurbo",
+        "v_score_model": 1.7006768721764223,
+        "t_score_model": 1.6205375439980891,
+        "p_score_model": 0.9257741811692025,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 3;\nphysical/common-sense consistency: 3;\n\nThe image appears to meet the basic requirements of being visually clear and stable, but it is too stylized and lacks natural movement, which affects the overall visual quality. The physical consistency is also somewhat lacking due to the unnatural stance and lack of dynamic action associated with squatting. While the text-to-video alignment is acceptable since the figure is depicted squatting, the visual and physical aspects detract from the score. Therefore, an overall score of 3 is given."
+    },
+    {
+        "video_name": "T2VTurbo_8f971b743a6c467785646556d8dd5e43",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/8f971b743a6c467785646556d8dd5e43.mp4",
+        "prompt": "a teddy bear is swimming in the ocean.",
+        "t2v_model": "T2VTurbo",
+        "v_score_model": 3.716886731542532,
+        "t_score_model": 3.618877272487187,
+        "p_score_model": 2.185940198767885,
+        "output": "visual quality: 4  \ntext-to-video alignment: 4  \nphysical/common-sense consistency: 3  \n\nExplanation: \n- Visual quality: The video appears to have standard resolution, good overall clarity, and no visible blurriness or distortions. However, the image lacks vibrant colors and exhibits some inconsistencies with lighting, which affects the quality slightly.\n- Text-to-video alignment: The video shows two teddy bears in the ocean, matching the description in the prompt. However, the bears appear too small relative to the size of the ocean waves, which may not be entirely accurate based on real-world physics.\n- Physical/common-sense consistency: There are no major violations of physical laws. However, if teddy bears were to swim realistically, they wouldn't be able to float without additional props, but this is a creative scenario and can be considered acceptable for artistic purposes."
+    },
+    {
+        "video_name": "AnimateDiffTurbo_477ee2bf5c8d415fbcdb8bbddd5e6232",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/477ee2bf5c8d415fbcdb8bbddd5e6232.mp4",
+        "prompt": "a teddy bear is swimming in the ocean.",
+        "t2v_model": "AnimateDiffTurbo",
+        "v_score_model": 2.27805588878851,
+        "t_score_model": 2.1555845903490156,
+        "p_score_model": 1.639258188715099,
+        "output": "visual quality: 4;\ntext-to-video alignment: 3,\nphysical/common-sense consistency: 3"
+    },
+    {
+        "video_name": "StableVideoDiffusion_47fed473abbd440abf7bb16c548d6b6d",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/47fed473abbd440abf7bb16c548d6b6d.mp4",
+        "prompt": "a shark is swimming in the ocean, pixel art",
+        "t2v_model": "StableVideoDiffusion",
+        "v_score_model": 3.773749726112388,
+        "t_score_model": 2.4373476926754405,
+        "p_score_model": 2.1621612384391824,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 3;  \nphysical/common-sense consistency: 3;\n\nExplanation:\n\n- **Visual Quality**: The video has a high level of detail with vibrant colors and a clear depiction of the underwater scene. The sunlight filtering through the water adds depth and enhances the overall aesthetic appeal. However, the image appears slightly unrealistic, which might be due to the \"pixel art\" aspect, leading to some inconsistency in the sharpness and detail compared to a natural ocean environment.\n\n- **Text-to-Video Alignment**: While the video includes a shark, it does not fully capture all the details specified in the text prompt (\"pixel art\"). The image seems more like a high-resolution illustration rather than a pixelated one, which might be due to the need to balance clarity and adherence to the text prompt.\n\n- **Physical/Common-Sense Consistency**: The video depicts a realistic underwater scene with a shark in motion, but the \"pixel art\" aspect makes it slightly inconsistent with real-world physics, especially regarding the detailed and crisp appearance that is generally not expected in a pixel art style. Despite this, the overall scene is coherent and lacks any elements that defy common sense or physical laws. \n\nCombining these evaluations, the score reflects a good balance between technical quality and thematic alignment while maintaining a certain degree of artistic interpretation."
+    },
+    {
+        "video_name": "AnimateDiff_83d40c53a9ff44d0b04b6fea1c9f5a6c",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/83d40c53a9ff44d0b04b6fea1c9f5a6c.mp4",
+        "prompt": "a shark is swimming in the ocean, pixel art",
+        "t2v_model": "AnimateDiff",
+        "v_score_model": 2.054305730827759,
+        "t_score_model": 2.199779469064734,
+        "p_score_model": 2.357367516176046,
+        "output": "visual quality: 3;  \ntext-to-video alignment: 3;\nphysical/common-sense consistency: 2;\n\nThe visual quality is moderate, with some pixelation visible on the shark's body, indicating a lower resolution or less refined rendering. The text-to-video alignment is relatively high because the video does indeed show a shark in the ocean, in line with the prompt. However, the image appears somewhat artificial, which impacts physical consistency. Overall, the quality is average due to these minor issues."
+    },
+    {
+        "video_name": "OpenSora_2dd935efa39e4d98b8ac7e2ed452bd89",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/2dd935efa39e4d98b8ac7e2ed452bd89.mp4",
+        "prompt": "Ashtray full of butts on table, smoke flowing on black background, close-up",
+        "t2v_model": "OpenSora",
+        "v_score_model": 0.599146643778053,
+        "t_score_model": 0.8536130347681896,
+        "p_score_model": 0.712702551528228,
+        "output": "visual quality: 1  \ntext-to-video alignment: 2  \nphysical/common-sense consistency: 2  \n\nExplanation:\n- Visual Quality: The video appears to have low resolution, it's difficult to discern details, and the overall image seems somewhat unclear. There might also be motion blur due to the dynamic movement of smoke. The lighting is inconsistent with the black background, making it hard to see the ashtray clearly. Therefore, the visual quality is quite poor.\n- Text-to-Video Alignment: The video shows smoke indicating the presence of a light source or heat, which aligns with the concept of \"smoke flowing.\" However, it doesn't fully meet the requirements of an ashtray full of butts and a close-up shot. The focus isn't sharp enough, and the overall representation of the scene (ashtray, butts) is not clear.\n- Physical/Common-Sense Consistency: While the scene of smoke flowing off a table can be understood, the absence of clear details about the ashtray and butts makes it seem somewhat unrealistic. Therefore, there are issues with physical consistency and adherence to common sense."
+    },
+    {
+        "video_name": "AnimateDiffTurbo_93941edc5ba241f59381f060fee02316",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/93941edc5ba241f59381f060fee02316.mp4",
+        "prompt": "Ashtray full of butts on table, smoke flowing on black background, close-up",
+        "t2v_model": "AnimateDiffTurbo",
+        "v_score_model": 2.0638350587706458,
+        "t_score_model": 2.4305049514589854,
+        "p_score_model": 2.481770246975835,
+        "output": "visual quality: 4;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 3"
+    },
+    {
+        "video_name": "OpenSora_3ed3bc80d56a4df7a0c7c3993ee5cf27",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/3ed3bc80d56a4df7a0c7c3993ee5cf27.mp4",
+        "prompt": "A confused panda in calculus class",
+        "t2v_model": "OpenSora",
+        "v_score_model": 2.671750770129253,
+        "t_score_model": 3.6819203433967704,
+        "p_score_model": 2.8261914106444967,
+        "output": "visual quality: 3;  \ntext-to-video alignment: 4;  \nphysical/common-sense consistency: 3;"
+    },
+    {
+        "video_name": "StableVideoDiffusion_fc73d414b2ff4d72ac48648ff2f66954",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/fc73d414b2ff4d72ac48648ff2f66954.mp4",
+        "prompt": "A confused panda in calculus class",
+        "t2v_model": "StableVideoDiffusion",
+        "v_score_model": 2.085643636458277,
+        "t_score_model": 2.5424557821370715,
+        "p_score_model": 1.702525513220125,
+        "output": "visual quality: 3;  \ntext-to-video alignment: 4;\nphysical/common-sense consistency: 3;\n\nExplanation for each dimension:\n- Visual quality: The image shows a panda in a classroom setting with clear visibility, but the resolution appears somewhat low, resulting in possible slight artifacts or lower detail compared to high-resolution standards. This is reflected in a score of 3 out of 5.\n\n- Text-to-Video alignment: The video depicts a panda in a classroom, which aligns with the prompt of a \"confused panda in calculus class.\" The panda is positioned at a desk, holding a book, which adds to the scene's plausibility within the given context. However, the overall scene feels artificially constructed, which slightly detracts from the alignment score.\n\n- Physical/common-sense consistency: The video attempts to show a logical scenario where a panda is taking part in a human activity (a calculus class). While this is imaginative, it introduces a significant violation of common sense since pandas do not naturally engage with human education environments in reality. Thus, the score is 3 due to this unrealistic aspect. If the panda were depicted in a more natural setting, the consistency would be higher. \n\nCombining these scores, the overall quality score is 3."
+    },
+    {
+        "video_name": "VideoCrafter2_4e330384021549a2afb763fa3d5dcaf8",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/4e330384021549a2afb763fa3d5dcaf8.mp4",
+        "prompt": "a dog running happily",
+        "t2v_model": "VideoCrafter2",
+        "v_score_model": 3.9985335599661864,
+        "t_score_model": 3.9800135214883134,
+        "p_score_model": 3.8431020020902165,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;  \nphysical/common-sense consistency: 4"
+    },
+    {
+        "video_name": "ModelScope_d02d8e3d95df47fd8722cafb2320e573",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/d02d8e3d95df47fd8722cafb2320e573.mp4",
+        "prompt": "a dog running happily",
+        "t2v_model": "ModelScope",
+        "v_score_model": 1.8056416764318854,
+        "t_score_model": 2.4043110170783186,
+        "p_score_model": 1.7998080114367005,
+        "output": "visual quality: 2;\ntext-to-video alignment: 3,\nphysical/common-sense consistency: 3\n\nExplanation:\n- Visual Quality: The video appears to have a low resolution and the details are not very clear. There is some motion blur due to the fast movement of the dog, which affects the overall clarity. The lighting seems to be consistent, but the image quality is not high, making it difficult to discern finer details.\n- Text-to-Video Alignment: The video shows a dog running, which aligns with the text prompt. However, there might be a slight discrepancy in the depiction of happiness, as the dog does not show clear signs of joy through body language or facial expressions.\n- Physical/Common-Sense Consistency: The video maintains a logical sequence of events (a dog running), but the sudden change in the dog's posture and orientation could seem a bit unusual in a real-world scenario. Additionally, the image quality affects the natural flow and engagement of the scene. \n\nGiven these points, the score reflects the moderate quality of the video in terms of visual properties, alignment, and physical consistency."
+    },
+    {
+        "video_name": "LaVie_24c06a9645c94d099ba9540e07c39e36",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/24c06a9645c94d099ba9540e07c39e36.mp4",
+        "prompt": "The bund Shanghai, racking focus",
+        "t2v_model": "LaVie",
+        "v_score_model": 3.9823365026438284,
+        "t_score_model": 3.637435377112441,
+        "p_score_model": 3.7828858894028974,
+        "output": "visual quality: 4;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 4"
+    },
+    {
+        "video_name": "OpenSora_c608a20aef3c43c4b66feae51377d663",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/c608a20aef3c43c4b66feae51377d663.mp4",
+        "prompt": "The bund Shanghai, racking focus",
+        "t2v_model": "OpenSora",
+        "v_score_model": 1.9870466679309495,
+        "t_score_model": 0.8575056043381041,
+        "p_score_model": 1.8176789307019479,
+        "output": "visual quality: 2;  \ntext-to-video alignment: 2;\nphysical/common-sense consistency: 2;\n\nExplanation:\n- Visual quality: The image appears to be clear enough but lacks detail due to a lack of high-resolution content. The colors are vivid, and the contrast is balanced, but there is a noticeable lack of sharpness, which suggests it may not be a high-resolution image. This results in a lower quality score.\n- Text-to-video alignment: The video seems to represent urban areas with buildings along a waterfront, aligning with the \"Shanghai\" and \"The Bund\" in the prompt. However, the focus is not clear, and specific details are hard to discern, leading to a moderate score.\n- Physical/common-sense consistency: There are no obvious violations, but the blurriness and lack of detail make it difficult to verify the accuracy of the scene depicted, resulting in a moderate score."
+    },
+    {
+        "video_name": "LaVie_57122b90bce44abfb625e14b96bfa3a5",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/57122b90bce44abfb625e14b96bfa3a5.mp4",
+        "prompt": "A person is sticking tongue out",
+        "t2v_model": "LaVie",
+        "v_score_model": 2.4527912294479286,
+        "t_score_model": 3.8973105990683603,
+        "p_score_model": 2.86157625765089,
+        "output": "visual quality: 3;  \ntext-to-video alignment: 4;\nphysical/common-sense consistency: 3"
+    },
+    {
+        "video_name": "AnimateDiff_376b43dd79ab4928acf1d98b94afd45c",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/376b43dd79ab4928acf1d98b94afd45c.mp4",
+        "prompt": "A person is sticking tongue out",
+        "t2v_model": "AnimateDiff",
+        "v_score_model": 3.905359709115354,
+        "t_score_model": 3.9086411198850843,
+        "p_score_model": 3.29445356223503,
+        "output": "visual quality: 4; \ntext-to-video alignment: 4,\nphysical/common-sense consistency: 4"
+    },
+    {
+        "video_name": "LaVie_8c11fd9a2ecc49cdb634e7fe26b38907",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/8c11fd9a2ecc49cdb634e7fe26b38907.mp4",
+        "prompt": "a bear climbing a tree",
+        "t2v_model": "LaVie",
+        "v_score_model": 3.327559870888024,
+        "t_score_model": 3.932934615489303,
+        "p_score_model": 2.7906427470486723,
+        "output": "visual quality: 3;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 3"
+    },
+    {
+        "video_name": "AnimateDiff_bb69020c44cd45bca2bf04e3d28d75cf",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/bb69020c44cd45bca2bf04e3d28d75cf.mp4",
+        "prompt": "a bear climbing a tree",
+        "t2v_model": "AnimateDiff",
+        "v_score_model": 2.257021122355202,
+        "t_score_model": 3.867309893966147,
+        "p_score_model": 2.511928336627179,
+        "output": "visual quality: 4;\ntext-to-video alignment: 4;\nphysical/common-sense consistency: 4;"
+    },
+    {
+        "video_name": "StableVideoDiffusion_4019255a577a47dcab16c3ec2af88215",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/4019255a577a47dcab16c3ec2af88215.mp4",
+        "prompt": "mansion",
+        "t2v_model": "StableVideoDiffusion",
+        "v_score_model": 3.9930562272311994,
+        "t_score_model": 3.8420450512676796,
+        "p_score_model": 3.783101116011088,
+        "output": "visual quality: 4;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 4"
+    },
+    {
+        "video_name": "OpenSora_0040926e6ec14d4ca5c63c9e5eef474b",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/0040926e6ec14d4ca5c63c9e5eef474b.mp4",
+        "prompt": "mansion",
+        "t2v_model": "OpenSora",
+        "v_score_model": 3.892578007725799,
+        "t_score_model": 3.7604277493431213,
+        "p_score_model": 3.7428680987705985,
+        "output": "visual quality: 4; \ntext-to-video alignment: 4,\nphysical/common-sense consistency: 3\n\nExplanation: \n- Visual quality: The mansion appears clear and detailed, suggesting a high-resolution and stable image with good contrast, albeit slightly blurred edges may indicate a lower resolution or compression issue.\n- Text-to-video alignment: The mansion is accurately represented according to the prompt, capturing all relevant details such as architectural design, columns, and landscaping without deviation.\n- Physical/common-sense consistency: While the mansion looks plausible, the slight blurriness could be seen as a minor inconsistency with real-world standards, affecting the perception of sharpness and detail. However, this does not violate any common sense or physical laws directly."
+    },
+    {
+        "video_name": "AnimateDiffTurbo_66e12fecbfde4766af0e2edca7660c94",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/66e12fecbfde4766af0e2edca7660c94.mp4",
+        "prompt": "A panda drinking coffee in a cafe in Paris",
+        "t2v_model": "AnimateDiffTurbo",
+        "v_score_model": 2.6024292949504035,
+        "t_score_model": 1.978229147657922,
+        "p_score_model": 2.761247150380127,
+        "output": "visual quality: 3;  \ntext-to-video alignment: 4;\nphysical/common-sense consistency: 4;\n\nThis AI-generated video appears to have moderate visual quality, as it seems clear but lacks detail that might enhance the overall appearance. The text-to-video alignment is good because the panda is depicted drinking from a cup, which aligns with the prompt. However, there are no clear indicators of the location being Paris, affecting the alignment slightly. Lastly, the video maintains a logical scenario without any unusual physical inconsistencies. Thus, the overall quality is evaluated at 4."
+    },
+    {
+        "video_name": "ModelScope_432473b6ab984ce9a671c71d068319f9",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/432473b6ab984ce9a671c71d068319f9.mp4",
+        "prompt": "A panda drinking coffee in a cafe in Paris",
+        "t2v_model": "ModelScope",
+        "v_score_model": 1.2352930820324965,
+        "t_score_model": 1.0340091720310454,
+        "p_score_model": 0.5792130288274057,
+        "output": "visual quality: 2;\ntext-to-video alignment: 1,\nphysical/common-sense consistency: 1"
+    },
+    {
+        "video_name": "AnimateDiff_252d7d70053d477090c2cc3d37578195",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/252d7d70053d477090c2cc3d37578195.mp4",
+        "prompt": "a bottle on the left of a wine glass, front view",
+        "t2v_model": "AnimateDiff",
+        "v_score_model": 3.3573516006718296,
+        "t_score_model": 0.7438524753983148,
+        "p_score_model": 1.8756881025728518,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 1;  \nphysical/common-sense consistency: 3;"
+    },
+    {
+        "video_name": "LaVie_af4763f22da64d5a80ad43279a1de768",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/af4763f22da64d5a80ad43279a1de768.mp4",
+        "prompt": "a bottle on the left of a wine glass, front view",
+        "t2v_model": "LaVie",
+        "v_score_model": 3.557101699197125,
+        "t_score_model": 0.5324015937949156,
+        "p_score_model": 1.8801092537794593,
+        "output": "visual quality: 4; \ntext-to-video alignment: 1,\nphysical/common-sense consistency: 2"
+    },
+    {
+        "video_name": "OpenSora_041e2568b78a48e9aec7a3cce7fe78a9",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/041e2568b78a48e9aec7a3cce7fe78a9.mp4",
+        "prompt": "A tranquil tableau of a bed",
+        "t2v_model": "OpenSora",
+        "v_score_model": 3.9599232784182465,
+        "t_score_model": 3.9250719793916415,
+        "p_score_model": 3.8603351983927503,
+        "output": "visual quality: 4;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 4"
+    },
+    {
+        "video_name": "AnimateDiffTurbo_aca153f712fc4d098aad4d7d75984e10",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/aca153f712fc4d098aad4d7d75984e10.mp4",
+        "prompt": "A tranquil tableau of a bed",
+        "t2v_model": "AnimateDiffTurbo",
+        "v_score_model": 2.7441068115071605,
+        "t_score_model": 3.8495320008193565,
+        "p_score_model": 2.927861420304059,
+        "output": "visual quality: 3;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 3"
+    },
+    {
+        "video_name": "OpenSora_62cf18cd6e1b41d5a8c53859c42da33d",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/62cf18cd6e1b41d5a8c53859c42da33d.mp4",
+        "prompt": "castle",
+        "t2v_model": "OpenSora",
+        "v_score_model": 2.663602149751859,
+        "t_score_model": 3.5347867685762977,
+        "p_score_model": 2.270817284840793,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;  \nphysical/common-sense consistency: 3."
+    },
+    {
+        "video_name": "LaVie_d060a446075b4397aa08836a84b45ee5",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/d060a446075b4397aa08836a84b45ee5.mp4",
+        "prompt": "castle",
+        "t2v_model": "LaVie",
+        "v_score_model": 3.9779502234050668,
+        "t_score_model": 3.889853124419833,
+        "p_score_model": 3.9088921350422234,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;\nphysical/common-sense consistency: 4"
+    },
+    {
+        "video_name": "ModelScope_e8d55dc721364a3ca24b0130a56559b8",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/e8d55dc721364a3ca24b0130a56559b8.mp4",
+        "prompt": "a motorcycle accelerating to gain speed",
+        "t2v_model": "ModelScope",
+        "v_score_model": 0.6435457636347488,
+        "t_score_model": 0.9558564435790432,
+        "p_score_model": 0.9897678196109854,
+        "output": "visual quality: 1;  \ntext-to-video alignment: 1;\nphysical/common-sense consistency: 1;\n\nExplanation:\n\n- The video lacks sufficient information to evaluate the visual quality effectively since it appears to be a very close-up shot of a section of pavement with a very small portion of a motorcycle visible. The quality cannot be assessed due to the lack of detail and context.\n- The video does not fully depict the elements mentioned in the text prompt (motorcycle, accelerating, gaining speed). It is unclear what part of the motorcycle or the action of accelerating is being shown, and the content is too minimalistic to align with the prompt.\n- The video does not violate any common-sense principles, but it fails to convey the information required by the text prompt, making it impossible to assess physical/common-sense consistency effectively.\n\nTherefore, all scores are set at 1, indicating low quality across all dimensions."
+    },
+    {
+        "video_name": "OpenSora_ac2bd9d460a14a51b202a27d2b716bd1",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/ac2bd9d460a14a51b202a27d2b716bd1.mp4",
+        "prompt": "a motorcycle accelerating to gain speed",
+        "t2v_model": "OpenSora",
+        "v_score_model": 0.9709132996239515,
+        "t_score_model": 0.8511549030322397,
+        "p_score_model": 0.9948900591167511,
+        "output": "visual quality: 1;  \ntext-to-video alignment: 1;\nphysical/common-sense consistency: 1;"
+    },
+    {
+        "video_name": "AnimateDiffTurbo_bb73a7d9fb4b4f9f82c291f7eba74fb2",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/bb73a7d9fb4b4f9f82c291f7eba74fb2.mp4",
+        "prompt": "beach",
+        "t2v_model": "AnimateDiffTurbo",
+        "v_score_model": 2.1316282106045166,
+        "t_score_model": 2.928642611990774,
+        "p_score_model": 2.2575979819912506,
+        "output": "visual quality: 3;  \ntext-to-video alignment: 3;\nphysical/common-sense consistency: 3;"
+    },
+    {
+        "video_name": "VideoCrafter2_cd3042e5336749799226805e1539bd8a",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/cd3042e5336749799226805e1539bd8a.mp4",
+        "prompt": "beach",
+        "t2v_model": "VideoCrafter2",
+        "v_score_model": 2.114170369063451,
+        "t_score_model": 3.6977116295337678,
+        "p_score_model": 2.7828229705256744,
+        "output": "visual quality: 3;  \ntext-to-video alignment: 3;  \nphysical/common-sense consistency: 3;  "
+    },
+    {
+        "video_name": "VideoCrafter2_b2c4475fb5234a419aa09eda616abfa0",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/b2c4475fb5234a419aa09eda616abfa0.mp4",
+        "prompt": "A cat eating food out of a bowl",
+        "t2v_model": "VideoCrafter2",
+        "v_score_model": 2.0402272298613227,
+        "t_score_model": 2.939513641991076,
+        "p_score_model": 1.7962684467560406,
+        "output": "visual quality: 3;  \ntext-to-video alignment: 4;\nphysical/common-sense consistency: 2;\n\nExplanation:\n- **Visual Quality**: The video appears to have moderate resolution and clarity, but the image lacks depth and detail. There might be some slight blurriness, especially around the edges of the cat's fur and the bowl, which could be improved with higher resolution.\n- **Text-to-Video Alignment**: The video accurately shows a cat eating food from a bowl, matching the description provided in the prompt. However, the level of detail might not fully capture the motion and texture of the food being eaten.\n- **Physical/Common-Sense Consistency**: While the scene is plausible, the cat's interaction with the food (licking directly from the bowl instead of eating it naturally) might seem slightly unnatural to viewers, as cats typically eat from their own meal dishes without direct contact with the bowl. This can be seen as a minor inconsistency, but it does not significantly detract from the overall realism of the scene.\n\nTherefore, the quality score is calculated based on these observations."
+    },
+    {
+        "video_name": "ModelScope_02ecb95f6a194815a2768dee1ac7aa02",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/02ecb95f6a194815a2768dee1ac7aa02.mp4",
+        "prompt": "A cat eating food out of a bowl",
+        "t2v_model": "ModelScope",
+        "v_score_model": 2.458256694688129,
+        "t_score_model": 3.936738448048254,
+        "p_score_model": 2.873563367054733,
+        "output": "visual quality: 3;  \ntext-to-video alignment: 3;\nphysical/common-sense consistency: 4;\n\nExplanation:\n- Visual Quality: The video appears to have decent visual properties. It seems to be shot with a moderate resolution, which allows for clear visibility of the cat and the bowl of food. However, the image quality is not very sharp, suggesting it may be slightly low resolution or the lighting conditions were not optimal for better clarity. There does not seem to be any distortion or misalignment issues in the frame, but the colors could stand to be more vivid for better aesthetic appeal.\n- Text-to-Video Alignment: The video successfully captures the essence of \"a cat eating food out of a bowl\" as described in the prompt. The cat is shown actively consuming food from the bowl, which aligns with the action described.\n- Physical/Common-Sense Consistency: The video seems consistent in terms of behavior depicted. Generally, cats eat food from a bowl without any apparent anomalies or violations of expected physical laws or common sense.\n\nThus, the evaluation suggests a solid performance in alignment and consistency, with room for improvement in visual quality to enhance the overall watching experience."
+    },
+    {
+        "video_name": "LaVie_419c39fa225d4070b15481df1e8fa043",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/419c39fa225d4070b15481df1e8fa043.mp4",
+        "prompt": "raceway",
+        "t2v_model": "LaVie",
+        "v_score_model": 3.958851999540854,
+        "t_score_model": 3.738363006135606,
+        "p_score_model": 3.8400348994080833,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;  \nphysical/common-sense consistency: 4;  "
+    },
+    {
+        "video_name": "StableVideoDiffusion_03d7cee5b74042ef91bdfe3c66153b20",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/03d7cee5b74042ef91bdfe3c66153b20.mp4",
+        "prompt": "raceway",
+        "t2v_model": "StableVideoDiffusion",
+        "v_score_model": 3.7138242757096815,
+        "t_score_model": 3.3658034974589865,
+        "p_score_model": 3.4021229993859943,
+        "output": "visual quality: 4;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 4"
+    },
+    {
+        "video_name": "T2VTurbo_043cdb3079654a09ad9cad75aee533f5",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/043cdb3079654a09ad9cad75aee533f5.mp4",
+        "prompt": "A person is pushing cart",
+        "t2v_model": "T2VTurbo",
+        "v_score_model": 1.8862320430655952,
+        "t_score_model": 1.4917218198238074,
+        "p_score_model": 2.259188591033407,
+        "output": "visual quality: 3;  \ntext-to-video alignment: 4;\nphysical/common-sense consistency: 3;"
+    },
+    {
+        "video_name": "OpenSora_5edc1ebfe2184398941ed3dd435a001f",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/5edc1ebfe2184398941ed3dd435a001f.mp4",
+        "prompt": "A person is pushing cart",
+        "t2v_model": "OpenSora",
+        "v_score_model": 0.6043773830789146,
+        "t_score_model": 0.8677834452071707,
+        "p_score_model": 0.9719592581968196,
+        "output": "visual quality: 1; text-to-video alignment: 1; physical/common-sense consistency: 1"
+    },
+    {
+        "video_name": "StableVideoDiffusion_2723edf5c77745a49d2b056aded3f0b2",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/2723edf5c77745a49d2b056aded3f0b2.mp4",
+        "prompt": "a bird building a nest from twigs and leaves",
+        "t2v_model": "StableVideoDiffusion",
+        "v_score_model": 3.9932251683200284,
+        "t_score_model": 3.8412914278495314,
+        "p_score_model": 3.472103308444899,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;  \nphysical/common-sense consistency: 4;  \n\nThe video appears to be of high visual quality with clear details and smooth transitions. The bird and the nest are depicted accurately based on the prompt, ensuring good alignment. The video also maintains a logical sequence consistent with the natural behavior of birds building nests, which results in good physical consistency. Some minor aspects could be improved upon, but it's close to achieving a perfect score."
+    },
+    {
+        "video_name": "OpenSora_855e3d3d46944c42bc163e07b23f6dec",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/855e3d3d46944c42bc163e07b23f6dec.mp4",
+        "prompt": "a bird building a nest from twigs and leaves",
+        "t2v_model": "OpenSora",
+        "v_score_model": 1.9346303604263944,
+        "t_score_model": 3.364656114276922,
+        "p_score_model": 3.2453399920442987,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;\nphysical/common-sense consistency: 4;\n\nExplanation:\n- **Visual Quality**: The video appears to have a decent resolution and the details of the birds and their actions are visible enough. The lighting seems natural with no major issues affecting visibility. While the background is slightly blurred, it doesn't significantly impact the understanding of the main action. Overall, the visual quality is satisfactory.\n  \n- **Text-to-Video Alignment**: The video clearly shows a bird building a nest using twigs and leaves, which aligns well with the text prompt. The bird's behavior matches the expected actions associated with nest-building, indicating a good alignment.\n\n- **Physical/Common-Sense Consistency**: The video demonstrates a plausible scenario where a bird is constructing a nest, without any apparent issues or inconsistencies. It adheres to the expected behavior of birds in nature, making it consistent with common sense and physical laws. There are no unusual elements present in the video.\n\nThus, the quality score based on these dimensions is 4 for all three categories."
+    },
+    {
+        "video_name": "AnimateDiffTurbo_e86454e34336417aae963e3c2fb09016",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/e86454e34336417aae963e3c2fb09016.mp4",
+        "prompt": "a cow on the right of an elephant, front view",
+        "t2v_model": "AnimateDiffTurbo",
+        "v_score_model": 2.039955906620149,
+        "t_score_model": 0.8277896309488963,
+        "p_score_model": 1.207690409235611,
+        "output": "visual quality: 3;\ntext-to-video alignment: 2,\nphysical/common-sense consistency: 3"
+    },
+    {
+        "video_name": "LaVie_39ca873b009d40cb9a7ac7d49f70b7b0",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/39ca873b009d40cb9a7ac7d49f70b7b0.mp4",
+        "prompt": "a cow on the right of an elephant, front view",
+        "t2v_model": "LaVie",
+        "v_score_model": 1.4608754258505674,
+        "t_score_model": 0.713843320483015,
+        "p_score_model": 1.6392690578208398,
+        "output": "visual quality: 2;\ntext-to-video alignment: 2;\nphysical/common-sense consistency: 2;"
+    },
+    {
+        "video_name": "ModelScope_9649ebf10e384b3cb9625049ff1a2f77",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/9649ebf10e384b3cb9625049ff1a2f77.mp4",
+        "prompt": "A person is filling eyebrows",
+        "t2v_model": "ModelScope",
+        "v_score_model": 1.1841071701511525,
+        "t_score_model": 1.1435275494824715,
+        "p_score_model": 1.4385215228480994,
+        "output": "visual quality: 2; \ntext-to-video alignment: 1,\nphysical/common-sense consistency: 2"
+    },
+    {
+        "video_name": "StableVideoDiffusion_f9557d025e3e46b19f1c70d910948fa4",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/f9557d025e3e46b19f1c70d910948fa4.mp4",
+        "prompt": "A person is filling eyebrows",
+        "t2v_model": "StableVideoDiffusion",
+        "v_score_model": 3.9949268073753488,
+        "t_score_model": 2.943295205547373,
+        "p_score_model": 3.227428612463701,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 3;\nphysical/common-sense consistency: 4 \n\nExplanation: \n- Visual Quality: The video appears to have good resolution, clarity, and stable lighting. There are no noticeable issues with blurriness or distortion. However, the video seems to lack dynamic range and could benefit from better contrast to enhance the overall visibility of the subject and the action being performed.\n\n- Text-to-Video Alignment: While the video shows a person applying makeup, the specific task mentioned in the prompt (filling eyebrows) is not clearly visible. Although the action might be inferred as part of a makeup routine, it does not fully align with the exact action described in the prompt.\n\n- Physical/Common-Sense Consistency: The video does not contain any elements that violate common sense or physical laws. Everything looks natural and logical within the context of a makeup application session. The subject is holding an applicator near their eye area, which is consistent with the activity of filling eyebrows.\n\nFor these reasons, I gave the quality score of 4 for visual quality, 3 for text-to-video alignment, and 4 for physical/common-sense consistency."
+    },
+    {
+        "video_name": "VideoCrafter2_8162e6e619eb41bebcd611134c48bb71",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/8162e6e619eb41bebcd611134c48bb71.mp4",
+        "prompt": "castle",
+        "t2v_model": "VideoCrafter2",
+        "v_score_model": 3.8670072178737955,
+        "t_score_model": 3.884414455569122,
+        "p_score_model": 3.7128844173193403,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4,\nphysical/common-sense consistency: 4"
+    },
+    {
+        "video_name": "StableVideoDiffusion_2f00b9f2387140c6b02b1f616b8dbdf6",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/2f00b9f2387140c6b02b1f616b8dbdf6.mp4",
+        "prompt": "castle",
+        "t2v_model": "StableVideoDiffusion",
+        "v_score_model": 3.999549753779302,
+        "t_score_model": 3.9198320691011106,
+        "p_score_model": 3.810951337686036,
+        "output": "visual quality: 4;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 4"
+    },
+    {
+        "video_name": "OpenSora_b46ab523a3504c6f9430eaa60999e7fd",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/b46ab523a3504c6f9430eaa60999e7fd.mp4",
+        "prompt": "A panda playing on a swing set",
+        "t2v_model": "OpenSora",
+        "v_score_model": 1.192731733105485,
+        "t_score_model": 3.0956520196500024,
+        "p_score_model": 1.980830529867899,
+        "output": "visual quality: 3;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 3"
+    },
+    {
+        "video_name": "VideoCrafter2_9c96dbb6ee7d41e2b8336d89513221c8",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/9c96dbb6ee7d41e2b8336d89513221c8.mp4",
+        "prompt": "A panda playing on a swing set",
+        "t2v_model": "VideoCrafter2",
+        "v_score_model": 3.825921145326589,
+        "t_score_model": 3.905712570693007,
+        "p_score_model": 2.827767781600303,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4,\nphysical/common-sense consistency: 3"
+    },
+    {
+        "video_name": "VideoCrafter2_8b356abb2bc04b258347693387888f97",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/8b356abb2bc04b258347693387888f97.mp4",
+        "prompt": "downtown",
+        "t2v_model": "VideoCrafter2",
+        "v_score_model": 1.870646226277403,
+        "t_score_model": 3.6248552848106956,
+        "p_score_model": 3.6247830653704614,
+        "output": "visual quality: 4;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 4"
+    },
+    {
+        "video_name": "ModelScope_2c2f109bbe0b4ecd94dff47d950fee1e",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/2c2f109bbe0b4ecd94dff47d950fee1e.mp4",
+        "prompt": "downtown",
+        "t2v_model": "ModelScope",
+        "v_score_model": 1.9561270711973537,
+        "t_score_model": 3.4419368638725034,
+        "p_score_model": 2.9326831366860295,
+        "output": "visual quality: 3;  \ntext-to-video alignment: 4;  \nphysical/common-sense consistency: 3;"
+    },
+    {
+        "video_name": "AnimateDiff_3599f0e7098f4deb86e7338102b2a9b7",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/3599f0e7098f4deb86e7338102b2a9b7.mp4",
+        "prompt": "In a still frame, the ornate Victorian streetlamp stands solemnly, adorned with intricate ironwork and stained glass panels",
+        "t2v_model": "AnimateDiff",
+        "v_score_model": 3.982780418706916,
+        "t_score_model": 3.920404785603471,
+        "p_score_model": 3.8446403334387567,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;  \nphysical/common-sense consistency: 4;  \n\nThis assessment is based on the provided image, which closely aligns with the description given in the text prompt. The ornate Victorian streetlamp, intricate ironwork, and stained glass panels are all present and clearly depicted. The lighting and composition also enhance the visual appeal, making it a high-quality image. There are no apparent inconsistencies or violations of common sense in the depiction of this scene. Thus, the scores reflect a satisfactory representation consistent with the original prompt and design expectations."
+    },
+    {
+        "video_name": "OpenSora_e9b0b62e428c43699a91123bed9e5f8c",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/e9b0b62e428c43699a91123bed9e5f8c.mp4",
+        "prompt": "In a still frame, the ornate Victorian streetlamp stands solemnly, adorned with intricate ironwork and stained glass panels",
+        "t2v_model": "OpenSora",
+        "v_score_model": 3.873280367339946,
+        "t_score_model": 3.930564890810849,
+        "p_score_model": 3.8366548196721872,
+        "output": "visual quality: 4; \ntext-to-video alignment: 4,\nphysical/common-sense consistency: 4"
+    },
+    {
+        "video_name": "StableVideoDiffusion_94ac84b540d7473bac0054865853e6cd",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/94ac84b540d7473bac0054865853e6cd.mp4",
+        "prompt": "a bicycle",
+        "t2v_model": "StableVideoDiffusion",
+        "v_score_model": 1.6291363924338285,
+        "t_score_model": 3.2911389245488323,
+        "p_score_model": 2.2350501144391526,
+        "output": "visual quality: 3;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 3\n\nExplanation:\n- Visual quality: The video appears to have a basic resolution and clarity, but lacks dynamic range and fine detail. The lighting seems even, though there is no indication of depth or texture in the image. There are no evident distortions or misalignments, although the movement could be smoother.\n- Text-to-video alignment: The video accurately represents the concept of a bicycle as described in the prompt. However, the video lacks context and action, just showing a static image, which might not fully align with a real-world depiction of a bicycle.\n- Physical/common-sense consistency: There are no immediate violations of common sense or physical laws, but the lack of context and action makes it difficult to ascertain the realism of the scene. A more dynamic or interactive display of the bicycle could improve this aspect."
+    },
+    {
+        "video_name": "AnimateDiff_6c3acbe82a9a4315b60fdd8c9e4b05b1",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/6c3acbe82a9a4315b60fdd8c9e4b05b1.mp4",
+        "prompt": "a bicycle",
+        "t2v_model": "AnimateDiff",
+        "v_score_model": 3.949289786491957,
+        "t_score_model": 3.7191630322874465,
+        "p_score_model": 3.677157444462869,
+        "output": "visual quality: 4  \ntext-to-video alignment: 4  \nphysical/common-sense consistency: 4  \n\nJustification:  \n- **Visual Quality**: The image appears to have good resolution, clarity, and smoothness. There are no visible blurriness, distortion, or abrupt changes. The lighting seems natural, which suggests stable brightness and contrast for a clear viewing experience.\n- **Text-to-Video Alignment**: The video content shows a single bicycle as expected in the prompt, with no additional elements that conflict with the text description.\n- **Physical/Common-Sense Consistency**: The scene is logical, depicting a typical street setting with a bicycle parked against a building. Everything looks consistent and realistic without any elements that violate common sense or physical laws. \n\nThus, all dimensions align favorably, giving a good quality score of 4."
+    },
+    {
+        "video_name": "ModelScope_f885e855d7ff48d5ab95eb34ce9072a6",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/f885e855d7ff48d5ab95eb34ce9072a6.mp4",
+        "prompt": "Snow rocky mountains peaks canyon. snow blanketed rocky mountains surround and shadow deep canyons. the canyons twist and bend through the high elevated mountain peaks.",
+        "t2v_model": "ModelScope",
+        "v_score_model": 3.6963947315124455,
+        "t_score_model": 3.9107775625885735,
+        "p_score_model": 3.6676983441601774,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;\nphysical/common-sense consistency: 4;\n\nExplanation:\n- Visual Quality: The video appears to have good resolution and clarity, though it may not be of extremely high definition. The edges of the cliffs and the contrast between the snow and the rock formations seem clear enough. There’s no evident local blurriness or distortion, but the image could benefit from a slightly higher resolution.\n- Text-to-Video Alignment: The video aligns well with the description provided. It shows snow-covered mountain peaks and deep canyons with twisting paths through them, which matches the text prompt. However, the extent of the canyons being described as \"deep\" might require more coverage of the terrain, which this video does not fully demonstrate.\n- Physical/Common-Sense Consistency: The video logically depicts snowy mountain peaks and deep canyons, which is consistent with the scene and weather conditions described in the text prompt. There are no apparent physical inconsistencies or violations of common sense.\n\nOverall, the video meets expectations well across all dimensions without significant issues, warranting a score of 4 on each scale."
+    },
+    {
+        "video_name": "VideoCrafter2_aa62f2b21a7d4bb0b1319627254cb4d2",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/aa62f2b21a7d4bb0b1319627254cb4d2.mp4",
+        "prompt": "Snow rocky mountains peaks canyon. snow blanketed rocky mountains surround and shadow deep canyons. the canyons twist and bend through the high elevated mountain peaks.",
+        "t2v_model": "VideoCrafter2",
+        "v_score_model": 3.9963962545026943,
+        "t_score_model": 3.9737859363159713,
+        "p_score_model": 3.822960241934193,
+        "output": "visual quality: 4;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 4"
+    },
+    {
+        "video_name": "T2VTurbo_d7c2a0662a994a1dba920f302c52fd58",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/d7c2a0662a994a1dba920f302c52fd58.mp4",
+        "prompt": "parking lot",
+        "t2v_model": "T2VTurbo",
+        "v_score_model": 3.88974824065576,
+        "t_score_model": 3.8644257592175646,
+        "p_score_model": 3.6751394858138595,
+        "output": "visual quality: 4;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 4"
+    },
+    {
+        "video_name": "LaVie_2ab365695df44443aa144512d67edc85",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/2ab365695df44443aa144512d67edc85.mp4",
+        "prompt": "parking lot",
+        "t2v_model": "LaVie",
+        "v_score_model": 1.7258372716514199,
+        "t_score_model": 3.65544874318705,
+        "p_score_model": 3.679395560975364,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;\nphysical/common-sense consistency: 4;"
+    },
+    {
+        "video_name": "StableVideoDiffusion_fe1536ec842045738521d946ae6f015d",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/fe1536ec842045738521d946ae6f015d.mp4",
+        "prompt": "a potted plant and a tv",
+        "t2v_model": "StableVideoDiffusion",
+        "v_score_model": 3.5877481099337163,
+        "t_score_model": 3.697081262638455,
+        "p_score_model": 3.22862193825606,
+        "output": "visual quality: 4;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 4"
+    },
+    {
+        "video_name": "AnimateDiff_717cfd532ca84954a066f0226bc238e6",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/717cfd532ca84954a066f0226bc238e6.mp4",
+        "prompt": "a potted plant and a tv",
+        "t2v_model": "AnimateDiff",
+        "v_score_model": 3.854458180548921,
+        "t_score_model": 3.907371164639821,
+        "p_score_model": 3.8831783546572343,
+        "output": "visual quality: 4;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 4"
+    },
+    {
+        "video_name": "ModelScope_31467622900c400882fe57be65faf99f",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/31467622900c400882fe57be65faf99f.mp4",
+        "prompt": "A cute fluffy panda eating Chinese food in a restaurant",
+        "t2v_model": "ModelScope",
+        "v_score_model": 1.480620796350087,
+        "t_score_model": 1.4772900929887287,
+        "p_score_model": 2.4594134219589328,
+        "output": "visual quality: 3;  \ntext-to-video alignment: 4;  \nphysical/common-sense consistency: 3;  "
+    },
+    {
+        "video_name": "StableVideoDiffusion_6bc05f882af84a939ecb435a2963261c",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/6bc05f882af84a939ecb435a2963261c.mp4",
+        "prompt": "A cute fluffy panda eating Chinese food in a restaurant",
+        "t2v_model": "StableVideoDiffusion",
+        "v_score_model": 3.9415366380550982,
+        "t_score_model": 3.88482773292973,
+        "p_score_model": 1.5171938321861325,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;  \nphysical/common-sense consistency: 4;\n\nThe video appears to have good visual quality with clear resolution and smoothness. The panda character looks well-rendered with no issues of blurriness or misalignment. However, the lighting and shadows could be better balanced to enhance the overall visual appeal.\n\nFor text-to-video alignment, the panda character, its actions, and the presence of Chinese food in a restaurant setting align fairly well with the textual prompt. The panda is depicted eating noodles, which is a reasonable assumption given the prompt.\n\nRegarding physical/common-sense consistency, the panda eating with chopsticks is a reasonable depiction as it is not uncommon for pandas to use their paws to eat, though chopsticks are typically associated with human behavior. The setting of a restaurant with red lanterns also aligns well with the prompt.\n\nGiven these observations, the video scores well but has room for improvement in areas like lighting balance and more detailed animation, which may slightly impact the visual quality. Therefore, a quality score of 4 seems appropriate for this evaluation."
+    },
+    {
+        "video_name": "VideoCrafter2_25af4db8bc654f05b60895f0b8363021",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/25af4db8bc654f05b60895f0b8363021.mp4",
+        "prompt": "a bird building a nest from twigs and leaves",
+        "t2v_model": "VideoCrafter2",
+        "v_score_model": 3.953544592220995,
+        "t_score_model": 2.6948573636900095,
+        "p_score_model": 3.3336016083713598,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 3;  \nphysical/common-sense consistency: 4;  \n\nExplanation:  \n- Visual Quality: The video appears to have good resolution and clarity, with a clear depiction of the bird and the nest. However, there might be some minor blur or slight movement affecting the overall crispness, which could slightly lower the score.\n- Text-to-Video Alignment: While the video shows a bird in a nest, it does not explicitly depict the bird actively building the nest from twigs and leaves. This aspect partially misaligns with the original prompt.\n- Physical/Common-Sense Consistency: There are no evident violations of common sense or physical laws within the provided frame. The bird and the nest are situated naturally as expected in a forest setting. However, the lack of visible twigs being used to build the nest might be seen as a limitation in full physical consistency. \n\nCombining these observations, a moderate quality score reflects the strengths and limitations identified. The final quality score is based on a balanced evaluation of all three dimensions."
+    },
+    {
+        "video_name": "OpenSora_b3584570e8364e9c80a0e2e870f2aff8",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/b3584570e8364e9c80a0e2e870f2aff8.mp4",
+        "prompt": "a bird building a nest from twigs and leaves",
+        "t2v_model": "OpenSora",
+        "v_score_model": 1.9346303604263944,
+        "t_score_model": 3.7371941893553458,
+        "p_score_model": 2.773771653867952,
+        "output": "visual quality: 3;\ntext-to-video alignment: 3,\nphysical/common-sense consistency: 3"
+    },
+    {
+        "video_name": "T2VTurbo_7f71ff63b71948a880898440d9b0c764",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/7f71ff63b71948a880898440d9b0c764.mp4",
+        "prompt": "a green bicycle",
+        "t2v_model": "T2VTurbo",
+        "v_score_model": 3.81906365374863,
+        "t_score_model": 3.8885998785360023,
+        "p_score_model": 3.8727022294730564,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;  \nphysical/common-sense consistency: 4 \n\nExplanation:\nThe video shows a green bicycle with good visual quality, demonstrating appropriate resolution, no noticeable local blurriness, smoothness, stable brightness and contrast, and no apparent distortion or misalignment. The video aligns well with the text prompt \"a green bicycle,\" accurately depicting the color and type of bike mentioned. Lastly, the video adheres to physical consistency, as it correctly represents a bicycle without any violations of common sense or physical laws."
+    },
+    {
+        "video_name": "AnimateDiff_9ba0a8bc2658492c933e6c2ae4400dc4",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/9ba0a8bc2658492c933e6c2ae4400dc4.mp4",
+        "prompt": "a green bicycle",
+        "t2v_model": "AnimateDiff",
+        "v_score_model": 2.338523317858316,
+        "t_score_model": 3.375721062836906,
+        "p_score_model": 2.752388312072664,
+        "output": "visual quality: 3;  \ntext-to-video alignment: 4;  \nphysical/common-sense consistency: 3;\n\nExplanation: The video shows a green bicycle, which aligns with the text prompt. However, the bicycle appears to be moving at an extremely fast speed, which might not be physically realistic given the context of a green bicycle typically used for leisurely rides or commuting. Additionally, the angle and perspective could be improved for better visual clarity, but these minor issues slightly reduce the overall visual quality. On the other hand, the alignment between the prompt and the video content is satisfactory, and there are no major violations of physical laws or common sense within the provided context. Therefore, the quality score is 3 for visual quality, 4 for text-to-video alignment, and 3 for physical/common-sense consistency."
+    },
+    {
+        "video_name": "AnimateDiffTurbo_df225cf481f840be8d406d31c893bcd0",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/df225cf481f840be8d406d31c893bcd0.mp4",
+        "prompt": "In a still frame, phone booth",
+        "t2v_model": "AnimateDiffTurbo",
+        "v_score_model": 0.9974832485399197,
+        "t_score_model": 0.6613109067932413,
+        "p_score_model": 1.536810123061785,
+        "output": "visual quality: 2; \ntext-to-video alignment: 1,\nphysical/common-sense consistency: 3"
+    },
+    {
+        "video_name": "StableVideoDiffusion_9fbec37f63d54bac8ba6c77ff286b3f3",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/9fbec37f63d54bac8ba6c77ff286b3f3.mp4",
+        "prompt": "In a still frame, phone booth",
+        "t2v_model": "StableVideoDiffusion",
+        "v_score_model": 3.2141478712114258,
+        "t_score_model": 2.847901341712292,
+        "p_score_model": 2.321114478183146,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;  \nphysical/common-sense consistency: 3;\n\nExplanation: \n\n- Visual quality: The video appears to have good resolution and clarity, but there might be some subtle issues with lighting and contrast as the scene seems slightly dim. There doesn't seem to be much local blurriness, but it could benefit from a bit more attention to lighting for a more dynamic look. Overall, it's a solid video in terms of visual quality.\n\n- Text-to-Video Alignment: The video accurately represents the prompt by showing a single stationary phone booth. It captures all key elements mentioned – the booth's structure, color, and location. The alignment is perfect.\n\n- Physical/Common-Sense Consistency: While the video shows a plausible scene with a phone booth in a street setting, there’s a minor inconsistency. The phone booth appears to be a classic British design, but the street and other urban elements (like the tram or bus) seem more modern, blending styles without a clear context. This could be seen as a slight violation of common sense if the viewer expects a consistent time period or style. However, this is a relatively minor issue.\n\nCombining these evaluations, the overall quality is good, but not perfect due to some minor inconsistencies and the need for more dynamic lighting. Thus, a score of 4 out of 5 seems appropriate."
+    },
+    {
+        "video_name": "AnimateDiffTurbo_f8596541b1814826a7360dc9c1e7db2b",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/f8596541b1814826a7360dc9c1e7db2b.mp4",
+        "prompt": "Gwen Stacy reading a book, pan right",
+        "t2v_model": "AnimateDiffTurbo",
+        "v_score_model": 3.044342273674994,
+        "t_score_model": 2.125641427426605,
+        "p_score_model": 2.3070455050749255,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;\nphysical/common-sense consistency: 4;\n\nExplanation:\n- Visual quality: The image appears clear with good detail and no noticeable blurriness, but the single frame provided does not allow for assessment of smoothness, stability, or abrupt changes. The resolution and contrast seem adequate.\n- Text-to-video alignment: The character (presumably Gwen Stacy based on the prompt) is depicted holding a book, which aligns with the text prompt. However, the \"pan right\" is not observable since only one frame is provided.\n- Physical/common-sense consistency: There are no apparent violations of common sense or physical laws within this single frame. However, without multiple frames, it's difficult to assess the overall consistency over time. \n\nGiven these observations, the highest possible score on all dimensions seems appropriate, but it is limited by the lack of multiple frames for a full assessment."
+    },
+    {
+        "video_name": "VideoCrafter2_e9ecef1027b747e5bee2d6a8ea6e76b8",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/e9ecef1027b747e5bee2d6a8ea6e76b8.mp4",
+        "prompt": "Gwen Stacy reading a book, pan right",
+        "t2v_model": "VideoCrafter2",
+        "v_score_model": 3.151688537927362,
+        "t_score_model": 2.6351295321645556,
+        "p_score_model": 2.038204726864796,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 4;\nphysical/common-sense consistency: 3;\n\nExplanation:\n- Visual Quality: The image appears clear and well-composed with good lighting and sharp details, but it lacks the dynamic range and depth typically found in high-quality video content. It has a consistent color palette and natural tone without noticeable distortions, thus the score is 4.\n- Text-to-Video Alignment: The video accurately captures the main action (Gwen Stacy reading a book) and the action sequence (panning to the right), though since it's a still image, the pan is not physically possible in the same sense as a video. However, the alignment between the text prompt and the content is fairly accurate, hence the score is 4.\n- Physical/Common-Sense Consistency: While the scene is plausible and follows common sense, there is a slight inconsistency in the panning concept as it is depicted in a static image rather than a video. This is a limitation inherent to the format of the still image used here. Hence the score is adjusted to 3."
+    },
+    {
+        "video_name": "AnimateDiff_44fbbf02ed20424eae95759d3165431d",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/44fbbf02ed20424eae95759d3165431d.mp4",
+        "prompt": "castle",
+        "t2v_model": "AnimateDiff",
+        "v_score_model": 3.993195754132071,
+        "t_score_model": 3.8995070533601717,
+        "p_score_model": 3.769615176958296,
+        "output": "visual quality: 4;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 4"
+    },
+    {
+        "video_name": "AnimateDiffTurbo_a5e35f0e97ee4a08b5658051e3716b9a",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/a5e35f0e97ee4a08b5658051e3716b9a.mp4",
+        "prompt": "castle",
+        "t2v_model": "AnimateDiffTurbo",
+        "v_score_model": 3.66522441554317,
+        "t_score_model": 3.696179765700729,
+        "p_score_model": 2.373391221967735,
+        "output": "visual quality: 4;  \ntext-to-video alignment: 3;\nphysical/common-sense consistency: 3;\n\nThe video appears to have a decent visual quality with clear details and no apparent blurriness or misalignment. However, the overall image seems somewhat static and lacks dynamic elements, which might lower the visual quality slightly. The alignment to the text prompt \"castle\" is reasonably good, depicting a castle-like structure. Yet, it doesn't fully capture the dynamic and immersive aspect that one might expect. The physical consistency seems acceptable, but the lack of context or additional elements could give it a sense of artificiality, making it feel less natural. Therefore, scoring lower on this dimension. Overall, a balanced rating is given."
+    },
+    {
+        "video_name": "ModelScope_a39a17f6a06d46a0856f13a3cb6c97e5",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/a39a17f6a06d46a0856f13a3cb6c97e5.mp4",
+        "prompt": "an airplane landing smoothly on a runway",
+        "t2v_model": "ModelScope",
+        "v_score_model": 1.2471166507291696,
+        "t_score_model": 0.6481140754204093,
+        "p_score_model": 0.9860420496278841,
+        "output": "visual quality: 1; \ntext-to-video alignment: 1,\nphysical/common-sense consistency: 1"
+    },
+    {
+        "video_name": "AnimateDiff_77c954fead2447e4a8c965d8f2bf8c0b",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/77c954fead2447e4a8c965d8f2bf8c0b.mp4",
+        "prompt": "an airplane landing smoothly on a runway",
+        "t2v_model": "AnimateDiff",
+        "v_score_model": 1.2373183319094438,
+        "t_score_model": 0.6467023783687698,
+        "p_score_model": 0.6364377325501429,
+        "output": "visual quality: 2;  \ntext-to-video alignment: 1;  \nphysical/common-sense consistency: 1;"
+    },
+    {
+        "video_name": "T2VTurbo_d8edd73569964a4cb0d607a0f5b8b5a9",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/d8edd73569964a4cb0d607a0f5b8b5a9.mp4",
+        "prompt": "a parking meter on the right of a bench, front view",
+        "t2v_model": "T2VTurbo",
+        "v_score_model": 3.7698713702787296,
+        "t_score_model": 2.8444036888756306,
+        "p_score_model": 3.7162685541576455,
+        "output": "visual quality: 4;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 4"
+    },
+    {
+        "video_name": "VideoCrafter2_7c282a6024874a0f97026d914fec713b",
+        "video_url": "https://huggingface.co/datasets/tianleliphoebe/genai-arena-video-mp4/resolve/main/7c282a6024874a0f97026d914fec713b.mp4",
+        "prompt": "a parking meter on the right of a bench, front view",
+        "t2v_model": "VideoCrafter2",
+        "v_score_model": 3.8119414702035694,
+        "t_score_model": 3.910071718200612,
+        "p_score_model": 3.66568145466036,
+        "output": "visual quality: 4;\ntext-to-video alignment: 4,\nphysical/common-sense consistency: 4"
+    }
+]
