@@ -158,13 +158,11 @@ def main(args):
     
     if method == "vs2_float":
         temperature=kwargs.get("temperature",0.7)
-        eval_res_path=eval_res_path.replace("_infer",f"_float_infer")
-        eval_res_path=eval_res_path.replace(".json",f"_tempe={temperature}.json")
+        eval_res_path=eval_res_path.replace(".json",f"_flt_normed_tempe={temperature}.json")
     
     if method == "vs2_float_weighted":
         temperature=kwargs.get("temperature",0.7)
-        eval_res_path=eval_res_path.replace("_infer",f"_infer_weighted")
-        eval_res_path=eval_res_path.replace(".json",f"_tempe={temperature}.json")
+        eval_res_path=eval_res_path.replace(".json",f"_flt_weighted_tempe={temperature}.json")
     
     print("Evaluation result will be saved to ", eval_res_path)
     
