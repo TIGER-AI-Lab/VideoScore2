@@ -166,10 +166,13 @@ class eval_VideoScore2_float:
         idx_t = find_score_token_index_by_prompt("text-to-video alignment:")
         idx_p = find_score_token_index_by_prompt("physical/common-sense consistency:")
         
-        def ll_based_soft_score_normed(hard_val, token_idx) -> float:
+        
+        def ll_based_soft_score_weighted(hard_val, token_idx) -> float:
             if hard_val is None or token_idx < 0:
                 return None
+
             logits = scores[token_idx][0]  # [vocab]
+
             score_range = list(range(1, 6))
             score_probs = []  # [(score, prob)]
 
@@ -189,18 +192,14 @@ class eval_VideoScore2_float:
 
             scores_list, probs_list = zip(*score_probs)
             total_prob = sum(probs_list)
-            max_prob = max(probs_list)
-            max_idx = probs_list.index(max_prob)
-            best_score = scores_list[max_idx]
+            norm_probs = [p / total_prob for p in probs_list]
 
-            normalized_prob = max_prob / total_prob if total_prob > 0 else 0
-            soft_score = best_score * normalized_prob
+            soft_score = sum(s * p for s, p in zip(scores_list, norm_probs))
 
             print(f"hard score={hard_val}, token_idx={token_idx}")
-            for s, p in score_probs:
-                print(f"  score {s}: prob={p:.4f}")
-            print(f"  max prob={max_prob:.4f} at score={best_score}, total prob={total_prob:.4f}")
-            print(f"  normalized prob={normalized_prob:.4f}, soft score={soft_score:.4f}")
+            for s, p, np_ in zip(scores_list, probs_list, norm_probs):
+                print(f"  score {s}: raw_prob={p:.4f}, norm_prob={np_:.4f}")
+            print(f"soft score (weighted average) = {soft_score:.4f}")
 
             return soft_score
         

@@ -406,7 +406,10 @@ if __name__ == "__main__":
     # print(len(data))
     
     
-    aside_prompts()
+    # aside_prompts()
+    
+    
+    
     None
 
             

@@ -3,7 +3,7 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 from tqdm import tqdm
-
+import copy
 def prompt_sources():
     p="/data/xuan/data/videoscore2/text_prompts/all_prompts.jsonl"
     with open(p, "r", encoding="utf-8") as f:
@@ -22,6 +22,7 @@ def prompt_sources():
         "story":0,
         "camera_motion":0,
     }
+    total=len(annos)
     for anno in tqdm(annos):
         video_name=anno['video_name']
         prompt_idx=video_name.split("_")[0]
@@ -32,7 +33,8 @@ def prompt_sources():
                 break
             
     print(prompt_src_cnt)
-     
+    for k in prompt_src_cnt:
+        print(f"{k}: {prompt_src_cnt[k]}/{total}, {prompt_src_cnt[k]/total:.2%}")
     
 def prompt_word_cloud():
     from wordcloud import WordCloud
@@ -88,16 +90,17 @@ def think_len_dist():
             data=json.load(f)
         for x in data:
             if x['thinking'] is not None:
-                think_len_list.append(len(x['thinking']))
+                think_len_list.append(len(x['thinking'].split(" ")))
             else:
                 print(p)
                 print(x['video_name'])
-    
-    bin_range=list(range(min(think_len_list)-100,max(think_len_list)+100,100))
-    plt.hist(think_len_list, bins=bin_range, rwidth=0.88)
-    plt.xlabel('Thinking Length')
+    plt.figure(figsize=(8, 4))
+    color1  = "#68E3F4FB"  
+    bin_range=list(range(min(think_len_list)-50,max(think_len_list)+50,20))
+    plt.hist(think_len_list, bins=bin_range, rwidth=0.88, color=color1)
+    plt.xlabel('Num of words in rationale (thinking)')
     plt.ylabel('Frequency')
-    plt.title(f'Thinking Length Distribution')
+    plt.title(f'Rationale Length Distribution')
     fig_dir="paper_figures"
     os.makedirs(fig_dir, exist_ok=True)
     plt.savefig(f"{fig_dir}/{batch_name}_think_len.png")
@@ -156,18 +159,19 @@ def score_dist_all_in_one():
     x = np.arange(len(bins))  # 分数位置
     width = 0.25              # 每根柱子的宽度
 
-    light_blue  = "#52C3F8"  # 淡蓝色
-    light_green = "#90EE90"  # 淡绿色
-    light_yellow= "#EEB24B"  # 淡黄色
+    color1  = "#82F2C5"  
+    color2 = "#AFC8EB"  
+    color3= "#EAB3A7"  
+    plt.figure(figsize=(8, 4))
     
-    plt.bar(x - width, v_counts, width, color=light_blue, label="Visual Quality")
-    plt.bar(x,         t_counts, width, color=light_green, label="Text Alignment")
-    plt.bar(x + width, p_counts, width, color=light_yellow, label="Physical Consistency")
+    plt.bar(x - width, v_counts, width, color=color1, label="Visual Quality")
+    plt.bar(x,         t_counts, width, color=color2, label="Text Alignment")
+    plt.bar(x + width, p_counts, width, color=color3, label="Physical Consistency")
 
     plt.xticks(x, bins)
     plt.xlabel("Score")
     plt.ylabel("Count")
-    plt.title("Score Distribution for All Dimensions")
+    plt.title("Score Distribution in Annotations")
     plt.legend()
 
     fig_dir = "paper_figures"
@@ -175,10 +179,91 @@ def score_dist_all_in_one():
     plt.savefig(f"{fig_dir}/score_dist_3_in_1.png")
     plt.clf()
 
+
+def count_score_difference_dist():
+    
+    paths=[
+        f"/data/xuan/workdir/VideoScore2/data/thinking_original/thinking_{bname}.json" for bname in [
+            "com_5k_0",
+            "com_5k_1",
+            "com_5k_2",
+            "com_5k_3",
+            "com_5k_4",
+        ]
+        ]
+    data=[]
+    for p in paths:
+        data.extend(json.load(open(p,"r",encoding='utf-8')))
+    total_items=len(data)
+    human_score=[]
+    v_gt=[]
+    t_gt=[]
+    p_gt=[]    
+    model_score=[]
+    v_model=[]
+    t_model=[]
+    p_model=[]
+    for item in tqdm(data):
+        human_score.extend([item['visual_score'],item['t2v_score'],item['phy_score']])
+        v_gt.append(item['visual_score'])
+        t_gt.append(item['t2v_score'])
+        p_gt.append(item['phy_score'])
+        model_score.extend([item['visual_score_model'],item['t2v_score_model'],item['phy_score_model']])
+        v_model.append(item['visual_score_model'])
+        t_model.append(item['t2v_score_model'])
+        p_model.append(item['phy_score_model'])
+
+    diff_dict={
+        0:0,
+        1:0,
+        -1:0,   
+        2:0,
+        -2:0,
+        3:0,
+        -3:0,
+        4:0,
+        -4:0,
+    }
+
+    v_diff_dict=copy.deepcopy(diff_dict)
+    t_diff_dict=copy.deepcopy(diff_dict)
+    p_diff_dict=copy.deepcopy(diff_dict)
+    
+    for h,m in zip(human_score,model_score):
+        diff=h-m
+        diff_dict[diff]+=1
+    for h,m in zip(v_gt,v_model):
+        diff=h-m
+        v_diff_dict[diff]+=1
+    for h,m in zip(t_gt,t_model):
+        diff=h-m
+        t_diff_dict[diff]+=1
+    for h,m in zip(p_gt,p_model):
+        diff=h-m
+        p_diff_dict[diff]+=1
+    
+    # print("V Score Difference Distribution:")
+    # for k in sorted(v_diff_dict.keys()):
+    #     print(f"{k}: {v_diff_dict[k]}/{total_items}")
+    
+    # print("T Score Difference Distribution:")
+    # for k in sorted(t_diff_dict.keys()):
+    #     print(f"{k}: {t_diff_dict[k]}/{total_items}")
+        
+    # print("P Score Difference Distribution:")
+    # for k in sorted(p_diff_dict.keys()):
+    #     print(f"{k}: {p_diff_dict[k]}/{total_items}")
+        
+    print("Overall Score Difference Distribution:")
+    for k in sorted(diff_dict.keys()):
+        print(f"{k}: {diff_dict[k]}/{total_items*3}")
+    
 if __name__ == "__main__":
-    # prompt_sources()
+    prompt_sources()
     # prompt_word_cloud()
-    prompt_len_hist()
+    # prompt_len_hist()
     # think_len_dist()
     # score_dist_seperate()
     # score_dist_all_in_one()
+    # count_score_difference_dist()
+    

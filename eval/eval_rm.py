@@ -34,7 +34,13 @@ def main(args):
         from eval_methods.vs2_float import eval_VideoScore2_float
         model=eval_VideoScore2_float(model_name_or_path)    
         q_template=VS2_QUERY_TEMPLATE
-        
+    
+    elif method.lower() == "vs2_float_weighted":
+        ## conda activate vs2_eval
+        from eval_methods.vs2_float_weighted import eval_VideoScore2_float
+        model=eval_VideoScore2_float(model_name_or_path)    
+        q_template=VS2_QUERY_TEMPLATE
+    
     elif method.lower() == "vs1":
         ## conda activate vs1_eval
         from eval_methods.vs1 import eval_VideoScore1
@@ -173,6 +179,7 @@ def main(args):
             json.dump(res_data,f,indent=4,ensure_ascii=False)
         
         print(f"Loaded existing {len(res_data)} res items for bench:{bench}, method:{method}")
+        print("Remaining items to eval: ", len(bench_data)-len(res_data))
         bench_data=[item for item in bench_data if item['video_name'] not in set([x['video_name'] for x in res_data])]
         
         

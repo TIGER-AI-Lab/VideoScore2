@@ -245,17 +245,17 @@ if __name__ == "__main__":
     # print(len(os.listdir("data/videos")))
     None
     
-    # bench="vs2_test_sft_27k"
+    bench="vs2_test_sft_27k"
     # bench="mj_bench_video"
     # bench="aigve_bench"
     # bench="video_phy2_test"
     # bench="videogen_reward_bench"
-    bench="t2vqa_db"
+    # bench="t2vqa_db"
 
     paths=[
-        # f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_5e-5_2fps_960_720_8192_float_infer_2fps_tempe=0.7.json",
+        f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_no_cot_5e-5_2fps_960_720_8192_float_infer_2fps_tempe=0.7.json",
         # f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_qwen2_5_vl_300_float_infer_2fps_tempe=0.7.json",
-        f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_5e-5_960_720_300_float_infer_2fps_tempe=0.7.json"
+        # f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_5e-5_960_720_300_float_infer_2fps_tempe=0.7.json"
     ]
     
     for p in paths:
