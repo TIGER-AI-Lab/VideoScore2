@@ -202,12 +202,12 @@ class eval_VideoScore2_float:
             print(f"soft score (weighted average) = {soft_score:.4f}")
 
             return soft_score
-        
-        
-        v_soft = ll_based_soft_score_normed(v_score_model, idx_v)
-        t_soft = ll_based_soft_score_normed(t_score_model, idx_t)
-        p_soft = ll_based_soft_score_normed(p_score_model, idx_p)
-        
+
+
+        v_soft = ll_based_soft_score_weighted(v_score_model, idx_v)
+        t_soft = ll_based_soft_score_weighted(t_score_model, idx_t)
+        p_soft = ll_based_soft_score_weighted(p_score_model, idx_p)
+
         # v_soft = ll_based_soft_score(v_score_model, idx_v)
         # t_soft = ll_based_soft_score(t_score_model, idx_t)
         # p_soft = ll_based_soft_score(p_score_model, idx_p)
