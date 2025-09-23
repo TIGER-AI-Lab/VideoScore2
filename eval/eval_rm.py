@@ -145,7 +145,7 @@ def main(args):
     if '/' in model_name_or_path:
         model_name_or_path=model_name_or_path.split('/')[-1]
     eval_res_path=f"res_data/res_{bench}/{model_name_or_path}.json"
-    if method in ["vs2","vs2_float"]:
+    if method in ["vs2","vs2_float","vs2_float_weighted"]:
         infer_fps=kwargs.get("infer_fps",2.0)
         if isinstance(infer_fps,str):
             if infer_fps != "raw" :
@@ -160,6 +160,13 @@ def main(args):
         temperature=kwargs.get("temperature",0.7)
         eval_res_path=eval_res_path.replace("_infer",f"_float_infer")
         eval_res_path=eval_res_path.replace(".json",f"_tempe={temperature}.json")
+    
+    if method == "vs2_float_weighted":
+        temperature=kwargs.get("temperature",0.7)
+        eval_res_path=eval_res_path.replace("_infer",f"_infer_weighted")
+        eval_res_path=eval_res_path.replace(".json",f"_tempe={temperature}.json")
+    
+    print("Evaluation result will be saved to ", eval_res_path)
     
     res_data=[]
     if not os.path.exists(eval_res_path):
