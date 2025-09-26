@@ -222,7 +222,7 @@ def main(bench,kwargs,short_sampling=False):
     if bench in ["videogen_reward_bench","videogen-reward-bench"]:
         csv_path = kwargs["src_file"]
         df = pd.read_csv(csv_path)
-        print(f"pairs num: ",len(df))
+        print(f"total pairs num: ",len(df))
         vq_correct = 0
         ta_correct = 0
         overall_correct = 0
@@ -542,9 +542,9 @@ def main(bench,kwargs,short_sampling=False):
     
 if __name__ == "__main__":
     bench_src_file_mapping={
-        # "videogen_reward_bench":"bench_data/videogen_reward_bench/videogen-rewardbench.csv",
+        "videogen_reward_bench":"bench_data/videogen_reward_bench/videogen-rewardbench.csv",
         
-        "t2vqa_db":"bench_data/t2vqa_db/t2vqa_db_pref.json",
+        # "t2vqa_db":"bench_data/t2vqa_db/t2vqa_db_pref.json",
         
         # "vision_reward_db_video":"bench_data/vision_reward_db_video/original_data_vision_reward_db_video.json",
         # "genai_bench":None,
@@ -556,16 +556,17 @@ if __name__ == "__main__":
         
         score_json_mapping={
             # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_5e-5_2fps_960_720_8192_float_infer_2fps_tempe=0.7.json",
-            "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_5e-5_2fps_960_720_8192_infer_2fps.json",
+            # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_5e-5_2fps_960_720_8192_infer_2fps_flt_weighted_tempe=0.7.json",
+            # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_5e-5_2fps_960_720_8192_infer_2fps.json",
             
             # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_qwen2_5_vl_300_float_infer_2fps_tempe=0.7.json",
+            # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_qwen2_5_vl_300_infer_2fps_flt_weighted_tempe=0.7.json",
             # "vs2":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_qwen2_5_vl_300_infer_2fps.json",
             
             # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_5e-5_960_720_300_float_infer_2fps_tempe=0.7.json",
+            # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_5e-5_960_720_200_infer_2fps_flt_normed_tempe=0.7.json",
+            "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_5e-5_960_720_300_infer_2fps_flt_weighted_tempe=0.7.json",
             # "vs2":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_5e-5_960_720_300_infer_2fps.json",
-            
-            # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_part17k_5e-5_960_720_500_float_infer_2fps_tempe=0.7.json",
-            # "vs2":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_part17k_5e-5_960_720_500_infer_2fps.json",
             
             # "aigve_macs":f"res_data/res_{bench}/AIGVE-MACS.json",
             # "deqa":f"res_data/res_{bench}/DeQA-Score-Mix3.json",
@@ -587,7 +588,7 @@ if __name__ == "__main__":
             
         }
         short_sampling=0
-        short_sample_num=3000
+        short_sample_num=4000
         
         for method,score_json in score_json_mapping.items():
             kwargs={

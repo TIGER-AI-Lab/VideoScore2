@@ -201,7 +201,7 @@ class eval_VideoScore2_float:
                 print(f"  score {s}: raw_prob={p:.4f}, norm_prob={np_:.4f}")
             print(f"soft score (weighted average) = {soft_score:.4f}")
 
-            return soft_score
+            return round(soft_score,4)
 
 
         v_soft = ll_based_soft_score_weighted(v_score_model, idx_v)

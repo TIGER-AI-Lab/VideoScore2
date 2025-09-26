@@ -366,13 +366,13 @@ def aside_prompts():
     
     aside_prompts_items=[x for x in prompt_items if x['video_id'] not in used_video_names]
     aside_prompts=[x['text'] for x in aside_prompts_items]
+    print(5000-len(aside_prompts))
+    # with open("vs2_aside_propmts.json","w") as f:
+    #     json.dump(aside_prompts_items,f,indent=4)
     
-    with open("vs2_aside_propmts.json","w") as f:
-        json.dump(aside_prompts_items,f,indent=4)
-    
-    with open("vs2_aside_prompts.txt", "w", encoding="utf-8") as f:
-        for item in aside_prompts:
-            f.write(item + "\n")
+    # with open("vs2_aside_prompts.txt", "w", encoding="utf-8") as f:
+    #     for item in aside_prompts:
+    #         f.write(item + "\n")
     
 
 if __name__ == "__main__":
@@ -406,7 +406,7 @@ if __name__ == "__main__":
     # print(len(data))
     
     
-    # aside_prompts()
+    aside_prompts()
     
     
     

@@ -202,7 +202,7 @@ class eval_VideoScore2_float:
             print(f"  max prob={max_prob:.4f} at score={best_score}, total prob={total_prob:.4f}")
             print(f"  normalized prob={normalized_prob:.4f}, soft score={soft_score:.4f}")
 
-            return soft_score
+            return round(soft_score,4)
         
         
         v_soft = ll_based_soft_score_normed(v_score_model, idx_v)

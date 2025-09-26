@@ -98,10 +98,16 @@ def import_anno(p):
             'video_url':url,
             'prompt':prompt_en,
             'visual_score':visual_score,
-            't2v_score':t2v_score,
+            't2v_align_score':t2v_score,
             'phy_score':phy_score
         })
     print(len(data))
+    return data
+
+
+def import_think(p):
+    with open(p,"r",encoding='utf-8') as f:
+        data=json.load(f)
     return data
 
 
@@ -124,9 +130,9 @@ def cal_iaa(data1,data2,data3):
     ]
     
     t_scores_2dlist=[
-        [x['t2v_score'] for x in data1],
-        [x['t2v_score'] for x in data2],
-        [x['t2v_score'] for x in data3],
+        [x['t2v_align_score'] for x in data1],
+        [x['t2v_align_score'] for x in data2],
+        [x['t2v_align_score'] for x in data3],
     ]
     
     p_scores_2dlist=[
@@ -142,16 +148,15 @@ def cal_iaa(data1,data2,data3):
         print(f"Agreement Ratio Relaxed: {three_way_agreement_ratio_relaxed(_2dlist[0],_2dlist[1],_2dlist[2],):.4f}")
         print(f"SPCC: {three_way_spcc(_2dlist[0],_2dlist[1],_2dlist[2],):.4f}")
         print(f"Fleiss' Kappa: {cal_kappa(_2dlist):.4f}")
-        print(f"Krippendorff's Alpha: {cal_alpha(_2dlist):.4f}")
-
-        print("\n")
+        print(f"Krippendorff's Alpha: {cal_alpha(_2dlist):.4f}\n")
+        # print("\n")
 
     
 if __name__ == "__main__":
     paths=[
-        "iaa/iaa10.json",
+        # "iaa/iaa10.json",
         "iaa/iaa11.json",
-        "iaa/iaa12.json",
+        # "iaa/iaa12.json",
         "iaa/iaa13.json",
         "iaa/iaa14.json",
     ]
@@ -159,23 +164,36 @@ if __name__ == "__main__":
     sub_lists = [list(c) for c in itertools.combinations(paths, 3)]
     for sub_list in sub_lists:
         print("Processing files:", sub_list)
-        data1=import_anno(sub_list[0])
-        data2=import_anno(sub_list[1])
-        data3=import_anno(sub_list[2])
+        data1=import_think(sub_list[0])
+        data2=import_think(sub_list[1])
+        data3=import_think(sub_list[2])
         cal_iaa(data1,data2,data3)
-        print("========================================")
+        print("="*100)
         
         
-        
-    # path="iaa/iaa2.json"
-    # data1=import_anno(path)
-    # path="iaa/iaa4.json"
-    # data2=import_anno(path)
-    # path="iaa/iaa5.json"
-    # data3=import_anno(path)
-    # cal_iaa(data1,data2,data3)
+    # p="/data/xuan/workdir/VideoScore2/data/iaa/iaa14.json"
+    # p2="/data/xuan/workdir/VideoScore2/data/iaa/iaa11.json"
+    # p3="/data/xuan/workdir/VideoScore2/data/iaa/iaa10.json"
     
+    # data=json.load(open(p,"r"))
+    # video_names=[x['video_name'] for x in data]
+    # data_2=json.load(open(p2,"r"))
+    # new_data_2=[]
+    # for video_name in video_names:
+    #     for x in data_2:
+    #         if x['video_name']==video_name:
+    #             new_data_2.append(x)
+    # with open(p2,"w") as f:
+    #     json.dump(new_data_2,f,indent=4)
     
-    # cal_iaa([],[],[])
+    # data_3=json.load(open(p3,"r"))
+    # new_data_3=[]
+    # for video_name in video_names:
+    #     for x in data_3:
+    #         if x['video_name']==video_name:
+    #             new_data_3.append(x)
+    # with open(p3,"w") as f:
+    #     json.dump(new_data_3,f,indent=4)
+    
     
     

@@ -395,6 +395,8 @@ def get_acc(method_name,bench_name,score_res_path,metric_report_p):
     # p_scores_model=[random.choice([1,2,3,4,5]) for _ in p_scores_gt]
     
     metrics_dict={
+        "acc_whole_item":_acc_whole_item(v_scores_model,t_scores_model,p_scores_model,v_scores_gt,t_scores_gt,p_scores_gt),
+        
         "v_acc":_compute_accuracy(v_scores_model,v_scores_gt),
         "t_acc":_compute_accuracy(t_scores_model,t_scores_gt),
         "p_acc":_compute_accuracy(p_scores_model,p_scores_gt),
@@ -405,11 +407,11 @@ def get_acc(method_name,bench_name,score_res_path,metric_report_p):
         
         "overall_acc":_compute_accuracy(overall_scores_model,overall_scores_gt),
         
-        "acc_whole_item":_acc_whole_item(v_scores_model,t_scores_model,p_scores_model,v_scores_gt,t_scores_gt,p_scores_gt),
+        
         }
-    print(list(metrics_dict.items())[:3])
-    print(list(metrics_dict.items())[3:6])
-    print(list(metrics_dict.items())[6:7])
+    print(list(metrics_dict.items())[0])
+    print(list(metrics_dict.items())[1:4])
+    print(list(metrics_dict.items())[4:7])
     print(list(metrics_dict.items())[7:])
     
     # batch_name="sft_model_score" 
@@ -516,10 +518,10 @@ def get_corr(method_name,bench_name,score_res_path,metric_report_p):
     #     },f,indent=4)
         
 if __name__ == "__main__":
-    # bench="vs2_test_sft_27k"
+    bench="vs2_test_sft_27k"
     # bench="mj_bench_video"
     # bench="aigve_bench"
-    bench="video_phy2_test"
+    # bench="video_phy2_test"
     # bench="tvge"
     # bench="t2vqa_db"
     
@@ -532,13 +534,16 @@ if __name__ == "__main__":
 
 
         # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_5e-5_2fps_960_720_8192_float_infer_2fps_tempe=0.7.json",
-        # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_no_cot_5e-5_2fps_960_720_8192_1epoch_infer_2fps.json",
+        # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_no_cot_5e-5_2fps_960_720_8192_infer_2fps_flt_weighted_tempe=0.7.json",
+        # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_no_cot_5e-5_2fps_960_720_8192_infer_2fps.json",
         
         # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_qwen2_5_vl_300_float_infer_2fps_tempe=0.7.json",
+        # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_qwen2_5_vl_300_infer_2fps_flt_weighted_tempe=0.7.json",
         # "vs2":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_qwen2_5_vl_300_infer_2fps.json",
         
         # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_5e-5_960_720_300_float_infer_2fps_tempe=0.7.json",
-        "vs2":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_5e-5_960_720_300_infer_2fps.json",
+        "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_reward2_base_sft_5e-5_960_720_300_infer_2fps_flt_normed_tempe=0.7.json",
+        # "vs2":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_5e-5_960_720_200_infer_2fps.json",
         
         # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_part17k_5e-5_960_720_500_float_infer_2fps_tempe=0.7.json",
         # "vs2":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_part17k_5e-5_960_720_500_infer_2fps.json",
