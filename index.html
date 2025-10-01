@@ -7,7 +7,7 @@
   <meta name="description" content="text-to-video generation evaluation">
   <meta name="keywords" content="multimodal evaluation">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>VideoScore</title>
+  <title>VideoScore2</title>
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
@@ -304,7 +304,7 @@
 <!----------------------------------------- Abstract. --------------------------------------------------->
   <section class="hero is-light is-small">
   <div class="hero-body has-text-centered">
-    <h2 class="title is-3"> 
+    <h2 class="title is-2"> 
       Abstract</h2>
   </div>
   </section>
@@ -331,7 +331,7 @@
 <!----------------------------------------- VideoScore2. --------------------------------------------------->  
 <section class="hero is-light is-small">
   <div class="hero-body has-text-centered">
-  <h2 class="title is-3">
+  <h2 class="title is-2">
     <span style="vertical-align: middle">VideoScore2</span>
   </h2>
   </div>
@@ -418,11 +418,11 @@ Preference benchmark results include ties. As shown in Table below, while VideoS
     <div class="columns is-centered">
       <div class="column is-full-width">
         <p>
-          We evaluate VIDEOSCORE2 with best-of-n (BoN) sampling (n = 5), where the model selects the
+          We evaluate VideoScore2 with best-of-n (BoN) sampling (n = 5), where the model selects the
  best video among candidates. Six T2V models of moderate or poor quality are used, avoiding very
  strong ones to highlight the BoN effect. For 500 prompts, each model generates 500 × 5 videos.
  Comparison on VBench shows BoN consistently outperforms random sampling, confirm
-ing that VIDEOSCORE2 effectively guides higher-quality selection.
+ing that VideoScore2 effectively guides higher-quality selection.
         </p>
         <centering>
             <div style="text-align: center;">
@@ -440,18 +440,45 @@ ing that VIDEOSCORE2 effectively guides higher-quality selection.
 
 <section class="hero is-light is-small">
   <div class="hero-body has-text-centered">
-  <h2 class="title is-3">
+  <h2 class="title is-2">
     <span style="vertical-align: middle">Case Studies</span>
   </h2>
   </div>
 </section>  
+
+<div class="hero-body has-text-centered">
+  <h2 class="title is-4">
+    <span style="vertical-align: middle">Example 1</span>
+  </h2>
   <centering>
       <div style="text-align: center;">
         <img id="cs1" width="50%" src="static/images/case1.png">
+      </div>
+  </centering> 
+</div>
+
+<div class="hero-body has-text-centered">
+  <h2 class="title is-4">
+    <span style="vertical-align: middle">Example 2</span>
+  </h2>
+  <centering>
+      <div style="text-align: center;">
         <img id="cs2" width="50%" src="static/images/case2.png">
+      </div>
+  </centering> 
+</div>
+
+<div class="hero-body has-text-centered">
+  <h2 class="title is-4">
+    <span style="vertical-align: middle">Example 3</span>
+  </h2>
+  <centering>
+      <div style="text-align: center;">
         <img id="cs3" width="50%" src="static/images/case3.png">
       </div>
   </centering> 
+</div>
+
 
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
