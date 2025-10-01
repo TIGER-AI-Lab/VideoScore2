@@ -179,16 +179,14 @@ prepare_video/prompts/*
 prepare_video/t2v_model/api*
 
 data/*
-data/plots
 !data/**/*.py
-!data/_prev/
-!data/thinking_original*/
-!data/thinking_new_score*/
-!data/thinking_final*/
-!data/thinking_rej*/
+!data/**/*.sh
+!data/**/*.md
 
 eval/*
-!eval/**/*.py
+# !eval/**/*.py
+!eval/**/*.sh
+!eval/**/*.md
 !req.txt
 !eval/res_data/
 !eval/eval_methods/
@@ -199,6 +197,5 @@ eval/eval_methods/utils_video_phy2/checkpoints/*
 eval/eval_methods/utils_dover/pretrained_weights/*
 !eval/eval_methods/utils_dover/pretrained_weights/download.txt
 
-diff/*
 
 *.slurm
