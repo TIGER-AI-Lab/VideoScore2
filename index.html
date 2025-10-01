@@ -163,8 +163,8 @@
                   <sup>6</sup><span class="author-block">Yi Lu,</span>
                   <sup>2</sup><span class="author-block">Keming Wu,</span>
                   <sup>2</sup><span class="author-block">Benjamin Schneider,</span>
-                  <sup>2</sup><span class="author-block">Quy Duc Do,</span>
                   <br>
+                  <sup>2</sup><span class="author-block">Quy Duc Do,</span>
                   <sup>2</sup><span class="author-block">Zhuofeng Li,</span>
                   <sup>6</sup><span class="author-block">Yiming Jia,</span>
                   <sup>2</sup><span class="author-block">Yuxuan Zhang,</span>
@@ -189,6 +189,7 @@
                     <sup>3</sup>Independent, 
                     <sup>4</sup>2077AI, 
                     <sup>5</sup>M-A-P, 
+                    <br>
                     <sup>6</sup>University of Toronto, 
                     <sup>7</sup>Zhejiang University, 
                     <sup>8</sup>Abaka AI,
@@ -198,7 +199,7 @@
             <br>   
             <div class="is-size-5 publication-authors">
               <span class="author-block">
-                    *Equal Contribution, Xuan He lead the project
+                    *Equal Contribution, Xuan leads the project
               </span>
             </div>
             <div class="is-size-5 publication-authors">
@@ -365,39 +366,51 @@
 
   <div class="hero-body has-text-centered">
     <h2 class="title is-4">
-      <span style="vertical-align: middle">Evaluation Results</span>
+      <span style="vertical-align: middle">Evaluation on VideoScore2-Bench</span>
     </h2>
   </div>
   <div class="container is-max-desktop">
     <div class="columns is-centered">
       <div class="column is-full-width">
-        <h2 class="title is-5"><span style="font-size: 100%;">
-          VideoScore2-Bench</span></h2>
         <p>
           We test VideoScore2 on the test set of VideoFeedback2, containing 500 videos with human scores from three dimensions. 
           Below we show the results of some scoring/reward models for image or video, like VideoReward, VisionReward, Q-Insight, DeQA-Score, and MLLM-prompting methods like Claude-Sonnet-4, GPT-5, Gemini-2.5-Pro, etc and our VideoScore2. 
         </p>
-        <img id="res_vs2_bench" width="100%" src="static/images/res_vs2_bench.png">
+        <img id="res_vs2_bench" width="70%" src="static/images/res_vs2_bench.png">
+      </div>
+    </div>
+  </div>
 
-        <br>
-        <h2 class="title is-5"><span style="font-size: 100%;">
-          <img id="painting_icon" width="3%" src="static/images/ec_icon.png">
-          Out-of-Domain Benchmark</span></h2>
+
+
+  <div class="hero-body has-text-centered">
+    <h2 class="title is-4">
+      <span style="vertical-align: middle">Evaluation on Out-of-Domain Benchmarks</span>
+    </h2>
+  </div>
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
         <p>
-          We further test on four out-of-domain (OOD) benchmarks: two pairwise preference and two point
-score. Preference benchmark results include ties. As shown in Table below, while VideoScore2 is
+          We further test on four out-of-domain (OOD) benchmarks: two pairwise preference (VideoGenReward-Bench and T2VQA-DB (preference version)) and two point score (MJ-Bench-Video and Video-Phy2-test). 
+
+Preference benchmark results include ties. As shown in Table below, while VideoScore2 is
  not always the top model on each benchmark, it achieves the highest overall average.
         </p>
-        <img id="res_ood_bench" width="100%" src="static/images/res_ood_bench.png">
+        <img id="res_ood_bench" width="70%" src="static/images/res_ood_bench.png">
       </div>
     </div>
   </div>
   
+  <div class="hero-body has-text-centered">
+    <h2 class="title is-4">
+      <span style="vertical-align: middle">Best-of-N Sampling with VideoScore2</span>
+    </h2>
+  </div>
+
   <div class="container is-max-desktop">
     <div class="columns is-centered">
       <div class="column is-full-width">
-        <h2 class="title is-5"><span style="font-size: 100%;">
-          Best-of-N Sampling</span></h2>
         <p>
           We evaluate VIDEOSCORE2 with best-of-n (BoN) sampling (n = 5), where the model selects the
  best video among candidates. Six T2V models of moderate or poor quality are used, avoiding very
@@ -405,16 +418,15 @@ score. Preference benchmark results include ties. As shown in Table below, while
  Comparison on VBench shows BoN consistently outperforms random sampling, confirm
 ing that VIDEOSCORE2 effectively guides higher-quality selection.
         </p>
-        <img id="BoN" width="100%" src="static/images/BoN.png">
+        <img id="BoN" width="70%" src="static/images/BoN.png">
       </div>
     </div>
   </div>
-
-
-  
-
     
 </section>
+
+
+
 
 <section class="hero is-light is-small">
   <div class="hero-body has-text-centered">
@@ -424,9 +436,9 @@ ing that VIDEOSCORE2 effectively guides higher-quality selection.
   </div>
 </section>  
 
-<img id="cs1" width="100%" src="static/images/case1.png">
-<img id="cs2" width="100%" src="static/images/case2.png">
-<img id="cs3" width="100%" src="static/images/case3.png">
+<img id="cs1" width="70%" src="static/images/case1.png">
+<img id="cs2" width="70%" src="static/images/case2.png">
+<img id="cs3" width="70%" src="static/images/case3.png">
 
 
 <section class="section" id="BibTeX">
