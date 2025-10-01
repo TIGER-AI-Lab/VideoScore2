@@ -11,8 +11,8 @@ This is the official repo for our paper: "VideoScore2: Think before You Score in
 <img style="height:22pt" src="https://img.shields.io/badge/-🤗%20Dataset-red?style=flat"></a>
 <a target="_blank" href="https://huggingface.co/TIGER-Lab/VideoScore2">
 <img style="height:22pt" src="https://img.shields.io/badge/-🤗%20Models-red?style=flat"></a>
-<a target="_blank" href="">
-<img style="height:22pt" src="https://img.shields.io/badge/-Tweet-blue?style=flat&logo=twitter"></a>
+<a target="_blank" href="https://x.com/DongfuJiang/status/1973465380028031463">
+<img style="height:22pt" src="https://img.shields.io/badge/-Post-black?style=flat&logo=x&logoColor=white"></a>
 <br>
 
 ## Introduction
