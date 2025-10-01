@@ -1,11 +1,435 @@
+
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>VideoScore2 Project Page</title>
-  </head>
-  <body>
-    <h1>VideoScore2</h1>
-    <p>Project page coming soon.</p>
-  </body>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="text-to-video generation evaluation">
+  <meta name="keywords" content="multimodal evaluation">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VideoScore</title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <link rel="icon" href="static/images/logo.png?v=4">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
+  <script type="module" src="https://gradio.s3-us-west-2.amazonaws.com/4.16.0/gradio.js"></script>
+</head>
+
+<style>
+  .text-with-background {
+      padding: 1rem; 
+      border-radius: 5px; 
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    }
+    .gif-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 2rem; 
+    }
+    .gif-wrapper {
+      width: 80%;
+      height: 200px; 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f5f5f5; 
+    }
+    .gif-wrapper img {
+      max-height: 100%;
+      max-width: 100%;
+      object-fit: contain; 
+    }
+  .expandable-card .card-text-container {
+    max-height: 200px;
+    overflow-y: hidden;
+    position: relative;
+  }
+
+  .expandable-card.expanded .card-text-container {
+    max-height: none;
+  }
+
+  .expand-btn {
+    position: relative;
+    display: none;
+    background-color: rgba(255, 255, 255, 0.8);
+    /* margin-top: -20px; */
+    /* justify-content: center; */
+    color: #510c75;
+    border-color: transparent;
+  }
+
+  .expand-btn:hover {
+    background-color: rgba(200, 200, 200, 0.8);
+    text-decoration: none;
+    border-color: transparent;
+    color: #510c75;
+  }
+
+  .expand-btn:focus {
+    outline: none;
+    text-decoration: none;
+  }
+
+  .expandable-card:not(.expanded) .card-text-container:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 90px;
+    background: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 1));
+  }
+
+  .expandable-card:not(.expanded) .expand-btn {
+    margin-top: -40px;
+  }
+
+  .card-body {
+    padding-bottom: 5px;
+  }
+
+  .vertical-flex-layout {
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .figure-img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .adjustable-font-size {
+    font-size: calc(0.5rem + 2vw);
+  }
+
+  .chat-history {
+    flex-grow: 1;
+    overflow-y: auto;
+    /* overflow-x: hidden; */
+    padding: 5px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 10px;
+  }
+
+  #gradio pre {
+    background-color: transparent;
+  }
+</style>
+
+<body>
+
+<!----------------------------------------- Title and Authors. --------------------------------------------------->
+<section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title is-bold">
+              VideoScore2 </h1>
+              <h2 class="subtitle is-3 publication-subtitle"> Think before You Score in Generative Video Evaluation</h2>
+              <br> 
+              <div class="is-size-5 publication-authors">
+                  <span class="author-block">
+                    <sup>1</sup><sup>,†</sup>
+                    <a style="font-weight:normal;">Xuan He*</a>,
+                  </span>
+                  <span class="author-block">
+                    <sup>2</sup><sup>,†</sup>
+                    <a style="font-weight:normal;">Dongfu Jiang*</a>,
+                  </span>
+                  <sup>3</sup><span class="author-block">Ping Nie,</span>
+                  <sup>4</sup><span class="author-block">Minghao Liu,</span>
+                  <sup>7</sup><span class="author-block">Zhengxuan Jiang,</span>
+                  <br>
+                  <sup>2</sup><span class="author-block">Mingyi Su,</span>
+                  <sup>6</sup><span class="author-block">Wentao Ma,</span>
+                  <sup>6</sup><span class="author-block">Junru Lin,</span>
+                  <sup>2</sup><span class="author-block">Chun Ye,</span>
+                  <sup>6</sup><span class="author-block">Yi Lu,</span>
+                  <sup>2</sup><span class="author-block">Keming Wu,</span>
+                  <sup>2</sup><span class="author-block">Benjamin Schneider,</span>
+                  <sup>2</sup><span class="author-block">Quy Duc Do,</span>
+                  <br>
+                  <sup>2</sup><span class="author-block">Zhuofeng Li,</span>
+                  <sup>6</sup><span class="author-block">Yiming Jia,</span>
+                  <sup>2</sup><span class="author-block">Yuxuan Zhang,</span>
+                  <sup>9</sup><span class="author-block">Guo Cheng,</span>
+                  <sup>2</sup><span class="author-block">Haozhe Wang,</span>
+                  <br>
+                  <sup>5</sup><span class="author-block">Wangchunshu Zhou,</span>
+                  <sup>8</sup><span class="author-block">Qunshu Lin,</span>
+                  <sup>5</sup><span class="author-block">Yuanxing Zhang,</span>
+                  <span class="author-block">
+                    <sup>2</sup><sup>,</sup><sup>5</sup>
+                    <a style="font-weight:normal;">Ge Zhang</a>,
+                  </span>
+                  <sup>5</sup><span class="author-block">Wenhao Huang,</span>
+                  <sup>1</sup><span class="author-block">Wenhu Chen,</span>
+              </div>  
+            <br>           
+            <div class="is-size-5 publication-authors">
+                <span class="author-block">
+                    <sup>1</sup>University of Illinois Urbana Champaign, 
+                    <sup>2</sup>University of Waterloo, 
+                    <sup>3</sup>Independent, 
+                    <sup>4</sup>2077AI, 
+                    <sup>5</sup>M-A-P, 
+                    <sup>6</sup>University of Toronto, 
+                    <sup>7</sup>Zhejiang University, 
+                    <sup>8</sup>Abaka AI,
+                    <sup>9</sup>Netmind.AI
+                </span>
+            </div>  
+            <br>   
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                    *Equal Contribution, Xuan He lead the project
+              </span>
+            </div>
+            <div class="is-size-5 publication-authors">
+                <span class="author-block">†Corresponding to:</span>
+                <span class="author-block"><a href="mailto:xuanhe4@illinois.edu">xuanhe4@illinois.edu</a>,</span>
+                <span class="author-block"><a href="mailto:dongfu.jiang@uwaterloo.ca">dongfu.jiang@uwaterloo.ca</a>,</span>
+                <span class="author-block"><a href="mailto:wenhuchen@uwaterloo.ca">wenhuchen@uwaterloo.ca</a></span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="https://www.arxiv.org/abs/2509.22799" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                    </span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+
+                <span class="link-block">
+                  <a href="https://github.com/TIGER-AI-Lab/VideoScore2/" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+
+                <span class="link-block">
+                  <a href="https://huggingface.co/datasets/TIGER-Lab/VideoFeedback2" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-database"></i>
+                    </span>
+                    <span>Dataset</span>
+                  </a>
+                </span>
+
+                <!-- <span class="link-block">
+                  <a href="https://huggingface.co/datasets/TIGER-Lab/VideoScore-Bench" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-database"></i>
+                    </span>
+                    <span>VideoScore-Bench</span>
+                  </a>
+                </span> -->
+
+                <span class="link-block">
+                  <a href="https://huggingface.co/TIGER-Lab/VideoScore2" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      🔥 
+                    </span>
+                    <span>Model</span>
+                  </a>
+                </span>
+                <br>
+                
+                <!-- <span class="link-block">
+                  <a href="https://huggingface.co/spaces/TIGER-Lab/VideoScore-Leaderboard" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      🤗
+                    </span>
+                    <span>Leaderboard</span>
+                  </a>
+                </span> -->
+
+                <!-- <span class="link-block">
+                  <a href="https://huggingface.co/spaces/TIGER-Lab/VideoScore" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      🤗
+                    </span>
+                    <span>Space</span>
+                  </a>
+                </span> -->
+
+
+                <span class="link-block">
+                  <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon has-text-white">
+                    <i class="fab fa-twitter"></i>
+                  </span>
+                  <span>Twitter</span>
+                </a>
+              </span>
+
+              </div>
+            </div>
+
+            <centering>
+              <div style="text-align: center;">
+                <img id="teaser" width="85%" src="static/images/teaser.png">     
+              </div>
+            </centering> 
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+<!----------------------------------------- Abstract. --------------------------------------------------->
+  <section class="hero is-light is-small">
+  <div class="hero-body has-text-centered">
+    <h2 class="title is-3"> 
+      Abstract</h2>
+  </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+           
+          <div class="content has-text-justified">
+            <p>
+              Recent advances in text-to-video generation have produced increasingly realistic and diverse content, yet evaluating such videos remains a fundamental challenge due to their multi-faceted nature encompassing visual quality, semantic alignment, and physical consistency. Existing evaluators and reward models are limited to single opaque scores, lack interpretability, or provide only coarse analysis, making them insufficient for capturing the comprehensive nature of video quality assessment. We present VideoScore2, a multi-dimensional, interpretable, and human-aligned framework that explicitly evaluates visual quality, text-to-video alignment, and physical/common-sense consistency while producing detailed chain-of-thought rationales. Our model is trained on a large-scale dataset VideoFeedback2 containing 27,168 human-annotated videos with both scores and reasoning traces across three dimensions, using a two-stage pipeline of supervised fine-tuning followed by reinforcement learning with Group Relative Policy Optimization (GRPO) to enhance analytical robustness. Extensive experiments demonstrate that VideoScore2 achieves superior performance with 44.35 (+5.94) accuracy on our in-domain benchmark VideoScore-Bench-v2 and 50.37 (+4.32) average performance across four out-of-domain benchmarks (VideoGenReward-Bench, VideoPhy2, etc), while providing interpretable assessments that bridge the gap between evaluation and controllable generation through effective reward modeling for Best-of-N sampling
+            </p>
+  
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+ 
+<!----------------------------------------- VideoScore2. --------------------------------------------------->  
+<section class="hero is-light is-small">
+  <div class="hero-body has-text-centered">
+  <h2 class="title is-3">
+    <span style="vertical-align: middle">VideoScore2</span>
+  </h2>
+  </div>
+</section>  
+
+<section class="section"> 
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <div class="content has-text-justified"> 
+          <p>
+VideoScore2 is trained on the VideoFeedback2 dataset containing 27K human-annotated videos with both scores and rationales across three dimensions. We adopt a two-stage pipeline: first, supervised fine-tuning (SFT) on Qwen2.5-VL-7B-Instruct to establish format-following and scoring ability; then, reinforcement learning with Group Relative Policy Optimization (GRPO) to further align model outputs with human judgment and enhance analytical robustness.
+
+Compared to VideoScore (v1), VS2 introduces interpretable scoring for three dimensions (Visual Quality, Text Alignment, Physical/Common-sense Consistency) and CoT-style rationales, achieving stronger generalization on out-of-domain benchmarks while providing transparent and human-aligned video evaluation.
+          </p>
+        </div>          
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-body has-text-centered">
+    <h2 class="title is-4">
+      <span style="vertical-align: middle">Evaluation Benchmarks</span>
+    </h2>
+  </div>
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-5"><span style="font-size: 100%;">
+          VideoScore2-Bench</span></h2>
+        <p>
+          We test VideoScore2 on the test set of VideoFeedback2, containing 500 videos with human scores from three dimensions. 
+          Below we show the results of some scoring/reward models for image or video, like VideoReward, VisionReward, Q-Insight, DeQA-Score, and MLLM-prompting methods like Claude-Sonnet-4, GPT-5, Gemini-2.5-Pro, etc and our VideoScore2. 
+        </p>
+        <img id="res_vs2_bench" width="100%" src="static/images/res_vs2_bench.png">
+
+        <br>
+        <h2 class="title is-5"><span style="font-size: 100%;">
+          <img id="painting_icon" width="3%" src="static/images/ec_icon.png">
+          Out-of-Domain Benchmark</span></h2>
+        <p>
+          We further test on four out-of-domain (OOD) benchmarks: two pairwise preference and two point
+score. Preference benchmark results include ties. As shown in Table below, while VideoScore2 is
+ not always the top model on each benchmark, it achieves the highest overall average.
+        </p>
+        <img id="res_ood_bench" width="100%" src="static/images/res_ood_bench.png">
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-body has-text-centered">
+    <h2 class="title is-4">
+      <span style="vertical-align: middle">Best-of-N Sampling</span>
+    </h2>
+  </div>
+
+    
+</section>
+
+<section class="hero is-light is-small">
+  <div class="hero-body has-text-centered">
+  <h2 class="title is-3">
+    <span style="vertical-align: middle">Case Studies</span>
+  </h2>
+  </div>
+</section>  
+
+<img id="cs1" width="100%" src="static/images/case1.png">
+<img id="cs2" width="100%" src="static/images/case2.png">
+<img id="cs3" width="100%" src="static/images/case3.png">
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@misc{he2025videoscore2thinkscoregenerative,
+      title={VideoScore2: Think before You Score in Generative Video Evaluation}, 
+      author={Xuan He and Dongfu Jiang and Ping Nie and Minghao Liu and Zhengxuan Jiang and Mingyi Su and Wentao Ma and Junru Lin and Chun Ye and Yi Lu and Keming Wu and Benjamin Schneider and Quy Duc Do and Zhuofeng Li and Yiming Jia and Yuxuan Zhang and Guo Cheng and Haozhe Wang and Wangchunshu Zhou and Qunshu Lin and Yuanxing Zhang and Ge Zhang and Wenhao Huang and Wenhu Chen},
+      year={2025},
+      eprint={2509.22799},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2509.22799}, 
+}
+    </code></pre>
+  </div>
+</section>
+
+
+</body>
+
 </html>
