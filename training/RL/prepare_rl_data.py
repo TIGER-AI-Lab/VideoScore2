@@ -31,7 +31,7 @@ def download_file(url: str, save_path: str, overwrite: bool = False, timeout: in
 
 
 
-def main(json_name: str, video_zip_name:str, data_save_dir: str):
+def main(json_name: str, data_save_dir: str):
     json_fname  = f"{json_name}.json"
     json_save_p = os.path.join(data_save_dir, json_fname)
     
@@ -42,7 +42,6 @@ def main(json_name: str, video_zip_name:str, data_save_dir: str):
     zip_file_list=[f for f in hf_video_repo_files if json_name in f and f.endswith(".zip") and "videos" in f]
     
     data_url = f"https://huggingface.co/datasets/{HF_DATA_REPO}/resolve/main/{json_fname}"
-    video_zip_url = f"https://huggingface.co/datasets/{HF_DATA_REPO}/resolve/main/{video_zip}"
     
     download_file(data_url, json_save_p, overwrite=True)
     with open(json_save_p, "r", encoding="utf-8") as f:
@@ -66,7 +65,6 @@ def main(json_name: str, video_zip_name:str, data_save_dir: str):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Prepare RL JSON & ZIP")
     parser.add_argument("--json_name", required=True)
-    parser.add_argument("--video_zip_name", required=True)
     parser.add_argument("--data_save_dir", required=True)
     args = parser.parse_args()
-    main(args.json_name,args.video_zip_name,args.data_save_dir)
+    main(args.json_name,args.data_save_dir)
