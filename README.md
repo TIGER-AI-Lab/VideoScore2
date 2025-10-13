@@ -18,20 +18,39 @@ This is the official repo for our paper: "VideoScore2: Think before You Score in
 ## Introduction
 Recent advances in text-to-video generation have produced increasingly realistic and diverse content, yet evaluating such videos remains a fundamental challenge due to their multi-faceted nature encompassing visual quality, semantic alignment, and physical consistency. Existing evaluators and reward models are limited to single opaque scores, lack interpretability, or provide only coarse analysis, making them insufficient for capturing the comprehensive nature of video quality assessment. We present VideoScore2, a multi-dimensional, interpretable, and human-aligned framework that explicitly evaluates visual quality, text-to-video alignment, and physical/common-sense consistency while producing detailed chain-of-thought rationales. Our model is trained on a large-scale dataset VideoFeedback2 containing 27,168 human-annotated videos with both scores and reasoning traces across three dimensions, using a two-stage pipeline of supervised fine-tuning followed by reinforcement learning with Group Relative Policy Optimization (GRPO) to enhance analytical robustness. Extensive experiments demonstrate that VideoScore2 achieves superior performance with 44.35 (+5.94) accuracy on our in-domain benchmark VideoScore-Bench-v2 and 50.37 (+4.32) average performance across four out-of-domain benchmarks (VideoGenReward-Bench, VideoPhy2, etc), while providing interpretable assessments that bridge the gap between evaluation and controllable generation through effective reward modeling for Best-of-N sampling.
 
-## Installation
-🚧 TODO
-
-## Dataset and Model
-🚧 TODO
 
 ## Inference
-🚧 TODO
+For running inference of VideoScore2, firstly install: 
+```
+pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0
+pip install transformers==4.53.2
+pip install qwen-vl-utils
+pip install accelerate
+pip install opencv-python-headless
+pip install scipy
+pip install numpy==2.2.6
+```
+
+Run inference on one video:
+```
+python vs2_inference.py \ 
+  --video_path=<path of your video> \
+  --t2v_prompt=<corresponding text prompt for your video>
+```
 
 ## Training
-🚧 TODO
+VideoScore2 is trained in two stages, SFT and RL, where the SFT checkpoint is used to initialize the RL stage.
+
+For details, please check [training_README.md](training/training_README.md)
 
 ## Evaluation
-🚧 TODO
+We test VideoScore2 and many other baselines on our test set [VideoScore-Bench-v2](https://huggingface.co/datasets/TIGER-Lab/VideoFeedback2/tree/main) and other Out-Of-Domain (OOD) benchmarks: 
+- VideoGen-Reward-Bench (pairwise preference benchmark), 
+- T2VQA-DB (we convert it to a pairwise preference benchmark)
+- MJ-Bench-Video
+- Video-Phy2-test
+
+For details, please check [eval_README.md](eval/eval_README.md)
 
 ## Acknowledgement
 This project builds upon several open-source frameworks:
