@@ -41,7 +41,7 @@ python vs2_inference.py \
 ## Training
 VideoScore2 is trained in two stages, SFT and RL, where the SFT checkpoint is used to initialize the RL stage.
 
-For details, please check [training_README.md](training/training_README.md)
+For details, please check [training/README.md](training/README.md)
 
 ## Evaluation
 We test VideoScore2 and many other baselines on our test set [VideoScore-Bench-v2](https://huggingface.co/datasets/TIGER-Lab/VideoFeedback2/tree/main) and other Out-Of-Domain (OOD) benchmarks: 
@@ -50,7 +50,7 @@ We test VideoScore2 and many other baselines on our test set [VideoScore-Bench-v
 - MJ-Bench-Video (point score)
 - Video-Phy2-test (point score)
 
-For details, please check [eval_README.md](eval/eval_README.md)
+For details, please check [eval/README.md](eval/README.md)
 
 ## Acknowledgement
 This project builds upon several open-source frameworks:
