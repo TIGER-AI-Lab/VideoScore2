@@ -130,6 +130,8 @@ python -c "import flash_attn_2_cuda"
 
 - Copy 'RL/grpo_vs2_no_sft.py' in our repo to 'Video-R1/src/r1-v/src/open_r1/'
 
+- Copy 'RL/grpo_trainer.py' in our repo to **REPLACE** 'Video-R1/src/r1-v/src/open_r1/trainer/grpo_trainer.py'
+
 - Copy 'RL/run_grpo_with_sft.sh' in our repo to 'Video-R1/scripts/'
 
 - Copy 'RL/run_grpo_wo_sft.sh' in our repo to 'Video-R1/scripts/'
