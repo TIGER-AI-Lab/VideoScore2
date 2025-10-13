@@ -140,7 +140,6 @@ python -c "import flash_attn_2_cuda"
 ```bash
 python prepare_rl_data.py \
   --json_name data_27k_train_RL \
-  --video_zip_name videos_27k \
   --data_save_dir "r1-v/Video-R1-data" 
 ```
 
