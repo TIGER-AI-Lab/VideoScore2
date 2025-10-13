@@ -47,8 +47,8 @@ For details, please check [training_README.md](training/training_README.md)
 We test VideoScore2 and many other baselines on our test set [VideoScore-Bench-v2](https://huggingface.co/datasets/TIGER-Lab/VideoFeedback2/tree/main) and other Out-Of-Domain (OOD) benchmarks: 
 - VideoGen-Reward-Bench (pairwise preference benchmark), 
 - T2VQA-DB (we convert it to a pairwise preference benchmark)
-- MJ-Bench-Video
-- Video-Phy2-test
+- MJ-Bench-Video (point score)
+- Video-Phy2-test (point score)
 
 For details, please check [eval_README.md](eval/eval_README.md)
 
