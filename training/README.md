@@ -29,14 +29,15 @@ pip install --no-deps transformers==4.50.0
 ```
 
 ### 4️⃣ Prepare Data and Config Files
-- Copy 'SFT/prepare_SFT_data.py' in our repo to 'LLaMA-Factory/'
+- Copy `SFT/prepare_SFT_data.py` in our repo to `LLaMA-Factory/` and prepare json data and videos: 
 
-- Copy 'SFT/vs2_qwen2_5vl_sft_27k_5e-5_2fps_960_720_8192' in our repo to 'LLaMA-Factory/examples/train_full/'
-
-- Prepare json data and videos: 
 ```bash
 python prepare_sft_data.py --data_version_name data_27k_train_SFT
 ```
+
+- Copy `SFT/vs2_qwen2_5vl_sft_27k_5e-5_2fps_960_720_8192` in our repo to `LLaMA-Factory/examples/train_full/`
+
+- Note: you can also modify hyper-params and save them to a new `yaml` config file to reproduce the ablation results, like `learning_rate`, `num_train_epochs`, `video_fps` (num of sampled frames per second as the input), etc.
 
 ### 5️⃣ Final Directory Structure
 ```
@@ -105,7 +106,8 @@ cd src/qwen-vl-utils
 pip install -e .[decord]
 cd ../..
 ```
-As mentioned in the original repo, since Qwen2.5-VL has been frequently updated in the Transformers library, which may cause version-related bugs or inconsistencies. The code of Video-R1 is compatible with the following version, please download at [google-drive](https://drive.google.com/file/d/1Kc81WZitEhUZYWXpL6y2GXuSXufLSYcF/view?usp=sharing)
+As mentioned in the original repo, since Qwen2.5-VL has been frequently updated in the Transformers library, which may cause version-related bugs or inconsistencies. The code of Video-R1 is compatible with the following version, please download at [google-drive](https://drive.google.com/file/d/1Kc81WZitEhUZYWXpL6y2GXuSXufLSYcF/view?usp=sharing), and put the zip file under `Video-R1/`.
+
 
 ```
 unzip transformers-main.zip
@@ -124,24 +126,29 @@ python -c "import flash_attn_2_cuda"
 ```
 
 ### 4️⃣ Prepare Data and Config Files
-- Copy 'RL/prepare_RL_data.py' in our repo to 'Video-R1/src'
-
-- Copy 'RL/grpo_vs2_sft.py' in our repo to 'Video-R1/src/r1-v/src/open_r1/'
-
-- Copy 'RL/grpo_vs2_no_sft.py' in our repo to 'Video-R1/src/r1-v/src/open_r1/'
-
-- Copy 'RL/grpo_trainer.py' in our repo to **REPLACE** 'Video-R1/src/r1-v/src/open_r1/trainer/grpo_trainer.py'
-
-- Copy 'RL/run_grpo_with_sft.sh' in our repo to 'Video-R1/scripts/'
-
-- Copy 'RL/run_grpo_wo_sft.sh' in our repo to 'Video-R1/scripts/'
-
-- Prepare json data and videos: 
+- Copy `RL/prepare_RL_data.py` in our repo to `Video-R1/src` and prepare json data and videos: 
 ```bash
 python prepare_rl_data.py \
   --json_name data_27k_train_RL \
   --data_save_dir "r1-v/Video-R1-data" 
 ```
+
+- Copy `RL/grpo_vs2_sft.py` in our repo to `Video-R1/src/r1-v/src/open_r1/`
+
+- Copy `RL/grpo_vs2_no_sft.py` in our repo to 'Video-R1/src/r1-v/src/open_r1/'
+
+- Copy `RL/grpo_trainer.py` in our repo to **replace** `Video-R1/src/r1-v/src/open_r1/trainer/grpo_trainer.py`. Or you can change `line 371` of the original 'grpo_trainer.py':
+```python
+### the original: 
+# logits = model(input_ids, **kwargs).logits
+### modified: 
+logits = model(input_ids, **kwargs).logits.clone()
+```
+
+- Copy `RL/run_grpo_with_sft.sh` in our repo to `Video-R1/scripts/`
+
+- Copy `RL/run_grpo_wo_sft.sh` in our repo to `Video-R1/scripts/`
+
 
 ### 5️⃣ Final Directory Structure
 ```
@@ -150,15 +157,14 @@ Video-R1/
 │   ├── r1-v/
 │   │   ├── configs/
 │   │   ├── log/   
-│   │   │   ├── <run_name>/
+│   │   │   ├── <run_name>/  ## saved checkpoints
 │   │   │   └── ...
 │   │   ├── src/
 │   │   │   └── open_r1/
 │   │   │       ├── trainer/
-│   │   │       │   ├── ...
 │   │   │       │   ├── __init__.py
 │   │   │       │   ├── grpo_trainer.py
-│   │   │       │   └── grpo_trainer_vs2.py
+│   │   │       │   └── ...
 │   │   │       │
 │   │   │       ├── __init__.py
 │   │   │       ├── grpo.py
@@ -166,7 +172,7 @@ Video-R1/
 │   │   │       ├── grpo_vs2_no_sft.py
 │   │   │       └── ...
 │   │   ├── Video-R1-data/
-│   │   │   ├── vs2_videos/
+│   │   │   ├── vs2_videos/   ## videos of our dataset
 │   │   │   └── data_27k_rl_train.json
 │   │   ├── wandb/
 │   │   ├── prepare_rl_data.py
@@ -175,13 +181,15 @@ Video-R1/
 │   ├── scripts/
 │   │   ├── run_grpo_with_sft.sh
 │   │   ├── run_grpo_wo_sft.sh
+│   │   ├── run_vllm_grpo.sh
 │   │   └── ...
 │   │
 │   └── qwen-vl-utils
 │
+├── transformers-main/
+├── transformers-main.zip
 ├── setup.sh
 ├── ...
-
 
 ```
 

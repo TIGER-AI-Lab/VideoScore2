@@ -184,10 +184,11 @@ data/*
 !data/**/*.md
 
 eval/*
-# !eval/**/*.py
+!eval/**/*.py
 !eval/**/*.sh
 !eval/**/*.md
 !req.txt
+!eval/env*/
 !eval/res_data/
 !eval/eval_methods/
 eval/eval_methods/utils_video_reward/checkpoints/*

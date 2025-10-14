@@ -208,10 +208,6 @@ class eval_VideoScore2_float:
         v_soft = ll_based_soft_score_normed(v_score_model, idx_v)
         t_soft = ll_based_soft_score_normed(t_score_model, idx_t)
         p_soft = ll_based_soft_score_normed(p_score_model, idx_p)
-        
-        # v_soft = ll_based_soft_score(v_score_model, idx_v)
-        # t_soft = ll_based_soft_score(t_score_model, idx_t)
-        # p_soft = ll_based_soft_score(p_score_model, idx_p)
 
         return v_soft, t_soft, p_soft, output_text
         

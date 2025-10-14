@@ -8,10 +8,12 @@ This is the official repo for our paper: "VideoScore2: Think before You Score in
 <a target="_blank" href="https://tiger-ai-lab.github.io/VideoScore2/">
 <img style="height:22pt" src="https://img.shields.io/badge/-🌐%20Website-blue?style=flat"></a>
 <a target="_blank" href="https://huggingface.co/datasets/TIGER-Lab/VideoFeedback2">
-<img style="height:22pt" src="https://img.shields.io/badge/-🤗%20Dataset-red?style=flat"></a>
+<img style="height:22pt" src="https://img.shields.io/badge/-🛢️%20Dataset-red?style=flat"></a>
 <a target="_blank" href="https://huggingface.co/TIGER-Lab/VideoScore2">
 <img style="height:22pt" src="https://img.shields.io/badge/-🤗%20Models-red?style=flat"></a>
 <a target="_blank" href="https://x.com/DongfuJiang/status/1973465380028031463">
+<a target="_blank" href="https://huggingface.co/TIGER-Lab/VideoScore">
+<img style="height:22pt" src="https://img.shields.io/badge/-🤗%20Demo-red?style=flat"></a> 
 <img style="height:22pt" src="https://img.shields.io/badge/-Post-black?style=flat&logo=x&logoColor=white"></a>
 <br>
 
