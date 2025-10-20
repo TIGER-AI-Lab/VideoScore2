@@ -191,6 +191,7 @@ eval/*
 !eval/env*/
 !eval/res_data/
 !eval/eval_methods/
+!eval/env_prepare/
 eval/eval_methods/utils_video_reward/checkpoints/*
 !eval/eval_methods/utils_video_reward/checkpoints/download.txt
 eval/eval_methods/utils_video_phy2/checkpoints/*
