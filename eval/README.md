@@ -46,6 +46,9 @@ cd ../../..
 
 For setting up other baselines, refer to corresponding `.txt` file in dir `eval/env_prepare/`.
 
+## Run Baselines (including our model VideoScore2)
+🚧TODO
+
 ## Prepare Benchmark Data
 🚧TODO
 
