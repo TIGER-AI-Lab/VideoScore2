@@ -52,7 +52,7 @@ class eval_ImageReward:
         video_path: str,
         kwargs: dict,
     ):
-        fps=kwargs.get("fps",2.0)
+        fps=kwargs.get("infer_fps",2.0)
         max_frames=kwargs.get("max_frames",16)
         image_list = self._extract_frames_from_video(video_path, fps, max_frames)
 

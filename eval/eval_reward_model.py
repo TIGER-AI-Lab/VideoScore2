@@ -88,14 +88,6 @@ def main(args):
         model=eval_VideoPhy2(model_name_or_path) 
         q_template=Template("""$t2v_prompt""")
     
-    elif method.lower() == "lift":
-        ## conda activate lift
-        from eval_methods.lift import eval_LiFT
-        model_name_or_path="Fudan-FUXI/LiFT-Critic-13b-lora-v1.5"
-        # model_name_or_path="Fudan-FUXI/LiFT-Critic-40b-lora-v1.5"
-        model=eval_LiFT(model_name_or_path) 
-        q_template=Template("""$t2v_prompt""")
-    
     elif method.lower() == "dover":
         ## conda activate dover
         from eval_methods.dover import eval_DOVER
@@ -196,22 +188,15 @@ def main(args):
             continue
            
         if "vs2" in bench \
-            or bench in ["aigve_bench","aigve-bench",
-                         "video_phy","video_phy_test_public",
+            or bench in [
                          "video_phy2","video_phy2_test",
                          "mj_video_bench","mj_bench_video","mj-video-bench","mj-bench-video",
-                         "t2vqa_db",
-                         "tvge"]:  
+                         "t2vqa_db",]:  
                 
             if "vs2" in bench:    
                 v_gt=item['visual_score']
                 t_gt=item['t2v_score']
                 p_gt=item['phy_score']
-            
-            elif bench in ["aigve_bench","aigve-bench"]:
-                v_gt=int(round((item['technical_quality']+item['element_quality']+item['action_quality'])/3))
-                t_gt=int(round((item['element_presence']+item['action_presence'])/2))
-                p_gt=item['physics']
             
             elif bench in ["video_phy","video_phy_test_public",
                            "video_phy2","video_phy2_test",]:
@@ -223,11 +208,6 @@ def main(args):
                 v_gt=item['fineness']
                 t_gt=item['alignment']
                 p_gt=item['consistency']
-                
-            elif bench in ["tvge"]:
-                v_gt=item['video_quality_score']
-                t_gt=item['text_alignment_score']
-                p_gt=None
             
             elif bench in ["t2vqa_db"]:
                 v_gt=t_gt=p_gt=item['quality_score']
@@ -239,9 +219,7 @@ def main(args):
                 "output":raw_output
             })
             
-        elif bench in ["videogen_reward_bench","videogen-reward-bench",
-                       "genai_bench","genai-bench",
-                       "vision_reward_db_video",]:
+        elif bench in ["videogen_reward_bench","videogen-reward-bench",]:
             res_item.update({
                 "video_name":video_name,
                 "prompt":prompt,
@@ -258,7 +236,6 @@ def main(args):
 
 
 if __name__ == "__main__":    
-
     bench_data_dir="./bench_data"
     
     ap = argparse.ArgumentParser()

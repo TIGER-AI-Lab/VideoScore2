@@ -521,12 +521,9 @@ if __name__ == "__main__":
     from benchmark import load_benchmark
     bench_data_dir="bench_data"
     
-    bench="vs2_test_sft_27k"
+    bench="vs2_bench"
     # bench="mj_bench_video"
-    # bench="aigve_bench"
     # bench="video_phy2_test"
-    # bench="tvge"
-    # bench="t2vqa_db"
     
     res_path_mapping={
         # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192_infer_2fps.json",

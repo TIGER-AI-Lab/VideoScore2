@@ -13,7 +13,8 @@ cd ..
 rm -rf VideoAlign
 ```
 ```
-cd checkpoints
+mkdir -p eval_methods/utils_video_reward/checkpoints
+cd eval_methods/utils_video_reward/checkpoints
 git lfs install
 git clone https://huggingface.co/KwaiVGI/VideoReward
 pip install numpy

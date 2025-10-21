@@ -1,7 +1,7 @@
 suppose you are in dir 'eval'
 ```
-conda create -n vision_reward python=3.11 -y --no-default-packages
-conda activate vision_reward
+conda create -n videophy python=3.11 -y --no-default-packages
+conda activate videophy
 ```
 ```
 # shared packages for all baselines
@@ -17,9 +17,8 @@ rm -rf videophy
 ```
 ```
 # download ckpt to ./eval_methods/utils_video_phy2/checkpoints
-cd eval_methods/utils_video_phy2
-mkdir -p checkpoints
-cd checkpoints
+mkdir -p eval_methods/utils_video_phy2/checkpoints
+cd eval_methods/utils_video_phy2/checkpoints
 conda install -c conda-forge git-lfs
 git lfs install
 git clone https://huggingface.co/videophysics/videophy_2_auto
