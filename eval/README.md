@@ -1,9 +1,9 @@
-## Prepare Baselines (build env and ckpt)
+## 1 Prepare Baselines (build env and ckpt)
 We have two classes of baselines: 
 - (1) MLLM Prompting Methods (via [OpenRouter](https://openrouter.ai/) API calling)
 - (2) reward/scoring models for vision, both image and video
 
-Please create a separate environment for certain baseline, then install dependencies and download checkpoint (if needed) as shown in text files in dir `eval/env_prepare/`. 
+Please create a separate environment for certain baseline, then install dependencies and download checkpoint (if needed) as shown in text files in dir [eval/env_prepare/](env_prepare/). 
 
 Here we take baseline `VideoPhy2-auto-eval` as an example: 
 
@@ -46,9 +46,9 @@ git clone https://huggingface.co/videophysics/videophy_2_auto
 cd ../../..
 ```
 
-For other baselines, refer to corresponding `.md` in `eval/env_prepare/`.
+For other baselines, refer to corresponding `.md` in [eval/env_prepare/](env_prepare/).
 
-## Run Baselines (including our model VideoScore2)
+## 2 Run Baselines (including our model VideoScore2)
 (1) MLLM prompting method: run multi-modal models to evaluate the video. 
 🚧TODO
 
@@ -67,10 +67,10 @@ Note:
  - `method`: we support `vs2_float` `vs2_int` `vs1` `video_reward` `vision_reward` `unified_reward` `q_align` `aigve_macs` `video_phy2_auto_eval` `dover` `image_reward`  `q_insight` `deqa`  
  - `bench_data_num`: choose 'all' to load the full dataset, or specify any integer not larger than the dataset size.
 
-For running other baselines, refer to `run_example.sh`. We adopt default inference configs as reported in each baseline. 
+For running other baselines, refer to [eval/run_example.sh](run_example.sh). We adopt default inference configs as reported in each baseline. 
 
 
-## Prepare Benchmark Data
+## 2.5 Prepare Benchmark Data
 When you run the evaluation script, the corresponding benchmark data will be downloaded automatically.
 
 If you prefer to download and process the benchmark data separately, you can do so with the following command:
@@ -92,5 +92,5 @@ Note:
  }
  ```
 
-## Metric Calculation
+## 3 Metric Calculation
 🚧TODO
