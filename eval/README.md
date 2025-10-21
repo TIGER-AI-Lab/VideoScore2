@@ -1,4 +1,4 @@
-## 1 Prepare Baselines (build env and ckpt)
+## Prepare Baselines (build env and ckpt)
 We have two classes of baselines: 
 - (1) MLLM Prompting Methods (via [OpenRouter](https://openrouter.ai/) API calling)
 - (2) reward/scoring models for vision, both image and video
@@ -48,7 +48,7 @@ cd ../../..
 
 For other baselines, refer to corresponding `.md` in [eval/env_prepare/](env_prepare/).
 
-## 2 Run Baselines (including our model VideoScore2)
+## Run Baselines (including our model VideoScore2)
 (1) MLLM prompting method: run multi-modal models to evaluate the video. 
 🚧TODO
 
@@ -70,7 +70,7 @@ Note:
 For running other baselines, refer to [eval/run_example.sh](run_example.sh). We adopt default inference configs as reported in each baseline. 
 
 
-## 2.5 Prepare Benchmark Data
+## Prepare Benchmark Data
 When you run the evaluation script, the corresponding benchmark data will be downloaded automatically.
 
 If you prefer to download and process the benchmark data separately, you can do so with the following command:
@@ -92,5 +92,5 @@ Note:
  }
  ```
 
-## 3 Metric Calculation
+## Metric Calculation
 🚧TODO
