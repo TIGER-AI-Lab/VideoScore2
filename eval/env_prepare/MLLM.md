@@ -1,0 +1,1 @@
+MLLM prompting baselines can be run in the env of 'VideoScore2', please refer to `env_prepare/VideoScore2.md`.

@@ -3,10 +3,9 @@ import os
 import zipfile
 from string import Template
 from tqdm import tqdm
-import tarfile
-import shutil
 import time
 import requests
+import argparse
 
 def _download_file(url: str, save_path: str, overwrite: bool = False, timeout: int = 15, log_enabled: bool = True):
     chunk_size=1<<14
@@ -126,23 +125,7 @@ DIM_NAMES=[
 def load_benchmark(bench_data_dir,bench_name,num="all"):
     data=[]
     # ========================= VideoScore2-Bench =========================
-    if bench_name == "vs2_test_sft_17k":
-        repo_id="hexuan21/vs2_sft"
-        url=f"https://huggingface.co/datasets/{repo_id}/resolve/main/sft_17k_test.json"
-        json_save_path=f"{bench_data_dir}/{bench_name}/sft_17k_test.json"
-        _download_file(url,json_save_path,overwrite=False)
-        with open(json_save_path,"r") as f:
-            all_data=json.load(f)
-        
-        for x in tqdm(all_data):
-            v_name=x["video_name"]
-            v_url=x["video_url"] 
-            v_save_path=f"{bench_data_dir}/{bench_name}/videos/{v_name}.mp4"   
-            if _download_file(v_url,v_save_path) is None:
-                continue
-            data.append(x)
-            
-    elif bench_name == "vs2_test_sft_27k":
+    if bench_name in ["vs2_bench","vs2-bench","vs2"]:
         repo_id="hexuan21/vs2_sft"
         url=f"https://huggingface.co/datasets/{repo_id}/resolve/main/sft_27k_test.json"
         json_save_path=f"{bench_data_dir}/{bench_name}/sft_27k_test.json"
@@ -220,450 +203,6 @@ def load_benchmark(bench_data_dir,bench_name,num="all"):
         with open(json_save_path,"w",encoding='utf-8') as f:
             json.dump(data,f,indent=4,ensure_ascii='False')
     
-    # ========================= GenAI-Bench =========================
-    elif bench_name in ["genai_bench","genai-bench"]:
-        bench_name = "genai_bench"
-        from datasets import load_dataset
-        ds = load_dataset("TIGER-Lab/GenAI-Bench", "video_generation",split="test")
-        src_save_path=f"{bench_data_dir}/{bench_name}/original_data_{bench_name}.json"
-        os.makedirs(os.path.dirname(os.path.abspath(src_save_path)),exist_ok=True)
-        original_data=[x for x in ds]
-        
-        with open(src_save_path,"w",encoding='utf-8') as f:
-            json.dump(original_data,f,indent=4,ensure_ascii='False')
-
-        json_save_path=f"{bench_data_dir}/{bench_name}/{bench_name}.json"
-        os.makedirs(os.path.dirname(os.path.abspath(json_save_path)),exist_ok=True)
-        raw_data=[]
-        
-        for x in ds:
-            prompt=x['prompt']
-            t2v_model=x['left_model']
-            video_name=t2v_model+"_"+x['left_video'].split('/')[-1].split('.mp4')[0]
-            video_url=x['left_video'].replace("blob/main","resolve/main")
-            item={
-                    "video_name":video_name,
-                    "video_url":video_url,
-                    "prompt":prompt,
-                    "t2v_model":t2v_model
-                }
-            raw_data.append(item)
-            t2v_model=x['right_model']
-            video_name=t2v_model+"_"+x['right_video'].split('/')[-1].split('.mp4')[0]
-            video_url=x['right_video'].replace("blob/main","resolve/main")
-            item={
-                    "video_name":video_name,
-                    "video_url":video_url,
-                    "prompt":prompt,
-                    "t2v_model":t2v_model
-                }
-            raw_data.append(item)
-            
-        raw_data = list({frozenset(item.items()): item for item in raw_data}.values())
-        print(len(raw_data))
-        
-        for x in tqdm(raw_data):
-            v_name=x["video_name"]
-            v_url=x["video_url"] 
-            v_save_path=f"{bench_data_dir}/{bench_name}/videos/{v_name}.mp4"   
-            if _download_file(v_url,v_save_path,log_enabled=False) is None:
-                print("download failed", v_name)
-                continue
-            data.append(x)
-        with open(json_save_path,"w",encoding='utf-8') as f:
-            json.dump(data,f,indent=4,ensure_ascii='False')
-    
-    # ========================= VisionRewardDB-Video =========================
-    elif bench_name in ["vision_reward_db_video","visionreward_db_video"]:
-        bench_name = "vision_reward_db_video"
-        from datasets import load_dataset
-        ds = load_dataset("zai-org/VisionRewardDB-Video", "test")["test"]
-        json_save_path=f"{bench_data_dir}/{bench_name}/{bench_name}.json"
-        os.makedirs(os.path.dirname(os.path.abspath(json_save_path)),exist_ok=True)
-        
-        src_save_path=f"{bench_data_dir}/{bench_name}/original_data_{bench_name}.json"
-        original_data=[x for x in ds]
-        with open(src_save_path,"w",encoding='utf-8') as f:
-            json.dump(original_data,f,indent=4,ensure_ascii='False')
-            
-        zip_url="https://huggingface.co/datasets/zai-org/VisionRewardDB-Video/resolve/main/videos/test.tar.gz"
-        zip_save_path=f"{bench_data_dir}/{bench_name}/{bench_name}_videos.tar.gz"
-        video_save_dir=f"{bench_data_dir}/{bench_name}/videos"
-        
-        if not os.path.exists(video_save_dir):
-            _download_file(zip_url,zip_save_path)
-            os.makedirs(video_save_dir,exist_ok=True)
-            with tarfile.open(zip_save_path, "r:gz") as tar:
-                for member in tar.getmembers():
-                    if member.isfile() and member.name.startswith("test/") and member.name.endswith(".mp4"):
-                        video_name = os.path.basename(member.name)
-                        with tar.extractfile(member) as src, open(os.path.join(video_save_dir, video_name), "wb") as dst:
-                            dst.write(src.read())
-            os.remove(zip_save_path)
-            
-        raw_data=[]
-        for x in ds:
-            item={
-                "video_name":x["video1_path"].split('/')[-1].split('.mp4')[0],
-                "video_url":None,
-                "prompt":x["prompt"],
-            }
-            raw_data.append(item)
-            item={
-                "video_name":x["video2_path"].split('/')[-1].split('.mp4')[0],
-                "video_url":None,
-                "prompt":x["prompt"],
-            }
-            raw_data.append(item)
-        
-        raw_data = list({frozenset(item.items()): item for item in raw_data}.values())
-        print(len(raw_data))
-        for x in tqdm(raw_data):
-            v_save_path=f"{bench_data_dir}/{bench_name}/videos/{x['video_name']}.mp4"   
-            if not os.path.exists(v_save_path):
-                continue
-            data.append(x)
-        with open(json_save_path,"w",encoding='utf-8') as f:
-            json.dump(data,f,indent=4,ensure_ascii='False')
-        
-    # ========================= MJ-Bench-Video =========================
-    elif bench_name in ["mj_video_bench","mj_bench_video","mj-video-bench","mj-bench-video"]:
-        bench_name = "mj_bench_video"
-        test_url="https://huggingface.co/datasets/MJ-Bench/MJ-BENCH-VIDEO/resolve/main/test.json"
-        json_save_path_raw=f"{bench_data_dir}/{bench_name}/mj_bench_video_raw.json"
-        json_save_path=f"{bench_data_dir}/{bench_name}/{bench_name}.json"
-        os.makedirs(os.path.dirname(os.path.abspath(json_save_path)),exist_ok=True)
-        _download_file(test_url,json_save_path_raw,overwrite=False)
-        with open(json_save_path_raw,"r") as f:
-            all_data=json.load(f)
-        
-        zip_url="https://huggingface.co/datasets/MJ-Bench/MJ-BENCH-VIDEO/resolve/main/videos/test.zip"
-        zip_save_path=f"{bench_data_dir}/{bench_name}/mj_bench_videos.zip"
-        video_save_dir=f"{bench_data_dir}/{bench_name}/videos"
-        if not os.path.exists(video_save_dir):
-            os.makedirs(video_save_dir,exist_ok=True)
-            _download_file(zip_url,zip_save_path)
-            with zipfile.ZipFile(zip_save_path, 'r') as zip_ref:
-                for zip_info in zip_ref.infolist():
-                    if zip_info.filename.startswith("test/") and zip_info.filename.endswith(".mp4") and not zip_info.is_dir():
-                        filename = os.path.basename(zip_info.filename)
-                        target_path = os.path.join(video_save_dir, filename)
-
-                        if os.path.exists(target_path):
-                            base, ext = os.path.splitext(filename)
-                            i = 1
-                            while os.path.exists(os.path.join(video_save_dir, f"{base}_{i}{ext}")):
-                                i += 1
-                            target_path = os.path.join(video_save_dir, f"{base}_{i}{ext}")
-
-                        with zip_ref.open(zip_info) as src, open(target_path, "wb") as dst:
-                            dst.write(src.read())
-            os.remove(zip_save_path)
-        else:
-            print(f"video save dir already exists!")  
-                
-        for item in all_data:
-            prompt=item['caption']
-            video_name=item['video_0_path'].split('/')[-1].split('.mp4')[0]
-            aspect_score=item['video_0_overall_score']
-            total_score=item['video_0_total_score']
-            new_item={
-                "video_name":video_name,
-                "video_url":None,
-                "prompt":prompt,
-                "alignment": aspect_score['Alignment'],
-                "safety": aspect_score['Safety'],
-                "fineness": aspect_score['Fineness'],
-                "consistency": aspect_score['Consistency'],
-                "bias": aspect_score['Bias'],
-                "total_score":total_score,
-            }
-            data.append(new_item)
-            video_name=item['video_1_path'].split('/')[-1].split('.mp4')[0]
-            aspect_score=item['video_1_overall_score']
-            total_score=item['video_1_total_score']
-            new_item={
-                "video_name":video_name,
-                "video_url":None,
-                "prompt":prompt,
-                "alignment": aspect_score['Alignment'],
-                "safety": aspect_score['Safety'],
-                "fineness": aspect_score['Fineness'],
-                "consistency": aspect_score['Consistency'],
-                "bias": aspect_score['Bias'],
-                "total_score":total_score,
-            }
-            data.append(new_item)
-        with open(json_save_path,"w",encoding='utf-8') as f:
-            json.dump(data,f,indent=4,ensure_ascii='False')
-    
-    # ========================= AIGVE-Bench =========================
-    elif bench_name in ["aigve_bench","aigve-bench"]:
-        bench_name = "aigve_bench"
-        csv_url="https://huggingface.co/datasets/xiaoliux/AIGVE-Bench/resolve/main/AIGVE-Bench1.0.csv"
-        csv_save_path=f"{bench_data_dir}/{bench_name}/aigve_bench.csv"
-        json_save_path=f"{bench_data_dir}/{bench_name}/aigve_bench.json"
-        os.makedirs(os.path.dirname(os.path.abspath(json_save_path)),exist_ok=True)
-       
-        zip_url="https://huggingface.co/datasets/xiaoliux/AIGVE-Bench/resolve/main/AIGVE-Bench%20Videos.zip"
-        zip_save_path=f"{bench_data_dir}/{bench_name}/aigve_bench_videos.zip"
-        video_save_dir=f"{bench_data_dir}/{bench_name}/videos"
-        
-        _download_file(csv_url,csv_save_path)
-        if not os.path.exists(video_save_dir):
-            _download_file(zip_url,zip_save_path)
-            os.makedirs(video_save_dir,exist_ok=True)
-            with zipfile.ZipFile(zip_save_path, 'r') as zip_ref:
-                for zip_info in zip_ref.infolist():
-                    if zip_info.filename.startswith("videos/") and zip_info.filename.endswith(".mp4") and not zip_info.is_dir():
-                        filename = os.path.basename(zip_info.filename)
-                        target_path = os.path.join(video_save_dir, filename)
-
-                        if os.path.exists(target_path):
-                            base, ext = os.path.splitext(filename)
-                            i = 1
-                            while os.path.exists(os.path.join(video_save_dir, f"{base}_{i}{ext}")):
-                                i += 1
-                            target_path = os.path.join(video_save_dir, f"{base}_{i}{ext}")
-
-                        with zip_ref.open(zip_info) as src, open(target_path, "wb") as dst:
-                            dst.write(src.read())
-            
-            os.remove(zip_save_path)
-        else:
-            print(f"video save dir already exists!")  
-                
-        import pandas as pd            
-        df = pd.read_csv(csv_save_path)
-        df = df.iloc[1:]
-        for index, row in df.iterrows():
-            video_name=row["Video_Path"].split('.mp4')[0]
-            t2v_prompt=row["Prompt"]
-            tq=row["Technical_Quality"]
-            ele_q=row["Element_Quality"]
-            act_q=row["Element_Action_Quality"]
-            phy=row["Physics"]
-            ele_presence=row["Element_Presentence"]
-            act_presence=row["Element_Action_Presentence"]
-            item={
-                "video_name":video_name,
-                "video_url":None,
-                "prompt":t2v_prompt,
-                "technical_quality":tq,
-                "element_quality":ele_q,
-                "action_quality":act_q,
-                "element_presence":ele_presence,
-                "action_presence":act_presence,
-                "physics":phy,
-            }
-            data.append(item)
-        with open(json_save_path,"w",encoding='utf-8') as f:
-            json.dump(data,f,indent=4,ensure_ascii='False')
-    
-    # ========================= VideoPhy-test =========================
-    elif bench_name in ["video_phy","video_phy_test"]:
-        bench_name = "video_phy_test"
-        csv_url="https://huggingface.co/datasets/videophysics/videophy_test_public/resolve/main/videophy_test_public.csv"
-        csv_save_path=f"{bench_data_dir}/{bench_name}/videophy_test_public.csv"
-        json_save_path=f"{bench_data_dir}/{bench_name}/videophy_test_public.json"
-        os.makedirs(os.path.dirname(os.path.abspath(json_save_path)),exist_ok=True)
-        
-        video_save_dir=f"{bench_data_dir}/{bench_name}/videos"
-        os.makedirs(video_save_dir,exist_ok=True)
-        
-        _download_file(csv_url,csv_save_path)
-        
-        import pandas as pd
-        raw_data=[]
-        df = pd.read_csv(csv_save_path)
-        df = df.iloc[1:]
-        for index, row in df.iterrows():
-            video_url=row["video_url"]
-            video_name=video_url.split('/')[-1].split('.mp4')[0]
-            t2v_prompt=row["caption"]
-            semantic=row["majority_sa"]
-            phy=row["majority_pc"]
-            item={
-                "video_name":video_name,
-                "video_url":video_url,
-                "prompt":t2v_prompt,
-                "semantic":semantic,
-                "physical":phy,
-            }
-            raw_data.append(item)
-                            
-        for x in tqdm(raw_data):
-            v_name=x["video_name"]
-            v_url=x["video_url"] 
-            v_save_path=f"{bench_data_dir}/{bench_name}/videos/{v_name}.mp4"   
-            if _download_file(v_url,v_save_path,log_enabled=False) is None:
-                print("download failed", v_name)
-                continue
-            data.append(x)
-        with open(json_save_path,"w",encoding='utf-8') as f:
-            json.dump(data,f,indent=4,ensure_ascii='False')
-    
-    # ========================= VideoPhy2-test =========================
-    elif bench_name in ["video_phy2","video_phy2_test"]:
-        bench_name = "video_phy2_test"
-        csv_url="https://huggingface.co/datasets/videophysics/videophy2_test/resolve/main/videophy2_test.csv"
-        csv_save_path=f"{bench_data_dir}/{bench_name}/{bench_name}t.csv"
-        json_save_path=f"{bench_data_dir}/{bench_name}/{bench_name}.json"
-        os.makedirs(os.path.dirname(os.path.abspath(json_save_path)),exist_ok=True)
-        
-        video_save_dir=f"{bench_data_dir}/{bench_name}/videos"
-        os.makedirs(video_save_dir,exist_ok=True)
-        
-        _download_file(csv_url,csv_save_path)
-
-        import pandas as pd
-        raw_data=[]
-        df = pd.read_csv(csv_save_path)
-        df = df.iloc[1:]
-        for index, row in df.iterrows():
-            video_url=row["video_url"]
-            video_name=video_url.split('/')[-1].split('.mp4')[0]
-            t2v_prompt=row["caption"]
-            semantic_score=row["sa"]
-            phy_score=row["pc"]
-            is_hard=row["is_hard"]
-            t2v_model=row["model_name"]
-            item={
-                "video_name":video_name,
-                "video_url":video_url,
-                "prompt":t2v_prompt,
-                "semantic":semantic_score,
-                "physical":phy_score,
-                "is_hard":is_hard,
-                "t2v_model":t2v_model,
-            }
-            raw_data.append(item)
-                            
-        for x in tqdm(raw_data):
-            v_name=x["video_name"]
-            v_url=x["video_url"] 
-            v_save_path=f"{bench_data_dir}/{bench_name}/videos/{v_name}.mp4"   
-            if _download_file(v_url,v_save_path,log_enabled=False) is None:
-                print("download failed", v_name)
-                continue
-            data.append(x)
-        with open(json_save_path,"w",encoding='utf-8') as f:
-            json.dump(data,f,indent=4,ensure_ascii='False')
-
-    # ========================= TVGE / T2V GenEval =========================
-    elif bench_name in ["tvge"]:
-        csv_url="https://huggingface.co/datasets/jayw/t2v-gen-eval/resolve/main/labels.csv"
-        csv_save_path=f"{bench_data_dir}/{bench_name}/{bench_name}.csv"
-        json_save_path=f"{bench_data_dir}/{bench_name}/{bench_name}.json"
-        os.makedirs(os.path.dirname(os.path.abspath(json_save_path)),exist_ok=True)
-        
-        zip_url="https://huggingface.co/datasets/jayw/t2v-gen-eval/resolve/main/videos.tar.gz"
-        zip_save_path=f"{bench_data_dir}/{bench_name}/{bench_name}_videos.tar.gz"
-        video_save_dir=f"{bench_data_dir}/{bench_name}/videos"
-        
-        _download_file(csv_url,csv_save_path)
-        
-        if not os.path.exists(video_save_dir):
-            os.makedirs(video_save_dir,exist_ok=True)
-            _download_file(zip_url,zip_save_path)
-            with tarfile.open(zip_save_path, "r:gz") as tar:
-                mp4_members = [m for m in tar.getmembers() if m.isfile() and m.name.endswith(".mp4")]
-                for member in tqdm(mp4_members, desc="Extracting videos", unit="file"):
-                    if member.isfile() and member.name.endswith(".mp4"):
-                        # member.name like: folder1/video1.mp4
-                        path_parts = member.name.split("/")
-                        if len(path_parts) >= 2:
-                            folder_name = path_parts[-2]
-                            file_name = path_parts[-1].split("_")[-1]
-                            new_name = f"{folder_name}_{file_name}"
-                            target_path = os.path.join(video_save_dir, new_name)
-
-                            extracted_file = tar.extractfile(member)
-                            if extracted_file:
-                                with open(target_path, "wb") as f_out:
-                                    shutil.copyfileobj(extracted_file, f_out)
-            os.remove(zip_save_path)
-        else:
-            print(f"video save dir already exists!")  
-                   
-        import pandas as pd
-        df = pd.read_csv(csv_save_path)
-        df = df.iloc[1:]
-        for index, row in df.iterrows():
-            video_name=str(row["model_name"])+"_"+f"{row['video_id']:04d}"
-            t2v_prompt=row["prompt"]
-            visual_score=row["video_quality_score"]
-            align_score=row["text_alignment_score"]
-            item={
-                "video_name":video_name,
-                "video_url":None,
-                "prompt":t2v_prompt,
-                "video_quality_score":visual_score,
-                "text_alignment_score":align_score,
-            }
-            data.append(item)
-        with open(json_save_path,"w",encoding='utf-8') as f:
-            json.dump(data,f,indent=4,ensure_ascii='False')
-
-        # build preference benchmark for tvge
-        from collections import defaultdict
-        from itertools import combinations
-        groups = defaultdict(list)
-        tvge_pref_json=f"{bench_data_dir}/{bench_name}/{bench_name}_pref.json"
-        df = pd.read_csv(csv_save_path)
-        df = df.iloc[1:]
-        for index, row in df.iterrows():
-            model_name = row["model_name"].strip()
-            video_id = int(row["video_id"])
-            prompt = row["prompt"].strip()
-            align_score = float(row["text_alignment_score"])
-            quality_score = float(row["video_quality_score"])
-
-            groups[prompt].append({
-                "name": f"{model_name}_{video_id:04d}",
-                "align": align_score,
-                "quality": quality_score,
-                "prompt": prompt
-            })
-
-        pref_data = []
-
-        for key, videos in groups.items():
-            for v1, v2 in combinations(videos, 2):
-                diff_align = v1["align"] - v2["align"]
-                if abs(diff_align) <= 0.3:
-                    align_pref = "same"
-                elif diff_align > 0:
-                    align_pref = "1"
-                else:
-                    align_pref = "2"
-
-                diff_quality = v1["quality"] - v2["quality"]
-                if abs(diff_quality) <= 0.3:
-                    quality_pref = "same"
-                elif diff_quality > 0:
-                    quality_pref = "1"
-                else:
-                    quality_pref = "2"
-
-                pair = {
-                    "prompt": v1["prompt"],
-                    "video1": v1["name"],
-                    "video2": v2["name"],
-                    "v1_align_score": v1["align"],
-                    "v2_align_score": v2["align"],
-                    "text_alignment_pref": align_pref,
-                    "v1_quality_score": v1["quality"],
-                    "v2_quality_score": v2["quality"],
-                    "video_quality_pref": quality_pref,
-                }
-                pref_data.append(pair)
-
-        with open(tvge_pref_json, "w", encoding="utf-8") as f:
-            json.dump(pref_data, f, indent=2, ensure_ascii=False)
-
-        # print(f"✅ saved {len(pref_data)} pairs to {tvge_pref_json}")
-        
     # ========================= T2VQA-DB =========================
     elif bench_name in ["t2vqa_db"]:
         import gdown
@@ -764,8 +303,125 @@ def load_benchmark(bench_data_dir,bench_name,num="all"):
         with open(t2vqa_pref_json, "w", encoding="utf-8") as f:
             json.dump(pref_data, f, indent=2, ensure_ascii=False)
         # print(len(pref_data), "preference pairs saved to", t2vqa_pref_json)
+    
+    # ========================= MJ-Bench-Video =========================
+    elif bench_name in ["mj_video_bench","mj_bench_video","mj-video-bench","mj-bench-video"]:
+        bench_name = "mj_bench_video"
+        test_url="https://huggingface.co/datasets/MJ-Bench/MJ-BENCH-VIDEO/resolve/main/test.json"
+        json_save_path_raw=f"{bench_data_dir}/{bench_name}/mj_bench_video_raw.json"
+        json_save_path=f"{bench_data_dir}/{bench_name}/{bench_name}.json"
+        os.makedirs(os.path.dirname(os.path.abspath(json_save_path)),exist_ok=True)
+        _download_file(test_url,json_save_path_raw,overwrite=False)
+        with open(json_save_path_raw,"r") as f:
+            all_data=json.load(f)
         
+        zip_url="https://huggingface.co/datasets/MJ-Bench/MJ-BENCH-VIDEO/resolve/main/videos/test.zip"
+        zip_save_path=f"{bench_data_dir}/{bench_name}/mj_bench_videos.zip"
+        video_save_dir=f"{bench_data_dir}/{bench_name}/videos"
+        if not os.path.exists(video_save_dir):
+            os.makedirs(video_save_dir,exist_ok=True)
+            _download_file(zip_url,zip_save_path)
+            with zipfile.ZipFile(zip_save_path, 'r') as zip_ref:
+                for zip_info in zip_ref.infolist():
+                    if zip_info.filename.startswith("test/") and zip_info.filename.endswith(".mp4") and not zip_info.is_dir():
+                        filename = os.path.basename(zip_info.filename)
+                        target_path = os.path.join(video_save_dir, filename)
+
+                        if os.path.exists(target_path):
+                            base, ext = os.path.splitext(filename)
+                            i = 1
+                            while os.path.exists(os.path.join(video_save_dir, f"{base}_{i}{ext}")):
+                                i += 1
+                            target_path = os.path.join(video_save_dir, f"{base}_{i}{ext}")
+
+                        with zip_ref.open(zip_info) as src, open(target_path, "wb") as dst:
+                            dst.write(src.read())
+            os.remove(zip_save_path)
+        else:
+            print(f"video save dir already exists!")  
+                
+        for item in all_data:
+            prompt=item['caption']
+            video_name=item['video_0_path'].split('/')[-1].split('.mp4')[0]
+            aspect_score=item['video_0_overall_score']
+            total_score=item['video_0_total_score']
+            new_item={
+                "video_name":video_name,
+                "video_url":None,
+                "prompt":prompt,
+                "alignment": aspect_score['Alignment'],
+                "safety": aspect_score['Safety'],
+                "fineness": aspect_score['Fineness'],
+                "consistency": aspect_score['Consistency'],
+                "bias": aspect_score['Bias'],
+                "total_score":total_score,
+            }
+            data.append(new_item)
+            video_name=item['video_1_path'].split('/')[-1].split('.mp4')[0]
+            aspect_score=item['video_1_overall_score']
+            total_score=item['video_1_total_score']
+            new_item={
+                "video_name":video_name,
+                "video_url":None,
+                "prompt":prompt,
+                "alignment": aspect_score['Alignment'],
+                "safety": aspect_score['Safety'],
+                "fineness": aspect_score['Fineness'],
+                "consistency": aspect_score['Consistency'],
+                "bias": aspect_score['Bias'],
+                "total_score":total_score,
+            }
+            data.append(new_item)
+        with open(json_save_path,"w",encoding='utf-8') as f:
+            json.dump(data,f,indent=4,ensure_ascii='False')
+    
+    # ========================= VideoPhy2-test =========================
+    elif bench_name in ["video_phy2","video_phy2_test"]:
+        bench_name = "video_phy2_test"
+        csv_url="https://huggingface.co/datasets/videophysics/videophy2_test/resolve/main/videophy2_test.csv"
+        csv_save_path=f"{bench_data_dir}/{bench_name}/{bench_name}t.csv"
+        json_save_path=f"{bench_data_dir}/{bench_name}/{bench_name}.json"
+        os.makedirs(os.path.dirname(os.path.abspath(json_save_path)),exist_ok=True)
         
+        video_save_dir=f"{bench_data_dir}/{bench_name}/videos"
+        os.makedirs(video_save_dir,exist_ok=True)
+        
+        _download_file(csv_url,csv_save_path)
+
+        import pandas as pd
+        raw_data=[]
+        df = pd.read_csv(csv_save_path)
+        df = df.iloc[1:]
+        for index, row in df.iterrows():
+            video_url=row["video_url"]
+            video_name=video_url.split('/')[-1].split('.mp4')[0]
+            t2v_prompt=row["caption"]
+            semantic_score=row["sa"]
+            phy_score=row["pc"]
+            is_hard=row["is_hard"]
+            t2v_model=row["model_name"]
+            item={
+                "video_name":video_name,
+                "video_url":video_url,
+                "prompt":t2v_prompt,
+                "semantic":semantic_score,
+                "physical":phy_score,
+                "is_hard":is_hard,
+                "t2v_model":t2v_model,
+            }
+            raw_data.append(item)
+                            
+        for x in tqdm(raw_data):
+            v_name=x["video_name"]
+            v_url=x["video_url"] 
+            v_save_path=f"{bench_data_dir}/{bench_name}/videos/{v_name}.mp4"   
+            if _download_file(v_url,v_save_path,log_enabled=False) is None:
+                print("download failed", v_name)
+                continue
+            data.append(x)
+        with open(json_save_path,"w",encoding='utf-8') as f:
+            json.dump(data,f,indent=4,ensure_ascii='False')
+
     else:
         print(f"{bench_name} not supported. Exited.")
         exit(0)
@@ -779,18 +435,18 @@ def load_benchmark(bench_data_dir,bench_name,num="all"):
 
 
 if __name__ == "__main__":
-    bench_data_dir="./bench_data"
-    # bench_name="genai_bench"
+    
+    # bench_name="vs2_bench"
     # bench_name="videogen_reward_bench"
-    # bench_name="vision_reward_db_video"
     # bench_name="mj_bench_video"
-    bench_name="aigve_bench"
-    # bench_name="video_phy_test"
     # bench_name="video_phy2_test"
-    # bench_name="tvge"
     # bench_name="t2vqa_db"
-    data=load_benchmark(bench_data_dir,bench_name)
-    print(len(data))
-
-    # import os
-    # print(len(os.listdir("/data/xuan/workdir/VideoScore2/eval/bench_data/genai_bench/videos")))
+    
+    bench_data_dir="./bench_data"
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--bench_name', type=str, default="vs2_bench", help='benchmark name')
+    parser.add_argument('--loaded_num', default="all", help='number of loaded samples')
+    args = parser.parse_args()
+    bench_name = args.bench_name
+    loaded_num=args.loaded_num
+    data=load_benchmark(bench_data_dir,bench_name,loaded_num)

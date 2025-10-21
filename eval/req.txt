@@ -135,14 +135,3 @@ pip install torch==2.0.1
 pip install numpy==1.26.4
 pip install protobuf
 pip install opencv-python-headless==4.11.0.86
-
-
-lift
-git clone https://github.com/CodeGoat24/LiFT.git
-cd LiFT
-bash ./environment_setup.sh lift
-pip install peft==0.10.0
-pip install accelerate==0.27.2
-pip install typing_extensions
-pip install opencv-python-headless==4.11.0.86
-pip install numpy==1.26.0
