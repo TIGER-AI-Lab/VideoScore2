@@ -1,5 +1,8 @@
 # (1) eval MLLM prompting methods
-##### TODO TODO
+conda activate vs2_eval
+python eval_mllm.py \
+    --bench "vs2_bench" \
+    --model_name "openai/gpt-5-mini"
 
 # (2) eval reward model / scoring model
 # ============================== VideoScore2 ==============================

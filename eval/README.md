@@ -56,12 +56,12 @@ We use [OpenRouter](https://openrouter.ai/) API calling, firstly, an valid API k
 ```
 export OR_API_KEY=<your_open_router_key>
 ```
-
+Run: 
 ```
 python eval_mllm.py --bench "vs2_bench" --model_name "openai/gpt-5-mini"
 ```
 
-refer to script [eval/eval_mllm.py](eval_mllm.py) for more args and configs.
+refer to script [eval/eval_mllm.py](eval_mllm.py) for more configs like `max_tokens`, `temperature`, `thinking_enabled`.
 
 #### Reward model / scoring model: 
 
