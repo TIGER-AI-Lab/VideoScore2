@@ -1,7 +1,3 @@
-import base64
-import cv2
-from openai import OpenAI
-from typing import List
 from eval_methods.utils import extract_video_frames_base64
 import json
 import re

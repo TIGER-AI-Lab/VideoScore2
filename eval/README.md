@@ -5,7 +5,7 @@ We have two classes of baselines:
 
 Please create a separate environment for certain baseline, then install dependencies and download checkpoint (if needed) as shown in text files in dir [eval/env_prepare/](env_prepare/). 
 
-Here we take baseline `VideoPhy2-auto-eval` as an example: 
+#### Here we take baseline `VideoPhy2-auto-eval` as an example: 
 
 (1) clone original repo
 ```
@@ -49,10 +49,21 @@ cd ../../..
 For other baselines, refer to corresponding `.md` in [eval/env_prepare/](env_prepare/).
 
 ## Run Baselines (including our model VideoScore2)
-(1) MLLM prompting method: run multi-modal models to evaluate the video. 
-🚧TODO
+#### MLLM prompting method: 
+run multi-modal models to evaluate the video.  
 
-(2) Reward model / scoring model: 
+We use [OpenRouter](https://openrouter.ai/) API calling, firstly, an valid API key needs to be specified: 
+```
+export OR_API_KEY=<your_open_router_key>
+```
+
+```
+python eval_mllm.py --bench "vs2_bench" --model_name "openai/gpt-5-mini"
+```
+
+refer to script [eval/eval_mllm.py](eval_mllm.py) for more args and configs.
+
+#### Reward model / scoring model: 
 
 ```
 CUDA_VISIBLE_DEVICES=0 python eval_rm.py \
@@ -92,5 +103,26 @@ Note:
  }
  ```
 
-## Metric Calculation
-🚧TODO
+## Metrics Calculation
+After running a method on a given benchmark, the output results will be saved under [eval/res_data](res_data). 
+
+For benchmark `vs2_bench` `mj_bench_video` `video_phy2_test`, they are point-wise benchmarks, metrics are Prediction Accuracy or Correlation Coefficient (PLCC/SPCC). run: 
+```
+python get_acc_corr.py \
+  --bench <bench> \
+  --method_or_model <method_or_model> 
+  # (optional) --score_path <path of saved scores>
+```
+For benchmark `videogen_reward_bench` `t2vqa_db` , they are preference benchmarks, metrics are Pairwise Preference Prediction Accuracy. run: 
+```
+python get_pairwise_acc.py \
+  --bench <bench> \
+  --method_or_model <method_or_model> \
+  --with_ties False 
+  # (optional) --score_path <path of saved scores>
+```
+
+The path to the saved scores is automatically determined by the default configuration of each method.
+For example, when evaluating "vs2_float" on the benchmark "vs2_bench", we are using default config `infer_fps=2` and `temperature=0.7` by default, so the score_path is ```res_data/res_vs2_bench/VideoScore2_infer_2fps_float_weighted_tempe=0.7.json```. 
+
+You can also modify `--score_path` if you use different configurations.

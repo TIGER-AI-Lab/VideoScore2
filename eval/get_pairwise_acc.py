@@ -1,7 +1,11 @@
 import pandas as pd
 import json
 import random
+import os
 from benchmark import load_benchmark
+import argparse
+
+
 
 def judge_equal_for_diverse(method,score1,score2,with_ties):
     ## trival implt
@@ -106,20 +110,12 @@ def judge_equal_for_diverse(method,score1,score2,with_ties):
 
 
 
-def main(bench,kwargs,short_sampling_config):
-    score_json = kwargs["score_json"]
-    with_ties = kwargs["with_ties"]
-    method = kwargs["method"]
-    short_sampling=short_sampling["small_sampling"]
-    short_sample_num=short_sampling["short_sample_num"]
+def main(bench,method,with_ties,bench_src_file,score_json,):
     
-    print(method)
     print(bench)
     with open(score_json, 'r') as f:
         score_data = json.load(f)  
-    if short_sampling:
-        score_data=random.sample(score_data,short_sample_num)
-    print("total scores size: ",len(score_data)) 
+    print("num of total scored items: ",len(score_data)) 
     
     score_dict = {}
     for item in score_data:
@@ -130,14 +126,13 @@ def main(bench,kwargs,short_sampling_config):
             continue
         
         score_dict[v_name]=item
-    print("effective scores size: ",len(score_dict))
+    print("effective num of scored items: ",len(score_dict))
     print("with ties") if with_ties else print("w/o ties")
     
     # ========================= VideoGen-Reward-Bench =========================
     if bench in ["videogen_reward_bench","videogen-reward-bench"]:
-        csv_path = kwargs["src_file"]
-        df = pd.read_csv(csv_path)
-        print(f"total pairs num: ",len(df))
+        df = pd.read_csv(bench_src_file)
+        print(f"num of total pairs: ",len(df))
         vq_correct = 0
         ta_correct = 0
         overall_correct = 0
@@ -238,14 +233,17 @@ def main(bench,kwargs,short_sampling_config):
         
            
         print(f"method: {method}")
-        print(f"VQ Pairwise Accuracy: {vq_correct}/{total_eff_vq} = {vq_correct/total_eff_vq*100:.3f}")
-        print(f"TA Pairwise Accuracy: {ta_correct}/{total_eff_ta} = {ta_correct/total_eff_ta*100:.3f}")
-        print(f"Overall Pairwise Accuracy: {overall_correct}/{total_eff_overall} = {overall_correct/total_eff_overall*100:.3f}\n")
+        res_vq=f"VideoGen-Reward-Bench VQ Pairwise Accuracy: {vq_correct}/{total_eff_vq} = {vq_correct/total_eff_vq*100:.3f}\n"
+        res_ta=f"VideoGen-Reward-Bench TA Pairwise Accuracy: {ta_correct}/{total_eff_ta} = {ta_correct/total_eff_ta*100:.3f}\n"
+        res_overall=f"VideoGen-Reward-Bench Overall Pairwise Accuracy: {overall_correct}/{total_eff_overall} = {overall_correct/total_eff_overall*100:.3f}\n"
+        print(res_vq)
+        print(res_ta)
+        print(res_overall)
+        return {method:res_vq,method:res_ta,method:res_overall}
     
     # ========================= T2VQA-DB =========================
     if bench in ["t2vqa_db","t2vqa-db"]:
-        src_json_path = kwargs["src_file"]
-        with open(src_json_path, "r") as f:
+        with open(bench_src_file, "r") as f:
             src_data = json.load(f)
         print(f"pairs num: ",len(src_data))
         total=0
@@ -281,52 +279,69 @@ def main(bench,kwargs,short_sampling_config):
         print(f"current pairs num: ",total)
         print(f"method: {method}")
         acc = correct / total if total > 0 else 0
-        print(f"T2VQA-DB Pref Pairwise Accuracy: {correct}/{total} = {acc*100:.3f}")
+        res=f"T2VQA-DB Pref Pairwise Accuracy: {correct}/{total} = {acc*100:.3f}"
+        print(res)
+        return {method:res}
     
     
 if __name__ == "__main__":
-    bench_data_dir="bench_data"
+    BENCH_DATA_DIR="bench_data"
+    
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--bench",type=str,default="videogen_reward_bench")
+    ap.add_argument("--method_or_model",default="vs2_float")
+    ap.add_argument("--with_ties",default=False,)
+    args = ap.parse_args()
+    bench=args.bench
+    method_or_model=args.method_or_model
+    with_ties=args.with_ties
+    
     bench_src_file_mapping={
         "videogen_reward_bench":"bench_data/videogen_reward_bench/videogen-rewardbench.csv",
-        
-        # "t2vqa_db":"bench_data/t2vqa_db/t2vqa_db_pref.json",
+        "t2vqa_db":"bench_data/t2vqa_db/t2vqa_db_pref.json",
     }
     
-    for bench,src_file in bench_src_file_mapping.items():
+    method_score_json_mapping={
+        "vs2_int":f"res_data/res_{bench}/VideoScore2_infer_2fps.json",
+        "vs2_float":f"res_data/res_{bench}/VideoScore2_infer_2fps_float_normed_tempe=0.7.json",
+        "vs2_float_normed":f"res_data/res_{bench}/VideoScore2_infer_2fps_float_normed_tempe=0.7.json",
+        "vs2_float_weighted":f"res_data/res_{bench}/VideoScore2_infer_2fps_float_normed_tempe=0.7.json",
         
-        score_json_mapping={
-            # "vs2_float":f"res_data/res_{bench}/VideoScore2.json",
+        "vs1":f"res_data/res_{bench}/VideoScore.json",
+        "aigve_macs":f"res_data/res_{bench}/AIGVE-MACS.json",
+        "dover":f"res_data/res_{bench}/dover.json",
+        "video_phy2_auto_eval":f"res_data/res_{bench}/videophy_2_auto.json",
+        "unified_reward":f"res_data/res_{bench}/UnifiedReward-7b.json",
+        "video_reward":f"res_data/res_{bench}/VideoReward.json",
+        "vision_reward":f"res_data/res_{bench}/VisionReward-Video.json",
+        "q_align":f"res_data/res_{bench}/Q-Align.json",
+        "deqa":f"res_data/res_{bench}/DeQA-Score-Mix3.json",
+        "image_reward":f"res_data/res_{bench}/ImageReward-v1.0.json",
+        "q_insight":f"res_data/res_{bench}/Q-Insight.json",
+        
+        "claude-sonnet-4":f"res_data/res_{bench}/claude-sonnet-4_infer_2fps_3shot.json",
+        "gemini-2.5-flash":f"res_data/res_{bench}/gemini-2.5-flash_infer_2fps_3shot.json",
+        "gemini-2.5-pro":f"res_data/res_{bench}/gemini-2.5-pro_infer_2fps_3shot.json",
+        "gpt-5":f"res_data/res_{bench}/gpt-5_infer_2fps_3shot.json",
+        "gpt-5-mini":f"res_data/res_{bench}/gpt-5-mini_infer_2fps_3shot.json",
+        "o4-mini":f"res_data/res_{bench}/o4-mini_infer_2fps_3shot.json",
+        "grok-4":f"res_data/res_{bench}/grok-4_infer_2fps_3shot.json",
+        "gemma-3-27b-it":f"res_data/res_{bench}/gemma-3-27b-it_infer_2fps_3shot.json",
+        "qwen2.5-vl-7b-instruct":f"res_data/res_{bench}/qwen2.5-vl-7b-instruct_infer_2fps.json",
+        "qwen2.5-vl-32b-instruct":f"res_data/res_{bench}/qwen2.5-vl-32b-instruct_infer_2fps_3shot.json",
+        "qwen2.5-vl-72b-instruct":f"res_data/res_{bench}/qwen2.5-vl-72b-instruct_infer_2fps_3shot.json",
+        "llama-4-scout":f"res_data/res_{bench}/llama-4-scout_infer_2fps_3shot.json",
+        "llama-4-maverick":f"res_data/res_{bench}/llama-4-maverick_infer_2fps_3shot.json",
+        "glm-4.1v-9b-thinking":f"res_data/res_{bench}/glm-4.1v-9b-thinking_infer_2fps_3shot.json",
+        "glm-4.5v":f"res_data/res_{bench}/glm-4.5v_infer_2fps_3shot.json",
+    }
+    
+    bench_src_file=bench_src_file_mapping[bench] 
+    score_json=method_score_json_mapping[method_or_model]
+    metrics_p=f'metrics_report/{bench}/{method_or_model}.json'
 
-            # "aigve_macs":f"res_data/res_{bench}/AIGVE-MACS.json",
-            # "deqa":f"res_data/res_{bench}/DeQA-Score-Mix3.json",
-            # "dover":f"res_data/res_{bench}/dover.json",
-            # "image_reward":f"res_data/res_{bench}/ImageReward-v1.0.json",
-            # "q_align":f"res_data/res_{bench}/Q-Align.json",
-            # "q_insight":f"res_data/res_{bench}/Q-Insight.json",
-            # "video_phy2_auto_eval":f"res_data/res_{bench}/videophy_2_auto.json",
-            # "unified_reward":f"res_data/res_{bench}/UnifiedReward-7b.json",
-            # "vision_reward":f"res_data/res_{bench}/VisionReward-Video.json",
-            # "video_reward":f"res_data/res_{bench}/VideoReward.json",
-            # "vs1":f"res_data/res_{bench}/VideoScore-v1.1.json",
-            # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192_infer_2fps.json",
-            # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_17k_5e-5_2fps_960_720_8192_infer_2fps.json",
-            # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_2400_infer_2fps.json",
-            # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_2400_float_infer_2fps_tempe=0.7.json",
-            
-            
-        }
-        small_sampling_config={
-            "small_sampling":False,
-            "short_sample_num":4000
-        }
-        
-        for method,score_json in score_json_mapping.items():
-            kwargs={
-                "method": method,
-                "src_file":src_file,
-                "score_json":score_json,
-                # "with_ties":False,
-                "with_ties":True,
-            }
-            load_benchmark(bench_data_dir,bench,num="all")
-            main(bench,kwargs,small_sampling_config)
+    load_benchmark(BENCH_DATA_DIR,bench,num="all")
+    res_dict=main(bench,method_or_model,with_ties,bench_src_file,score_json,)
+    os.makedirs(os.path.dirname(metrics_p),exist_ok=True)
+    with open(metrics_p,"w") as f:
+        json.dump(res_dict,f,indent=4)

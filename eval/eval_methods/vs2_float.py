@@ -14,7 +14,7 @@ def _get_video_fps(url_or_p:str):
     return fps
 
 class eval_VideoScore2_float:
-    def __init__(self, model_name: str):
+    def __init__(self, model_name: str, floating_method: str = "normed"):
         self.model, self.processor = self.load_model_processor(model_name)
 
         self.tokenizer = getattr(self.processor, "tokenizer", None)
@@ -24,6 +24,8 @@ class eval_VideoScore2_float:
                 trust_remote_code=True,
                 use_fast=False,
             )
+        self.floating_method = floating_method.lower()
+        assert self.floating_method in ["normed","weighted"], f"invalid floating_method: {floating_method}"
 
     def load_model_processor(self, model_name):
         model = AutoModelForVision2Seq.from_pretrained(
@@ -110,35 +112,6 @@ class eval_VideoScore2_float:
         else:
             v_score_model = t_score_model = p_score_model = None 
         
-        # def find_score_token_index_by_prompt(prompt_text: str) -> int:
-        #     prompt_tokens = self.tokenizer.encode(prompt_text, add_special_tokens=False)
-        #     gen_ids = gen_token_ids  
-        #     print("Prompt tokens:", prompt_tokens, self.tokenizer.decode(prompt_tokens))
-        #     print("Generated tokens snippet:", gen_ids[:50], self.tokenizer.decode(gen_ids[:50]))
-        #     for i in range(len(gen_ids) - len(prompt_tokens)):
-        #         if gen_ids[i:i+len(prompt_tokens)] == prompt_tokens:
-        #             j = i + len(prompt_tokens)
-        #             while j < len(gen_ids):
-        #                 token_str = self.tokenizer.decode([gen_ids[j]]).strip()
-        #                 if token_str.isdigit():
-        #                     return j
-        #                 j += 1
-        #     return -1
-        
-        def find_score_token_index_by_prompt_v0(prompt_text: str) -> int:
-            prompt_tokens = self.tokenizer.encode(prompt_text, add_special_tokens=False)
-            gen_ids = gen_token_ids  
-
-            for i in range(len(gen_ids) - len(prompt_tokens)):
-                if gen_ids[i:i+len(prompt_tokens)] == prompt_tokens:
-                    j = i + len(prompt_tokens)
-                    while j < len(gen_ids):
-                        token_str = self.tokenizer.decode([gen_ids[j]], skip_special_tokens=True).strip()
-                        if token_str.isdigit():
-                            return j
-                        j += 1
-            return -1
-        
         def find_score_token_index_by_prompt(prompt_text: str):
             import re
             gen_ids = gen_token_ids
@@ -203,11 +176,51 @@ class eval_VideoScore2_float:
             print(f"  normalized prob={normalized_prob:.4f}, soft score={soft_score:.4f}")
 
             return round(soft_score,4)
+    
+        def ll_based_soft_score_weighted(hard_val, token_idx) -> float:
+            if hard_val is None or token_idx < 0:
+                return None
+
+            logits = scores[token_idx][0]  # [vocab]
+
+            score_range = list(range(1, 6))
+            score_probs = []  # [(score, prob)]
+
+            for s in score_range:
+                ids = self.tokenizer.encode(str(s), add_special_tokens=False)
+                if len(ids) == 1:
+                    tid = ids[0]
+                    logp = torch.log_softmax(logits, dim=-1)[tid].item()
+                    prob = float(np.exp(logp))
+                    score_probs.append((s, prob))
+                else:
+                    print(f"[warn] score {s} maps to multi-token: {ids}, skipping.")
+
+            if not score_probs:
+                print("[warn] No valid score token found (1–5 all multi-token?)")
+                return None
+
+            scores_list, probs_list = zip(*score_probs)
+            total_prob = sum(probs_list)
+            norm_probs = [p / total_prob for p in probs_list]
+
+            soft_score = sum(s * p for s, p in zip(scores_list, norm_probs))
+
+            print(f"hard score={hard_val}, token_idx={token_idx}")
+            for s, p, np_ in zip(scores_list, probs_list, norm_probs):
+                print(f"  score {s}: raw_prob={p:.4f}, norm_prob={np_:.4f}")
+            print(f"soft score (weighted average) = {soft_score:.4f}")
+
+            return round(soft_score,4)
         
-        
-        v_soft = ll_based_soft_score_normed(v_score_model, idx_v)
-        t_soft = ll_based_soft_score_normed(t_score_model, idx_t)
-        p_soft = ll_based_soft_score_normed(p_score_model, idx_p)
+        if self.floating_method == "normed":
+            v_soft = ll_based_soft_score_weighted(v_score_model, idx_v)
+            t_soft = ll_based_soft_score_weighted(t_score_model, idx_t)
+            p_soft = ll_based_soft_score_weighted(p_score_model, idx_p)
+        else:  # weighted
+            v_soft = ll_based_soft_score_normed(v_score_model, idx_v)
+            t_soft = ll_based_soft_score_normed(t_score_model, idx_t)
+            p_soft = ll_based_soft_score_normed(p_score_model, idx_p)
 
         return v_soft, t_soft, p_soft, output_text
         

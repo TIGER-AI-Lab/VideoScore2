@@ -1,5 +1,4 @@
 
-ROUND_DIGIT=3
 
 def plot(data,batch_name,dim_idx):
     import matplotlib.pyplot as plt
@@ -164,24 +163,6 @@ def _compute_accuracy_relaxed(pred, ground_truth):
     except Exception as e:
         print(e)
         return None
-
-def _acc_whole_item(pred1,pred2,pred3,gt1,gt2,gt3):
-    matched=0
-    total = len(gt1)
-    assert len(pred1) == len(gt1) and len(pred2) == len(gt2) and len(pred3) == len(gt3), "len(pred) should be the same as len(ground_truth)"
-    try:
-        for p1, p2, p3, g1, g2, g3 in zip(pred1, pred2, pred3, gt1, gt2, gt3):
-            if p1 is None or p2 is None or p3 is None:
-                continue
-            if g1 is None or g2 is None or g3 is None:
-                continue
-            if abs(p1 - g1) + abs(p2 - g2) + abs(p3 - g3) <= 0:
-                matched += 1
-        return round(matched / total*100,ROUND_DIGIT) if total > 0 else 0.0
-    except Exception as e:
-        print(e)
-        return None
-        
     
 def _compute_spcc(pred, ground_truth):
     try:
@@ -222,7 +203,7 @@ def _compute_plcc(pred, ground_truth):
 
     
     
-def get_acc(method_name,bench_name,score_res_path,metric_report_p):
+def get_acc(method_name,bench_name,score_res_path)->dict:
     if bench_name in ["genai_bench","videogen_reward_bench","vision_reward_db_video"]:
         raise ValueError(f"{bench_name} is a preference benchmark, SPCC/PLCC is not supported")
     
@@ -293,19 +274,6 @@ def get_acc(method_name,bench_name,score_res_path,metric_report_p):
         t_scores_model = [min(5, max(1, round(x))) for x in t_scores_model]
         p_scores_model = [min(5, max(1, round(x))) for x in p_scores_model]
         
-    if method_name in ["lift"]:
-        # LiFT has 3 dim {fiedlity, semantic, motion}. 
-        # Raw score (int) in [1,2,3]. 
-        if bench_name in ["aigve_bench","mj_bench_video","video_phy2"]:
-            # the above benchmarks have <=3 score levels, which LiFT score can be adapted.
-            # For other benchmarks, skip LiFT for acc calculation
-            v_scores_model=[1 if x==1 else 3 if x==2 else 5 for x in v_scores_model]
-            t_scores_model=[1 if x==1 else 3 if x==2 else 5 for x in t_scores_model]
-            p_scores_model=[None for x in p_scores_model]
-        else:
-            print("[skip] skipping acc calculation for method LiFT. Exited")      
-            return None
-        
     if method_name in ["video_phy2_auto_eval"]:
         # VideoPhy2-AutoEval has 2 dim (t p). Raw score (int) in [1,2,3,4,5]. Some scores are 0.
         v_scores_model = [None for x in v_scores_model]    
@@ -339,20 +307,7 @@ def get_acc(method_name,bench_name,score_res_path,metric_report_p):
     # To calculate Accuracy, rescale for some different benchmarks   
     if "vs2" in bench_name:
         None
-         
-    if bench_name in ["aigve_bench",]:
-        # In AIGVE-Bench, phy dim only has score 1,3,5
-        # (1,2)->1, (3,4)->3, 5->5
-        p_scores_model=[1 if x in [1,2] else 3 if x in [3,4] else 5 if x in [5] else None for x in p_scores_model]            
     
-    
-    if bench_name in ["video_phy_test",]:
-        # In Video-Phy-test, sa and pc dim only have score 0,1
-        # (1,2,3)->0, (4,5)->1
-        t_scores_model = [0 if x in [1, 2, 3] else 1 if x in [4, 5] else None for x in t_scores_model]
-        p_scores_model = [0 if x in [1, 2, 3] else 1 if x in [4, 5] else None for x in p_scores_model]
-        
-        
     if bench_name in ["mj_bench_video",]:
         # In MJ-Bench-Video, v t p dim all have score 0,1,2
         # (1,2)->0, (3,4)->1, 5->2
@@ -373,30 +328,15 @@ def get_acc(method_name,bench_name,score_res_path,metric_report_p):
         t_scores_model = [0 if x in [1] else 1 if x in [2, 3] else 2 if x in [4, 5] else None for x in t_scores_model]
         p_scores_model = [0 if x in [1] else 1 if x in [2, 3] else 2 if x in [4, 5] else None for x in p_scores_model]
         overall_scores_model=[0 if x in [1] else 1 if x in [2, 3] else 2 for x in overall_scores_model]
-
-
-    if bench_name in ["tvge","t2v_gen_eval"]:
-        # In TVGE (or T2V Gen Eval), 2 dim v and t. Scores in Benchmark are float in [1.0, 5.0].
-        # Skip acc calculation for this benchmark.
-        print("[skip] skipping acc calculation for benchmark TVGE.")    
-        return None
-    
-    
+        
     if bench_name in ["t2vqa_db"]:
         # In T2VQA-DB, only one final score. Scores in Benchmark are float in [0,100].
         # Skip acc calculation for this benchmark.
         print("[skip] skipping acc calculation for benchmark T2VQA-DB.")    
         return None
     
-    # import random
-    # random.seed(42)
-    # v_scores_model=[random.choice([1,2,3,4,5]) for _ in v_scores_gt]
-    # t_scores_model=[random.choice([1,2,3,4,5]) for _ in t_scores_gt]
-    # p_scores_model=[random.choice([1,2,3,4,5]) for _ in p_scores_gt]
     
     metrics_dict={
-        "acc_whole_item":_acc_whole_item(v_scores_model,t_scores_model,p_scores_model,v_scores_gt,t_scores_gt,p_scores_gt),
-        
         "v_acc":_compute_accuracy(v_scores_model,v_scores_gt),
         "t_acc":_compute_accuracy(t_scores_model,t_scores_gt),
         "p_acc":_compute_accuracy(p_scores_model,p_scores_gt),
@@ -409,26 +349,15 @@ def get_acc(method_name,bench_name,score_res_path,metric_report_p):
         
         
         }
-    print(list(metrics_dict.items())[0])
-    print(list(metrics_dict.items())[1:4])
-    print(list(metrics_dict.items())[4:7])
-    print(list(metrics_dict.items())[7:])
+    print(list(metrics_dict.items())[0:3])
+    print(list(metrics_dict.items())[3:6])
+    print(list(metrics_dict.items())[6:])
     
-    # batch_name="sft_model_score" 
-    # plot(v_scores_model,batch_name,1)
-    # plot(t_scores_model,batch_name,2)
-    # plot(p_scores_model,batch_name,3)
-    
-    # with open(metric_report_p,"w") as f:
-    #     json.dump({
-    #         method_name:metrics_dict
-    #     },f,indent=4)
+    return metrics_dict
     
     
     
-    
-    
-def get_corr(method_name,bench_name,score_res_path,metric_report_p):
+def get_corr(method_name,bench_name,score_res_path)->dict:
     if bench_name in ["genai_bench","videogen_reward_bench","vision_reward_db_video"]:
         raise ValueError(f"{bench_name} is a preference benchmark, SPCC/PLCC is not supported")
     
@@ -441,7 +370,6 @@ def get_corr(method_name,bench_name,score_res_path,metric_report_p):
     if method_name in ["vs2","vs2_float","vs1",
                        "vision_reward","unified_reward","image_reward",
                        "aigve_macs","dover",
-                       "lift",
                        "q_insight","q_align","deqa"]:
         # use raw score to calculate SPCC/PLCC
         None 
@@ -505,85 +433,74 @@ def get_corr(method_name,bench_name,score_res_path,metric_report_p):
     print(list(metrics_dict.items())[3:4])
     print(list(metrics_dict.items())[4:7])
     print(list(metrics_dict.items())[7:])
-    
-    
-    # batch_name="sft_model_score" 
-    # plot(v_scores_model,batch_name,1)
-    # plot(t_scores_model,batch_name,2)
-    # plot(p_scores_model,batch_name,3)
-    
-    # with open(metric_report_p,"w") as f:
-    #     json.dump({
-    #         method_name:metrics_dict
-    #     },f,indent=4)
+    return metrics_dict
         
 if __name__ == "__main__":
     from benchmark import load_benchmark
-    bench_data_dir="bench_data"
-    
-    bench="vs2_bench"
-    # bench="mj_bench_video"
-    # bench="video_phy2_test"
-    
-    res_path_mapping={
-        # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_17k_2e-4_2fps_512_512_8192_infer_2fps.json",
-        # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_2400_infer_2fps.json",
-        # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_1e-6_base960_720_reward4_temporal_2400_infer_2fps.json",
-        # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_17k_5e-5_2fps_960_720_8192_float_infer_2fps_tempe=0.7.json",
-        # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_grpo_17k_1e-6_base960-720_reward_3_2400_float_infer_2fps_tempe=0.7.json",
+    import json
+    import os
+    import argparse
 
-
-        # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_5e-5_2fps_960_720_8192_float_infer_2fps_tempe=0.7.json",
-        # "vs2_float":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_no_cot_5e-5_2fps_960_720_8192_infer_2fps_flt_weighted_tempe=0.7.json",
-        # "vs2":f"res_data/res_{bench}/vs2_qwen2_5vl_sft_27k_no_cot_5e-5_2fps_960_720_8192_infer_2fps.json",
+    ROUND_DIGIT=3
+    BENCH_DATA_DIR="bench_data"
+    
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--bench",type=str,default="vs2_bench")
+    ap.add_argument("--method_or_model",type=str,default="vs2_float")
+    ap.add_argument("--score_path",required=False,type=str,default=None)
+    args = ap.parse_args()
+    bench=args.bench
+    method_or_model=args.method_or_model
+    
+    score_json_mapping={
+        "vs2_int":f"res_data/res_{bench}/VideoScore2_infer_2fps.json",
+        "vs2_float":f"res_data/res_{bench}/VideoScore2_infer_2fps_float_normed_tempe=0.7.json",
+        "vs2_float_normed":f"res_data/res_{bench}/VideoScore2_infer_2fps_float_normed_tempe=0.7.json",
+        "vs2_float_weighted":f"res_data/res_{bench}/VideoScore2_infer_2fps_float_normed_tempe=0.7.json",
         
-        # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_qwen2_5_vl_300_float_infer_2fps_tempe=0.7.json",
-        # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_qwen2_5_vl_300_infer_2fps_flt_weighted_tempe=0.7.json",
-        # "vs2":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_qwen2_5_vl_300_infer_2fps.json",
+        "vs1":f"res_data/res_{bench}/VideoScore.json",
+        "aigve_macs":f"res_data/res_{bench}/AIGVE-MACS.json",
+        "dover":f"res_data/res_{bench}/dover.json",
+        "video_phy2_auto_eval":f"res_data/res_{bench}/videophy_2_auto.json",
+        "unified_reward":f"res_data/res_{bench}/UnifiedReward-7b.json",
+        "video_reward":f"res_data/res_{bench}/VideoReward.json",
+        "vision_reward":f"res_data/res_{bench}/VisionReward-Video.json",
+        "q_align":f"res_data/res_{bench}/Q-Align.json",
+        "deqa":f"res_data/res_{bench}/DeQA-Score-Mix3.json",
+        "image_reward":f"res_data/res_{bench}/ImageReward-v1.0.json",
+        "q_insight":f"res_data/res_{bench}/Q-Insight.json",
         
-        # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_5e-5_960_720_300_float_infer_2fps_tempe=0.7.json",
-        "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_reward2_base_sft_5e-5_960_720_300_infer_2fps_flt_normed_tempe=0.7.json",
-        # "vs2":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_5e-5_960_720_200_infer_2fps.json",
-        
-        # "vs2_float":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_part17k_5e-5_960_720_500_float_infer_2fps_tempe=0.7.json",
-        # "vs2":f"res_data/res_{bench}/vs2_grpo_27k_2e-6_base_sft_part17k_5e-5_960_720_500_infer_2fps.json",
-        
-        # "vs1":f"res_data/res_{bench}/VideoScore.json",
-        # "aigve_macs":f"res_data/res_{bench}/AIGVE-MACS.json",
-        # "dover":f"res_data/res_{bench}/dover.json",
-        # "lift":f"res_data/res_{bench}/LiFT-Critic-13b-lora-v1.5.json",
-        # "video_phy2_auto_eval":f"res_data/res_{bench}/videophy_2_auto.json",
-        # "unified_reward":f"res_data/res_{bench}/UnifiedReward-7b.json",
-        # "video_reward":f"res_data/res_{bench}/VideoReward.json",
-        # "vision_reward":f"res_data/res_{bench}/VisionReward-Video.json",
-        # "q_align":f"res_data/res_{bench}/Q-Align.json",
-        # "deqa":f"res_data/res_{bench}/DeQA-Score-Mix3.json",
-        # "image_reward":f"res_data/res_{bench}/ImageReward-v1.0.json",
-        # "q_insight":f"res_data/res_{bench}/Q-Insight.json",
-        
-        # "claude-sonnet-4":f"res_data/res_{bench}/open-router-claude-sonnet-4_infer_2fps.json",
-        # "gemini-2.5-flash":f"res_data/res_{bench}/open-router-gemini-2.5-flash_infer_2fps.json",
-        # "gemini-2.5-pro":f"res_data/res_{bench}/open-router-gemini-2.5-pro_infer_2fps.json",
-        # "gpt-5":f"res_data/res_{bench}/open-router-gpt-5_infer_2fps.json",
-        # "gpt-5-mini":f"res_data/res_{bench}/open-router-gpt-5-mini_infer_2fps.json",
-        # "o4-mini":f"res_data/res_{bench}/open-router-o4-mini_infer_2fps.json",
-        # "grok-4":f"res_data/res_{bench}/open-router-grok-4_infer_2fps.json",
-        # "gemma-3-27b-it":f"res_data/res_{bench}/open-router-gemma-3-27b-it_infer_2fps.json",
-        # "qwen2.5-vl-7b-instruct":f"res_data/res_{bench}/open-router-qwen2.5-vl-7b-instruct_infer_2fps.json",
-        # "qwen2.5-vl-32b-instruct":f"res_data/res_{bench}/open-router-qwen2.5-vl-32b-instruct_infer_2fps_3-shot.json",
-        # "qwen2.5-vl-72b-instruct":f"res_data/res_{bench}/open-router-qwen2.5-vl-72b-instruct_infer_2fps_3-shot.json",
-        # "llama-4-scout":f"res_data/res_{bench}/open-router-llama-4-scout_infer_2fps.json",
-        # "llama-4-maverick":f"res_data/res_{bench}/open-router-llama-4-maverick_infer_2fps.json",
-        # "glm-4.1v-9b-thinking":f"res_data/res_{bench}/open-router-glm-4.1v-9b-thinking_infer_2fps.json",
-        # "glm-4.5v":f"res_data/res_{bench}/open-router-glm-4.5v_infer_2fps.json",
+        "claude-sonnet-4":f"res_data/res_{bench}/claude-sonnet-4_infer_2fps_3shot.json",
+        "gemini-2.5-flash":f"res_data/res_{bench}/gemini-2.5-flash_infer_2fps_3shot.json",
+        "gemini-2.5-pro":f"res_data/res_{bench}/gemini-2.5-pro_infer_2fps_3shot.json",
+        "gpt-5":f"res_data/res_{bench}/gpt-5_infer_2fps_3shot.json",
+        "gpt-5-mini":f"res_data/res_{bench}/gpt-5-mini_infer_2fps_3shot.json",
+        "o4-mini":f"res_data/res_{bench}/o4-mini_infer_2fps_3shot.json",
+        "grok-4":f"res_data/res_{bench}/grok-4_infer_2fps_3shot.json",
+        "gemma-3-27b-it":f"res_data/res_{bench}/gemma-3-27b-it_infer_2fps_3shot.json",
+        "qwen2.5-vl-7b-instruct":f"res_data/res_{bench}/qwen2.5-vl-7b-instruct_infer_2fps.json",
+        "qwen2.5-vl-32b-instruct":f"res_data/res_{bench}/qwen2.5-vl-32b-instruct_infer_2fps_3shot.json",
+        "qwen2.5-vl-72b-instruct":f"res_data/res_{bench}/qwen2.5-vl-72b-instruct_infer_2fps_3shot.json",
+        "llama-4-scout":f"res_data/res_{bench}/llama-4-scout_infer_2fps_3shot.json",
+        "llama-4-maverick":f"res_data/res_{bench}/llama-4-maverick_infer_2fps_3shot.json",
+        "glm-4.1v-9b-thinking":f"res_data/res_{bench}/glm-4.1v-9b-thinking_infer_2fps_3shot.json",
+        "glm-4.5v":f"res_data/res_{bench}/glm-4.5v_infer_2fps_3shot.json",
     }
-    load_benchmark(bench_data_dir,bench,num="all")
-    for method_name, res_p in res_path_mapping.items():
-        metrics_p=f'metrics_report/report_{method_name}.json'
-        from get_acc_corr import get_acc, get_corr
-        print(f"method_name: {method_name}")
-        get_acc(method_name,bench,res_p,metrics_p)
-        get_corr(method_name,bench,res_p,metrics_p)
-        print("\n")
+    load_benchmark(BENCH_DATA_DIR,bench,num="all")
+    
+    if args.score_path is not None:
+        score_p=args.score_path
+    else:
+        score_p=score_json_mapping.get(method_or_model,None)
         
+    metrics_p=f'metrics_report/{bench}/{method_or_model}.json'
+    from get_acc_corr import get_acc, get_corr
+    print(f"method_or_model_name: {method_or_model}")
+    res_dict=get_acc(method_or_model,bench,score_p)
+    res_dict.update(get_corr(method_or_model,bench,score_p))
+    print("\n")
+    
+    os.makedirs(os.path.dirname(metrics_p),exist_ok=True)
+    with open(metrics_p,"w") as f:
+        json.dump(res_dict,f,indent=4)
     

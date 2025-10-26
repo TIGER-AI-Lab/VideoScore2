@@ -126,8 +126,9 @@ def load_benchmark(bench_data_dir,bench_name,num="all"):
     data=[]
     # ========================= VideoScore2-Bench =========================
     if bench_name in ["vs2_bench","vs2-bench","vs2"]:
-        repo_id="hexuan21/vs2_sft"
-        url=f"https://huggingface.co/datasets/{repo_id}/resolve/main/sft_27k_test.json"
+        bench_name="vs2_bench"
+        repo_id="TIGER-Lab/VideoFeedback2"
+        url=f"https://huggingface.co/datasets/{repo_id}/resolve/main/data_27k_test%20(VideoScoreBench-v2).json"
         json_save_path=f"{bench_data_dir}/{bench_name}/sft_27k_test.json"
         _download_file(url,json_save_path,overwrite=False)
         with open(json_save_path,"r") as f:
@@ -442,11 +443,11 @@ if __name__ == "__main__":
     # bench_name="video_phy2_test"
     # bench_name="t2vqa_db"
     
-    bench_data_dir="./bench_data"
+    BENCH_DATA_DIR="./bench_data"
     parser = argparse.ArgumentParser()
     parser.add_argument('--bench_name', type=str, default="vs2_bench", help='benchmark name')
     parser.add_argument('--loaded_num', default="all", help='number of loaded samples')
     args = parser.parse_args()
     bench_name = args.bench_name
     loaded_num=args.loaded_num
-    data=load_benchmark(bench_data_dir,bench_name,loaded_num)
+    data=load_benchmark(BENCH_DATA_DIR,bench_name,loaded_num)
