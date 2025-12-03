@@ -83,7 +83,7 @@ The checkpoint will be saves in 'LLaMA-Factory/saves/<run_name>'
 # Stage-2: RL (Reinforcement Learning)
 ### 1️⃣ Clone from the original or your forked version
 ```
-git clone <url of llama-factory or your forked one>
+git clone <url of Video-R1 or your forked one>
 ```
 
 ### 2️⃣ Create a Dedicated Environment
