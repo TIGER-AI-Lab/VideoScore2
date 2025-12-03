@@ -81,6 +81,7 @@ The checkpoint will be saves in 'LLaMA-Factory/saves/<run_name>'
 
 
 # Stage-2: RL (Reinforcement Learning)
+We perform RL within the framework [Video-R1](https://github.com/tulerfeng/Video-R1).
 ### 1️⃣ Clone from the original or your forked version
 ```
 git clone <url of Video-R1 or your forked one>
