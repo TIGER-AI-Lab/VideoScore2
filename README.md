@@ -17,6 +17,10 @@ This is the official repo for our paper: "VideoScore2: Think before You Score in
 <img style="height:22pt" src="https://img.shields.io/badge/-Post-black?style=flat&logo=x&logoColor=white"></a>
 <br>
 
+## News/TODO
+- [x] Support 11 baselines: `AIGVE-MACS`, `DeQA-Score`, `Dover`, `ImageReward`, `Q-Align`, `Q-Insight`, `UnifiedReward`, `VideoPhy2-auto-eval`, `VideoReward`, `VisionReward`, `VideoScore1`. Some are not reported in the paper due to length contraint.
+- [x] Support 5 benchmarks: in-domain: VideoScore-Bench-v2, out-of-domain: VideoGenReward-Bench,  T2VQA-DB (converted to preference version), MJ-Bench-Video, VideoPhy2-test.
+
 ## Introduction
 Recent advances in text-to-video generation have produced increasingly realistic and diverse content, yet evaluating such videos remains a fundamental challenge due to their multi-faceted nature encompassing visual quality, semantic alignment, and physical consistency. Existing evaluators and reward models are limited to single opaque scores, lack interpretability, or provide only coarse analysis, making them insufficient for capturing the comprehensive nature of video quality assessment. We present VideoScore2, a multi-dimensional, interpretable, and human-aligned framework that explicitly evaluates visual quality, text-to-video alignment, and physical/common-sense consistency while producing detailed chain-of-thought rationales. Our model is trained on a large-scale dataset VideoFeedback2 containing 27,168 human-annotated videos with both scores and reasoning traces across three dimensions, using a two-stage pipeline of supervised fine-tuning followed by reinforcement learning with Group Relative Policy Optimization (GRPO) to enhance analytical robustness. Extensive experiments demonstrate that VideoScore2 achieves superior performance with 44.35 (+5.94) accuracy on our in-domain benchmark VideoScore-Bench-v2 and 50.37 (+4.32) average performance across four out-of-domain benchmarks (VideoGenReward-Bench, VideoPhy2, etc), while providing interpretable assessments that bridge the gap between evaluation and controllable generation through effective reward modeling for Best-of-N sampling.
 
