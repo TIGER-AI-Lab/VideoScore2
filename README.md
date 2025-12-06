@@ -17,6 +17,13 @@ This is the official repo for our paper: "VideoScore2: Think before You Score in
 <img style="height:22pt" src="https://img.shields.io/badge/-Post-black?style=flat&logo=x&logoColor=white"></a>
 <br>
 
+## VideoScore (v1 and v1.1)
+"VideoScore: Building Automatic Metrics to Simulate Fine-grained Human Feedback for Video Generation" (EMNLP 2024)
+
+[Paper](https://arxiv.org/abs/2406.15252)
+
+[Github Repo](https://github.com/TIGER-AI-Lab/VideoScore)
+
 ## News/TODO
 - [x] Support 11 baselines: `AIGVE-MACS`, `DeQA-Score`, `Dover`, `ImageReward`, `Q-Align`, `Q-Insight`, `UnifiedReward`, `VideoPhy2-auto-eval`, `VideoReward`, `VisionReward`, `VideoScore1`. Some are not reported in the paper due to length contraint.
 - [x] Support 5 benchmarks: in-domain: VideoScore-Bench-v2, out-of-domain: VideoGenReward-Bench,  T2VQA-DB (converted to preference version), MJ-Bench-Video, VideoPhy2-test.
