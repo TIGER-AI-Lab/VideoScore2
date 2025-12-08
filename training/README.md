@@ -25,21 +25,33 @@ cd LLaMA-Factory
 pip install -e ".[torch,metrics]"
 pip install wandb
 pip install deepspeed==0.16.9
-pip install --no-deps transformers==4.50.0
+pip install --no-deps transformers==4.50.0  # for Qwen2.5-VL-7B-Instruct
 ```
 
-### 4️⃣ Prepare Data and Config Files
+On our training data, fine-tuning Qwen2.5-VL-7B-Instruct with 8*A800 needs ~6h. If training is very slow, install torch with this version. See [Issue9282] of original LLaMA-Factory repo. (https://github.com/hiyouga/LLaMA-Factory/issues/9282)
+```
+pip install torch==2.8.0 torchvision==0.23.0 torchaudio==2.8.0 --index-url https://download.pytorch.org/whl/cu129
+```
+
+### 4️⃣ Prepare Data
 - Copy `SFT/prepare_SFT_data.py` in our repo to `LLaMA-Factory/` and prepare json data and videos: 
 
 ```bash
 python prepare_sft_data.py --data_version_name data_27k_train_SFT
 ```
 
-- Copy `SFT/vs2_qwen2_5vl_sft_27k_5e-5_2fps_960_720_8192` in our repo to `LLaMA-Factory/examples/train_full/`
+### 5️⃣ Prepare Config Files
+- Copy `SFT/vs2_qwen2_5vl_sft_27k_5e-5_2fps_960_720_8192.yaml` in our repo to `LLaMA-Factory/examples/train_full/`
 
-- Note: you can also modify hyper-params and save them to a new `yaml` config file to reproduce the ablation results, like `learning_rate`, `num_train_epochs`, `video_fps` (num of sampled frames per second as the input), etc.
+- Note: you can also modify hyper-params and save them to a new `yaml` config file to reproduce the ablation results, like `learning_rate`, `num_train_epochs`, `video_fps` (num of sampled frames per second).
 
-### 5️⃣ Final Directory Structure
+- In part "## train" of the `yaml` file above, make sure `per_device_train_batch_size` * `gradient_accumulation_steps` * "num of your GPUs" is 64 or 128.
+
+- In part "## dataset" of the `yaml` file above, 
+`preprocessing_num_workers` is set to `16`
+`dataloader_num_workers` is set to `4`, it works on 8*A100 GPUs. But if there's any error about this, reduce the num.
+
+### 6️⃣ Final Directory Structure
 ```
 LLaMA-Factory/
 ├── data/
@@ -65,7 +77,7 @@ LLaMA-Factory/
 ...
 ```
 
-### 6️⃣ Launch Training
+### 7️⃣ Launch Training
 Set up environment variables and start SFT training (see SFT/run_sft.sh for reference):
 ```bash
 export HF_HOME=<your_hf_cache_dir>

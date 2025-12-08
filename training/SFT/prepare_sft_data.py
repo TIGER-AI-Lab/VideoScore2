@@ -70,12 +70,13 @@ def main(version_name: str):
     from huggingface_hub import list_repo_files
     hf_video_repo_files = list_repo_files(HF_DATA_REPO,repo_type="dataset")
         
-    zip_file_list=[f for f in hf_video_repo_files if base_name in f and f.endswith(".zip") and "videos" in f]
+    zip_file_list=[f for f in hf_video_repo_files if f.endswith(".zip") and "videos" in f]
     video_dir = os.path.join("data", "videos")
     print(zip_file_list)
     
     data_url = f"https://huggingface.co/datasets/{HF_DATA_REPO}/resolve/main/{json_fname}"
     download_file(data_url, json_save_p, overwrite=True)
+    
     with open(json_save_p, "r", encoding="utf-8") as f:
         data = json.load(f)
     with open(json_save_p, "w", encoding="utf-8") as f:
@@ -102,3 +103,6 @@ if __name__ == "__main__":
     parser.add_argument("--data_version_name", required=True)
     args = parser.parse_args()
     main(args.data_version_name)
+
+    # python prepare_sft_data.py --data_version_name data_27k_train_SFT
+    
