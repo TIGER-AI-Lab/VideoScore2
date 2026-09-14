@@ -73,6 +73,8 @@ This project builds upon several open-source frameworks:
 - Thanks [Video-R1](https://github.com/tulerfeng/Video-R1) for the Video RL framework and codebase!
 
 ## Citation
+Machine-readable citation metadata is available in [CITATION.cff](CITATION.cff). The BibTeX below cites the [arXiv preprint](https://arxiv.org/abs/2509.22799).
+
 ```bibtex
 @misc{he2025videoscore2thinkscoregenerative,
       title={VideoScore2: Think before You Score in Generative Video Evaluation}, 
